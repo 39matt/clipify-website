@@ -3,8 +3,8 @@ import { Box, useTheme, useColorModeValue } from '@chakra-ui/react'
 export const BackgroundGradient = ({ hideOverlay, ...props }: any) => {
   const theme = useTheme()
   const colors = [
-    theme.colors.primary['800'],
-    theme.colors.secondary['500'],
+    theme.colors.green['800'],
+    theme.colors.green['500'],
     theme.colors.cyan['500'],
     theme.colors.teal['500'],
   ]

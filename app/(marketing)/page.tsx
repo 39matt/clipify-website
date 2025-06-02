@@ -295,7 +295,7 @@ const HighlightsSection = () => {
               <Tag
                 key={value}
                 variant="subtle"
-                colorScheme="purple"
+                colorScheme="primary"
                 rounded="full"
                 px="3"
               >
