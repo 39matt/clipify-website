@@ -5,7 +5,7 @@ import { Auth } from '@saas-ui/auth'
 import { Link } from '@saas-ui/react'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
-import { FaGithub, FaGoogle } from 'react-icons/fa'
+import { FaDiscord, FaGithub, FaGoogle } from 'react-icons/fa'
 
 import { Features } from '#components/features'
 import { BackgroundGradient } from '#components/gradients/background-gradient'
@@ -15,13 +15,8 @@ import siteConfig from '#data/config'
 
 const providers = {
   google: {
-    name: 'Google',
-    icon: FaGoogle,
-  },
-  github: {
-    name: 'Github',
-    icon: FaGithub,
-    variant: 'solid',
+    name: 'Discord',
+    icon: FaDiscord,
   },
 }
 

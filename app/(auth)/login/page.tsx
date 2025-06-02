@@ -7,17 +7,12 @@ import { BackgroundGradient } from 'components/gradients/background-gradient'
 import { PageTransition } from 'components/motion/page-transition'
 import { Section } from 'components/section'
 import { NextPage } from 'next'
-import { FaGithub, FaGoogle } from 'react-icons/fa'
+import { FaDiscord, FaGithub, FaGoogle } from 'react-icons/fa'
 
 const providers = {
   google: {
-    name: 'Google',
-    icon: FaGoogle,
-  },
-  github: {
-    name: 'Github',
-    icon: FaGithub,
-    variant: 'solid',
+    name: 'Discord',
+    icon: FaDiscord,
   },
 }
 
