@@ -152,9 +152,9 @@ const HeroSection: React.FC = () => {
             <FallInPlace delay={1}>
               <Box overflow="hidden" height="100%">
                 <Image
-                  src="/static/screenshots/list.png"
-                  width={1200}
-                  height={762}
+                  src="/static/screenshots/example.png"
+                  width={2000}
+                  height={786}
                   alt="Snimak ekrana liste kampanja u Clipster-u"
                   quality="75"
                   priority
