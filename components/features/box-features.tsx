@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 
 import { Section, SectionTitle, SectionTitleProps } from 'components/section'
-import { MotionBox } from '#components/motion/box'
 
 const Revealer = ({ children }: any) => {
   return children
@@ -46,7 +45,7 @@ export interface FeatureProps {
   delay?: number
 }
 
-export const Feature: React.FC<FeatureProps> = (props) => {
+export const BoxFeature: React.FC<FeatureProps> = (props) => {
   const {
     title,
     description,
@@ -55,7 +54,6 @@ export const Feature: React.FC<FeatureProps> = (props) => {
     iconSize = 8,
     ip,
     variant,
-    delay = 0
   } = props
   const styles = useMultiStyleConfig('Feature', { variant })
 
@@ -63,19 +61,7 @@ export const Feature: React.FC<FeatureProps> = (props) => {
   const direction = pos === 'left' ? 'row' : 'column'
 
   return (
-
-    <MotionBox
-      initial={{ scale: 1, opacity: 0, translateY: '20px' }}
-      whileInView={{ scale: 1, opacity: 1, translateY: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{
-        type: 'tween',
-        ease: 'easeOut',
-        duration: 0.6,
-        delay,
-      }}
-    >
-    <Stack sx={styles.container} direction={direction} >
+    <Stack sx={styles.container} direction={direction} p="8" border="2px" borderRadius="lg" borderColor='#059669' transition="all 0.5s ease-out"  _hover={{transform: 'scale(1.1)', transition: 'all 0.5s ease-in'}} >
       {icon && (
         <Circle sx={styles.icon}>
           <Icon as={icon} boxSize={iconSize} />
@@ -86,11 +72,10 @@ export const Feature: React.FC<FeatureProps> = (props) => {
         <Text sx={styles.description}>{description}</Text>
       </Box>
     </Stack>
-    </MotionBox>
   )
 }
 
-export const Features: React.FC<FeaturesProps> = (props) => {
+export const BoxFeatures: React.FC<FeaturesProps> = (props) => {
   const {
     title,
     description,
@@ -125,7 +110,7 @@ export const Features: React.FC<FeaturesProps> = (props) => {
             {features.map((feature, i) => {
               return (
                 <Wrap key={i} delay={feature.delay}>
-                  <Feature iconSize={iconSize} {...feature} ip={ip} />
+                  <BoxFeature iconSize={iconSize} {...feature} ip={ip} />
                 </Wrap>
               )
             })}

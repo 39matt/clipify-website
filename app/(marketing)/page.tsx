@@ -21,21 +21,6 @@ import type { Metadata, NextPage } from 'next'
 import Image from 'next/image'
 import {
   FiArrowRight,
-  FiBox,
-  FiCheck,
-  FiCode,
-  FiCopy, FiDollarSign,
-  FiFlag,
-  FiGrid,
-  FiLock,
-  FiSearch,
-  FiSliders,
-  FiSmile,
-  FiTerminal,
-  FiThumbsUp,
-  FiToggleLeft,
-  FiTrendingUp,
-  FiUserPlus,
 } from 'react-icons/fi'
 
 import * as React from 'react'
@@ -50,7 +35,6 @@ import {
   HighlightsItem,
   HighlightsTestimonialItem,
 } from '#components/highlights'
-import { ChakraLogo, NextjsLogo } from '#components/logos'
 import { FallInPlace } from '#components/motion/fall-in-place'
 import { Pricing } from '#components/pricing/pricing'
 import { Testimonial, Testimonials } from '#components/testimonials'
@@ -58,13 +42,9 @@ import { Em } from '#components/typography'
 import faq from '#data/faq'
 import pricing from '#data/pricing'
 import testimonials from '#data/testimonials'
-import { TfiEye, TfiUser, TfiVideoClapper } from 'react-icons/tfi'
 import { Award, DollarSign, EyeIcon, MessageSquare, Search, Shield, UploadCloud, User, Users } from 'lucide-react'
-import { FaBullhorn } from 'react-icons/fa'
-import { CiBullhorn } from 'react-icons/ci'
 import { ImBullhorn } from 'react-icons/im'
-import { GiBullHorns } from 'react-icons/gi'
-import { LiaBullhornSolid } from 'react-icons/lia'
+import { BoxFeatures } from '#components/features/box-features'
 
 
 const Home: NextPage = () => {
@@ -180,7 +160,7 @@ const HeroSection: React.FC = () => {
         </Stack>
       </Container>
 
-      <Features
+      <BoxFeatures
         id="benefits"
         columns={[1, 2, 4]}
         iconSize={4}
@@ -231,18 +211,19 @@ const HighlightsSection = () => {
       <HighlightsItem
         colSpan={[1, null, 2]}
         title="Otključajte Potencijal Vašeg Sadržaja"
+        delay={0}
       >
         <VStack alignItems="flex-start" spacing="8">
-          <Text color="muted" fontSize="xl">
-            Povežite se direktno sa talentovanim klip editorima spremnim da
-            transformišu vaše najbolje trenutke u{' '}
-            <Em>deljive, viralno spremne isečke</Em>. Ili, ako ste klip editor,
-            pronađite uzbudljive projekte i{' '}
-            <Em>zaradite prikazujući svoje veštine editovanja</Em>.
-          </Text>
+            <Text color="muted" fontSize="xl">
+              Povežite se direktno sa talentovanim klip editorima spremnim da
+              transformišu vaše najbolje trenutke u{' '}
+              <Em>deljive, viralno spremne isečke</Em>. Ili, ako ste klip editor,
+              pronađite uzbudljive projekte i{' '}
+              <Em>zaradite prikazujući svoje veštine editovanja</Em>.
+            </Text>
         </VStack>
       </HighlightsItem>
-      <HighlightsItem title="Izgrađeno na Poverenju i Talentu">
+      <HighlightsItem title="Izgrađeno na Poverenju i Talentu" delay={0.5}>
         <Text color="muted" fontSize="lg">
           Verujemo u negovanje zajednice gde kreatori mogu sa poverenjem
           pronaći vešte klip editore, a klip editori mogu pronaći isplative
@@ -255,6 +236,7 @@ const HighlightsSection = () => {
         description="Kreator Sadržaja"
         avatar="/static/images/creator-avatar.jpg" // Replace with actual path
         gradient={['blue.300', 'teal.500']}
+        delay={1.5}
       >
         „Ova platforma je revolucionisala način na koji upravljam svojim
         sadržajem! Pronašao sam neverovatne klip editore koji razumeju moj
@@ -263,6 +245,7 @@ const HighlightsSection = () => {
       </HighlightsTestimonialItem>
       <HighlightsItem
         colSpan={[1, null, 2]}
+        delay={1}
         rowSpan={2}
         title="Povećajte Svoj Domet, Bez Napora"
         height="100%" // Attempt to make the card itself take full height of its grid cell
@@ -321,6 +304,7 @@ const HighlightsSection = () => {
         </VStack>
       </HighlightsItem>
       <HighlightsTestimonialItem
+        delay={2}
         name="Džejmi Li"
         description="Profi Klip Editor"
         avatar="/static/images/clipper-avatar.jpg" // Replace with actual path
@@ -369,6 +353,7 @@ const FeaturesSection = () => {
                     description:
                         'Kreatori lako kreiraju kampanje sa jasnim zadacima i budžetom za klip editore.',
                     variant: 'inline',
+                    delay: 0
                 },
                 {
                     title: 'Prijavljivanje na Kampanje',
@@ -376,6 +361,7 @@ const FeaturesSection = () => {
                     description:
                         'Klip editori mogu pregledati dostupne kampanje i prijaviti se za one koje odgovaraju njihovim veštinama.',
                     variant: 'inline',
+                  delay: 0.5
                 },
                 {
                     title: 'Sigurna Isplata po Učinku',
@@ -383,6 +369,7 @@ const FeaturesSection = () => {
                     description:
                         'Sistem osigurava da klip editori budu plaćeni po broju pregleda ili unapred dogovorenim nagradama.',
                     variant: 'inline',
+                  delay: 1
                 },
                 {
                     title: 'Pregled Profila i Portfolija',
@@ -390,6 +377,7 @@ const FeaturesSection = () => {
                     description:
                         'Kreatori mogu pregledati radove i ocene klip editora pre nego što ih angažuju.',
                     variant: 'inline',
+                  delay: 1.5
                 },
                 {
                     title: 'Izgradnja Profesionalnog Portfolija',
@@ -397,6 +385,7 @@ const FeaturesSection = () => {
                     description:
                         'Svaki uspešan klip doprinosi reputaciji klip editora i povećava šanse za nove angažmane.',
                     variant: 'inline',
+                  delay: 2
                 },
                 {
                     title: 'Direktna i Jasna Komunikacija',
@@ -404,6 +393,7 @@ const FeaturesSection = () => {
                     description:
                         'Olakšavamo komunikaciju između kreatora i klip editora za brzu i kvalitetnu saradnju.',
                     variant: 'inline',
+                  delay: 2.5
                 },
             ]}
         />
@@ -432,7 +422,7 @@ const TestimonialsSection = () => {
         {columns.map((column, i) => (
           <Stack key={i} spacing="8">
             {column.map((t, i) => (
-              <Testimonial key={i} {...t} />
+              <Testimonial delay={i/2} key={i} {...t} />
             ))}
           </Stack>
         ))}

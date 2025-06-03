@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { MotionBox, MotionBoxProps } from './box'
 
 export const FallInPlace: React.FC<MotionBoxProps & { delay?: number }> = (
@@ -9,7 +8,8 @@ export const FallInPlace: React.FC<MotionBoxProps & { delay?: number }> = (
   return (
     <MotionBox
       initial={{ scale: 1, opacity: 0, translateY: '20px' }}
-      animate={{ scale: 1, opacity: 1, translateY: 0 }}
+      whileInView={{ scale: 1, opacity: 1, translateY: 0 }}
+      viewport={{ once: true, amount: 0.3 }} // Trigger once when 30% visible
       transition={{
         type: 'tween',
         ease: 'easeOut',

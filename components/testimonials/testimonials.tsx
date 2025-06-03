@@ -6,6 +6,7 @@ import {
   SectionTitleProps,
 } from 'components/section'
 import { Testimonial } from './testimonial'
+import { MotionBox } from '#components/motion/box'
 
 export interface TestimonialsProps
   extends Omit<SectionProps, 'title'>,
@@ -16,6 +17,7 @@ export interface TestimonialsProps
 export const Testimonials: React.FC<TestimonialsProps> = (props) => {
   const { children, title, columns = [1, null, 2], ...rest } = props
   return (
+
     <Section {...rest}>
       <SectionTitle title={title} />
       <SimpleGrid columns={columns} spacing="8">

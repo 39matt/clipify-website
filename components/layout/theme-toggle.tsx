@@ -3,15 +3,20 @@ import { FiMoon, FiSun } from 'react-icons/fi'
 
 const ThemeToggle = () => {
   const { colorMode, toggleColorMode } = useColorMode()
-  return (
-    <IconButton
-      variant="ghost"
-      aria-label="theme toggle"
-      icon={colorMode === 'light' ? <FiMoon size="14" /> : <FiSun size="14" />}
-      borderRadius="md"
-      onClick={toggleColorMode}
-    />
-  )
+
+  if (colorMode === 'light') {
+    toggleColorMode()
+  }
+  return null
+  // (
+  //   <IconButton
+  //     variant="ghost"
+  //     aria-label="theme toggle"
+  //     icon={colorMode === 'light' ? <FiMoon size="14" /> : <FiSun size="14" />}
+  //     borderRadius="md"
+  //     onClick={toggleColorMode}
+  //   />
+  // )
 }
 
 export default ThemeToggle

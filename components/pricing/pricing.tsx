@@ -18,6 +18,7 @@ import {
 } from '#components/button-link/button-link'
 import { BackgroundGradient } from '#components/gradients/background-gradient'
 import { Section, SectionProps, SectionTitle } from '#components/section'
+import { MotionBox } from '#components/motion/box'
 
 export interface PricingPlan {
   id: string
@@ -44,7 +45,18 @@ export const Pricing: React.FC<PricingProps> = (props) => {
         <SectionTitle title={title} description={description}></SectionTitle>
 
         <SimpleGrid columns={[1, null, 2]} spacing={4}>
-          {plans?.map((plan) => (
+          {plans?.map((plan, i) => (
+            <MotionBox
+              initial={{ scale: 1, opacity: 0, translateY: '20px' }}
+              whileInView={{ scale: 1, opacity: 1, translateY: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{
+                type: 'tween',
+                ease: 'easeOut',
+                duration: 0.6,
+                delay: i/2,
+              }}
+            >
             <PricingBox
               key={plan.id}
               title={plan.title}
@@ -75,6 +87,7 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                 {plan.action.label || 'Sign Up'}
               </ButtonLink>
             </PricingBox>
+            </MotionBox>
           ))}
         </SimpleGrid>
 
