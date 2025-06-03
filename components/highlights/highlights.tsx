@@ -111,6 +111,7 @@ export const HighlightsTestimonialItem: React.FC<
         boxShadow="none"
         color="gray.50"
         position="relative"
+        delay={0}
       >
         {children}
       </Testimonial>
