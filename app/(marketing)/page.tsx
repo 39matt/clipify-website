@@ -89,24 +89,27 @@ const HeroSection: React.FC = () => {
   return (
     <Box position="relative" overflow="hidden">
       <BackgroundGradient height="100%" zIndex="-1" />
-      <Container maxW="container.xl" pt={{ base: 40, lg: 60 }} pb="40">
-        <Stack direction={{ base: 'column', lg: 'row' }} alignItems="center">
+      <Container maxW="container.xl" pt={{ base: 40, md: 60 }} pb="40">
+        <Stack direction={{ base: 'column', lg: 'row' }} >
           <Hero
             id="home"
-            justifyContent="flex-start"
             px="0"
             title={
               <FallInPlace>
-                Sve-u-jednom alat za
-                <Br /> viralnost
+                <Text fontSize={{base:'3xl', md:'5xl'}}>
+                  Sve-u-jednom alat za
+                  <Br /> viralnost
+                </Text>
               </FallInPlace>
             }
             description={
               <FallInPlace delay={0.4} fontWeight="medium">
+                <Text>
                 Clipster pretvara strastvene kreatore
                 <Br /> u <Em>viralni motor</Em> za brendove—
                 plaćanje samo za stvarne preglede,
                 stvarnu interakciju i stvaran uticaj.
+                  </Text>
               </FallInPlace>
             }
           >
@@ -114,14 +117,26 @@ const HeroSection: React.FC = () => {
               <HStack pt="4" pb="12" spacing="8">
               </HStack>
 
-              <ButtonGroup spacing={4} alignItems="center">
-                <ButtonLink colorScheme="primary" size="lg" href="/signup">
+              <ButtonGroup
+                spacing={{ base: 3, md: 4 }}
+                alignItems="center"
+                flexDirection={{ base: 'column', md: 'row' }}
+                width={{ base: 'full', md: 'auto' }}
+              >
+                <ButtonLink
+                  colorScheme="primary"
+                  size="lg"
+                  href="/signup"
+                  width={{ base: 'full', md: 'auto' }}
+                  mb={{base:'2em', md:0}}
+                >
                   Pridruži se sada
                 </ButtonLink>
                 <ButtonLink
                   size="lg"
                   href=""
                   variant="outline"
+                  width={{ base: 'full', md: 'auto' }}
                   rightIcon={
                     <Icon
                       as={FiArrowRight}
