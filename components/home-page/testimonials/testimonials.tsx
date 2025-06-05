@@ -4,9 +4,9 @@ import {
   SectionProps,
   SectionTitle,
   SectionTitleProps,
-} from 'components/section'
+} from '#components/home-page/section'
 import { Testimonial } from './testimonial'
-import { MotionBox } from '#components/motion/box'
+import { MotionBox } from '#components/home-page/motion/box'
 
 export interface TestimonialsProps
   extends Omit<SectionProps, 'title'>,

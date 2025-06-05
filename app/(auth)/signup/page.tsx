@@ -1,28 +1,53 @@
 'use client'
 
-import { Box, Center, Stack, Text } from '@chakra-ui/react'
-import { Auth } from '@saas-ui/auth'
-import { Link } from '@saas-ui/react'
+import {
+  Box,
+  Card,
+  CardBody,
+  CardHeader,
+  Center,
+  Heading,
+  Stack,
+  Text,
+  SimpleGrid,
+  Flex,
+  Button, HStack,
+} from '@chakra-ui/react'
+import { PasswordForm } from '@saas-ui/auth'
+import { Field, FormLayout } from '@saas-ui/react'
 import { NextPage } from 'next'
 import NextLink from 'next/link'
-import { FaDiscord, FaGithub, FaGoogle } from 'react-icons/fa'
-
-import { Features } from '#components/features'
-import { BackgroundGradient } from '#components/gradients/background-gradient'
-import { PageTransition } from '#components/motion/page-transition'
-import { Section } from '#components/section'
+import { Features } from 'components/home-page/features'
+import { BackgroundGradient } from '#components/home-page/gradients/background-gradient'
+import { PageTransition } from '#components/home-page/motion/page-transition'
+import { Section } from 'components/home-page/section'
 import siteConfig from '#data/config'
+import { translations } from '../../../utils/translations'
+import { useState } from 'react'
+import { auth } from '../../../utils/firebase'
+import {createUserWithEmailAndPassword} from "@firebase/auth";
 
-const providers = {
-  google: {
-    name: 'Discord',
-    icon: FaDiscord,
-  },
-}
+const SignUp: NextPage = () => {
+  const [error, setError] = useState('')
 
-const Login: NextPage = () => {
+  const handleSignup = async (data: { email: string; password: string }) => {
+    try {
+      await createUserWithEmailAndPassword(auth, data.email, data.password)
+    } catch (err: any) {
+      setError(err)
+    }
+  }
+
   return (
-    <Section height="100vh" innerWidth="container.xl">
+    <Flex
+      direction="column"
+      minH="100vh"
+      maxH="100vh"
+      h="100vh"
+      w="100vw"
+      overflow="hidden"
+      position="relative"
+    >
       <BackgroundGradient
         zIndex="-1"
         width={{ base: 'full', lg: '50%' }}
@@ -34,20 +59,29 @@ const Login: NextPage = () => {
           borderColor: 'gray.700',
         }}
       />
-      <PageTransition height="100%" display="flex" alignItems="center">
-        <Stack
-          width="100%"
-          alignItems={{ base: 'center', lg: 'flex-start' }}
-          spacing="20"
-          flexDirection={{ base: 'column', lg: 'row' }}
+      <PageTransition h="100%" w="100%">
+        <SimpleGrid
+          columns={{ base: 1, lg: 2 }}
+          h="100%"
+          minH="100vh"
+          maxH="100vh"
+          alignItems="center"
+          spacing={{ base: 8, lg: 0 }}
         >
-          <Box pe="20">
-            <NextLink href="/">
+          <Flex
+            direction="column"
+            alignItems={{ base: 'center' }}
+            px={{ base: 4, md: 12, lg: 20 }}
+            py={{ base: 8, lg: 0 }}
+            h="100%"
+          >
+            <NextLink href="/" passHref>
               <Box
                 as={siteConfig.logo}
-                width="320px"
-                ms="4"
-                mb={{ base: 0, lg: 16 }}
+                width={{ base: '150px', md: '240px' }}
+                mb={{ base: 8, lg: 16 }}
+                cursor="pointer"
+                mx='auto'
               />
             </NextLink>
             <Features
@@ -61,36 +95,44 @@ const Login: NextPage = () => {
               features={siteConfig.signup.features.map((feature) => ({
                 iconPosition: 'left',
                 variant: 'left-icon',
-
                 ...feature,
               }))}
             />
-          </Box>
-          <Center height="100%" flex="1">
-            <Box width="container.sm" pt="8" px="8">
-              <Auth
-                view="signup"
-                title={siteConfig.signup.title}
-                providers={providers}
-                loginLink={<Link href="/login">Log in</Link>}
-              >
-                <Text color="muted" fontSize="sm">
-                  By signing up you agree to our{' '}
-                  <Link href={siteConfig.termsUrl} color="white">
-                    Terms of Service
-                  </Link>{' '}
-                  and{' '}
-                  <Link href={siteConfig.privacyUrl} color="white">
-                    Privacy Policy
-                  </Link>
-                </Text>
-              </Auth>
-            </Box>
-          </Center>
-        </Stack>
+          </Flex>
+
+          <Flex align="center" justify="center" h="100%" >
+            <Card maxW="400px" w="full" boxShadow="lg" paddingX="10px" paddingY="5px">
+              <CardHeader>
+                <Heading size="md" textAlign="center">
+                  Napravi nalog na Clipify
+                </Heading>
+              </CardHeader>
+              <CardBody>
+                <PasswordForm
+                  onSubmit={handleSignup}
+                >
+                  <Field name="username" label="Username" />
+                  <FormLayout columns={3}></FormLayout>
+                  <Field name="refferalCode" label="Referral code" />
+                </PasswordForm>
+                <HStack spacing='5px' mt='10px'>
+                  <Text fontSize='14px' textColor="gray.500" display="inline">
+                    Već imaš nalog?
+                  </Text>
+                  <NextLink  href={"/login"} passHref>
+                    <Text textColor="white" fontSize='14px'>
+                      Uloguj se
+                    </Text>
+                  </NextLink>
+                </HStack>
+              </CardBody>
+
+            </Card>
+          </Flex>
+        </SimpleGrid>
       </PageTransition>
-    </Section>
+    </Flex>
   )
 }
 
-export default Login
+export default SignUp

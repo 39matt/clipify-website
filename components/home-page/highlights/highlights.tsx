@@ -11,8 +11,8 @@ import {
 import { transparentize } from '@chakra-ui/theme-tools'
 import { motion } from 'framer-motion'
 
-import { Section, SectionProps } from '#components/section'
-import { Testimonial, TestimonialProps } from '#components/testimonials'
+import { Section, SectionProps } from '#components/home-page/section'
+import { Testimonial, TestimonialProps } from '#components/home-page/testimonials'
 
 // Use motion.div instead of motion(GridItem)
 const MotionDiv = motion.div
@@ -23,7 +23,7 @@ export interface HighlightBoxProps
   delay?: number
 }
 
-import { MotionBox } from '#components/motion/box' // Your existing MotionBox
+import { MotionBox } from '#components/home-page/motion/box' // Your existing MotionBox
 
 export const HighlightsItem: React.FC<HighlightBoxProps> = (props) => {
   const { children, title, delay = 0.2, ...rest } = props

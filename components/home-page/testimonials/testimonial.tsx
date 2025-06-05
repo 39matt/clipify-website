@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "@saas-ui/react";
 import { FaTwitter } from "react-icons/fa";
-import { MotionBox } from '#components/motion/box'
+import { MotionBox } from '#components/home-page/motion/box'
 
 export interface TestimonialProps extends CardProps {
   name: string;

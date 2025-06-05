@@ -25,26 +25,26 @@ import {
 
 import * as React from 'react'
 
-import { ButtonLink } from '#components/button-link/button-link'
-import { Faq } from '#components/faq'
-import { Features } from '#components/features'
-import { BackgroundGradient } from '#components/gradients/background-gradient'
-import { Hero } from '#components/hero'
+import { ButtonLink } from '#components/home-page/button-link/button-link'
+import { Faq } from 'components/home-page/faq'
+import { Features } from 'components/home-page/features'
+import { BackgroundGradient } from '#components/home-page/gradients/background-gradient'
+import { Hero } from 'components/home-page/hero'
 import {
   Highlights,
   HighlightsItem,
   HighlightsTestimonialItem,
-} from '#components/highlights'
-import { FallInPlace } from '#components/motion/fall-in-place'
-import { Pricing } from '#components/pricing/pricing'
-import { Testimonial, Testimonials } from '#components/testimonials'
-import { Em } from '#components/typography'
+} from 'components/home-page/highlights'
+import { FallInPlace } from '#components/home-page/motion/fall-in-place'
+import { Pricing } from '#components/home-page/pricing/pricing'
+import { Testimonial, Testimonials } from 'components/home-page/testimonials'
+import { Em } from 'components/home-page/typography'
 import faq from '#data/faq'
 import pricing from '#data/pricing'
 import testimonials from '#data/testimonials'
 import { Award, DollarSign, EyeIcon, MessageSquare, Search, Shield, UploadCloud, User, Users } from 'lucide-react'
 import { ImBullhorn } from 'react-icons/im'
-import { BoxFeatures } from '#components/features/box-features'
+import { BoxFeatures } from '#components/home-page/features/box-features'
 
 
 const Home: NextPage = () => {

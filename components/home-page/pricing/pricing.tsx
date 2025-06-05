@@ -15,10 +15,10 @@ import React from 'react'
 import {
   ButtonLink,
   ButtonLinkProps,
-} from '#components/button-link/button-link'
-import { BackgroundGradient } from '#components/gradients/background-gradient'
-import { Section, SectionProps, SectionTitle } from '#components/section'
-import { MotionBox } from '#components/motion/box'
+} from '#components/home-page/button-link/button-link'
+import { BackgroundGradient } from '#components/home-page/gradients/background-gradient'
+import { Section, SectionProps, SectionTitle } from '#components/home-page/section'
+import { MotionBox } from '#components/home-page/motion/box'
 
 export interface PricingPlan {
   id: string
@@ -56,9 +56,9 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                 duration: 0.6,
                 delay: i/2,
               }}
+              key={plan.id}
             >
             <PricingBox
-              key={plan.id}
               title={plan.title}
               description={plan.description}
               price={plan.price}

@@ -18,7 +18,7 @@ import {
   BannerTitle,
 } from "@saas-ui/react";
 import { FiArrowRight } from "react-icons/fi";
-import { FallInPlace } from "../motion/fall-in-place";
+import { FallInPlace } from "#components/home-page/motion/fall-in-place";
 
 export interface AnnouncementBannerProps {
   title: string;

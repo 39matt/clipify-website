@@ -14,11 +14,15 @@
     "@chakra-ui/theme-tools": "^2.2.5",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@firebase/app": "^0.13.0",
+    "@firebase/auth": "^1.10.6",
+    "@firebase/firestore": "^4.7.16",
     "@fontsource-variable/inter": "^5.1.0",
     "@saas-ui/auth": "^3.4.0",
     "@saas-ui/react": "^2.9.0",
     "@svgr/webpack": "^8.1.0",
     "date-fns": "^4.1.0",
+    "firebase": "^11.8.1",
     "framer-motion": "^11.11.1",
     "lucide-react": "^0.511.0",
     "next": "^14.2.14",
@@ -40,5 +44,5 @@
     "prettier": "^3.3.3",
     "typescript": "5.6.2"
   },
-  "packageManager": "pnpm@8.15.9+sha512.499434c9d8fdd1a2794ebf4552b3b25c0a633abcee5bb15e7b5de90f32f47b513aca98cd5cfd001c31f0db454bc3804edccd578501e4ca293a6816166bbd9f81"
+  "packageManager": "pnpm@10.11.1"
 }

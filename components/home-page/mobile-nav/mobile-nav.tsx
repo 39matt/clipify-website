@@ -12,14 +12,14 @@ import {
   useUpdateEffect,
 } from '@chakra-ui/react'
 import { Link } from '@saas-ui/react'
-import useRouteChanged from 'hooks/use-route-changed'
+import useRouteChanged from '#hooks/use-route-changed'
 import { usePathname } from 'next/navigation'
 import { AiOutlineMenu } from 'react-icons/ai'
 import { RemoveScroll } from 'react-remove-scroll'
 
 import * as React from 'react'
 
-import { Logo } from '#components/layout/logo'
+import { Logo } from '#components/home-page/layout/logo'
 import siteConfig from '#data/config'
 
 interface NavLinkProps extends LinkProps {
@@ -119,7 +119,7 @@ export function MobileNavContent(props: MobileNavContentProps) {
                   ({ href, id, label, ...props }, i) => {
                     return (
                       <NavLink
-                        href={href || `/#${id}`}
+                        href={href || `/public#${id}`}
                         key={i}
                         {...(props as any)}
                       >
