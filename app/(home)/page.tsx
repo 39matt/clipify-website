@@ -236,7 +236,7 @@ const HighlightsSection = () => {
         description="Kreator Sadržaja"
         avatar="/static/images/creator-avatar.jpg" // Replace with actual path
         gradient={['blue.300', 'teal.500']}
-        delay={1.5}
+        delay={1}
       >
         „Ova platforma je revolucionisala način na koji upravljam svojim
         sadržajem! Pronašao sam neverovatne klip editore koji razumeju moj
@@ -245,7 +245,7 @@ const HighlightsSection = () => {
       </HighlightsTestimonialItem>
       <HighlightsItem
         colSpan={[1, null, 2]}
-        delay={1}
+        delay={0.5}
         rowSpan={2}
         title="Povećajte Svoj Domet, Bez Napora"
         height="100%" // Attempt to make the card itself take full height of its grid cell
@@ -304,7 +304,7 @@ const HighlightsSection = () => {
         </VStack>
       </HighlightsItem>
       <HighlightsTestimonialItem
-        delay={2}
+        delay={1}
         name="Džejmi Li"
         description="Profi Klip Editor"
         avatar="/static/images/clipper-avatar.jpg" // Replace with actual path

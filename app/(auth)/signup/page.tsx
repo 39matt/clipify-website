@@ -5,13 +5,11 @@ import {
   Card,
   CardBody,
   CardHeader,
-  Center,
   Heading,
-  Stack,
   Text,
   SimpleGrid,
   Flex,
-  Button, HStack,
+  HStack, Alert, AlertIcon,
 } from '@chakra-ui/react'
 import { PasswordForm } from '@saas-ui/auth'
 import { Field, FormLayout } from '@saas-ui/react'
@@ -20,21 +18,36 @@ import NextLink from 'next/link'
 import { Features } from 'components/home-page/features'
 import { BackgroundGradient } from '#components/home-page/gradients/background-gradient'
 import { PageTransition } from '#components/home-page/motion/page-transition'
-import { Section } from 'components/home-page/section'
 import siteConfig from '#data/config'
-import { translations } from '../../../utils/translations'
 import { useState } from 'react'
-import { auth } from '../../../utils/firebase'
-import {createUserWithEmailAndPassword} from "@firebase/auth";
+import {firebaseSignupErrorMap} from '../../lib/firebase/errors'
+import {useRouter} from "next/navigation";
+import { signUp } from '../../lib/firebase/auth'
 
 const SignUp: NextPage = () => {
+  const router = useRouter()
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
-  const handleSignup = async (data: { email: string; password: string }) => {
+
+  const handleSignup = async (data: { email: string; password: string}) => {
     try {
-      await createUserWithEmailAndPassword(auth, data.email, data.password)
+
+      await signUp(data.email, data.password)
+      setSuccess("Uspešno ste napravili nalog! Proverite vaš mail kako bi ste se verifikovali.")
+      router.push('/login')
+
     } catch (err: any) {
-      setError(err)
+
+      let code = ''
+      if (err.code) {
+        code = err.code
+      } else if (err.message) {
+        const match = err.message.match(/\(([^)]+)\)/)
+        if (match) code = match[1]
+      }
+
+      setError(firebaseSignupErrorMap[code] || 'Došlo je do greške. Pokušajte ponovo.')
     }
   }
 
@@ -110,10 +123,29 @@ const SignUp: NextPage = () => {
               <CardBody>
                 <PasswordForm
                   onSubmit={handleSignup}
+                  fields={{
+                    submit: {
+                      children: 'Kreiraj nalog',
+                    },
+                    email: {
+                      isRequired: true
+                    },
+                    password: {
+                      isRequired: true
+                    }
+                  }}
                 >
-                  <Field name="username" label="Username" />
+                  <Field name="username" label="Username" isRequired/>
                   <FormLayout columns={3}></FormLayout>
                   <Field name="refferalCode" label="Referral code" />
+                  {error && (<Alert status="error">
+                    <AlertIcon />
+                    {error ? error : String(error)}
+                  </Alert>)}
+                  {success && (<Alert status="success">
+                    <AlertIcon />
+                    {success ? success : String(success)}
+                  </Alert>)}
                 </PasswordForm>
                 <HStack spacing='5px' mt='10px'>
                   <Text fontSize='14px' textColor="gray.500" display="inline">

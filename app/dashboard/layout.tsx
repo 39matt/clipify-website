@@ -1,15 +1,18 @@
+'use client';
+
 import {
-  Box,
   Badge,
   Text,
   Spacer,
-  Button,
   IconButton,
   Menu,
   MenuButton,
   MenuList,
-  MenuItem, Image,
-} from '@chakra-ui/react'
+  MenuItem,
+  Image,
+  Spinner,
+  Center,
+} from '@chakra-ui/react';
 import {
   AppShell,
   Sidebar,
@@ -18,14 +21,42 @@ import {
   NavItem,
   NavGroup,
   PersonaAvatar,
-} from '@saas-ui/react'
-import { FiHome, FiUsers, FiSettings, FiHelpCircle } from 'react-icons/fi'
-import { NextPage } from 'next'
+} from '@saas-ui/react';
+import { FiHome, FiUsers, FiSettings, FiHelpCircle } from 'react-icons/fi';
+import { logout } from '../lib/firebase/auth';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useAuth } from '../providers/authProvider';
 
-export default function Layout(props: {children: React.ReactNode }) {
+export default function Layout(props: { children: React.ReactNode }) {
+  const router = useRouter();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  if (loading || !user) {
+    return (
+      <Center minH="100vh">
+        <Spinner />
+      </Center>
+    );
+  }
+
   return (
     <AppShell
-      children={props.children}
       sidebar={
         <Sidebar toggleBreakpoint="sm">
           <SidebarToggleButton />
@@ -48,11 +79,11 @@ export default function Layout(props: {children: React.ReactNode }) {
                 variant="ghost"
               />
               <MenuList>
-                <MenuItem>Sign out</MenuItem>
+                <MenuItem onClick={handleLogout}>Sign out</MenuItem>
               </MenuList>
             </Menu>
           </SidebarSection>
-          <SidebarSection flex="1" overflowY="auto">
+          <SidebarSection flex="1">
             <NavGroup>
               <NavItem icon={<FiHome />} isActive>
                 Home
@@ -90,6 +121,8 @@ export default function Layout(props: {children: React.ReactNode }) {
           </SidebarSection>
         </Sidebar>
       }
-    />
-  )
+    >
+      {props.children}
+    </AppShell>
+  );
 }
