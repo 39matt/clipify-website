@@ -19,8 +19,6 @@ const firebaseConfig = {
 
 };
 
-console.log("AAAAAAAA " + process.env.FIREBASE_API_KEY!)
-
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 export const auth = getAuth(app);
