@@ -14,11 +14,11 @@ export async function GET(req: NextRequest) {
   try {
     // Step 1: Exchange code for Discord token
     const params = new URLSearchParams({
-      client_id: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID!,
-      client_secret: process.env.NEXT_PUBLIC_DISCORD_CLIENT_SECRET!,
+      client_id: process.env.DISCORD_CLIENT_ID!,
+      client_secret: process.env.DISCORD_CLIENT_SECRET!,
       grant_type: 'authorization_code',
       code,
-      redirect_uri: process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI!,
+      redirect_uri: process.env.DISCORD_REDIRECT_URI!,
       scope: 'identify email',
     });
 
