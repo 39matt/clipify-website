@@ -1,19 +1,22 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react'
+import { User } from '@firebase/auth'
+import { useAuth } from '../providers/authProvider'
 
 interface LayoutContextType {
+  user: User | null;
+  loading: boolean | null;
   discordUsername: string | null;
-  setDiscordUsername: (value: string | null) => void;
 }
 
 const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 export const LayoutProvider = ({ children }: { children: ReactNode }) => {
-  const [discordUsername, setDiscordUsername] = useState<string | null>(null);
+  const { user, loading, discordUsername } = useAuth();
 
   return (
-    <LayoutContext.Provider value={{ discordUsername, setDiscordUsername }}>
+    <LayoutContext.Provider value={{ user, loading, discordUsername }}>
       {children}
     </LayoutContext.Provider>
   );

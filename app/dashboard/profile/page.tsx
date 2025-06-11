@@ -22,24 +22,23 @@ import { useRouter } from 'next/navigation';
 import { isUserLinked } from '../../lib/firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useLayoutContext } from '../context'
+import { time } from 'framer-motion'
 
 const Profile: NextPage = () => {
   const router = useRouter();
-  const { user, loading } = useAuth();
   const [linked, setLinked] = useState<boolean | null>(null);
   const [checkingLinked, setCheckingLinked] = useState(true);
-  const { discordUsername } = useLayoutContext()
+  const { user, loading, discordUsername } = useLayoutContext()
 
-  // Check if the user is linked when the component mounts
   useEffect(() => {
     const checkLinkedStatus = async () => {
-      if (user?.email) {
+      if (discordUsername) {
         setCheckingLinked(true);
-        const isLinked = await isUserLinked(user.email);
+        const isLinked = await isUserLinked(discordUsername);
         setLinked(isLinked);
         setCheckingLinked(false);
       } else {
-        setLinked(null);
+        setLinked(false);
         setCheckingLinked(false);
       }
     };
@@ -48,11 +47,6 @@ const Profile: NextPage = () => {
   }, [user]);
 
   const handleLinkDiscord = async () => {
-    if (!user) {
-      router.push('/login');
-      return;
-    }
-
     if (linked) {
       alert(`Korisnik sa emailom "${user?.email}" je već povezao nalog`);
       return;
