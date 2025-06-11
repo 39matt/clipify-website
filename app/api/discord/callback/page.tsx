@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Spinner, Center } from '@chakra-ui/react';
+import { Spinner, Center, Text } from '@chakra-ui/react'
 
 const DiscordCallback = () => {
   const router = useRouter();
@@ -44,6 +44,7 @@ const DiscordCallback = () => {
 
   return (
     <Center minH="100vh">
+      <Text>Povezivanje vašeg naloga...</Text>
       <Spinner />
     </Center>
   );

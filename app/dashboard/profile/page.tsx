@@ -52,7 +52,7 @@ const Profile: NextPage = () => {
       return;
     }
 
-    localStorage.setItem('userEmail', user?.email!);
+    localStorage.setItem('userEmail', user!.email!);
     const params = new URLSearchParams({
       client_id: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID!,
       redirect_uri: process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI!,

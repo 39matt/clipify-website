@@ -25,10 +25,10 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const fetchUserIdAndSubscribe = async () => {
-      if (user?.email) {
+      if (user?.email && !discordUsername) {
         try {
           const userId = await getUserId(user.email)
-          setDiscordUsername(userId) // Set the username (or userId)
+          setDiscordUsername(userId)
         } catch (error) {
           console.error('Error fetching userId:', error)
         }

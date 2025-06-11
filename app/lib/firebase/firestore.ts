@@ -1,13 +1,25 @@
-import { collection, doc, getDoc, getDocs, query, setDoc, where } from '@firebase/firestore'
+import { collection, doc, getDoc, getDocs, limit, query, setDoc, where } from '@firebase/firestore'
 import { db } from './firebase'
 
 
 export async function getUserId(email: string): Promise<string> {
-  const usersCollection = collection(db, 'users')
-  const q = query(usersCollection, where('email', '==', email));
+  try {
+    const usersCollection = collection(db, 'users');
 
-  const userSnapshot = await getDocs(q);
-  return userSnapshot.docs[0].id;
+    console.log(`email: ${email}`);
+    const q = query(usersCollection, where('email', '==', email), limit(1));
+
+    const userSnapshot = await getDocs(q);
+
+    if (userSnapshot.empty) {
+      throw new Error(`No user found with email: ${email}`);
+    }
+
+    return userSnapshot.docs[0].id;
+  } catch (error) {
+    console.error('Error fetching user ID:', error);
+    throw new Error('Failed to fetch user ID');
+  }
 }
 
 export async function addUser(email: string, discordUsername: string) {
