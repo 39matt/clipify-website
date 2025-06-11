@@ -31,6 +31,11 @@ const SignUp: NextPage = () => {
   const [success, setSuccess] = useState('')
   const {user, loading} = useAuth()
 
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard/profile');
+    }
+  }, [user, router]);
 
   if (loading) {
     return (
@@ -39,13 +44,6 @@ const SignUp: NextPage = () => {
       </Center>
     )
   }
-
-  useEffect(() => {
-    if (user) {
-      router.push('/dashboard/profile');
-    }
-  }, [user, router]);
-
 
   const handleSignup = async (data: { email: string; password: string}) => {
     try {

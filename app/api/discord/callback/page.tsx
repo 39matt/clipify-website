@@ -1,53 +1,91 @@
 'use client';
 
-import { useEffect } from 'react';
+import {
+  Spinner,
+  Center,
+  Heading,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
-import { Spinner, Center, Text } from '@chakra-ui/react'
+import { useEffect, useState, useRef } from 'react';
 
-const DiscordCallback = () => {
+export default function DiscordCallback() {
   const router = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const didFetch = useRef(false);
+  const [modalText, setModalText] = useState('');
 
   useEffect(() => {
+    if (didFetch.current) return;
+    didFetch.current = true;
+
     const linkDiscordAccount = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
-      const email = localStorage.getItem('userEmail'); // Retrieve the logged-in user's email
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      const email = localStorage.getItem('userEmail');
 
       if (!code || !email) {
-        console.log(`email: ${email}`);
-        console.log(`code: ${code}`);
-        // alert('Missing code or email');
-        router.push('/dashboard/profile');
+        router.replace('/dashboard/profile');
         return;
       }
 
       try {
-        const res = await fetch(`/api/discord/link?code=${code}&email=${email}`);
+        const res = await fetch(
+          `/api/discord/link?code=${encodeURIComponent(code)}&email=${encodeURIComponent(email)}`
+        );
         const data = await res.json();
 
         if (res.ok) {
-          // alert(`Discord account linked: ${data.discordUsername}`);
-          router.push('/dashboard/profile');
+          setModalText(`Povezan discord nalog: ${data.discordUsername}`);
         } else {
-          // alert(data.error || 'Failed to link Discord account');
-          router.push('/dashboard/profile');
+          setModalText(data.error || 'Neuspešno povezivanje naloga!');
         }
-      } catch (error) {
-        console.error('Error linking Discord account:', error);
-        // alert('An error occurred while linking your Discord account.');
-        router.push('/dashboard/profile');
+      } catch (err) {
+        console.error(err);
+        setModalText('Greška pri povezivanju naloga');
+      } finally {
+        onOpen();
       }
     };
 
     linkDiscordAccount();
-  }, [router]);
+  }, [router, onOpen]);
 
   return (
-    <Center minH="100vh">
-      <Text>Povezivanje vašeg naloga...</Text>
+    <Center minH="100vh" flexDir="column">
+      <Heading mb={4}>Povezivanje vašeg naloga…</Heading>
       <Spinner />
+
+      <Modal isOpen={isOpen} onClose={() => {
+        onClose();
+        router.replace('/dashboard/profile');
+      }}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Info</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>{modalText}</ModalBody>
+          <ModalFooter>
+            <Button
+              colorScheme="green"
+              onClick={() => {
+                onClose();
+                router.replace('/dashboard/profile');
+              }}
+            >
+              Nazad na profil
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Center>
   );
-};
-
-export default DiscordCallback;
+}

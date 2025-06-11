@@ -20,6 +20,13 @@ const Login: NextPage = () => {
   const [success, setSuccess] = useState('')
   const {user, loading} = useAuth()
 
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard/profile');
+    }
+  }, [user, router]);
+
+
 
   if (loading) {
     return (
@@ -29,11 +36,7 @@ const Login: NextPage = () => {
     )
   }
 
-  useEffect(() => {
-    if (user) {
-      router.push('/dashboard/profile');
-    }
-  }, [user, router]);
+
 
 
   const handleLogin = async (data: { email: string, password: string }) => {

@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
 
   try {
     // Step 1: Exchange code for Discord token
+    console.log(1);
     const params = new URLSearchParams({
       client_id: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID!,
       client_secret: process.env.NEXT_PUBLIC_DISCORD_CLIENT_SECRET!,
@@ -21,27 +22,32 @@ export async function GET(req: NextRequest) {
       redirect_uri: process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI!,
       scope: 'identify email',
     });
+    console.log(2);
 
     const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params,
     });
+    console.log(3);
 
     const tokenData = await tokenRes.json();
     if (!tokenData.access_token) {
       return NextResponse.json({ error: 'Failed to retrieve access token' }, { status: 400 });
     }
+    console.log(4);
 
     // Step 2: Fetch user info from Discord
     const userRes = await fetch('https://discord.com/api/users/@me', {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
+    console.log(5);
 
     const userData = await userRes.json();
     if (!userData.username) {
       return NextResponse.json({ error: 'Failed to retrieve Discord user info' }, { status: 400 });
     }
+    console.log(6);
 
     // Step 3: Use Discord username as document ID
     const discordUsername = userData.username;
