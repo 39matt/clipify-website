@@ -21,7 +21,7 @@ import { useAuth } from '../../providers/authProvider';
 import { useRouter } from 'next/navigation';
 import { isUserLinked } from '../../lib/firebase/firestore';
 import { useEffect, useState } from 'react';
-import { useLayoutContext } from '../layout'
+import { useLayoutContext } from '../context'
 
 const Profile: NextPage = () => {
   const router = useRouter();

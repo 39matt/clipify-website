@@ -40,10 +40,7 @@ const Login: NextPage = () => {
     try {
       await signIn(data.email, data.password)
       setSuccess("Uspešno ste se ulogovali!")
-
-      setTimeout(() => {
         router.push('/login');
-      }, 3000);
 
     } catch (err: any) {
 

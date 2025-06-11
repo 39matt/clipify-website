@@ -23,7 +23,6 @@ import { useEffect, useState } from 'react'
 import {firebaseSignupErrorMap} from '../../lib/firebase/errors'
 import {useRouter} from "next/navigation";
 import { signUp } from '../../lib/firebase/auth'
-import { setTimeout } from 'next/dist/compiled/@edge-runtime/primitives'
 import { useAuth } from '../../providers/authProvider'
 
 const SignUp: NextPage = () => {
@@ -53,9 +52,7 @@ const SignUp: NextPage = () => {
 
       await signUp(data.email, data.password)
       setSuccess("Uspešno ste napravili nalog! Proverite vaš mail kako bi ste se verifikovali.")
-      setTimeout(() => {
-        router.push('/login')
-      }, 3000);
+      router.push('/login')
 
     } catch (err: any) {
 

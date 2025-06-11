@@ -1,6 +1,15 @@
 'use client';
 
 import {
+  AppShell,
+  Sidebar,
+  SidebarToggleButton,
+  SidebarSection,
+  NavItem,
+  NavGroup,
+  PersonaAvatar,
+} from '@saas-ui/react';
+import {
   Badge,
   Text,
   Spacer,
@@ -13,30 +22,16 @@ import {
   Spinner,
   Center,
 } from '@chakra-ui/react';
-import {
-  AppShell,
-  Sidebar,
-  SidebarToggleButton,
-  SidebarSection,
-  NavItem,
-  NavGroup,
-  PersonaAvatar,
-} from '@saas-ui/react';
 import { FiHome, FiUsers, FiSettings, FiHelpCircle } from 'react-icons/fi';
-import { logout } from '../lib/firebase/auth';
 import { useRouter } from 'next/navigation';
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useAuth } from '../providers/authProvider';
+import { useEffect } from 'react';
+import { useAuth } from '../providers/authProvider'
+import { logout } from '../lib/firebase/auth'
+import { LayoutProvider } from './context'
 
-interface LayoutContextType {
-  discordUsername: string | null;
-}
-
-const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
-
-export default function Layout(props: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { user, loading, discordUsername } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -62,7 +57,7 @@ export default function Layout(props: { children: React.ReactNode }) {
   }
 
   return (
-    <LayoutContext.Provider value={{ discordUsername }}>
+    <LayoutProvider>
       <AppShell
         sidebar={
           <Sidebar toggleBreakpoint="sm">
@@ -141,16 +136,8 @@ export default function Layout(props: { children: React.ReactNode }) {
           </Sidebar>
         }
       >
-        {props.children}
+        {children}
       </AppShell>
-    </LayoutContext.Provider>
+    </LayoutProvider>
   );
-}
-
-export function useLayoutContext(){
-  const context = useContext(LayoutContext);
-  if (!context) {
-    throw new Error('useLayoutContext must be used within a LayoutProvider');
-  }
-  return context;
 }
