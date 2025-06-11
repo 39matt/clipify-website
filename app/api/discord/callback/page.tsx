@@ -16,7 +16,7 @@ const DiscordCallback = () => {
       if (!code || !email) {
         console.log(`email: ${email}`);
         console.log(`code: ${code}`);
-        alert('Missing code or email');
+        // alert('Missing code or email');
         router.push('/dashboard/profile');
         return;
       }
@@ -26,15 +26,15 @@ const DiscordCallback = () => {
         const data = await res.json();
 
         if (res.ok) {
-          alert(`Discord account linked: ${data.discordUsername}`);
+          // alert(`Discord account linked: ${data.discordUsername}`);
           router.push('/dashboard/profile');
         } else {
-          alert(data.error || 'Failed to link Discord account');
+          // alert(data.error || 'Failed to link Discord account');
           router.push('/dashboard/profile');
         }
       } catch (error) {
         console.error('Error linking Discord account:', error);
-        alert('An error occurred while linking your Discord account.');
+        // alert('An error occurred while linking your Discord account.');
         router.push('/dashboard/profile');
       }
     };

@@ -2,6 +2,14 @@ import { collection, doc, getDocs, query, setDoc, where } from '@firebase/firest
 import { db } from './firebase'
 
 
+export async function getUserId(email: string): Promise<string> {
+  const usersCollection = collection(db, 'users')
+  const q = query(usersCollection, where('email', '==', email));
+
+  const userSnapshot = await getDocs(q);
+  return userSnapshot.docs[0].id;
+}
+
 export async function addUser(email: string, discordUsername: string) {
   const userDocRef = doc(db, 'users', discordUsername);
 

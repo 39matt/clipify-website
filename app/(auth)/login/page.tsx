@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react'
 import { firebaseLoginErrorMap } from '../../lib/firebase/errors'
 import { useRouter } from 'next/navigation'
 import {  signIn } from '../../lib/firebase/auth'
-import { useModals } from '@saas-ui/react'
 import { useAuth } from '../../providers/authProvider'
 
 const Login: NextPage = () => {
@@ -42,7 +41,9 @@ const Login: NextPage = () => {
       await signIn(data.email, data.password)
       setSuccess("Uspešno ste se ulogovali!")
 
-      router.push('/dashboard/profile')
+      setTimeout(() => {
+        router.push('/login');
+      }, 3000);
 
     } catch (err: any) {
 

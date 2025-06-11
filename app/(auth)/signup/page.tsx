@@ -9,7 +9,7 @@ import {
   Text,
   SimpleGrid,
   Flex,
-  HStack, Alert, AlertIcon,
+  HStack, Alert, AlertIcon, Center, Spinner,
 } from '@chakra-ui/react'
 import { PasswordForm } from '@saas-ui/auth'
 import { Field, FormLayout } from '@saas-ui/react'
@@ -19,15 +19,33 @@ import { Features } from 'components/home-page/features'
 import { BackgroundGradient } from '#components/home-page/gradients/background-gradient'
 import { PageTransition } from '#components/home-page/motion/page-transition'
 import siteConfig from '#data/config'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {firebaseSignupErrorMap} from '../../lib/firebase/errors'
 import {useRouter} from "next/navigation";
 import { signUp } from '../../lib/firebase/auth'
+import { setTimeout } from 'next/dist/compiled/@edge-runtime/primitives'
+import { useAuth } from '../../providers/authProvider'
 
 const SignUp: NextPage = () => {
   const router = useRouter()
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
+  const {user, loading} = useAuth()
+
+
+  if (loading) {
+    return (
+      <Center minH="100vh">
+        <Spinner />
+      </Center>
+    )
+  }
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard/profile');
+    }
+  }, [user, router]);
 
 
   const handleSignup = async (data: { email: string; password: string}) => {
@@ -35,7 +53,9 @@ const SignUp: NextPage = () => {
 
       await signUp(data.email, data.password)
       setSuccess("Uspešno ste napravili nalog! Proverite vaš mail kako bi ste se verifikovali.")
-      router.push('/login')
+      setTimeout(() => {
+        router.push('/login')
+      }, 3000);
 
     } catch (err: any) {
 

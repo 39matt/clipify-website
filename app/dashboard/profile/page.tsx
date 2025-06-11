@@ -21,12 +21,14 @@ import { useAuth } from '../../providers/authProvider';
 import { useRouter } from 'next/navigation';
 import { isUserLinked } from '../../lib/firebase/firestore';
 import { useEffect, useState } from 'react';
+import { useLayoutContext } from '../layout'
 
 const Profile: NextPage = () => {
   const router = useRouter();
   const { user, loading } = useAuth();
-  const [linked, setLinked] = useState<boolean | null>(null); // State to track if the user is linked
-  const [checkingLinked, setCheckingLinked] = useState(true); // State to track loading for `isUserLinked`
+  const [linked, setLinked] = useState<boolean | null>(null);
+  const [checkingLinked, setCheckingLinked] = useState(true);
+  const { discordUsername } = useLayoutContext()
 
   // Check if the user is linked when the component mounts
   useEffect(() => {
@@ -85,7 +87,7 @@ const Profile: NextPage = () => {
       <HStack minW="100%" flex={1} justifyContent="space-around">
         <Card maxW="33%" w="full">
           <CardHeader display="flex" flexDirection="row">
-            <Heading size="sm">Billing details</Heading>
+            <Heading size="sm">{discordUsername}</Heading>
             <Spacer />
             {!linked && (
               <Button colorScheme="green" variant="solid" onClick={handleLinkDiscord}>
@@ -99,7 +101,9 @@ const Profile: NextPage = () => {
                 label="Billing plan"
                 value={<Text fontWeight="bold">Professional</Text>}
               />
-              <Property label="Billing period" value="Yearly" />
+              <Property label="Discord" value={
+                linked ? "Linked" : "Not linked"
+              } textColor={linked ? "green.500" : "red.500"} />
               <Property label="Renewal date" value="01-01-2023" />
               <Property
                 label="Users"

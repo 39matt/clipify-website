@@ -25,12 +25,18 @@ import {
 import { FiHome, FiUsers, FiSettings, FiHelpCircle } from 'react-icons/fi';
 import { logout } from '../lib/firebase/auth';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from '../providers/authProvider';
+
+interface LayoutContextType {
+  discordUsername: string | null;
+}
+
+const LayoutContext = createContext<LayoutContextType | undefined>(undefined);
 
 export default function Layout(props: { children: React.ReactNode }) {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, discordUsername } = useAuth();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -56,73 +62,95 @@ export default function Layout(props: { children: React.ReactNode }) {
   }
 
   return (
-    <AppShell
-      sidebar={
-        <Sidebar toggleBreakpoint="sm">
-          <SidebarToggleButton />
-          <SidebarSection direction="row">
-            <Image
-              src="https://saas-ui.dev/favicons/favicon-96x96.png"
-              boxSize="7"
-            />
-            <Spacer />
-            <Menu>
-              <MenuButton
-                as={IconButton}
-                icon={
-                  <PersonaAvatar
-                    presence="online"
-                    size="xs"
-                    src="/showcase-avatar.jpg"
-                  />
-                }
-                variant="ghost"
+    <LayoutContext.Provider value={{ discordUsername }}>
+      <AppShell
+        sidebar={
+          <Sidebar toggleBreakpoint="sm">
+            <SidebarToggleButton />
+            <SidebarSection direction="row">
+              <Image
+                src="https://saas-ui.dev/favicons/favicon-96x96.png"
+                boxSize="7"
               />
-              <MenuList>
-                <MenuItem onClick={handleLogout}>Sign out</MenuItem>
-              </MenuList>
-            </Menu>
-          </SidebarSection>
-          <SidebarSection flex="1">
-            <NavGroup>
-              <NavItem icon={<FiHome />} isActive>
-                Home
-              </NavItem>
-              <NavItem icon={<FiUsers />}>Users</NavItem>
-              <NavItem icon={<FiSettings />}>Settings</NavItem>
-            </NavGroup>
+              <Spacer />
+              <Menu>
+                <MenuButton
+                  as={IconButton}
+                  icon={
+                    <PersonaAvatar
+                      presence="online"
+                      size="xs"
+                      src="/showcase-avatar.jpg"
+                    />
+                  }
+                  variant="ghost"
+                />
+                <MenuList>
+                  <MenuItem onClick={handleLogout}>Sign out</MenuItem>
+                </MenuList>
+              </Menu>
+            </SidebarSection>
+            <SidebarSection flex="1">
+              <NavGroup>
+                <NavItem icon={<FiHome />} isActive>
+                  Home
+                </NavItem>
+                <NavItem icon={<FiUsers />}>Users</NavItem>
+                <NavItem icon={<FiSettings />}>Settings</NavItem>
+              </NavGroup>
 
-            <NavGroup title="Teams" isCollapsible>
-              <NavItem>Sales</NavItem>
-              <NavItem>Support</NavItem>
-            </NavGroup>
+              <NavGroup title="Teams" isCollapsible>
+                <NavItem>Sales</NavItem>
+                <NavItem>Support</NavItem>
+              </NavGroup>
 
-            <NavGroup title="Tags" isCollapsible>
-              <NavItem
-                icon={<Badge bg="purple.500" boxSize="2" borderRadius="full" />}
-              >
-                <Text>Lead</Text>
-                <Badge opacity="0.6" borderRadius="full" bg="none" ms="auto">
-                  83
-                </Badge>
-              </NavItem>
-              <NavItem
-                icon={<Badge bg="cyan.500" boxSize="2" borderRadius="full" />}
-              >
-                <Text>Customer</Text>
-                <Badge opacity="0.6" borderRadius="full" bg="none" ms="auto">
-                  210
-                </Badge>
-              </NavItem>
-            </NavGroup>
-          </SidebarSection>
-          <SidebarSection>
-            <NavItem icon={<FiHelpCircle />}>Documentation</NavItem>
-          </SidebarSection>
-        </Sidebar>
-      }
-    >
-      {props.children}
-    </AppShell>
+              <NavGroup title="Tags" isCollapsible>
+                <NavItem
+                  icon={
+                    <Badge bg="purple.500" boxSize="2" borderRadius="full" />
+                  }
+                >
+                  <Text>Lead</Text>
+                  <Badge
+                    opacity="0.6"
+                    borderRadius="full"
+                    bg="none"
+                    ms="auto"
+                  >
+                    83
+                  </Badge>
+                </NavItem>
+                <NavItem
+                  icon={<Badge bg="cyan.500" boxSize="2" borderRadius="full" />}
+                >
+                  <Text>Customer</Text>
+                  <Badge
+                    opacity="0.6"
+                    borderRadius="full"
+                    bg="none"
+                    ms="auto"
+                  >
+                    210
+                  </Badge>
+                </NavItem>
+              </NavGroup>
+            </SidebarSection>
+            <SidebarSection>
+              <NavItem icon={<FiHelpCircle />}>Documentation</NavItem>
+            </SidebarSection>
+          </Sidebar>
+        }
+      >
+        {props.children}
+      </AppShell>
+    </LayoutContext.Provider>
   );
+}
+
+export function useLayoutContext(){
+  const context = useContext(LayoutContext);
+  if (!context) {
+    throw new Error('useLayoutContext must be used within a LayoutProvider');
+  }
+  return context;
 }
