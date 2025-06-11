@@ -5,17 +5,17 @@ import { getAuth, signOut } from '@firebase/auth'
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyC9Zmq_mXXWEtL6WD4TF8zWOh6yiW9LMZ4",
+  apiKey: process.env.FIREBASE_API_KEY,
 
-  authDomain: "botina-44e95.firebaseapp.com",
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
 
-  projectId: "botina-44e95",
+  projectId: process.env.FIREBASE_PROJECT_ID,
 
-  storageBucket: "botina-44e95.firebasestorage.app",
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
 
-  messagingSenderId: "86747851038",
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
 
-  appId: "1:86747851038:web:bdf9dd6741c3469243410f"
+  appId: process.env.FIREBASE_APP_ID
 
 };
 
