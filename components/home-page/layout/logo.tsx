@@ -23,7 +23,7 @@ export const Logo = ({ href = '/', onClick }: LogoProps) => {
   }
 
   return (
-    <Flex h="20" flexShrink="0" alignItems="flex-start">
+    <Flex h="12" flexShrink="0" alignItems="flex-start">
       <Link
         my={"auto"}
         href={href}
