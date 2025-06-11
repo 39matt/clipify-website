@@ -17,12 +17,10 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { Property, PropertyList } from '@saas-ui/core';
-import { useAuth } from '../../providers/authProvider';
 import { useRouter } from 'next/navigation';
 import { isUserLinked } from '../../lib/firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useLayoutContext } from '../context'
-import { time } from 'framer-motion'
 
 const Profile: NextPage = () => {
   const router = useRouter();
@@ -42,9 +40,8 @@ const Profile: NextPage = () => {
         setCheckingLinked(false);
       }
     };
-
     checkLinkedStatus();
-  }, [user]);
+  }, [discordUsername]);
 
   const handleLinkDiscord = async () => {
     if (linked) {
@@ -81,7 +78,7 @@ const Profile: NextPage = () => {
       <HStack minW="100%" flex={1} justifyContent="space-around">
         <Card maxW="33%" w="full">
           <CardHeader display="flex" flexDirection="row">
-            <Heading size="sm">{discordUsername}</Heading>
+            <Heading size="lg">{discordUsername}</Heading>
             <Spacer />
             {!linked && (
               <Button colorScheme="green" variant="solid" onClick={handleLinkDiscord}>
@@ -91,33 +88,33 @@ const Profile: NextPage = () => {
           </CardHeader>
           <CardBody>
             <PropertyList>
-              <Property
-                label="Billing plan"
-                value={<Text fontWeight="bold">Professional</Text>}
-              />
               <Property label="Discord" value={
                 linked ? "Linked" : "Not linked"
               } textColor={linked ? "green.500" : "red.500"} />
-              <Property label="Renewal date" value="01-01-2023" />
-              <Property
-                label="Users"
-                value={
-                  <Box flex="1">
-                    <Text fontSize="sm">20/100</Text>{' '}
-                    <Progress
-                      value={20}
-                      size="xs"
-                      colorScheme="primary"
-                      borderRadius="full"
-                    />
-                  </Box>
-                }
-              />
-              <Property label="Price" value="€1250,-" />
+              {/*<Property*/}
+              {/*  label="Users"*/}
+              {/*  value={*/}
+              {/*    <Box flex="1">*/}
+              {/*      <Text fontSize="sm">20/100</Text>{' '}*/}
+              {/*      <Progress*/}
+              {/*        value={20}*/}
+              {/*        size="xs"*/}
+              {/*        colorScheme="primary"*/}
+              {/*        borderRadius="full"*/}
+              {/*      />*/}
+              {/*    </Box>*/}
+              {/*  }*/}
+              {/*/>*/}
+              <Property label="Money made" value="€1250,-" />
             </PropertyList>
           </CardBody>
         </Card>
-        <Card maxW="33%" w="full"></Card>
+        <Card maxW="33%" w="full">
+          <CardHeader display="flex" flexDirection="row">
+            <Heading size="lg">Stats</Heading>
+            <Spacer />
+          </CardHeader>
+        </Card>
       </HStack>
     </VStack>
   );

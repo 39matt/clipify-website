@@ -24,30 +24,34 @@ export function AuthProvider({ children }) {
   const [discordUsername, setDiscordUsername] = useState('')
 
   useEffect(() => {
-    const fetchUserIdAndSubscribe = async () => {
-      if (user?.email && !discordUsername) {
-        try {
-          const userId = await getUserId(user.email)
-          setDiscordUsername(userId)
-        } catch (error) {
-          console.error('Error fetching userId:', error)
-        }
-      }
-
-      return onAuthStateChanged(auth, (firebaseUser) => {
-        setUser(firebaseUser)
-        setLoading(false)
-      })
-    }
-
-    const unsubscribePromise = fetchUserIdAndSubscribe()
-
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser)
+      setLoading(false)
+    })
     return () => {
-      unsubscribePromise.then((unsubscribe) => {
-        if (typeof unsubscribe === 'function') {
-          unsubscribe()
+      unsubscribe()
+    }
+  }, [])
+
+  useEffect(() => {
+    // if we're logged out, clear the username
+    if (!user?.email) {
+      setDiscordUsername('')
+      return
+    }
+    // otherwise fetch
+    let cancelled = false
+    getUserId(user.email)
+      .then((id) => {
+        if (!cancelled) {
+          setDiscordUsername(id)
         }
       })
+      .catch((err) => {
+        console.error('Error fetching userId:', err)
+      })
+    return () => {
+      cancelled = true
     }
   }, [user])
 

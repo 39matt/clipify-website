@@ -29,7 +29,6 @@ export async function addUser(email: string, discordUsername: string) {
     userDocRef,
     {
       email,
-      discordUsername,
       connected: true,
     },
     { merge: true }
