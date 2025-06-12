@@ -75,8 +75,8 @@ const Profile: NextPage = () => {
           User Profile
         </Heading>
       </Box>
-      <HStack minW="100%" flex={1} justifyContent="space-around">
-        <Card maxW="33%" w="full" maxH='150px'>
+      <HStack minW="100%" flex={1} justifyContent="space-around" alignItems="flex-start">
+        <Card maxW="33%" w="full" maxH='200px'>
           <CardHeader display="flex" flexDirection="row">
             <Heading size="lg">{discordUsername}</Heading>
             <Spacer />
@@ -109,7 +109,7 @@ const Profile: NextPage = () => {
             </PropertyList>
           </CardBody>
         </Card>
-        <Card maxW="33%" w="full" maxH='150px'>
+        <Card maxW="33%" w="full">
           <CardHeader display="flex" flexDirection="row">
             <Heading size="lg">Stats</Heading>
             <Spacer />
