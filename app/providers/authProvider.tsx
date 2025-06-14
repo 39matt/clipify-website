@@ -34,12 +34,11 @@ export function AuthProvider({ children }) {
   }, [])
 
   useEffect(() => {
-    // if we're logged out, clear the username
     if (!user?.email) {
       setDiscordUsername('')
       return
     }
-    // otherwise fetch
+
     let cancelled = false
     getUserId(user.email)
       .then((id) => {

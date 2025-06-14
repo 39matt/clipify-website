@@ -102,3 +102,16 @@ export const firebaseLoginErrorMap = {
   // fallback
   'default': 'Došlo je do greške pri prijavi. Pokušajte ponovo.',
 }
+
+export const firebaseResetPasswordErrorMap = {
+  'auth/wrong-password': 'Trenutna šifra nije tačna. Pokušajte ponovo.',
+  'auth/weak-password': 'Nova šifra je previše slaba. Molimo unesite jaču šifru.',
+  'auth/requires-recent-login':
+    'Vaša sesija je istekla. Molimo prijavite se ponovo i pokušajte ponovo.',
+  'auth/too-many-requests':
+    'Previše neuspešnih pokušaja. Molimo pokušajte ponovo kasnije.',
+  'auth/network-request-failed': 'Došlo je do greške u mreži. Proverite internet konekciju.',
+  'auth/user-not-found': 'Korisnik nije pronađen. Molimo proverite podatke.',
+  'auth/internal-error': 'Došlo je do interne greške. Pokušajte ponovo.',
+  'auth/invalid-credential': 'Uneta šifra nije tačna. Molimo pokušajte ponovo.'
+};

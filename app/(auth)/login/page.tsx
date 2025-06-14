@@ -55,7 +55,8 @@ const Login: NextPage = () => {
         if (match) code = match[1]
       }
 
-      setError(firebaseLoginErrorMap[code] || 'Došlo je do greške. Pokušajte ponovo.')    }
+      setError(firebaseLoginErrorMap[code] || 'Došlo je do greške. Pokušajte ponovo.')
+    }
   }
   return (
     <Section height="calc(100vh - 200px)" innerWidth="container.sm">

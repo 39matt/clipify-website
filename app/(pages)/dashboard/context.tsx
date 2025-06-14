@@ -2,7 +2,7 @@
 
 import { createContext, useContext, ReactNode } from 'react'
 import { User } from '@firebase/auth'
-import { useAuth } from '../providers/authProvider'
+import { useAuth } from '../../providers/authProvider'
 
 interface LayoutContextType {
   user: User | null;

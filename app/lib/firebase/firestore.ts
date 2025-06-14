@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, getDocs, limit, query, setDoc, where } from '@firebase/firestore'
+import { collection, doc, getDoc, getDocs, limit, query, setDoc, updateDoc, where } from '@firebase/firestore'
 import { db } from './firebase'
 
 
@@ -54,3 +54,14 @@ export async function isUserLinked(uid: string): Promise<boolean> {
     throw new Error('Failed to check user linkage');
   }
 }
+
+export const updateWalletAddress = async (uid: string, walletAddress: string) => {
+  const userDocRef = doc(db, 'users', uid);
+  await setDoc(
+    userDocRef,
+    {
+      walletAddress,
+    },
+    { merge: true }
+  );
+};

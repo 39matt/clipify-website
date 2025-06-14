@@ -22,8 +22,8 @@ import {
   Spinner,
   Center,
 } from '@chakra-ui/react';
-import { FiHome, FiUsers, FiSettings, FiHelpCircle } from 'react-icons/fi';
-import { LayoutProvider, useLayoutContext } from './context';
+import { FiHome, FiUsers, FiSettings, FiHelpCircle, FiCompass, FiUser } from 'react-icons/fi'
+import { LayoutProvider, useLayoutContext } from './dashboard/context';
 import { logout } from '../lib/firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -66,7 +66,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <AppShell
       sidebar={
-        <Sidebar toggleBreakpoint="sm">
+        <Sidebar toggleBreakpoint="md">
           <SidebarToggleButton />
           <SidebarSection direction="row">
             <Image
@@ -93,52 +93,52 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           </SidebarSection>
           <SidebarSection flex="1">
             <NavGroup>
-              <NavItem icon={<FiHome />} isActive>
-                Home
+              <NavItem icon={<FiUser />}>Profil</NavItem>
+              <NavItem icon={<FiCompass />} isActive>
+                Aktivne kampanje
               </NavItem>
-              <NavItem icon={<FiUsers />}>Users</NavItem>
               <NavItem icon={<FiSettings />}>Settings</NavItem>
             </NavGroup>
 
-            <NavGroup title="Teams" isCollapsible>
-              <NavItem>Sales</NavItem>
-              <NavItem>Support</NavItem>
+            <NavGroup title="Vaše kampanje" isCollapsible>
+              <NavItem>Baka Prase - Gamba</NavItem>
+              <NavItem>Guh Saiyan - IRL</NavItem>
             </NavGroup>
 
-            <NavGroup title="Tags" isCollapsible>
-              <NavItem
-                icon={
-                  <Badge bg="purple.500" boxSize="2" borderRadius="full" />
-                }
-              >
-                <Text>Lead</Text>
-                <Badge
-                  opacity="0.6"
-                  borderRadius="full"
-                  bg="none"
-                  ms="auto"
-                >
-                  83
-                </Badge>
-              </NavItem>
-              <NavItem
-                icon={<Badge bg="cyan.500" boxSize="2" borderRadius="full" />}
-              >
-                <Text>Customer</Text>
-                <Badge
-                  opacity="0.6"
-                  borderRadius="full"
-                  bg="none"
-                  ms="auto"
-                >
-                  210
-                </Badge>
-              </NavItem>
-            </NavGroup>
+            {/*<NavGroup title="Tags" isCollapsible>*/}
+            {/*  <NavItem*/}
+            {/*    icon={*/}
+            {/*      <Badge bg="purple.500" boxSize="2" borderRadius="full" />*/}
+            {/*    }*/}
+            {/*  >*/}
+            {/*    <Text>Lead</Text>*/}
+            {/*    <Badge*/}
+            {/*      opacity="0.6"*/}
+            {/*      borderRadius="full"*/}
+            {/*      bg="none"*/}
+            {/*      ms="auto"*/}
+            {/*    >*/}
+            {/*      83*/}
+            {/*    </Badge>*/}
+            {/*  </NavItem>*/}
+            {/*  <NavItem*/}
+            {/*    icon={<Badge bg="cyan.500" boxSize="2" borderRadius="full" />}*/}
+            {/*  >*/}
+            {/*    <Text>Customer</Text>*/}
+            {/*    <Badge*/}
+            {/*      opacity="0.6"*/}
+            {/*      borderRadius="full"*/}
+            {/*      bg="none"*/}
+            {/*      ms="auto"*/}
+            {/*    >*/}
+            {/*      210*/}
+            {/*    </Badge>*/}
+            {/*  </NavItem>*/}
+            {/*</NavGroup>*/}
           </SidebarSection>
-          <SidebarSection>
-            <NavItem icon={<FiHelpCircle />}>Documentation</NavItem>
-          </SidebarSection>
+          {/*<SidebarSection>*/}
+          {/*  <NavItem icon={<FiHelpCircle />}>Documentation</NavItem>*/}
+          {/*</SidebarSection>*/}
         </Sidebar>
       }
     >
