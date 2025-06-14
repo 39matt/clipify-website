@@ -59,14 +59,14 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
   return (
     <Card w={{ base: '100%', md: '40%' }} h="full">
       <CardHeader>
-        <Heading size="lg">Payment info</Heading>
+        <Heading size="lg">Informacije o isplati</Heading>
         <Spacer />
       </CardHeader>
       <CardBody h="full" justifyContent="space-between">
         <PropertyList>
           <Property
             w="full"
-            label="Payment method"
+            label="Način isplate"
             value={
               <Select
                 name="payment"
@@ -74,7 +74,7 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
                 options={[
                   { label: 'USDT (ERC20)', value: 'usdt' },
                 ]}
-                aria-label="Select payment method"
+                aria-label="Izaberi način isplate"
               >
                 <SelectButton />
                 <SelectList />
@@ -84,7 +84,7 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
     <VStack align="start">
       <Property
         w="full"
-        label="Wallet address"
+        label="Adresa USDT novčanika"
         value={
           <Editable
             defaultValue={walletAddress}
