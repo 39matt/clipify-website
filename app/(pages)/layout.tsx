@@ -20,7 +20,7 @@ import {
   MenuItem,
   Image,
   Spinner,
-  Center,
+  Center, Box, Flex,
 } from '@chakra-ui/react';
 import { FiHome, FiUsers, FiSettings, FiHelpCircle, FiCompass, FiUser } from 'react-icons/fi'
 import { LayoutProvider, useLayoutContext } from './dashboard/context';
@@ -66,7 +66,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <AppShell
       sidebar={
-        <Sidebar h="100vh" toggleBreakpoint="md" bg="gray.800" color="white">
+        <Sidebar h="100vh" position="fixed" toggleBreakpoint="md" bg="gray.800" color="white">
           <SidebarToggleButton />
           <SidebarSection direction="row">
             <Image
@@ -93,8 +93,8 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           </SidebarSection>
           <SidebarSection flex="1">
             <NavGroup>
-              <NavItem icon={<FiUser />}>Profil</NavItem>
-              <NavItem icon={<FiCompass />} isActive>
+              <NavItem icon={<FiUser />} onClick={()=>router.push('/dashboard/profile')} isActive>Profil</NavItem>
+              <NavItem icon={<FiCompass />} onClick={()=>router.push('/campaigns')}>
                 Aktivne kampanje
               </NavItem>
               <NavItem icon={<FiSettings />}>Settings</NavItem>
@@ -142,7 +142,14 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
         </Sidebar>
       }
     >
-      {children}
+      <Flex
+          ml={{ base: 0, md: '250px' }} // Offset for the sidebar
+          justify="center" // Centers content horizontally
+          align="center" // Centers content vertically
+          p={6} // Padding for spacing
+      >
+          {children}
+      </Flex>
     </AppShell>
   );
 }
