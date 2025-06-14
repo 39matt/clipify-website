@@ -66,7 +66,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
   return (
     <AppShell
       sidebar={
-        <Sidebar toggleBreakpoint="md">
+        <Sidebar h="100vh" toggleBreakpoint="md" bg="gray.800" color="white">
           <SidebarToggleButton />
           <SidebarSection direction="row">
             <Image
