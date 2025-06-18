@@ -22,7 +22,7 @@ export default {
         <>
           „Ova platforma mi omogućava da lako pronađem projekte, sarađujem sa
           kreatorima i zarađujem od onoga što volim da radim. Već sam radila sa
-          pet različitih kreatora — bez ikakvih problema.”
+          pet različitih kreatora - bez ikakvih problema.”
         </>
       ),
     },

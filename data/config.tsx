@@ -4,6 +4,7 @@ import { NextSeoProps } from 'next-seo'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
 import { FiCheck } from 'react-icons/fi'
 import { Logo } from './logo'
+import { FaInstagram, FaTiktok } from 'react-icons/fa6'
 
 const siteConfig = {
   logo: Logo,
@@ -16,12 +17,12 @@ const siteConfig = {
   header: {
     links: [
       {
-        id: 'features',
-        label: 'Funkcionalnosti',
+        id: 'funkcionalnosti',
+        label: 'O nama',
       },
       {
-        id: 'plans',
-        label: 'Planovi',
+        id: 'kreni',
+        label: 'Kreni',
       },
       {
         id: 'faq',
@@ -46,21 +47,21 @@ const siteConfig = {
     ),
     links: [
       {
-        href: 'mailto:pomoc@klipplatforma.rs',
+        href: '/kontakt',
         label: 'Kontakt',
       },
       {
-        href: 'https://twitter.com/klipplatforma',
-        label: <FaTwitter size="14" />,
+        href: 'https://www.tiktok.com/@clipify.rs',
+        label: <FaTiktok size="14" />,
       },
       {
-        href: 'https://github.com/klipplatforma',
-        label: <FaGithub size="14" />,
+        href: 'https://www.instagram.com/clipify.rs/',
+        label: <FaInstagram size="14" />,
       },
     ],
   },
   signup: {
-    title: 'Kreni sa pravljenjem viralnih klipova',
+    title: 'Zašto odabrati našu platformu?',
     features: [
       {
         icon: FiCheck,
@@ -69,21 +70,18 @@ const siteConfig = {
       },
       {
         icon: FiCheck,
-        title: 'Jednostavna saradnja',
-        description:
-          'Povežite se lako sa klip editorima ili kreatorima i ostvarite najbolje rezultate.',
+        title: 'Brza i Sigurna Isplata',
+        description: 'Brza i sigurna isplata u najkraćem roku.',
       },
       {
         icon: FiCheck,
-        title: 'Sigurna i transparentna isplata',
-        description:
-          'Sredstva su sigurno deponovana dok rad ne bude završen i odobren.',
+        title: 'Efikasna Komunikacija',
+        description: 'Aktivno komuniciramo i pružamo podršku svakome kome je potrebna.',
       },
       {
         icon: FiCheck,
-        title: 'Brza i direktna komunikacija',
-        description:
-          'Olakšavamo komunikaciju kako bi saradnja bila bez problema.',
+        title: 'Jednostavnost Korišćenja',
+        description: 'Korak po korak instrukcije olakšavaju korišćenje i onima koji se prvi put susreću sa platformom.',
       },
     ],
   },

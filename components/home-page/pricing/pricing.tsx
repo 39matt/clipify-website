@@ -39,12 +39,12 @@ export const Pricing: React.FC<PricingProps> = (props) => {
   const { children, plans, title, description, ...rest } = props
 
   return (
-    <Section id="pricing" pos="relative" {...rest}>
+    <Section id="kreni" pos="relative" {...rest}>
       <BackgroundGradient height="100%" />
       <Box zIndex="2" pos="relative">
         <SectionTitle title={title} description={description}></SectionTitle>
 
-        <SimpleGrid columns={[1, null, 2]} spacing={4}>
+        <SimpleGrid columns={[1, null, 2]} spacing={4} alignItems="stretch">
           {plans?.map((plan, i) => (
             <MotionBox
               initial={{ scale: 1, opacity: 0, translateY: '20px' }}
@@ -54,43 +54,42 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                 type: 'tween',
                 ease: 'easeOut',
                 duration: 0.6,
-                delay: i/2,
+                delay: i / 2,
               }}
               key={plan.id}
             >
-            <PricingBox
-              title={plan.title}
-              description={plan.description}
-              price={plan.price}
-              sx={
-                plan.isRecommended
-                  ? {
+              <PricingBox
+                title={plan.title}
+                description={plan.description}
+                price={plan.price}
+                sx={
+                  plan.isRecommended
+                    ? {
                       borderColor: 'primary.500',
                       _dark: {
                         borderColor: 'primary.500',
                         bg: 'blackAlpha.300',
                       },
                     }
-                  : {}
-              }
-            >
-              <PricingFeatures>
-                {plan.features.map((feature, i) =>
-                  feature ? (
-                    <PricingFeature key={i} {...feature} />
-                  ) : (
-                    <br key={i} />
-                  ),
-                )}
-              </PricingFeatures>
-              <ButtonLink colorScheme="primary" {...plan.action}>
-                {plan.action.label || 'Sign Up'}
-              </ButtonLink>
-            </PricingBox>
+                    : {}
+                }
+              >
+                <PricingFeatures>
+                  {plan.features.map((feature, i) =>
+                    feature ? (
+                      <PricingFeature key={i} {...feature} />
+                    ) : (
+                      <br key={i} />
+                    ),
+                  )}
+                </PricingFeatures>
+                <ButtonLink colorScheme="primary" {...plan.action}>
+                  {plan.action.label || 'Sign Up'}
+                </ButtonLink>
+              </PricingBox>
             </MotionBox>
           ))}
         </SimpleGrid>
-
         {children}
       </Box>
     </Section>
@@ -144,7 +143,7 @@ const PricingBox: React.FC<PricingBoxProps> = (props) => {
       bg="whiteAlpha.600"
       borderRadius="md"
       p="8"
-      flex="1 0"
+      flex="1 0 auto" // Ensures the box grows and shrinks equally
       alignItems="stretch"
       border="1px solid"
       borderColor="gray.400"
@@ -152,6 +151,7 @@ const PricingBox: React.FC<PricingBoxProps> = (props) => {
         bg: 'blackAlpha.300',
         borderColor: 'gray.800',
       }}
+      minHeight="100%" // Ensures all boxes have the same height
       {...rest}
     >
       <Heading as="h3" size="md" fontWeight="bold" fontSize="lg" mb="2">

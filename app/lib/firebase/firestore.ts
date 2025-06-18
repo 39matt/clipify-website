@@ -31,6 +31,17 @@ export async function getUserId(email: string): Promise<string> {
   }
 }
 
+
+export async function checkUsernameAvailability(username: string): Promise<boolean> {
+  const usersCollection = collection(db, 'users');
+
+  const q = query(usersCollection, where('username', '==', username), limit(1));
+
+  const querySnapshot = await getDocs(q);
+
+  return !querySnapshot.empty;
+}
+
 export async function addUser(email: string, discordUsername: string) {
   const userDocRef = doc(db, 'users', discordUsername)
 

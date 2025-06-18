@@ -1,35 +1,36 @@
-'use client'
+'use client';
 
-import {
-  Box,
-  Card,
-  CardBody,
-  CardHeader,
-  Heading,
-  Text,
-  SimpleGrid,
-  Flex,
-  HStack, Alert, AlertIcon, Center, Spinner,
-} from '@chakra-ui/react'
-import { PasswordForm } from '@saas-ui/auth'
-import { Field, FormLayout } from '@saas-ui/react'
-import { NextPage } from 'next'
-import NextLink from 'next/link'
-import { Features } from 'components/home-page/features'
-import { BackgroundGradient } from '#components/home-page/gradients/background-gradient'
-import { PageTransition } from '#components/home-page/motion/page-transition'
-import siteConfig from '#data/config'
-import { useEffect, useState } from 'react'
-import {firebaseSignupErrorMap} from '../../lib/firebase/errors'
-import {useRouter} from "next/navigation";
-import { signUp } from '../../lib/firebase/auth'
-import { useAuth } from '../../providers/authProvider'
+import { Alert, AlertIcon, Box, Card, CardBody, CardHeader, Center, Flex, HStack, Heading, SimpleGrid, Spinner, Text } from '@chakra-ui/react';
+import { PasswordForm } from '@saas-ui/auth';
+import { PasswordSubmitParams } from '@saas-ui/auth/src/components';
+import { Field } from '@saas-ui/react';
+import { Features } from 'components/home-page/features';
+import { NextPage } from 'next';
+import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
+
+
+
+import { useEffect, useState } from 'react';
+
+
+
+import { BackgroundGradient } from '#components/home-page/gradients/background-gradient';
+import { PageTransition } from '#components/home-page/motion/page-transition';
+import siteConfig from '#data/config';
+
+
+
+import { signUp } from '../../lib/firebase/auth';
+import { firebaseSignupErrorMap } from '../../lib/firebase/errors';
+import { useAuth } from '../../providers/authProvider';
+
 
 const SignUp: NextPage = () => {
-  const router = useRouter()
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-  const {user, loading} = useAuth()
+  const router = useRouter();
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const { user, loading } = useAuth();
 
   useEffect(() => {
     if (user) {
@@ -42,18 +43,24 @@ const SignUp: NextPage = () => {
       <Center minH="100vh">
         <Spinner />
       </Center>
-    )
+    );
   }
 
-  const handleSignup = async (data: { email: string; password: string}) => {
+  const handleSignup = async (data: PasswordSubmitParams) => {
     try {
+      const confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
+
+      if (data.password !== confirmPassword) {
+        setError('Lozinka i potvrda lozinke se ne podudaraju.');
+        return;
+      }
 
       await signUp(data.email, data.password)
-      setSuccess("Uspešno ste napravili nalog! Proverite vaš mail kako bi ste se verifikovali.")
+      setSuccess(
+        'Uspešno ste napravili nalog! Proverite vaš mail kako bi ste se verifikovali.',
+      )
       router.push('/login')
-
     } catch (err: any) {
-
       let code = ''
       if (err.code) {
         code = err.code
@@ -62,7 +69,9 @@ const SignUp: NextPage = () => {
         if (match) code = match[1]
       }
 
-      setError(firebaseSignupErrorMap[code] || 'Došlo je do greške. Pokušajte ponovo.')
+      setError(
+        firebaseSignupErrorMap[code] || 'Došlo je do greške. Pokušajte ponovo.',
+      )
     }
   }
 
@@ -101,7 +110,6 @@ const SignUp: NextPage = () => {
             alignItems={{ base: 'center' }}
             px={{ base: 4, md: 12, lg: 20 }}
             py={{ base: 8, lg: 0 }}
-            h="100%"
           >
             <NextLink href="/" passHref>
               <Box
@@ -109,7 +117,7 @@ const SignUp: NextPage = () => {
                 width={{ base: '150px', md: '240px' }}
                 mb={{ base: 8, lg: 16 }}
                 cursor="pointer"
-                mx='auto'
+                mx="auto"
               />
             </NextLink>
             <Features
@@ -128,7 +136,7 @@ const SignUp: NextPage = () => {
             />
           </Flex>
 
-          <Flex align="center" justify="center" h="100%" >
+          <Flex align="center" justify="center" h="100%">
             <Card maxW="400px" w="full" boxShadow="lg" paddingX="10px" paddingY="5px">
               <CardHeader>
                 <Heading size="md" textAlign="center">
@@ -143,43 +151,47 @@ const SignUp: NextPage = () => {
                       children: 'Kreiraj nalog',
                     },
                     email: {
-                      isRequired: true
+                      isRequired: true,
                     },
                     password: {
-                      isRequired: true
+                      isRequired: true,
+                      label: "Lozinka"
                     }
-                  }}
+                  }
+                }
                 >
-                  <Field name="username" label="Username" isRequired/>
-                  <FormLayout columns={3}></FormLayout>
-                  <Field name="refferalCode" label="Referral code" />
-                  {error && (<Alert status="error">
-                    <AlertIcon />
-                    {error ? error : String(error)}
-                  </Alert>)}
-                  {success && (<Alert status="success">
-                    <AlertIcon />
-                    {success ? success : String(success)}
-                  </Alert>)}
+                  <Field id="confirmPassword" name="confirmPassword" label="Potvrdi lozinku" isRequired />
+                  {/*<Field name="username" label="Korisničko ime" isRequired />*/}
+                  {error && (
+                    <Alert status="error">
+                      <AlertIcon />
+                      {error}
+                    </Alert>
+                  )}
+                  {success && (
+                    <Alert status="success">
+                      <AlertIcon />
+                      {success}
+                    </Alert>
+                  )}
                 </PasswordForm>
-                <HStack spacing='5px' mt='10px'>
-                  <Text fontSize='14px' textColor="gray.500" display="inline">
+                <HStack spacing="5px" mt="10px">
+                  <Text fontSize="14px" textColor="gray.500" display="inline">
                     Već imaš nalog?
                   </Text>
-                  <NextLink  href={"/login"} passHref>
-                    <Text textColor="white" fontSize='14px'>
+                  <NextLink href="/login" passHref>
+                    <Text textColor="white" fontSize="14px">
                       Uloguj se
                     </Text>
                   </NextLink>
                 </HStack>
               </CardBody>
-
             </Card>
           </Flex>
         </SimpleGrid>
       </PageTransition>
     </Flex>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

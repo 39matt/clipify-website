@@ -52,11 +52,11 @@ const Home: NextPage = () => {
     <Box>
       <HeroSection />
 
-      <HighlightsSection />
+      {/*<HighlightsSection />*/}
 
       <FeaturesSection />
 
-      <TestimonialsSection />
+      {/*<TestimonialsSection />*/}
 
       <PricingSection />
 
@@ -85,10 +85,7 @@ const HeroSection: React.FC = () => {
             description={
               <FallInPlace delay={0.4} fontWeight="medium">
                 <Text>
-                Clipster pretvara strastvene kreatore
-                <Br /> u <Em>viralni motor</Em> za brendove—
-                plaćanje samo za stvarne preglede,
-                stvarnu interakciju i stvaran uticaj.
+                  Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi <Em>rezultate</Em>, sve je usmereno na <Em>stvarne preglede</Em>, pravu publiku i vidljive rezultate.
                   </Text>
               </FallInPlace>
             }
@@ -114,7 +111,7 @@ const HeroSection: React.FC = () => {
                 </ButtonLink>
                 <ButtonLink
                   size="lg"
-                  href=""
+                  href="/kontakt"
                   variant="outline"
                   width={{ base: 'full', md: 'auto' }}
                   rightIcon={
@@ -172,7 +169,7 @@ const HeroSection: React.FC = () => {
             icon: DollarSign,
             description: 'Isplaćeno kliperima',
             iconPosition: 'left',
-            delay: 0.6,
+            delay: 0,
           },
           {
             title: '2,000+',
@@ -180,7 +177,7 @@ const HeroSection: React.FC = () => {
             description:
               'Aktivnih klipera',
             iconPosition: 'left',
-            delay: 0.8,
+            delay: 0.33,
           },
           {
             title: '1.5B+',
@@ -188,7 +185,7 @@ const HeroSection: React.FC = () => {
             description:
               'Organskih pregleda',
             iconPosition: 'left',
-            delay: 1,
+            delay: 0.66,
           },
           {
             title: '51',
@@ -196,7 +193,7 @@ const HeroSection: React.FC = () => {
             description:
               'Pokrenutih kampanja',
             iconPosition: 'left',
-            delay: 1.1,
+            delay: 0.99,
           },
         ]}
         reveal={FallInPlace}
@@ -215,11 +212,8 @@ const HighlightsSection = () => {
       >
         <VStack alignItems="flex-start" spacing="8">
             <Text color="muted" fontSize="xl">
-              Povežite se direktno sa talentovanim klip editorima spremnim da
-              transformišu vaše najbolje trenutke u{' '}
-              <Em>deljive, viralno spremne isečke</Em>. Ili, ako ste klip editor,
-              pronađite uzbudljive projekte i{' '}
-              <Em>zaradite prikazujući svoje veštine editovanja</Em>.
+              Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi <Em>rezultate</Em>
+              - sve je usmereno na <Em>stvarne preglede</Em>, pravu publiku i vidljive rezultate.
             </Text>
         </VStack>
       </HighlightsItem>
@@ -331,16 +325,12 @@ const FeaturesSection = () => {
                     as="p"
                 >
                     Povezujemo Kreatore i
-                    <Br /> Klip Editore za Uspeh.
+                    <Br /> Klipere za zajednički uspeh.
                 </Heading>
             }
             description={
                 <>
-                    Naša platforma omogućava kreatorima da objave kampanje sa
-                    budžetom i ciljem pregleda, dok klip editori stvaraju klipove i
-                    takmiče se za nagrade.
-                    <Br />
-                    Pronađite idealnog saradnika i povećajte svoj domet.
+                  Kreatori postavljaju kampanje sa jasnim ciljem, a kliperi stvaraju sadržaj koji privlači pažnju i donosi rezultate
                 </>
             }
             align="left"
@@ -348,51 +338,51 @@ const FeaturesSection = () => {
             iconSize={4}
             features={[
                 {
-                    title: 'Jednostavno Postavljanje Kampanja',
+                    title: 'Jednostavno Kreiranje Kampanja',
                     icon: UploadCloud,
                     description:
-                        'Kreatori lako kreiraju kampanje sa jasnim zadacima i budžetom za klip editore.',
+                        'Kreatori lako kreiraju kampanje sa jasnim pravilima i budžetom za klipere.',
                     variant: 'inline',
                     delay: 0
                 },
                 {
-                    title: 'Prijavljivanje na Kampanje',
+                    title: 'Učestvovanje u kampanjama',
                     icon: Search,
                     description:
-                        'Klip editori mogu pregledati dostupne kampanje i prijaviti se za one koje odgovaraju njihovim veštinama.',
+                        'Kliperi imaju pristup svim dostupnim kampanjama i mogu učestvovati u onima koje im najviše odgovaraju.',
                     variant: 'inline',
                   delay: 0.5
                 },
                 {
-                    title: 'Sigurna Isplata po Učinku',
+                    title: 'Sigurna i brza isplata',
                     icon: Shield,
                     description:
-                        'Sistem osigurava da klip editori budu plaćeni po broju pregleda ili unapred dogovorenim nagradama.',
+                        'Kliperi dobijaju sigurnu i brzu isplatu za svaki pregled koji ostvare - bez čekanja i komplikacija.',
                     variant: 'inline',
                   delay: 1
                 },
                 {
-                    title: 'Pregled Profila i Portfolija',
-                    icon: Users,
+                    title: 'Kompletna statistika',
+                    icon: Award,
                     description:
-                        'Kreatori mogu pregledati radove i ocene klip editora pre nego što ih angažuju.',
+                        'Kliperi u svakom trenutku imaju jasan pregled svoje zarade i broja pregleda.',
                     variant: 'inline',
                   delay: 1.5
                 },
                 {
-                    title: 'Izgradnja Profesionalnog Portfolija',
-                    icon: Award,
+                    title: 'Mogucnost ostvarivanja bonusa',
+                    icon: MessageSquare,
                     description:
-                        'Svaki uspešan klip doprinosi reputaciji klip editora i povećava šanse za nove angažmane.',
+                        'Kliperi mogu ostvariti dodatne bonuse zasnovane na rezultatima i aktivnostima u kampanjamas',
                     variant: 'inline',
                   delay: 2
                 },
                 {
-                    title: 'Direktna i Jasna Komunikacija',
-                    icon: MessageSquare,
-                    description:
-                        'Olakšavamo komunikaciju između kreatora i klip editora za brzu i kvalitetnu saradnju.',
-                    variant: 'inline',
+                  title: 'Direktna i jasna komunikacija',
+                  icon: Users,
+                  description:
+                    'Kliperi imaju direktnu i jasnu komunikaciju sa timom, što omogućava brzo rešavanje problema.',
+                  variant: 'inline',
                   delay: 2.5
                 },
             ]}
@@ -435,7 +425,6 @@ const PricingSection = () => {
   return (
     <Pricing {...pricing}>
       <Text p="8" textAlign="center" color="muted">
-        VAT may be applicable depending on your location.
       </Text>
     </Pricing>
   )

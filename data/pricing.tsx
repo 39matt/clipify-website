@@ -3,60 +3,62 @@ import { HStack, Text } from '@chakra-ui/react'
 export default {
   title: 'Kako naša platforma funkcioniše',
   description:
-    'Povezujemo kreatore sa kliperima koji stvaraju viralne isečke – sve besplatno, plaćanje samo za ostvarene preglede.',
+    'Povezujemo kreatore sa kliperima koji prave viralne klipove – bez ulaganja na početku, plaćate tek kada klipovi donesu rezultate',
   plans: [
     {
       id: 'creator-start',
       title: 'Kreator',
       description:
-        'Objavite kampanje sa budžetom i ciljem pregleda. Plaćate samo za stvarne rezultate i angažman.',
+        'Kampanja sa jasnim ciljem i kontrolisanim budžetom. Plaćate isključivo kada vidite konkretne rezultate.',
       price: 'Besplatno za registraciju',
       features: [
         {
           title: 'Kreiranje i objava kampanja sa jasnim ciljevima',
         },
         {
-          title: 'Pristup širokoj mreži talentovanih klipera',
+          title: 'Pristup velikom broju iskusnih klipera',
         },
         {
-          title: 'Plaćanje po stvarnim pregledima i angažmanu',
+          title: 'Plaćaš samo za autentične preglede i engagement',
         },
         {
           title: 'Detaljna analitika i izveštaji o performansama',
         },
         {
-          title: 'Podrška korisnicima',
+          title: '24/7 Korisnička Podrška',
         },
       ],
       action: {
-        href: '/signup',
+        href: '/kontakt',
+        label: 'Započni!'
       },
     },
     {
       id: 'clipper',
-      title: 'Klip Editor',
+      title: 'Kliper',
       description:
-        'Prijavite se na kampanje, kreirajte viralne isečke i zarađujte po broju pregleda vašeg rada.',
+        'Kreirajte klipove, ucestvujte u kampanjama i zarađujte neograničeno – što više pregleda, to veća zarada.',
       price: 'Besplatno za registraciju',
       features: [
         {
-          title: 'Pregled otvorenih kampanja za prijavu',
+          title: 'Možete učestvovati u svim dostupnim kampanjama',
         },
         {
-          title: 'Zarada bazirana na stvarnim pregledima klipova',
+          title: 'Zarada bazirana na autentičnim pregledima klipova',
         },
         {
-          title: 'Mogućnost izgradnje portfolija i ocenjivanja',
+          title: 'Mogućnost otključavanja bonusa i napredovanja',
         },
         {
-          title: 'Sigurno i pravovremeno plaćanje',
+          title: 'Sigurna i brza isplata',
         },
         {
-          title: 'Pristup zajednici i podršci',
+          title: '24/7 Support',
         },
       ],
       action: {
         href: '/signup',
+        label: 'Registruj se!'
       },
     },
   ],

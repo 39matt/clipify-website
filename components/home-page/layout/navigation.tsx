@@ -31,13 +31,23 @@ const Navigation: React.FC = () => {
     mobileNavBtnRef.current?.focus()
   }, [mobileNav.isOpen])
 
+  const handleScrollToSection = (id: string) => {
+    const section = document.getElementById(id)
+    if (section) {
+      section.scrollIntoView({
+        behavior: 'smooth', // Smooth scrolling
+        block: 'start', // Align to the top of the section
+      })
+    }
+  }
+
   return (
     <HStack spacing="2" flexShrink={0}>
       {siteConfig.header.links.map(({ href, id, ...props }, i) => {
         return (
           <NavLink
             display={['none', null, 'block']}
-            href={href || `/public#${id}`}
+            href={href || `/`}
             key={i}
             isActive={
               !!(
@@ -45,6 +55,14 @@ const Navigation: React.FC = () => {
                 (href && !!path?.match(new RegExp(href)))
               )
             }
+            onClick={(e) => {
+              e.preventDefault() // Prevent default navigation behavior
+              if (id) {
+                handleScrollToSection(id) // Scroll to the section with the given id
+              } else if (href) {
+                router.push(href) // Navigate to the href if no id is provided
+              }
+            }}
             {...props}
           >
             {props.label}

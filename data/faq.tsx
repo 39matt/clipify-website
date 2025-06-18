@@ -2,53 +2,47 @@ const faq = {
   title: 'Često postavljana pitanja',
   items: [
     {
-      q: 'Kako funkcioniše saradnja između kreatora i klip editora?',
+      q: 'Koliko mogu da zaradim?',
       a: (
         <>
-          Kreatori objavljuju kampanje sa zadacima, a klip editori se prijavljuju sa svojim klipovima.
-          Kada kreator odabere najbolji klip, editor dobija nagradu, a klip se može objaviti na društvenim mrežama.
+          Svaka Clipify kampanja ima svoj iznos koji se plaća po broju pregleda i ukupni budžet. Kada se budžet potroši ili prođe mesec dana, isplate se obrađuju.
         </>
       ),
     },
     {
-      q: 'Da li je platforma besplatna?',
+      q: 'Mogu li odmah uploadovati objavu ili trebam sačekati da pregledi porastu?',
       a: (
         <>
-          Da, klip editori koriste platformu besplatno. Kreatori mogu započeti besplatno,
-          ali napredne funkcije poput direktne komunikacije, detaljne analitike i većeg broja kampanja
-          dostupne su u Pro planu.
+          Ne, naš softver prati tvoje preglede u realnom vremenu, tako da će brojati sve preglede i nakon što pošalješ objavu, sve dok kampanja traje. Morate uploadovati svoju objavu u roku od 24 sata od objavljivanja.
         </>
       ),
     },
     {
-      q: 'Kako se obračunava isplata editorima?',
+      q: 'Koje društvene mreže mogu koristiti?',
       a: (
         <>
-          Isplata se vrši na osnovu unapred dogovorene nagrade ili po broju pregleda koje klip ostvari.
-          Sistem garantuje sigurnu i pravovremenu uplatu.
+          Imamo kampanje za glavne društvene mreže (TikTok, Instagram) i uskoro stižu još!
         </>
       ),
     },
     {
-      q: 'Mogu li da sarađujem sa istim kreatorom više puta?',
+      q: 'Mogu li kombinovati više Clipify kampanja?',
       a: (
         <>
-          Naravno! Kada uspostavite saradnju sa kreatorom, možete nastaviti da radite zajedno direktno,
-          bez ponovne prijave na nove kampanje.
+          Da, možeš uploadovati objave za više kampanja kako bi povećao zaradu, pod uslovom da ispunjavaš sve njihove zahteve.
         </>
       ),
     },
     {
-      q: 'Da li mogu koristiti platformu kao agencija?',
+      q: 'Kako funkcioniše isplata i koji su uslovi?',
       a: (
         <>
-          Možete, ali vas molimo da nas kontaktirate radi posebnih uslova ako planirate da
-          upravljate kampanjama i klipovima za više kreatora u ime trećih lica.
+          Da bi ostvario isplatu, potrebno je da kampanja ostvari minimum 50.000 pregleda. Nakon što kampanja završi, naš tim proverava sve objave i pokreće obradu isplate, što traje 5 do 7 dana. Isplata se trenutno
+          vrši isključivo u kriptu, ali uskoro uvodimo i druge metode. Zaradu možeš podići sa svog Clipify naloga u bilo kom trenutku.
         </>
       ),
     },
   ],
-}
+};
 
-
-export default faq
+export default faq;

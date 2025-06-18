@@ -109,7 +109,7 @@ export const BoxFeatures: React.FC<FeaturesProps> = (props) => {
           <SimpleGrid columns={columns} spacing={spacing}>
             {features.map((feature, i) => {
               return (
-                <Wrap key={i} delay={feature.delay}>
+                <Wrap key={i} delay={feature.delay} amount={0.1}>
                   <BoxFeature iconSize={iconSize} {...feature} ip={ip} />
                 </Wrap>
               )

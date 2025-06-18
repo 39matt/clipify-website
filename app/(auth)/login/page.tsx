@@ -72,7 +72,7 @@ const Login: NextPage = () => {
           {/*/>*/}
           <Card flex="1" maxW="400px">
             <CardHeader display="flex" alignItems="center" justifyContent="center">
-              <Logo width={{ base: '150px', md: '240px' }} />
+              <Logo onClick={()=>{router.push('/')}} _hover={{cursor:"pointer"}} width={{ base: '150px', md: '240px' }} />
             </CardHeader>
             <CardBody>
               <PasswordForm onSubmit={handleLogin} fields={{submit: {children:'Uloguj se'}}}>

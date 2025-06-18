@@ -15,6 +15,7 @@ export async function signUp(email: string, password: string): Promise<any> {
   await sendEmailVerification(userCredential.user)
 }
 
+
 export async function signIn(email: string, password: string) {
   await signInWithEmailAndPassword(auth, email, password)
 }
