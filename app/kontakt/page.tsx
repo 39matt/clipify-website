@@ -137,15 +137,9 @@ const Contact: NextPage = () => {
             {/* Additional Contact Information */}
             <Box textAlign="center" mt={8}>
               <Heading size="md" mb={4}>
-                Kontakt informacije
+                Ili nas kontaktirajte direktno mejlom:
               </Heading>
               <VStack spacing={4}>
-                <HStack spacing={4}>
-                  <Icon as={FiPhone} boxSize={6} color="green.500" />
-                  <Text fontSize="md" color="gray.500">
-                    +381 123 456 789
-                  </Text>
-                </HStack>
                 <HStack spacing={4}>
                   <Icon as={FiMail} boxSize={6} color="green.500" />
                   <Text fontSize="md" color="gray.500">
