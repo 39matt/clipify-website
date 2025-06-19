@@ -1,10 +1,12 @@
-import { chakra, SimpleGrid } from '@chakra-ui/react'
-import { Section, SectionProps, SectionTitle } from '#components/home-page/section'
+import { chakra, Box, Flex, Collapse, Icon, SimpleGrid } from '@chakra-ui/react';
+import { Section, SectionProps, SectionTitle } from '#components/home-page/section';
+import { useState } from 'react';
+import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
 interface FaqProps extends Omit<SectionProps, 'title' | 'children'> {
-  title?: React.ReactNode
-  description?: React.ReactNode
-  items: { q: React.ReactNode; a: React.ReactNode }[]
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  items: { q: React.ReactNode; a: React.ReactNode }[];
 }
 
 export const Faq: React.FC<FaqProps> = (props) => {
@@ -12,32 +14,52 @@ export const Faq: React.FC<FaqProps> = (props) => {
     title = 'Frequently asked questions',
     description,
     items = [],
-  } = props
+  } = props;
+
   return (
     <Section id="faq">
       <SectionTitle title={title} description={description} />
 
-      <SimpleGrid columns={[1, null, 2]} spacingY={10} spacingX="20">
+      <Box flex={1} flexDirection={"column"}>
         {items?.map(({ q, a }, i) => {
-          return <FaqItem key={i} question={q} answer={a} />
+          return <FaqItem key={i} question={q} answer={a} />;
         })}
-      </SimpleGrid>
+      </Box>
     </Section>
-  )
-}
+  );
+};
 
 export interface FaqItemProps {
-  question: React.ReactNode
-  answer: React.ReactNode
+  question: React.ReactNode;
+  answer: React.ReactNode;
 }
 
 const FaqItem: React.FC<FaqItemProps> = ({ question, answer }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggle = () => setIsOpen(!isOpen);
+
   return (
-    <chakra.dl>
-      <chakra.dt fontWeight="semibold" mb="2">
-        {question}
-      </chakra.dt>
-      <chakra.dd color="muted">{answer}</chakra.dd>
-    </chakra.dl>
-  )
-}
+    <Box
+      borderColor="gray.200"
+      borderRadius="md"
+      p={4}
+      bg={isOpen ? 'gray.700' : 'gray.800'}
+      color="white"
+      _hover={{ cursor: 'pointer', bg: 'gray.700' }}
+      onClick={toggle}
+    >
+      <Flex justify="space-between" align="center">
+        <chakra.dt fontWeight="semibold" fontSize="lg">
+          {question}
+        </chakra.dt>
+        <Icon as={isOpen ? FiChevronUp : FiChevronDown} boxSize={5} />
+      </Flex>
+      <Collapse in={isOpen} animateOpacity>
+        <chakra.dd mt={4} fontSize="md" color="gray.300">
+          {answer}
+        </chakra.dd>
+      </Collapse>
+    </Box>
+  );
+};
