@@ -74,7 +74,7 @@ const Profile: NextPage = () => {
   return (
     <VStack>
       <Box my="24px">
-        <Heading textAlign="center" fontSize="48px">
+        <Heading textAlign="center" fontSize="48px" textColor={"green.400"}>
           Korisnički profil
         </Heading>
       </Box>

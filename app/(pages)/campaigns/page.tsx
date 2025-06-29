@@ -24,7 +24,7 @@
       <VStack>
         <Box my="24px">
           <Heading textAlign="center" fontSize="48px">
-            Campaigns
+            Aktivne kampanje
           </Heading>
         </Box>
         <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={6}>

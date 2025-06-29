@@ -22,12 +22,13 @@ import {
 } from '@chakra-ui/react';
 import { BackgroundGradient } from '#components/home-page/gradients/background-gradient';
 import { PageTransition } from '#components/home-page/motion/page-transition';
-import { Section } from 'components/home-page/section';
+import { Section } from '#components/home-page/section';
 import { Logo } from '#data/logo';
 import NextLink from 'next/link';
 import { NextPage } from 'next';
 import { useState } from 'react';
 import { FiPhone, FiMail } from 'react-icons/fi';
+import Link from 'next/link'
 
 const Contact: NextPage = () => {
   const [error, setError] = useState('');
@@ -73,7 +74,7 @@ const Contact: NextPage = () => {
     <Section height="calc(100vh)" innerWidth="container.md">
       <BackgroundGradient zIndex="-1" />
 
-      <Center height="100%">
+      <Center>
         <PageTransition width="100%">
           <VStack spacing={8} align="center" w="full">
             {/* Heading and Description */}
@@ -82,7 +83,7 @@ const Contact: NextPage = () => {
                 Kontaktirajte nas
               </Heading>
               <Text fontSize="md" color="gray.500">
-                Imate pitanja ili želite da viralizujete vaš kontent? Pošaljite nam poruku putem forme ispod.
+                Imate pitanja ili želite da viralizujete vaš sadržaj? Pošaljite nam poruku putem forme ispod.
               </Text>
             </Box>
 
@@ -142,9 +143,9 @@ const Contact: NextPage = () => {
               <VStack spacing={4}>
                 <HStack spacing={4}>
                   <Icon as={FiMail} boxSize={6} color="green.500" />
-                  <Text fontSize="md" color="gray.500">
-                    kontakt@clipify.com
-                  </Text>
+                  <Link passHref href={"mailto:kontakt@clipify.com"} >
+                    <Text fontSize="md" color="gray.500">kontakt@clipify.com</Text>
+                  </Link>
                 </HStack>
               </VStack>
             </Box>

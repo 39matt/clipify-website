@@ -97,7 +97,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
               <NavItem icon={<FiCompass />} onClick={()=>router.push('/campaigns')}>
                 Aktivne kampanje
               </NavItem>
-              <NavItem icon={<FiSettings />}>Settings</NavItem>
+              <NavItem icon={<FiSettings />} onClick={()=>router.push('/dashboard/accounts')}>Vaši nalozi</NavItem>
             </NavGroup>
 
             <NavGroup title="Vaše kampanje" isCollapsible>
