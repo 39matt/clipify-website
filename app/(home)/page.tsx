@@ -70,91 +70,98 @@ const HeroSection: React.FC = () => {
     <Box position="relative" overflow="hidden">
       <BackgroundGradient height="100%" zIndex="-1" />
       <Container maxW="container.xl" pt={{ base: 40, md: 60 }} pb="40">
-        <Stack direction={{ base: 'column', lg: 'row' }} >
-          <Hero
-            id="home"
-            px="0"
-            title={
-              <FallInPlace>
-                <Text fontSize={{base:'3xl', md:'5xl'}}>
-                  Sve-u-jednom alat za
-                  <Br /> viralnost
-                </Text>
-              </FallInPlace>
-            }
-            description={
-              <FallInPlace delay={0.4} fontWeight="medium">
-                <Text>
-                  Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi <Em>rezultate</Em>, sve je usmereno na <Em>stvarne preglede</Em>, pravu publiku i vidljive rezultate.
+        <Flex
+          direction={{ base: 'column', lg: 'row' }}
+          align="center"
+          justify="space-between"
+        >
+          {/* Text Section */}
+          <Box flex="1" pr={{ base: 0, lg: 8 }} mb={{ base: 8, lg: 0 }}>
+            <Hero
+              id="home"
+              px="0"
+              title={
+                <FallInPlace>
+                  <Text fontSize={{ base: '3xl', md: '5xl' }}>
+                    Sve-u-jednom alat za
+                    <Br /> viralnost
                   </Text>
-              </FallInPlace>
-            }
-          >
-            <FallInPlace delay={0.8}>
-              <HStack pt="4" pb="12" spacing="8">
-              </HStack>
+                </FallInPlace>
+              }
+              description={
+                <FallInPlace delay={0.4} fontWeight="medium">
+                  <Text>
+                    Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi{' '}
+                    <Em>rezultate</Em>, sve je usmereno na <Em>stvarne preglede</Em>,
+                    pravu publiku i vidljive rezultate.
+                  </Text>
+                </FallInPlace>
+              }
+            >
+              <FallInPlace delay={0.8}>
+                <HStack pt="4" pb="12" spacing="8"></HStack>
 
-              <ButtonGroup
-                spacing={{ base: 3, md: 4 }}
-                alignItems="center"
-                flexDirection={{ base: 'column', md: 'row' }}
-                width={{ base: 'full', md: 'auto' }}
-              >
-                <ButtonLink
-                  colorScheme="primary"
-                  size="lg"
-                  href="/signup"
+                <ButtonGroup
+                  spacing={{ base: 3, md: 4 }}
+                  alignItems="center"
+                  flexDirection={{ base: 'column', md: 'row' }}
                   width={{ base: 'full', md: 'auto' }}
-                  mb={{base:'2em', md:0}}
                 >
-                  Pridruži se sada
-                </ButtonLink>
-                <ButtonLink
-                  size="lg"
-                  href="/kontakt"
-                  variant="outline"
-                  width={{ base: 'full', md: 'auto' }}
-                  rightIcon={
-                    <Icon
-                      as={FiArrowRight}
-                      sx={{
-                        transitionProperty: 'common',
-                        transitionDuration: 'normal',
-                        '.chakra-button:hover &': {
-                          transform: 'translate(5px)',
-                        },
-                      }}
-                    />
-                  }
-                >
-                  Saradnja sa nama
-                </ButtonLink>
-              </ButtonGroup>
-            </FallInPlace>
-          </Hero>
-          <Box
-            height="600px"
-            position="absolute"
-            display={{ base: 'none', lg: 'block' }}
-            left={{ lg: '60%', xl: '55%' }}
-            width="80vw"
-            maxW="1100px"
-            margin="0 auto"
-          >
+                  <ButtonLink
+                    colorScheme="primary"
+                    size="lg"
+                    href="/signup"
+                    width={{ base: 'full', md: 'auto' }}
+                    mb={{ base: '2em', md: 0 }}
+                  >
+                    Pridruži se sada
+                  </ButtonLink>
+                  <ButtonLink
+                    size="lg"
+                    href="/kontakt"
+                    variant="outline"
+                    width={{ base: 'full', md: 'auto' }}
+                    rightIcon={
+                      <Icon
+                        as={FiArrowRight}
+                        sx={{
+                          transitionProperty: 'common',
+                          transitionDuration: 'normal',
+                          '.chakra-button:hover &': {
+                            transform: 'translate(5px)',
+                          },
+                        }}
+                      />
+                    }
+                  >
+                    Saradnja sa nama
+                  </ButtonLink>
+                </ButtonGroup>
+              </FallInPlace>
+            </Hero>
+          </Box>
+
+          {/* Image Section */}
+          <Box flex="1" pl={{ base: 0, lg: 8 }}>
             <FallInPlace delay={1}>
-              <Box overflow="hidden" height="100%">
+              <Box
+                width="100%"
+                maxWidth="700px"
+                mx="auto"
+                overflow="hidden"
+              >
                 <Image
                   src="/static/screenshots/example.png"
-                  width={2000}
-                  height={786}
                   alt="Snimak ekrana liste kampanja u Clipster-u"
-                  quality="75"
+                  quality={75}
                   priority
+                  width={2000} // Numeric value in pixels
+                  height={786} // Numeric value in pixels
                 />
               </Box>
             </FallInPlace>
           </Box>
-        </Stack>
+        </Flex>
       </Container>
 
       <BoxFeatures
