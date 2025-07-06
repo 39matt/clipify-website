@@ -121,7 +121,7 @@ const Page = () => {
   };
 
   return (
-    <Box bg="gray.900" color="white" maxH="100vh" p={6} minW="80vw">
+    <Box bg="gray.900" color="white" maxH="100vh" p={6} minW="60vw">
       {/* Sekcija zaglavlja */}
       <Box
         position="relative" // Omogućava slojevitost za pozadinu i sadržaj
