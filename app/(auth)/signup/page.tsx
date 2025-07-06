@@ -74,7 +74,6 @@ const SignUp: NextPage = () => {
       )
     }
   }
-
   return (
     <Flex
       direction="column"
@@ -136,7 +135,10 @@ const SignUp: NextPage = () => {
             />
           </Flex>
 
-          <Flex align="center" justify="center" h="100%">
+          <Flex align="center" justify="center" h="100%" flexDirection="column" justifyContent="space-around">
+            <Alert status="error" maxW="75%">
+              <AlertIcon/>
+              Trenutno nije moguća registracija, radimo na tome!</Alert>
             <Card maxW="400px" w="full" boxShadow="lg" paddingX="10px" paddingY="5px">
               <CardHeader>
                 <Heading size="md" textAlign="center">
@@ -149,6 +151,7 @@ const SignUp: NextPage = () => {
                   fields={{
                     submit: {
                       children: 'Kreiraj nalog',
+                      isDisabled: true
                     },
                     email: {
                       isRequired: true,
