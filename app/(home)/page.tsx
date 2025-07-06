@@ -73,10 +73,10 @@ const HeroSection: React.FC = () => {
         <Flex
           direction={{ base: 'column', lg: 'row' }}
           align="center"
-          justify="space-between"
+          gap={{ base: 8, lg: 24 }} // Adjust the spacing as needed
         >
           {/* Text Section */}
-          <Box flex="1" pr={{ base: 0, lg: 8 }} mb={{ base: 8, lg: 0 }}>
+          <Box flex="1"  pr={{ base: 0, lg: 8 }} mb={{ base: 8, lg: 0 }}>
             <Hero
               id="home"
               px="0"

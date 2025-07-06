@@ -15,7 +15,6 @@ import {
   Card,
   CardBody,
   CardHeader,
-  CardFooter,
   SimpleGrid,
   useColorModeValue,
   Badge,
@@ -42,10 +41,6 @@ const AccountPage = () => {
   const [account, setAccount] = useState<IAccount | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { user, loading, discordUsername } = useLayoutContext();
-
-  const cardBg = useColorModeValue('white', 'gray.800');
-  const cardHoverBg = useColorModeValue('gray.50', 'gray.700');
-  const textColor = useColorModeValue('gray.700', 'gray.300');
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [videoLink, setVideoLink] = useState('');
@@ -111,70 +106,100 @@ const AccountPage = () => {
   }
 
   return (
-    <Box maxW="1200px" mx="auto" p={8}>
-      <Card
-        bg={cardBg}
-        boxShadow="2xl"
-        borderRadius="xl"
-        p={8}
-        mb={8}
-        _hover={{ bg: cardHoverBg }}
-        transition="background-color 0.2s"
-      >
-        <CardBody>
-          <StatGroup mb={8}>
-            <Stat>
-              <StatLabel fontSize="lg" color={textColor}>
-                Korisničko ime
-              </StatLabel>
-              <StatNumber fontSize="2xl">
-                <Text as="a" href={account.link}>
-                  {account.username}
-                </Text>
-              </StatNumber>
-            </Stat>
-            <Stat>
-              <StatLabel fontSize="lg" color={textColor}>
-                Platforma
-              </StatLabel>
-              <StatNumber fontSize="2xl">{account.platform}</StatNumber>
-            </Stat>
-          </StatGroup>
-        </CardBody>
-        <CardFooter>
-          <Center>
-            <Text fontSize="md" color="gray.400">
-              {/* Additional footer content can go here */}
-            </Text>
-          </Center>
-        </CardFooter>
-      </Card>
-
-      {/* Add Video Button */}
-      <Button
-        colorScheme="green"
+    <Box bg="gray.900" color="white" maxH="100vh" p={6}>
+      {/* Header Section */}
+      <Box
+        position="relative"
+        bg="gray.800"
+        borderRadius="lg"
+        p={12}
         mb={6}
-        onClick={onOpen}
-        size="lg"
-        alignSelf="center"
+        textAlign="center"
+        boxShadow="lg"
+        overflow="hidden"
       >
-        Dodajte Video
-      </Button>
+        {/* Background Image */}
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          w="full"
+          h="full"
+          bgSize="cover"
+          bgPosition="center"
+          filter="blur(8px)"
+          opacity={0.6}
+        />
+
+        {/* Content */}
+        <Heading as="h1" size="lg" mb={2} opacity={1}>
+          {account.username}
+        </Heading>
+        <Text fontSize="md" color="gray.300" opacity={1}>
+          {account.platform}
+        </Text>
+      </Box>
+
+      {/* Account Details Section */}
+      <HStack spacing={6}>
+        {/* Card 1: Account Stats */}
+        <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="2">
+          <CardHeader textAlign="center">
+            <Heading as="h2" size="md" color="red.400" mb={4}>
+              Detalji naloga
+            </Heading>
+          </CardHeader>
+          <CardBody>
+            <StatGroup>
+              <Stat>
+                <StatLabel fontSize="lg" color="gray.300">
+                  Korisničko ime
+                </StatLabel>
+                <StatNumber fontSize="2xl">
+                  <Text as="a" href={account.link}>
+                    {account.username}
+                  </Text>
+                </StatNumber>
+              </Stat>
+              <Stat>
+                <StatLabel fontSize="lg" color="gray.300">
+                  Platforma
+                </StatLabel>
+                <StatNumber fontSize="2xl">{account.platform}</StatNumber>
+              </Stat>
+            </StatGroup>
+          </CardBody>
+        </Card>
+
+        {/* Card 2: Add Video */}
+        <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
+          <CardHeader textAlign="center">
+            <Heading as="h2" size="md" color="red.400" mb={4}>
+              Dodajte Video
+            </Heading>
+          </CardHeader>
+          <CardBody textAlign="center">
+            <Button colorScheme="green" size="lg" onClick={onOpen}>
+              Dodajte Video
+            </Button>
+          </CardBody>
+        </Card>
+      </HStack>
 
       {/* Videos Section */}
       <Heading as="h2" size="xl" mb={6} textAlign="center">
-        Videozapisi
+        Videi
       </Heading>
       {account.videos.length > 0 ? (
         <SimpleGrid columns={[1, 2, 3]} spacing={6}>
           {account.videos.map((video) => (
             <Card
               key={video.uid}
-              bg={cardBg}
+              bg="gray.800"
               boxShadow="lg"
               borderRadius="lg"
               p={4}
-              _hover={{ bg: cardHoverBg }}
+              _hover={{ bg: 'gray.700' }}
               transition="background-color 0.2s"
             >
               <CardHeader>
@@ -184,8 +209,8 @@ const AccountPage = () => {
                   mb={4}
                   color="blue.500"
                   cursor="pointer"
-                  _hover={{ color: "blue.600" }}
-                  onClick={() => window.open(video.link, "_blank")}
+                  _hover={{ color: 'blue.600' }}
+                  onClick={() => window.open(video.link, '_blank')}
                 >
                   {video.name}
                 </Heading>
@@ -193,7 +218,7 @@ const AccountPage = () => {
               <CardBody>
                 <VStack align="start" spacing={2}>
                   <HStack>
-                    <Box minW="100px" fontWeight="bold" color={textColor}>
+                    <Box minW="100px" fontWeight="bold" color="gray.300">
                       Pregledi:
                     </Box>
                     <Badge colorScheme="blue" fontSize="0.8em">
@@ -201,7 +226,7 @@ const AccountPage = () => {
                     </Badge>
                   </HStack>
                   <HStack>
-                    <Box minW="100px" fontWeight="bold" color={textColor}>
+                    <Box minW="100px" fontWeight="bold" color="gray.300">
                       Lajkovi:
                     </Box>
                     <Badge colorScheme="green" fontSize="0.8em">
@@ -209,7 +234,7 @@ const AccountPage = () => {
                     </Badge>
                   </HStack>
                   <HStack>
-                    <Box minW="100px" fontWeight="bold" color={textColor}>
+                    <Box minW="100px" fontWeight="bold" color="gray.300">
                       Deljenja:
                     </Box>
                     <Badge colorScheme="purple" fontSize="0.8em">
@@ -217,7 +242,7 @@ const AccountPage = () => {
                     </Badge>
                   </HStack>
                   <HStack>
-                    <Box minW="100px" fontWeight="bold" color={textColor}>
+                    <Box minW="100px" fontWeight="bold" color="gray.300">
                       Komentari:
                     </Box>
                     <Badge colorScheme="red" fontSize="0.8em">
@@ -232,7 +257,7 @@ const AccountPage = () => {
       ) : (
         <Center>
           <Text fontSize="lg" color="gray.500">
-            Nema videozapisa za ovaj nalog.
+            Nema videa za ovaj nalog.
           </Text>
         </Center>
       )}
