@@ -29,7 +29,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody, Input, useDisclosure, ModalFooter,
+  ModalBody, Input, useDisclosure, ModalFooter, Flex,
 } from '@chakra-ui/react'
 import { getCampaign } from '../../../lib/firebase/firestore';
 import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa'
@@ -201,7 +201,7 @@ const Page = () => {
             </HStack>
           </CardBody>
         </Card>
-        <HStack justify="center" spacing={4} width="full">
+        <Flex justify="center" gap={4} width="full" flexDirection={{base:"column", md:"row"}}>
           {/* First Card: Campaign Progress */}
           <Card
             bg="gray.800"
@@ -271,7 +271,7 @@ const Page = () => {
               </StatGroup>
             </CardBody>
           </Card>
-        </HStack>
+        </Flex>
 
       </VStack>
       <Modal isOpen={isOpen} onClose={onClose}>
