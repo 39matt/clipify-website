@@ -21,6 +21,8 @@ import * as React from 'react'
 
 import { Logo } from '#components/home-page/layout/logo'
 import siteConfig from '#data/config'
+import { NextRouter } from 'next/router'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 interface NavLinkProps extends LinkProps {
   label: string
@@ -60,11 +62,14 @@ function NavLink({ href, children, isActive, ...rest }: NavLinkProps) {
 
 interface MobileNavContentProps {
   isOpen?: boolean
-  onClose?: () => void
+  onClose: () => void
+  router: AppRouterInstance
 }
 
 export function MobileNavContent(props: MobileNavContentProps) {
-  const { isOpen, onClose = () => {} } = props
+  const isOpen = props.isOpen
+  const onClose = props.onClose
+  const router = props.router
   const closeBtnRef = React.useRef<HTMLButtonElement>(null)
   const pathname = usePathname()
   const bgColor = useColorModeValue('whiteAlpha.900', 'blackAlpha.900')
@@ -90,6 +95,16 @@ export function MobileNavContent(props: MobileNavContentProps) {
       })
     }
   }, [isOpen])
+
+  const handleScrollToSection = (id: string) => {
+    const section = document.getElementById(id)
+    if (section) {
+      section.scrollIntoView({
+        behavior: 'smooth', // Smooth scrolling
+        block: 'start', // Align to the top of the section
+      })
+    }
+  }
 
   return (
     <>
@@ -119,8 +134,16 @@ export function MobileNavContent(props: MobileNavContentProps) {
                   ({ href, id, label, ...props }, i) => {
                     return (
                       <NavLink
-                        href={href || `/public#${id}`}
+                        href={href || `/`}
                         key={i}
+                        onClick={(e) => {
+                          e.preventDefault() // Prevent default navigation behavior
+                          if (id) {
+                            handleScrollToSection(id) // Scroll to the section with the given id
+                          } else if (href) {
+                            router.push(href) // Navigate to the href if no id is provided
+                          }
+                        }}
                         {...(props as any)}
                       >
                         {label}

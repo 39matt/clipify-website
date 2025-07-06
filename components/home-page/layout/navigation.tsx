@@ -78,7 +78,7 @@ const Navigation: React.FC = () => {
         onClick={mobileNav.onOpen}
       />
 
-      <MobileNavContent isOpen={mobileNav.isOpen} onClose={mobileNav.onClose} />
+      <MobileNavContent isOpen={mobileNav.isOpen} onClose={mobileNav.onClose} router={router} />
     </HStack>
   )
 }
