@@ -329,6 +329,7 @@ export async function accountExists(username: string) {
 
 export async function addVideo(uid: string, accId: string, video: IVideo) {
   try {
+
     const userDocRef = doc(db, 'users', uid);
     const accountDocRef = doc(userDocRef, 'accounts', accId);
     const videoColRef = collection(accountDocRef, 'videos');
@@ -337,5 +338,14 @@ export async function addVideo(uid: string, accId: string, video: IVideo) {
   } catch (error) {
     console.error('Error adding video:', error);
     throw new Error('Failed to add video');
+  }
+}
+``
+export async function isVideoValid(uid: string, videoLink: string) {
+  try {
+
+  } catch (error) {
+    console.error('Error validating video:', error);
+    throw new Error('Failed to validate video');
   }
 }

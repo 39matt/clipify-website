@@ -121,19 +121,17 @@ const Page = () => {
   };
 
   return (
-    <Box bg="gray.900" color="white" maxH="100vh" p={6} minW="60vw">
-      {/* Sekcija zaglavlja */}
+    <Box bg="gray.900" color="white" maxH="100vh" minW="60vw">
       <Box
-        position="relative" // Omogućava slojevitost za pozadinu i sadržaj
+        position="relative"
         bg="gray.800"
         borderRadius="lg"
         p={16}
         mb={6}
         textAlign="center"
         boxShadow="lg"
-        overflow="hidden" // Sprečava sadržaj da prelazi granice kutije
+        overflow="hidden"
       >
-        {/* Pozadinska slika */}
         <Box
           position="absolute"
           top={0}
@@ -161,12 +159,12 @@ const Page = () => {
         {/* Kartica 1: Cena po milion pregleda */}
         <Card w={"full"} bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
           <CardHeader textAlign="center">
-            <Heading as="h2" size="md" color="green.400" mb={4}>
+            <Heading size="xl" color="green.400" mb={4}>
               Cena po milion pregleda
             </Heading>
           </CardHeader>
           <CardBody textAlign="center">
-            <Text fontSize="4xl" fontWeight="bold" color="green.400">
+            <Text fontSize="6xl" fontWeight="bold" color="green.400">
               ${campaign.perMillion.toFixed(2)}
             </Text>
             <Text fontSize="sm" color="gray.400" mb={4}>
@@ -211,7 +209,7 @@ const Page = () => {
             flex="1" // Makes this card larger
           >
             <CardHeader textAlign="center">
-              <Heading as="h2" size="md" color="green.400" mb={4}>
+              <Heading size="lg" color="green.400" mb={4}>
                 Napredak kampanje
               </Heading>
             </CardHeader>
@@ -247,7 +245,7 @@ const Page = () => {
             flex="1" // Makes this card smaller
           >
             <CardHeader textAlign="center">
-              <Heading as="h2" size="md" color="green.400" mb={4}>
+              <Heading size="lg" color="green.400" mb={4}>
                 Detalji kampanje
               </Heading>
             </CardHeader>

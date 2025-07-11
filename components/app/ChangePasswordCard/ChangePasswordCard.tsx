@@ -14,8 +14,8 @@ import {
   Input,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-} from '@chakra-ui/react';
+  FormErrorMessage, Box,
+} from '@chakra-ui/react'
 import { PasswordInput } from '@saas-ui/react'
 import { changePassword } from '../../../app/lib/firebase/auth'
 import { User } from '@firebase/auth'
@@ -88,13 +88,13 @@ const ChangePasswordCard: React.FC<ChangePasswordCardProps> = ({user}) => {
   }
 
   return (
-    <Card w={{ base: '100%', md: '60%' }} h="full">
+    <Card w={{ base: '100%', md: '60%' }} minH="30vh">
       <CardHeader>
-        <Heading size="lg">Change Password</Heading>
+        <Heading size="lg">Izmeni šifru</Heading>
         <Spacer />
       </CardHeader>
       <CardBody>
-        <VStack align="start" spacing={4}>
+        <VStack align="stretch" spacing={4}>
           {error && (
             <Alert status="error">
               <AlertIcon />
@@ -124,15 +124,16 @@ const ChangePasswordCard: React.FC<ChangePasswordCardProps> = ({user}) => {
             />
           </FormControl>
           <FormControl isInvalid={!!error}>
-            <PasswordInput
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Potvrdite novu šifru"
-            />
-          </FormControl>
+              <PasswordInput
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Potvrdite novu šifru"
+              />
+            </FormControl>
+
           <Button
-            colorScheme="blue"
+            colorScheme="green"
             onClick={handleSubmit}
             isLoading={loading}
             loadingText="Submitting"

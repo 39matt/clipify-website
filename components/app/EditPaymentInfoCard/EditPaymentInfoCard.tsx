@@ -5,12 +5,19 @@ import {
   EditablePreview,
   Button,
   VStack,
-  Center, Spinner, Alert, AlertIcon, CardHeader, Heading, Spacer, CardBody, Card,
+  Center,
+  Spinner,
+  Alert,
+  AlertIcon,
+  CardHeader,
+  Heading,
+  Spacer,
+  CardBody,
+  Card, Stack,
 } from '@chakra-ui/react'
-import { updateWalletAddress } from '../../../app/lib/firebase/firestore'
-import { Property, PropertyList } from '@saas-ui/core'
-import { useLayoutContext } from '../../../app/(pages)/dashboard/context'
-import { Select, SelectButton, SelectList } from '@saas-ui/react'
+import { updateWalletAddress } from '../../../app/lib/firebase/firestore';
+import { Property, PropertyList } from '@saas-ui/core';
+import { Select, SelectButton, SelectList } from '@saas-ui/react';
 
 interface EditPaymentInfoCardProps {
   discordUsername: string | null;
@@ -32,14 +39,14 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
     setError(null);
     setSuccess(null);
     if (!validateWalletAddress(walletAddress)) {
-      setError("Neispravan format adrese!");
+      setError('Neispravan format adrese!');
       setLoading(false);
-      return
+      return;
     }
     try {
       console.log('Submitting wallet address:', walletAddress);
       await updateWalletAddress(discordUsername!, walletAddress);
-      setSuccess('Usprešno izmenjena adresa!');
+      setSuccess('Uspešno izmenjena adresa!');
     } catch (error) {
       console.error('Error updating wallet address:', error);
       setError('Promena adrese nije uspela. Molimo vas pokušajte ponovo!');
@@ -48,87 +55,89 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
     }
   };
 
-  if(loading) {
+  if (loading) {
     return (
       <Center>
         <Spinner />
       </Center>
-    )
+    );
   }
 
   return (
-    <Card w={{ base: '100%', md: '40%' }} h="full">
+    <Card w={{ base: '100%', md: '40%' }} minH="30vh">
       <CardHeader>
         <Heading size="lg">Informacije o isplati</Heading>
         <Spacer />
       </CardHeader>
-      <CardBody h="full" justifyContent="space-between">
-        <PropertyList>
-          <Property
-            w="full"
-            label="Način isplate"
-            value={
-              <Select
-                name="payment"
-                defaultValue="usdt"
-                options={[
-                  { label: 'USDT (ERC20)', value: 'usdt' },
-                ]}
-                aria-label="Izaberi način isplate"
-              >
-                <SelectButton />
-                <SelectList />
-              </Select>
-            }
-          />
-    <VStack align="start">
-      <Property
-        w="full"
-        label="Adresa USDT novčanika"
-        value={
-          <Editable
-            defaultValue={walletAddress}
-            onChange={(value) => setWalletAddress(value)}
-            width="200px"
-            isTruncated
-          >
-            <EditablePreview
-              display="flex"
-              alignItems="center"
-              px="3"
-              fontSize="sm"
-              w="full"
-              minH="8"
-              _hover={{ bg: 'gray.100', borderRadius: 'md', cursor: 'pointer' }}
-              _dark={{
-                _hover: {
-                  bg: 'whiteAlpha.100',
-                },
-              }}
+      <CardBody h="full">
+        <VStack h="full" align="stretch" spacing={4}>
+          <PropertyList>
+            <Property
+              label="Način isplate"
+              value={
+                <Select
+                  name="payment"
+                  defaultValue="usdt"
+                  options={[{ label: 'USDT (ERC20)', value: 'usdt' }]}
+                  aria-label="Izaberi način isplate"
+                >
+                  <SelectButton maxW="90%" />
+                  <SelectList />
+                </Select>
+              }
             />
-            <EditableInput w="full"/>
-          </Editable>
-        }
-      />
-      <Button
-        colorScheme="blue"
-        onClick={handleSubmit}
-        isLoading={loading}
-        loadingText="Submitting"
-        w="full"
-      >
-        Submit
-      </Button>
-      {error && (<Alert status="error">
-        <AlertIcon />
-        {error ? error : String(error)}
-      </Alert>)}
-      {success && (<Alert status="success">
-        <AlertIcon />
-        {success ? success : String(success)}
-      </Alert>)}
-    </VStack>
-        </PropertyList>
+            <Property
+              w="full"
+              label="Adresa USDT novčanika"
+              value={
+                <Editable
+                  defaultValue={walletAddress}
+                  onChange={(value) => setWalletAddress(value)}
+                  width="90%"
+                  isTruncated
+                >
+                  <EditablePreview
+                    display="flex"
+                    alignItems="center"
+                    px="3"
+                    fontSize="sm"
+                    w="full"
+                    minH="8"
+                    _hover={{ bg: 'gray.100', borderRadius: 'md', cursor: 'pointer' }}
+                    _dark={{
+                      _hover: {
+                        bg: 'whiteAlpha.100',
+                      },
+                    }}
+                  />
+                  <EditableInput w="full" />
+                </Editable>
+              }
+            />
+          </PropertyList>
+          {error && (
+            <Alert status="error">
+              <AlertIcon />
+              {error}
+            </Alert>
+          )}
+          {success && (
+            <Alert status="success">
+              <AlertIcon />
+              {success}
+            </Alert>
+          )}
+          <Spacer />
+          <Button
+            colorScheme="green"
+            onClick={handleSubmit}
+            isLoading={loading}
+            loadingText="Submitting"
+            w="full"
+          >
+            Submit
+          </Button>
+å        </VStack>
       </CardBody>
     </Card>
   );

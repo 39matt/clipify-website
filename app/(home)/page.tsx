@@ -89,7 +89,7 @@ const HeroSection: React.FC = () => {
                 </FallInPlace>
               }
               description={
-                <FallInPlace delay={0.4} fontWeight="medium">
+                <FallInPlace delay={0.2} fontWeight="medium">
                   <Text>
                     Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi{' '}
                     <Em>rezultate</Em>, sve je usmereno na <Em>stvarne preglede</Em>,
@@ -98,7 +98,7 @@ const HeroSection: React.FC = () => {
                 </FallInPlace>
               }
             >
-              <FallInPlace delay={0.8}>
+              <FallInPlace delay={0.4}>
                 <HStack pt="4" pb="12" spacing="8"></HStack>
 
                 <ButtonGroup
@@ -143,7 +143,7 @@ const HeroSection: React.FC = () => {
 
           {/* Image Section */}
           <Box flex="1" pl={{ base: 0, lg: 8 }}>
-            <FallInPlace delay={1}>
+            <FallInPlace delay={0.6}>
               <Box
                 width="100%"
                 maxWidth="700px"
@@ -184,7 +184,7 @@ const HeroSection: React.FC = () => {
             description:
               'Aktivnih klipera',
             iconPosition: 'left',
-            delay: 0.33,
+            delay: 0.2,
           },
           {
             title: '1.5B+',
@@ -192,7 +192,7 @@ const HeroSection: React.FC = () => {
             description:
               'Organskih pregleda',
             iconPosition: 'left',
-            delay: 0.66,
+            delay: 0.4,
           },
           {
             title: '51',
@@ -200,7 +200,7 @@ const HeroSection: React.FC = () => {
             description:
               'Pokrenutih kampanja',
             iconPosition: 'left',
-            delay: 0.99,
+            delay: 0.6,
           },
         ]}
         reveal={FallInPlace}

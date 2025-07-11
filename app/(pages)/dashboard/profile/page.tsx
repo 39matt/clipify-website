@@ -20,12 +20,19 @@ import { useEffect, useState } from 'react';
 import { useLayoutContext } from '../context';
 import EditPaymentInfoCard from '#components/app/EditPaymentInfoCard/EditPaymentInfoCard'
 import ChangePasswordCard from '#components/app/ChangePasswordCard/ChangePasswordCard'
+import { BoxFeature, BoxFeatures } from '#components/home-page/features/box-features'
+import { FeatureProps } from '#components/home-page/features'
 
 const Profile: NextPage = () => {
   const router = useRouter();
   const [linked, setLinked] = useState<boolean | null>(null);
   const [checkingLinked, setCheckingLinked] = useState(true);
   const { user, loading, discordUsername } = useLayoutContext();
+  const features:FeatureProps[] = [
+    {title:"Broj videa", description:"0"},
+    {title:"Zarađen novac", description:"0"},
+    {title:"Ukupan broj pregleda", description:"0"},
+  ]
 
   useEffect(() => {
     const checkLinkedStatus = async () => {
@@ -79,8 +86,7 @@ const Profile: NextPage = () => {
         </Heading>
       </Box>
       <VStack minW="85%" gap={{ base: 4, lg: 12 }}>
-        <HStack w="100%" flex={1} justifyContent={{base: "center",md:"space-between"}} alignItems="flex-start" flexDirection={{base: "column", md: "row"}}>
-          <Card maxW={{ base: '100%', md: '50%' }} w="full" h="full">
+          <Card w="full" >
             <CardHeader display="flex" flexDirection="row">
               <Heading size="lg">{discordUsername}</Heading>
               <Spacer />
@@ -100,20 +106,24 @@ const Profile: NextPage = () => {
               </PropertyList>
             </CardBody>
           </Card>
-          <Card maxW={{ base: '100%', md: '50%' }} w="full">
-            <CardHeader display="flex" flexDirection="row">
-              <Heading size="lg">Statistike</Heading>
-              <Spacer />
-            </CardHeader>
-            <CardBody>
-              <PropertyList>
-                <Property label="Broj videa" value="0" />
-                <Property label="Zarađen novac" value="$0" />
-                <Property label="Ukupan broj pregleda" value="0" />
-              </PropertyList>
-            </CardBody>
-          </Card>
-        </HStack>
+        <Card w="full">
+          <CardHeader display="flex" flexDirection="row">
+            <Heading size="lg">Statistike</Heading>
+            <Spacer />
+          </CardHeader>
+          <CardBody>
+            <HStack justifyContent={"space-around"}>
+              <BoxFeature title={"Broj videa"} description={"0"}/>
+              <BoxFeature title={"Zarađen novac"} description={"0"}/>
+              <BoxFeature title={"Ukupan broj pregleda"} description={"0"}/>
+            </HStack>
+            {/*<PropertyList>*/}
+            {/*  <Property label="Broj videa" value="0" />*/}
+            {/*  <Property label="Zarađen novac" value="$0" />*/}
+            {/*  <Property label="Ukupan broj pregleda" value="0" />*/}
+            {/*</PropertyList>*/}
+          </CardBody>
+        </Card>
         <HStack w="full" justifyContent={{base: "center",md:"space-between"}} flexDirection={{base: "column", md: "row"}}>
           <EditPaymentInfoCard discordUsername={discordUsername}/>
           <ChangePasswordCard user={user}/>

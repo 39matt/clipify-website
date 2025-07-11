@@ -61,7 +61,7 @@ export const BoxFeature: React.FC<FeatureProps> = (props) => {
   const direction = pos === 'left' ? 'row' : 'column'
 
   return (
-    <Stack sx={styles.container} direction={direction} p="8" border="2px" borderRadius="lg" borderColor='#059669' transition="all 0.5s ease-out"  _hover={{transform: 'scale(1.1)', transition: 'all 0.5s ease-in'}} >
+    <Stack sx={styles.container} direction={direction} p="8" border="2px" borderRadius="lg" borderColor='#059669' transition="all 0.33s ease-out"  _hover={{transform: 'scale(1.1)', transition: 'all 0.33s ease-in'}} >
       {icon && (
         <Circle sx={styles.icon}>
           <Icon as={icon} boxSize={iconSize} />

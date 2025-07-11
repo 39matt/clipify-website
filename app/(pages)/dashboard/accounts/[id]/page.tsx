@@ -46,17 +46,6 @@ const AccountPage = () => {
   const [videoLink, setVideoLink] = useState('');
   const [message, setMessage] = useState('');
 
-  const handleAddVideo = () => {
-    if (!videoLink) {
-      setMessage('Molimo unesite validan link.');
-      return;
-    }
-    // Add logic to save the video link to the database
-    setMessage('Video je uspešno dodat!');
-    setVideoLink('');
-    onClose();
-  };
-
   useEffect(() => {
     const fetchAccount = async () => {
       try {
@@ -285,7 +274,7 @@ const AccountPage = () => {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="green" mr={3} onClick={handleAddVideo}>
+            <Button colorScheme="green" mr={3} onClick={() => onClose()}>
               Dodajte Video
             </Button>
             <Button variant="ghost" onClick={onClose}>
