@@ -22,8 +22,8 @@
     },[])
       return(
       <VStack>
-        <Box my="24px">
-          <Heading textAlign="center" fontSize="48px">
+        <Box my={{ base: 4, md: 8 }}>
+          <Heading textAlign="center" fontSize={{ base: '32px', md: '48px' }} textColor="green.400">
             Aktivne kampanje
           </Heading>
         </Box>

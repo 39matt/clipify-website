@@ -13,7 +13,7 @@ import {
   Heading,
   Spacer,
   CardBody,
-  Card, Stack,
+  Card, Stack, Flex, Box,
 } from '@chakra-ui/react'
 import { updateWalletAddress } from '../../../app/lib/firebase/firestore';
 import { Property, PropertyList } from '@saas-ui/core';
@@ -70,10 +70,19 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
         <Spacer />
       </CardHeader>
       <CardBody h="full">
-        <VStack h="full" align="stretch" spacing={4}>
-          <PropertyList>
+        <Flex
+          direction="column"
+          h="full"
+          justify="space-between"
+          align="stretch"
+          gap={4} // Adds spacing between elements
+          minW={"full"}
+        >
+          <PropertyList minW="full">
             <Property
-              label="Način isplate"
+              label={
+                  "Način isplate"
+              }
               value={
                 <Select
                   name="payment"
@@ -81,19 +90,25 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
                   options={[{ label: 'USDT (ERC20)', value: 'usdt' }]}
                   aria-label="Izaberi način isplate"
                 >
-                  <SelectButton maxW="90%" />
+                  <SelectButton />
                   <SelectList />
                 </Select>
               }
+              minW={"full"}
+              display="flex"
+              flexDirection={{ base: 'column', xl: 'row' }}
+              alignItems={{ base: 'flex-start', xl: 'center' }}
+              gap={2} // Adds spacing between label and value
             />
             <Property
-              w="full"
-              label="Adresa USDT novčanika"
+              minW={"full"}
+              label={
+                  "Adresa USDT novčanika"
+              }
               value={
                 <Editable
                   defaultValue={walletAddress}
                   onChange={(value) => setWalletAddress(value)}
-                  width="90%"
                   isTruncated
                 >
                   <EditablePreview
@@ -101,7 +116,7 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
                     alignItems="center"
                     px="3"
                     fontSize="sm"
-                    w="full"
+                    w="100%" // Ensures it doesn't overflow
                     minH="8"
                     _hover={{ bg: 'gray.100', borderRadius: 'md', cursor: 'pointer' }}
                     _dark={{
@@ -110,24 +125,33 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
                       },
                     }}
                   />
-                  <EditableInput w="full" />
+                  <EditableInput w="100%" />
                 </Editable>
               }
+              display="flex"
+              flexDirection={{ base: 'column', xl: 'row' }}
+              alignItems={{ base: 'flex-start', xl: 'center' }}
+              gap={2} // Adds spacing between label and value
+              w="full"
             />
           </PropertyList>
-          {error && (
-            <Alert status="error">
-              <AlertIcon />
-              {error}
-            </Alert>
-          )}
-          {success && (
-            <Alert status="success">
-              <AlertIcon />
-              {success}
-            </Alert>
-          )}
-          <Spacer />
+
+          {/* Placeholder for error/success messages */}
+          <Box minH="50px" w="full">
+            {error && (
+              <Alert status="error">
+                <AlertIcon />
+                {error}
+              </Alert>
+            )}
+            {success && (
+              <Alert status="success">
+                <AlertIcon />
+                {success}
+              </Alert>
+            )}
+          </Box>
+
           <Button
             colorScheme="green"
             onClick={handleSubmit}
@@ -137,10 +161,9 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
           >
             Submit
           </Button>
-å        </VStack>
+        </Flex>
       </CardBody>
     </Card>
-  );
-};
+  )}
 
 export default EditPaymentInfoCard;

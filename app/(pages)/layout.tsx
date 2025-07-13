@@ -25,7 +25,7 @@ import {
 import { FiHome, FiUsers, FiSettings, FiHelpCircle, FiCompass, FiUser } from 'react-icons/fi'
 import { LayoutProvider, useLayoutContext } from './dashboard/context';
 import { logout } from '../lib/firebase/auth';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -39,6 +39,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 function LayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { user, loading, discordUsername } = useLayoutContext();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -93,11 +94,11 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           </SidebarSection>
           <SidebarSection flex="1">
             <NavGroup>
-              <NavItem icon={<FiUser />} onClick={()=>router.push('/dashboard/profile')} isActive>Profil</NavItem>
-              <NavItem icon={<FiCompass />} onClick={()=>router.push('/campaigns')}>
+              <NavItem icon={<FiUser />} onClick={()=>router.push('/dashboard/profile')} isActive={pathname.includes("/profile")}>Profil</NavItem>
+              <NavItem icon={<FiCompass />} onClick={()=>router.push('/campaigns')} isActive={pathname.includes("/campaigns")}>
                 Aktivne kampanje
               </NavItem>
-              <NavItem icon={<FiSettings />} onClick={()=>router.push('/dashboard/accounts')}>Vaši nalozi</NavItem>
+              <NavItem icon={<FiSettings />} onClick={()=>router.push('/dashboard/accounts')} isActive={pathname.includes("/accounts")}>Vaši nalozi</NavItem>
             </NavGroup>
 
             <NavGroup title="Vaše kampanje" isCollapsible>

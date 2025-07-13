@@ -121,7 +121,7 @@ const Page = () => {
   };
 
   return (
-    <Box bg="gray.900" color="white" maxH="100vh" minW="60vw">
+    <Box bg="gray.900" color="white" maxH="90vh" minW="60vw">
       <Box
         position="relative"
         bg="gray.800"
@@ -164,7 +164,7 @@ const Page = () => {
             </Heading>
           </CardHeader>
           <CardBody textAlign="center">
-            <Text fontSize="6xl" fontWeight="bold" color="green.400">
+            <Text fontSize="6xl" fontWeight="bold" >
               ${campaign.perMillion.toFixed(2)}
             </Text>
             <Text fontSize="sm" color="gray.400" mb={4}>

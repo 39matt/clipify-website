@@ -73,9 +73,8 @@ const HeroSection: React.FC = () => {
         <Flex
           direction={{ base: 'column', lg: 'row' }}
           align="center"
-          gap={{ base: 8, lg: 24 }} // Adjust the spacing as needed
+          gap={{ base: 8, lg: 24 }}
         >
-          {/* Text Section */}
           <Box flex="1"  pr={{ base: 0, lg: 8 }} mb={{ base: 8, lg: 0 }}>
             <Hero
               id="home"
@@ -141,7 +140,6 @@ const HeroSection: React.FC = () => {
             </Hero>
           </Box>
 
-          {/* Image Section */}
           <Box flex="1" pl={{ base: 0, lg: 8 }}>
             <FallInPlace delay={0.6}>
               <Box
@@ -155,8 +153,8 @@ const HeroSection: React.FC = () => {
                   alt="Snimak ekrana liste kampanja u Clipster-u"
                   quality={75}
                   priority
-                  width={2000} // Numeric value in pixels
-                  height={786} // Numeric value in pixels
+                  width={2000}
+                  height={786}
                 />
               </Box>
             </FallInPlace>

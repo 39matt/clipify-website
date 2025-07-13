@@ -144,9 +144,11 @@ const ConnectedAccounts: NextPage = () => {
         maxW="1200px"
         mb={8}
       >
-        <Heading size="lg" color="green.400">
-          Povezani Nalozi
-        </Heading>
+        <Box my={{ base: 4, md: 8 }}>
+          <Heading textAlign="center" fontSize={{ base: '32px', md: '48px' }} textColor="green.400">
+            Povezani nalozi
+          </Heading>
+        </Box>
         <Button
           leftIcon={<Icon as={FiPlus} />}
           colorScheme="green"
