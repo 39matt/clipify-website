@@ -91,7 +91,7 @@ const Profile: NextPage = () => {
           <CardHeader display="flex" flexDirection={{ base: 'column', md: 'row' }} gap={4}>
             <Heading size="lg">{discordUsername}</Heading>
             <Spacer />
-            {!linked && (
+            {!linked && linked !== null && (
               <Button colorScheme="green" variant="solid" onClick={handleLinkDiscord}>
                 Link Discord
               </Button>

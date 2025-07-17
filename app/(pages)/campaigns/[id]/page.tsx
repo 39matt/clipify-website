@@ -31,8 +31,15 @@ import {
   ModalCloseButton,
   ModalBody, Input, useDisclosure, ModalFooter, Flex,
 } from '@chakra-ui/react'
-import { getCampaign } from '../../../lib/firebase/firestore';
+import {
+  accountVideoExists,
+  addVideo,
+  getCampaign,
+  getVideoInfo,
+  userAccountExists
+} from '../../../lib/firebase/firestore'
 import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa'
+import { useLayoutContext } from '../../dashboard/context'
 
 interface ICampaign {
   id: string;
@@ -51,21 +58,22 @@ interface ICampaign {
 
 const Page = () => {
   const pathname = usePathname();
-  const id = pathname.split('/').pop();
+  const campaignId = pathname.split('/').pop();
   const [campaign, setCampaign] = useState<ICampaign | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user, discordUsername } = useLayoutContext();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [videoUrl, setVideoUrl] = useState('');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (!id || Array.isArray(id)) return;
+    if (!campaignId || Array.isArray(campaignId)) return;
 
     const fetchCampaign = async () => {
       try {
-        const camp = await getCampaign(id);
+        const camp = await getCampaign(campaignId);
         setCampaign(camp);
       } catch (err) {
         console.error('Greška prilikom učitavanja kampanje:', err);
@@ -76,7 +84,7 @@ const Page = () => {
     };
 
     fetchCampaign();
-  }, [id]);
+  }, [campaignId]);
 
   if (loading) {
     return (
@@ -109,15 +117,76 @@ const Page = () => {
     );
   }
 
-  const handleAddVideo = () => {
+  const handleAddVideo = async () => {
     if (!videoUrl) {
-      setMessage('Molimo unesite validan URL.');
+      setMessage('Molimo unesite URL videa.');
       return;
     }
-    // Logic to handle video URL submission (e.g., save to database)
+
+    const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/reelsq\/[a-zA-Z0-9_-]+\/?$/;
+    const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
+    if (!instagramReelRegex.test(videoUrl) && !tiktokVideoRegex.test(videoUrl)) {
+      setMessage('Molimo vas unesite validan Instagram/TikTok video URL.');
+      return;
+    }
+
+    let accountName = ""
+    let video: IVideo | null = null
+
+    if(videoUrl.includes('tiktok')) {
+      accountName = videoUrl.split('/')[3].replace("@", '');
+      const videoId = videoUrl.split('/')[5];
+
+      const accExists = await userAccountExists(discordUsername!, accountName, "TikTok");
+      if(!accExists) {
+        setMessage("Nalog mora biti vaš!");
+        return
+      }
+
+      const videoExists = await accountVideoExists(discordUsername!, accountName, "TikTok", videoUrl);
+      if(videoExists) {
+        setMessage("Video je već dodat!");
+        return
+      }
+
+      video = await getVideoInfo(videoId, "TikTok", process.env.NEXT_PUBLIC_RAPIDAPI_KEY!);
+      if(!video) {
+        setMessage("Greška pri pribavljanju videa!")
+        return
+      }
+    }
+    else if(videoUrl.includes('instagram')){
+      const videoId = videoUrl.split('/')[4];
+
+      video = await getVideoInfo(videoId, "Instagram", process.env.NEXT_PUBLIC_RAPIDAPI_KEY!);
+      if(!video) {
+        setMessage("Greška pri pribavljanju videa!")
+        return
+      }
+
+      accountName = video.owner
+
+      const accExists = await userAccountExists(discordUsername!, accountName, "Instagram");
+      if(!accExists) {
+        setMessage("Nalog mora biti vaš!");
+        return
+      }
+
+      const videoExists = await accountVideoExists(discordUsername!, accountName, "Instagram", videoUrl);
+      if(videoExists) {
+        setMessage("Video je već dodat!");
+        return
+      }
+    }
+
+    video!.campaignId = campaignId!;
+    await addVideo(discordUsername!, accountName, video as IVideo);
+
     setMessage('Video URL je uspešno dodat!');
     setVideoUrl('');
-    onClose();
+    setTimeout(() => {
+      onClose()
+    }, 2000)
   };
 
   return (
@@ -138,14 +207,13 @@ const Page = () => {
           left={0}
           w="full"
           h="full"
-          bgImage={`url(${campaign.imageUrl})`} // Koristi sliku kampanje kao pozadinu
-          bgSize="cover" // Osigurava da slika pokriva celu kutiju
-          bgPosition="center" // Centriraj sliku
-          filter="blur(8px)" // Primeni efekat zamućenja
-          opacity={0.6} // Potamni sliku
+          bgImage={`url(${campaign.imageUrl})`}
+          bgSize="cover"
+          bgPosition="center"
+          filter="blur(8px)"
+          opacity={0.6}
         />
 
-        {/* Sadržaj */}
         <Heading size="4xl" mb={2} opacity={1}>
           {campaign.influencer}
         </Heading>
@@ -154,9 +222,7 @@ const Page = () => {
         </Text>
       </Box>
 
-      {/* Sekcija detalja kampanje */}
       <VStack spacing={6}>
-        {/* Kartica 1: Cena po milion pregleda */}
         <Card w={"full"} bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
           <CardHeader textAlign="center">
             <Heading size="xl" color="green.400" mb={4}>
@@ -200,13 +266,12 @@ const Page = () => {
           </CardBody>
         </Card>
         <Flex justify="center" gap={4} width="full" flexDirection={{base:"column", md:"row"}}>
-          {/* First Card: Campaign Progress */}
           <Card
             bg="gray.800"
             borderRadius="lg"
             boxShadow="lg"
             p={6}
-            flex="1" // Makes this card larger
+            flex="1"
           >
             <CardHeader textAlign="center">
               <Heading size="lg" color="green.400" mb={4}>
@@ -236,13 +301,12 @@ const Page = () => {
             </CardBody>
           </Card>
 
-          {/* Second Card: Campaign Details */}
           <Card
             bg="gray.800"
             borderRadius="lg"
             boxShadow="lg"
             p={6}
-            flex="1" // Makes this card smaller
+            flex="1"
           >
             <CardHeader textAlign="center">
               <Heading size="lg" color="green.400" mb={4}>

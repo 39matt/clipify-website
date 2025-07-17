@@ -49,6 +49,7 @@ export function AuthProvider({ children }) {
       .catch((err) => {
         console.error('Error fetching userId:', err)
       })
+
     return () => {
       cancelled = true
     }
