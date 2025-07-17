@@ -1,7 +1,7 @@
 import { getApp, getApps, initializeApp } from '@firebase/app'
 import { getFirestore } from '@firebase/firestore'
 import { getAuth } from '@firebase/auth'
-
+import { initializeAppCheck, ReCaptchaV3Provider } from '@firebase/app-check'
 
 const firebaseConfig = {
 
@@ -20,6 +20,11 @@ const firebaseConfig = {
 };
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
+if (typeof window !== "undefined") {
+  initializeAppCheck(app, {
+    provider: new ReCaptchaV3Provider(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!),
+    isTokenAutoRefreshEnabled: true
+  });
+}
 export const auth = getAuth(app);
 export const db = getFirestore(app);
