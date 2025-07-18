@@ -3,6 +3,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { IAccount } from '../../../app/lib/models/account'
 
 interface Props {
   account: IAccount;

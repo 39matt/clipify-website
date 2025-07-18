@@ -28,6 +28,7 @@ import AccountCard from '#components/app/AccountCard/AccountCard'
 import { useRouter } from 'next/navigation'
 import { addVerification, verificationExists, verifyVerification } from '../../../lib/firebase/firestore/verification'
 import { accountExists, getAllAccounts } from '../../../lib/firebase/firestore/account'
+import { IAccount } from '../../../lib/models/account'
 
 const ConnectedAccounts: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

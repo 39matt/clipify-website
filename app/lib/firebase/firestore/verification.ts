@@ -1,6 +1,7 @@
 import { addDoc, collection, deleteDoc, doc, getDocs } from '@firebase/firestore'
 import { db } from '../firebase'
 import { addAccount } from './account'
+import { IAccount } from '../../models/account'
 
 export async function verificationExists(uid: string) {
   try {

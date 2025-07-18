@@ -1,5 +1,6 @@
 import { collection, doc, getDoc, getDocs } from '@firebase/firestore'
 import { db } from '../firebase'
+import { IVideo } from '../../models/video'
 
 export async function getAllCampaigns() {
   try {
@@ -41,5 +42,22 @@ export async function getCampaign(id: string): Promise<ICampaign | null> {
     }
   } catch (err) {
     throw new Error('Došlo je do greške prilikom učitavanja kampanje.')
+  }
+}
+
+export async function getCampaignVideos(id: string): Promise<IVideo[] | null> {
+  try {
+    const campaignDocRef = doc(db, 'campaigns', id)
+    const videoColRef = collection(campaignDocRef, 'videos')
+    const videosSnap = await getDocs(videoColRef)
+
+    if (!videosSnap.empty) {
+      return videosSnap.docs.map(doc => doc.data()) as IVideo[]
+    } else {
+      console.log('Could not find videos in campaign')
+      return null
+    }
+  } catch (err) {
+    throw new Error('Došlo je do greške prilikom učitavanja videa kampanje.')
   }
 }
