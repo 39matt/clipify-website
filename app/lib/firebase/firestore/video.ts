@@ -31,9 +31,10 @@ export async function getVideoInfo(videoId: string, platform: string, api_key: s
         likes: instagramData.edge_media_preview_like?.count || 0,
         link: `https://www.instagram.com/p/${instagramData.shortcode}/`,
         name: instagramData.edge_media_to_caption?.edges[0]?.node?.text || '',
-        owner: instagramData.owner?.username || '',
+        accountName: instagramData.owner?.username || '',
         shares: 0,
         views: instagramData.video_play_count || 0,
+        coverUrl: instagramData.thumbnail_src || '',
       };
     } else if (platform === 'TikTok') {
       const tiktokData = parsedBody.itemInfo.itemStruct;
@@ -44,9 +45,10 @@ export async function getVideoInfo(videoId: string, platform: string, api_key: s
         likes: tiktokData.stats?.diggCount || 0,
         link: `https://www.tiktok.com/@${tiktokData.author?.uniqueId}/video/${tiktokData.id}`,
         name: tiktokData.desc || '',
-        owner: tiktokData.author?.nickname || '',
+        accountName: tiktokData.author?.nickname || '',
         shares: tiktokData.stats?.shareCount || 0,
         views: tiktokData.stats?.playCount || 0,
+        coverUrl: tiktokData.video.cover || '',
       };
     }
 
@@ -81,6 +83,8 @@ export async function addVideo(uid: string, accId: string, campaignId: string, v
 
     const userDocRef = doc(db, 'users', uid);
     video.userAccountRef = doc(userDocRef, 'accounts', accId);
+    video.accountName = accId;
+    video.uid = uid;
 
     const userVideoColRef = collection(video.userAccountRef, 'videos');
 

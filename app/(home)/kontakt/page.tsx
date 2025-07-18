@@ -27,48 +27,13 @@ import { Logo } from '#data/logo';
 import NextLink from 'next/link';
 import { NextPage } from 'next';
 import { useState } from 'react';
-import { FiPhone, FiMail } from 'react-icons/fi';
-import Link from 'next/link'
+import { FiMail } from 'react-icons/fi';
+import Link from 'next/link';
+import { useForm, ValidationError } from '@formspree/react';
 
 const Contact: NextPage = () => {
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [role, setRole] = useState<'kliper' | 'klijent'>('kliper'); // State for the slider
-
-  const handleContactSubmit = async (data: { name: string; email: string; message: string; role: string }) => {
-    try {
-      setLoading(true);
-      setError('');
-      setSuccess('');
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      if (!data.name || !data.email || !data.message) {
-        throw new Error('Sva polja su obavezna.');
-      }
-
-      setSuccess('Vaša poruka je uspešno poslata!');
-    } catch (err: any) {
-      setError(err.message || 'Došlo je do greške. Pokušajte ponovo.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      message: formData.get('message') as string,
-      role, // Include the role in the form data
-    };
-
-    handleContactSubmit(data);
-  };
+  const [role, setRole] = useState<'kliper' | 'klijent'>('kliper');
+  const [state, handleSubmit] = useForm("mzzvzkvp");
 
   return (
     <Section height="calc(100vh)" innerWidth="container.md">
@@ -96,11 +61,16 @@ const Contact: NextPage = () => {
                 <form onSubmit={handleSubmit}>
                   <VStack spacing={4}>
                     <Input name="name" placeholder="Ime" isRequired />
+                    <ValidationError prefix="Name" field="name" errors={state.errors} />
+
                     <Input name="email" type="email" placeholder="Email" isRequired />
+                    <ValidationError prefix="Email" field="email" errors={state.errors} />
+
                     <Textarea name="message" placeholder="Poruka" isRequired />
+                    <ValidationError prefix="Message" field="message" errors={state.errors} />
 
                     {/* Checkbox Slider */}
-                    <Flex gap={4} >
+                    <Flex gap={4}>
                       <Text fontSize="md" color={role === 'kliper' ? 'green.500' : 'gray.500'}>
                         Kliper
                       </Text>
@@ -115,20 +85,20 @@ const Contact: NextPage = () => {
                       </Text>
                     </Flex>
 
-                    <Button type="submit" colorScheme="green" isLoading={loading} w="full">
+                    <Button type="submit" colorScheme="green" isLoading={state.submitting} w="full">
                       Pošalji
                     </Button>
                   </VStack>
-                  {error && (
-                    <Alert status="error" mt={4}>
-                      <AlertIcon />
-                      {error}
-                    </Alert>
-                  )}
-                  {success && (
+                  {state.succeeded && (
                     <Alert status="success" mt={4}>
                       <AlertIcon />
-                      {success}
+                      Vaša poruka je uspešno poslata!
+                    </Alert>
+                  )}
+                  {state.errors?.getFormErrors().length! > 0 && (
+                    <Alert status="error" mt={4}>
+                      <AlertIcon />
+                      Došlo je do greške. Pokušajte ponovo.
                     </Alert>
                   )}
                 </form>
@@ -143,8 +113,8 @@ const Contact: NextPage = () => {
               <VStack spacing={4}>
                 <HStack spacing={4}>
                   <Icon as={FiMail} boxSize={6} color="green.500" />
-                  <Link passHref href={"mailto:kontakt@clipify.com"} >
-                    <Text fontSize="md" color="gray.500">kontakt@clipify.com</Text>
+                  <Link passHref href={"mailto:kontakt@clipify.rs"}>
+                    <Text fontSize="md" color="gray.500">kontakt@clipify.rs</Text>
                   </Link>
                 </HStack>
               </VStack>

@@ -167,7 +167,7 @@ const Page = () => {
         return
       }
 
-      accountName = video.owner
+      accountName = video.accountName;
 
       // check if user has account
       const accExists = await userAccountExists(discordUsername!, accountName, "Instagram");
@@ -193,7 +193,7 @@ const Page = () => {
 
     await addVideo(discordUsername!, accountName, campaignId!, video as IVideo);
 
-    setMessage('Video URL je uspešno dodat!');
+    setMessage('Video je uspešno dodat!');
     setVideoUrl('');
     setTimeout(() => {
       onClose()
