@@ -33,7 +33,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useLayoutContext } from '../../context';
-import { getAccountAndVideos } from '../../../../lib/firebase/firestore';
+import { getAccountAndVideos } from '../../../../lib/firebase/firestore/account'
 
 const AccountPage = () => {
   const pathname = usePathname();

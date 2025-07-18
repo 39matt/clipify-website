@@ -1,6 +1,8 @@
-interface IVideo {
+import { DocumentReference } from '@firebase/firestore'
+
+export interface IVideo {
   uid?: string;
-  campaignId: string;
+  userAccountRef?: DocumentReference;
   comments: number;
   createdAt: string;
   likes: number;

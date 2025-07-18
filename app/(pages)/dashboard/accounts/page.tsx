@@ -23,16 +23,11 @@ import {
 import { FiPlus } from 'react-icons/fi';
 import { NextPage } from 'next';
 import { useState, useEffect } from 'react';
-import {
-  accountExists,
-  addVerification,
-  getAllAccounts,
-  verificationExists,
-  verifyVerification,
-} from '../../../lib/firebase/firestore';
 import { useLayoutContext } from '../context';
 import AccountCard from '#components/app/AccountCard/AccountCard'
 import { useRouter } from 'next/navigation'
+import { addVerification, verificationExists, verifyVerification } from '../../../lib/firebase/firestore/verification'
+import { accountExists, getAllAccounts } from '../../../lib/firebase/firestore/account'
 
 const ConnectedAccounts: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();

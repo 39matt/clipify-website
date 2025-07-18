@@ -3,8 +3,9 @@ import {
   sendEmailVerification, signInWithEmailAndPassword, signOut,
   updatePassword, User,
 } from '@firebase/auth'
-import { auth } from './firebase'
+import { auth, db } from './firebase'
 import { AuthProvider, useAuth } from '../../providers/authProvider'
+import { clearIndexedDbPersistence } from '@firebase/firestore'
 
 export async function signUp(email: string, password: string): Promise<any> {
   const userCredential = await createUserWithEmailAndPassword(
@@ -22,6 +23,7 @@ export async function signIn(email: string, password: string) {
 
 export async function logout() {
     await signOut(auth)
+    await clearIndexedDbPersistence(db)
     console.log('Signed out successfully')
 }
 

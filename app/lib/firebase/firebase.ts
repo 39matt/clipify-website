@@ -1,5 +1,10 @@
 import { getApp, getApps, initializeApp } from '@firebase/app'
-import { getFirestore } from '@firebase/firestore'
+import {
+  getFirestore,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from '@firebase/firestore'
 import { getAuth } from '@firebase/auth'
 import { initializeAppCheck, ReCaptchaV3Provider } from '@firebase/app-check'
 
@@ -27,4 +32,7 @@ if (typeof window !== "undefined") {
   });
 }
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+export const db = initializeFirestore(app, {
+  localCache:
+    persistentLocalCache(/*settings*/{tabManager: persistentMultipleTabManager()})
+})

@@ -6,8 +6,8 @@
   import { NextPage } from 'next'
   import CampaignCard from '#components/app/CampaignCard/CampaignCard'
   import { useEffect, useState } from 'react'
-  import { getAllCampaigns } from '../../lib/firebase/firestore'
   import { useRouter } from 'next/navigation'
+  import { getAllCampaigns } from '../../lib/firebase/firestore/campaign'
 
   const Campaigns: NextPage = () => {
     const router = useRouter()

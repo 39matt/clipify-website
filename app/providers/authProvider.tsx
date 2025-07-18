@@ -4,7 +4,7 @@ import { onAuthStateChanged } from 'firebase/auth'
 import { createContext, useContext, useEffect, useState } from 'react'
 
 import { auth } from '../lib/firebase/firebase'
-import { getUserId } from '../lib/firebase/firestore'
+import { getUserId } from '../lib/firebase/firestore/user'
 
 interface AuthContextType {
   user: User | null

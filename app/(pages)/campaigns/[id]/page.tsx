@@ -31,15 +31,12 @@ import {
   ModalCloseButton,
   ModalBody, Input, useDisclosure, ModalFooter, Flex,
 } from '@chakra-ui/react'
-import {
-  accountVideoExists,
-  addVideo,
-  getCampaign,
-  getVideoInfo,
-  userAccountExists
-} from '../../../lib/firebase/firestore'
 import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa'
 import { useLayoutContext } from '../../dashboard/context'
+import { IVideo } from '../../../lib/models/video'
+import { getCampaign } from '../../../lib/firebase/firestore/campaign'
+import { userAccountExists } from '../../../lib/firebase/firestore/account'
+import { accountVideoExists, addVideo, getVideoInfo } from '../../../lib/firebase/firestore/video'
 
 interface ICampaign {
   id: string;
@@ -63,6 +60,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user, discordUsername } = useLayoutContext();
+  const videoAgeInHours = 24;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [videoUrl, setVideoUrl] = useState('');
@@ -122,7 +120,7 @@ const Page = () => {
       setMessage('Molimo unesite URL videa.');
       return;
     }
-
+    // validate link
     const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/reelsq\/[a-zA-Z0-9_-]+\/?$/;
     const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
     if (!instagramReelRegex.test(videoUrl) && !tiktokVideoRegex.test(videoUrl)) {
@@ -133,22 +131,26 @@ const Page = () => {
     let accountName = ""
     let video: IVideo | null = null
 
+    // tiktok or instagram
     if(videoUrl.includes('tiktok')) {
       accountName = videoUrl.split('/')[3].replace("@", '');
       const videoId = videoUrl.split('/')[5];
 
+      // check if user has account
       const accExists = await userAccountExists(discordUsername!, accountName, "TikTok");
       if(!accExists) {
         setMessage("Nalog mora biti vaš!");
         return
       }
 
+      // check if video is already added
       const videoExists = await accountVideoExists(discordUsername!, accountName, "TikTok", videoUrl);
       if(videoExists) {
         setMessage("Video je već dodat!");
         return
       }
 
+      // fetch video information
       video = await getVideoInfo(videoId, "TikTok", process.env.NEXT_PUBLIC_RAPIDAPI_KEY!);
       if(!video) {
         setMessage("Greška pri pribavljanju videa!")
@@ -158,6 +160,7 @@ const Page = () => {
     else if(videoUrl.includes('instagram')){
       const videoId = videoUrl.split('/')[4];
 
+      // fetch video information
       video = await getVideoInfo(videoId, "Instagram", process.env.NEXT_PUBLIC_RAPIDAPI_KEY!);
       if(!video) {
         setMessage("Greška pri pribavljanju videa!")
@@ -166,12 +169,14 @@ const Page = () => {
 
       accountName = video.owner
 
+      // check if user has account
       const accExists = await userAccountExists(discordUsername!, accountName, "Instagram");
       if(!accExists) {
         setMessage("Nalog mora biti vaš!");
         return
       }
 
+      // check if user has already added video
       const videoExists = await accountVideoExists(discordUsername!, accountName, "Instagram", videoUrl);
       if(videoExists) {
         setMessage("Video je već dodat!");
@@ -179,8 +184,14 @@ const Page = () => {
       }
     }
 
-    video!.campaignId = campaignId!;
-    await addVideo(discordUsername!, accountName, video as IVideo);
+    const createdAt = new Date(video?.createdAt!)
+    const currentTime = new Date()
+    if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
+      setMessage(`Video je stariji od ${videoAgeInHours}h`)
+      return
+    }
+
+    await addVideo(discordUsername!, accountName, campaignId!, video as IVideo);
 
     setMessage('Video URL je uspešno dodat!');
     setVideoUrl('');

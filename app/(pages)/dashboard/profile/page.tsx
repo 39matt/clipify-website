@@ -15,13 +15,13 @@ import {
 } from '@chakra-ui/react'
 import { Property, PropertyList } from '@saas-ui/core';
 import { useRouter } from 'next/navigation';
-import { isUserLinked } from '../../../lib/firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useLayoutContext } from '../context';
 import EditPaymentInfoCard from '#components/app/EditPaymentInfoCard/EditPaymentInfoCard';
 import ChangePasswordCard from '#components/app/ChangePasswordCard/ChangePasswordCard';
 import { BoxFeature, BoxFeatures } from '#components/home-page/features/box-features';
 import { FeatureProps } from '#components/home-page/features';
+import { isUserLinked } from '../../../lib/firebase/firestore/user'
 
 const Profile: NextPage = () => {
   const router = useRouter();

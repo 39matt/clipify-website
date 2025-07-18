@@ -15,9 +15,9 @@ import {
   CardBody,
   Card, Stack, Flex, Box,
 } from '@chakra-ui/react'
-import { updateWalletAddress } from '../../../app/lib/firebase/firestore';
 import { Property, PropertyList } from '@saas-ui/core';
 import { Select, SelectButton, SelectList } from '@saas-ui/react';
+import { updateWalletAddress } from '../../../app/lib/firebase/firestore/user'
 
 interface EditPaymentInfoCardProps {
   discordUsername: string | null;
