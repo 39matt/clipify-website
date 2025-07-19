@@ -27,6 +27,9 @@ import { LayoutProvider, useLayoutContext } from './dashboard/context';
 import { logout } from '../lib/firebase/auth';
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect } from 'react';
+import { RiAdminLine } from 'react-icons/ri'
+import { MdAdminPanelSettings } from 'react-icons/md'
+import { GrUserAdmin } from 'react-icons/gr'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -71,7 +74,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           <SidebarToggleButton />
           <SidebarSection direction="row">
             <Image
-              src="https://saas-ui.dev/favicons/favicon-96x96.png"
+              src="/public/logo.svg"
               boxSize="7"
             />
             <Spacer />
@@ -99,6 +102,8 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                 Aktivne kampanje
               </NavItem>
               <NavItem icon={<FiSettings />} onClick={()=>router.push('/dashboard/accounts')} isActive={pathname.includes("/accounts")}>Vaši nalozi</NavItem>
+              <NavItem icon={<GrUserAdmin />} onClick={()=>router.push('/dashboard/admin')} isActive={pathname.includes("/admin")}>Admin panel</NavItem>
+
             </NavGroup>
 
             <NavGroup title="Vaše kampanje" isCollapsible>

@@ -12,6 +12,8 @@ if (!admin.apps.length) {
 
 export const adminAuth = admin.auth()
 
+export const adminDb = admin.firestore()
+
 export const setAdminClaim = async (uid) => {
   await adminAuth.setCustomUserClaims(uid, { isAdmin: true });
 };

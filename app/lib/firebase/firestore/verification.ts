@@ -1,5 +1,5 @@
 import { addDoc, collection, deleteDoc, doc, getDocs } from '@firebase/firestore'
-import { db } from '../firebase'
+import { db } from '../firebaseClient'
 import { addAccount } from './account'
 import { IAccount } from '../../models/account'
 
@@ -96,7 +96,6 @@ export async function verifyVerification(uid: string, verification: IVerificatio
           verification.platform === 'Instagram'
             ? `https://www.instagram.com/${verification.username}`
             : `https://www.tiktok.com/@${verification.username}`,
-        videos: []
       };
       await removeVerification(uid);
       await addAccount(uid, account);

@@ -13,21 +13,25 @@ interface CampaignData {
 }
 
 const AdminPanel: NextPage = () => {
-  const [campaigns, setCampaigns] = useState<CampaignData[]>([]);
+  const [campaigns, setCampaigns] = useState<ICampaign[]>([]);
   const router = useRouter()
 
   useEffect(() => {
     const getCampaigns = async () => {
-      const campaigns = await getAllCampaigns();
-      const campaignsData: CampaignData[] = campaigns.map((campaign) => {
-        const campaignData: CampaignData = {
-          id: campaign.id,
-          name: `${campaign.influencer} - ${campaign.activity}`,
-          videoNumber: 1, // Replace with actual video number if available
-        };
-        return campaignData;
-      });
-      setCampaigns(campaignsData);
+      const response = await fetch('/api/campaigns/get-all', {method: 'GET'});
+      if(!response.ok) {
+        throw new Error("Failed to fetch campaigns!")
+      }
+      const campaigns:ICampaign[] = await response.json()
+      // const campaignsData: CampaignData[] = campaigns.map((campaign) => {
+      //   const campaignData: CampaignData = {
+      //     id: campaign.id,
+      //     name: `${campaign.influencer} - ${campaign.activity}`,
+      //     videoNumber: 1, // Replace with actual video number if available
+      //   };
+      //   return campaignData;
+      // });
+      setCampaigns(campaigns);
     };
 
     getCampaigns();
@@ -62,10 +66,10 @@ const AdminPanel: NextPage = () => {
                   onClick={()=>{router.push(`/dashboard/admin/campaign/${campaign.id}`)}}
                   _hover={{cursor:"pointer"}}
                   >
-                    {campaign.name}
+                    {campaign.influencer} - {campaign.activity}
                   </Text>
                 </Td>
-                <Td>{campaign.videoNumber}</Td>
+                <Td>2</Td>
               </Tr>
             ))}
           </Tbody>

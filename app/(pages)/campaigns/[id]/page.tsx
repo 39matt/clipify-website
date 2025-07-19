@@ -186,10 +186,10 @@ const Page = () => {
 
     const createdAt = new Date(video?.createdAt!)
     const currentTime = new Date()
-    if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
-      setMessage(`Video je stariji od ${videoAgeInHours}h`)
-      return
-    }
+    // if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
+    //   setMessage(`Video je stariji od ${videoAgeInHours}h`)
+    //   return
+    // }
 
     await addVideo(discordUsername!, accountName, campaignId!, video as IVideo);
 

@@ -3,7 +3,7 @@ import { onAuthStateChanged } from 'firebase/auth'
 
 import { createContext, useContext, useEffect, useState } from 'react'
 
-import { auth } from '../lib/firebase/firebase'
+import { auth } from '../lib/firebase/firebaseClient'
 import { getUserId } from '../lib/firebase/firestore/user'
 
 interface AuthContextType {

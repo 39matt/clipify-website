@@ -1,11 +1,12 @@
 import { collection, doc, getDoc, getDocs } from '@firebase/firestore'
-import { db } from '../firebase'
+import { db } from '../firebaseClient'
 import { IVideo } from '../../models/video'
 
 export async function getAllCampaigns() {
   try {
-    const campaignsCollection = collection(db, 'campaigns') // Replace 'campaigns' with your collection name
-    const snapshot = await getDocs(campaignsCollection)
+    const campaignsColRef = collection(db, 'campaigns')
+    const snapshot = await getDocs(campaignsColRef)
+    console.log("Documents:", snapshot.docs.map((doc) => doc.data()));
     return snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),

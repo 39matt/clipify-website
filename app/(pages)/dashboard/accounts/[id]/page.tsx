@@ -33,7 +33,6 @@ import {
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useLayoutContext } from '../../context';
-import { getAccountAndVideos } from '../../../../lib/firebase/firestore/account'
 import { IAccount } from '../../../../lib/models/account'
 
 const AccountPage = () => {
@@ -53,8 +52,8 @@ const AccountPage = () => {
         if (!id) {
           throw new Error('Account ID is missing');
         }
-        const acc = await getAccountAndVideos(discordUsername!, id);
-        setAccount(acc);
+        // const acc = await getAccountAndVideos(discordUsername!, id);
+        // setAccount(acc);
       } catch (err) {
         console.error('Error fetching account:', err);
         setError('Došlo je do greške prilikom učitavanja naloga.');
@@ -180,77 +179,77 @@ const AccountPage = () => {
       <Heading as="h2" size="xl" mb={6} textAlign="center">
         Videi
       </Heading>
-      {account.videos.length > 0 ? (
-        <SimpleGrid columns={[1, 2, 3]} spacing={6}>
-          {account.videos.map((video) => (
-            <Card
-              key={video.uid}
-              bg="gray.800"
-              boxShadow="lg"
-              borderRadius="lg"
-              p={4}
-              _hover={{ bg: 'gray.700' }}
-              transition="background-color 0.2s"
-            >
-              <CardHeader>
-                <Heading
-                  as="h3"
-                  size="md"
-                  mb={4}
-                  color="blue.500"
-                  cursor="pointer"
-                  _hover={{ color: 'blue.600' }}
-                  onClick={() => window.open(video.link, '_blank')}
-                >
-                  {video.name}
-                </Heading>
-              </CardHeader>
-              <CardBody>
-                <VStack align="start" spacing={2}>
-                  <HStack>
-                    <Box minW="100px" fontWeight="bold" color="gray.300">
-                      Pregledi:
-                    </Box>
-                    <Badge colorScheme="blue" fontSize="0.8em">
-                      {video.views}
-                    </Badge>
-                  </HStack>
-                  <HStack>
-                    <Box minW="100px" fontWeight="bold" color="gray.300">
-                      Lajkovi:
-                    </Box>
-                    <Badge colorScheme="green" fontSize="0.8em">
-                      {video.likes}
-                    </Badge>
-                  </HStack>
-                  <HStack>
-                    <Box minW="100px" fontWeight="bold" color="gray.300">
-                      Deljenja:
-                    </Box>
-                    <Badge colorScheme="purple" fontSize="0.8em">
-                      {video.shares}
-                    </Badge>
-                  </HStack>
-                  <HStack>
-                    <Box minW="100px" fontWeight="bold" color="gray.300">
-                      Komentari:
-                    </Box>
-                    <Badge colorScheme="red" fontSize="0.8em">
-                      {video.comments}
-                    </Badge>
-                  </HStack>
-                </VStack>
-              </CardBody>
-            </Card>
-          ))}
-        </SimpleGrid>
-      ) : (
-        <Center>
-          <Text fontSize="lg" color="gray.500">
-            Nema videa za ovaj nalog.
-          </Text>
-        </Center>
-      )}
+      {/*{account.videos.length > 0 ? (*/}
+      {/*  <SimpleGrid columns={[1, 2, 3]} spacing={6}>*/}
+      {/*    {account.videos.map((video) => (*/}
+      {/*      <Card*/}
+      {/*        key={video.uid}*/}
+      {/*        bg="gray.800"*/}
+      {/*        boxShadow="lg"*/}
+      {/*        borderRadius="lg"*/}
+      {/*        p={4}*/}
+      {/*        _hover={{ bg: 'gray.700' }}*/}
+      {/*        transition="background-color 0.2s"*/}
+      {/*      >*/}
+      {/*        <CardHeader>*/}
+      {/*          <Heading*/}
+      {/*            as="h3"*/}
+      {/*            size="md"*/}
+      {/*            mb={4}*/}
+      {/*            color="blue.500"*/}
+      {/*            cursor="pointer"*/}
+      {/*            _hover={{ color: 'blue.600' }}*/}
+      {/*            onClick={() => window.open(video.link, '_blank')}*/}
+      {/*          >*/}
+      {/*            {video.name}*/}
+      {/*          </Heading>*/}
+      {/*        </CardHeader>*/}
+      {/*        <CardBody>*/}
+      {/*          <VStack align="start" spacing={2}>*/}
+      {/*            <HStack>*/}
+      {/*              <Box minW="100px" fontWeight="bold" color="gray.300">*/}
+      {/*                Pregledi:*/}
+      {/*              </Box>*/}
+      {/*              <Badge colorScheme="blue" fontSize="0.8em">*/}
+      {/*                {video.views}*/}
+      {/*              </Badge>*/}
+      {/*            </HStack>*/}
+      {/*            <HStack>*/}
+      {/*              <Box minW="100px" fontWeight="bold" color="gray.300">*/}
+      {/*                Lajkovi:*/}
+      {/*              </Box>*/}
+      {/*              <Badge colorScheme="green" fontSize="0.8em">*/}
+      {/*                {video.likes}*/}
+      {/*              </Badge>*/}
+      {/*            </HStack>*/}
+      {/*            <HStack>*/}
+      {/*              <Box minW="100px" fontWeight="bold" color="gray.300">*/}
+      {/*                Deljenja:*/}
+      {/*              </Box>*/}
+      {/*              <Badge colorScheme="purple" fontSize="0.8em">*/}
+      {/*                {video.shares}*/}
+      {/*              </Badge>*/}
+      {/*            </HStack>*/}
+      {/*            <HStack>*/}
+      {/*              <Box minW="100px" fontWeight="bold" color="gray.300">*/}
+      {/*                Komentari:*/}
+      {/*              </Box>*/}
+      {/*              <Badge colorScheme="red" fontSize="0.8em">*/}
+      {/*                {video.comments}*/}
+      {/*              </Badge>*/}
+      {/*            </HStack>*/}
+      {/*          </VStack>*/}
+      {/*        </CardBody>*/}
+      {/*      </Card>*/}
+      {/*    ))}*/}
+      {/*  </SimpleGrid>*/}
+      {/*) : (*/}
+      {/*  <Center>*/}
+      {/*    <Text fontSize="lg" color="gray.500">*/}
+      {/*      Nema videa za ovaj nalog.*/}
+      {/*    </Text>*/}
+      {/*  </Center>*/}
+      {/*)}*/}
 
       {/* Add Video Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>

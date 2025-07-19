@@ -1,6 +1,6 @@
 import { IVideo } from '../../models/video'
 import { addDoc, collection, doc, getDocs, limit, query, where } from '@firebase/firestore'
-import { db } from '../firebase'
+import { db } from '../firebaseClient'
 
 export async function getVideoInfo(videoId: string, platform: string, api_key: string) {
   try {
@@ -88,9 +88,8 @@ export async function addVideo(uid: string, accId: string, campaignId: string, v
 
     const userVideoColRef = collection(video.userAccountRef, 'videos');
 
-
     const newVideoDocRef = await addDoc(videoColRef, video);
-    const newUserVideoDocRef = await addDoc(userVideoColRef, {newVideoDocRef});
+    const newUserVideoDocRef = await addDoc(userVideoColRef, {video: newVideoDocRef, campaignId: campaignId});
   } catch (error) {
     console.error('Error adding video:', error);
     throw new Error('Failed to add video');

@@ -3,8 +3,7 @@ import {
   sendEmailVerification, signInWithEmailAndPassword, signOut,
   updatePassword, User,
 } from '@firebase/auth'
-import { auth, db } from './firebase'
-import { AuthProvider, useAuth } from '../../providers/authProvider'
+import { auth, db } from './firebaseClient'
 import { clearIndexedDbPersistence } from '@firebase/firestore'
 
 export async function signUp(email: string, password: string): Promise<any> {

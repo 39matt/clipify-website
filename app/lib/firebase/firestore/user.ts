@@ -1,5 +1,5 @@
 import { collection, doc, getDoc, getDocs, limit, query, setDoc, where } from '@firebase/firestore'
-import { db } from '../firebase'
+import { db } from '../firebaseClient'
 
 export async function getUserId(email: string): Promise<string> {
   try {
