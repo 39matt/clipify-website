@@ -170,14 +170,14 @@ const HeroSection: React.FC = () => {
         pt="20"
         features={[
           {
-            title: '100K+',
+            title: '1K+',
             icon: DollarSign,
             description: 'Isplaćeno kliperima',
             iconPosition: 'left',
             delay: 0,
           },
           {
-            title: '2,000+',
+            title: '100+',
             icon: User,
             description:
               'Aktivnih klipera',
@@ -185,7 +185,7 @@ const HeroSection: React.FC = () => {
             delay: 0.2,
           },
           {
-            title: '1.5B+',
+            title: '5M+',
             icon: EyeIcon,
             description:
               'Organskih pregleda',
@@ -193,7 +193,7 @@ const HeroSection: React.FC = () => {
             delay: 0.4,
           },
           {
-            title: '51',
+            title: '1',
             icon: ImBullhorn,
             description:
               'Pokrenutih kampanja',
