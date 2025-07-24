@@ -127,9 +127,10 @@ export function AuthProvider({ children }) {
     const interval = setInterval(async () => {
       try {
         const newToken = await user.getIdToken(true) // Force refresh
+        const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost'
         Cookies.set('authToken', newToken, {
           expires: 1/24,
-          secure: true,
+          secure: !isLocalhost,
           sameSite: 'lax',
           path: '/'
         })
