@@ -8,7 +8,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error getting campaigns:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch campaigns' },
+      { error: 'Failed to fetch campaigns: ' + error },
       { status: 500 }
     );
   }
