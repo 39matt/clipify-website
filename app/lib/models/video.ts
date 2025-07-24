@@ -1,6 +1,7 @@
 import { DocumentReference } from '@firebase/firestore'
 
 export interface IVideo {
+  id?: string;
   uid?: string;
   accountName: string;
   userAccountRef?: DocumentReference;
@@ -12,4 +13,5 @@ export interface IVideo {
   shares: number;
   views: number;
   coverUrl: string;
+  approved?: boolean;
 }

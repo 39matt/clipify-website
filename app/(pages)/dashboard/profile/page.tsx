@@ -1,6 +1,7 @@
 'use client';
 import { NextPage } from 'next';
 import {
+  AbsoluteCenter,
   Box,
   Button,
   Card,
@@ -14,7 +15,6 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { Property, PropertyList } from '@saas-ui/core';
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useLayoutContext } from '../context';
 import EditPaymentInfoCard from '#components/app/EditPaymentInfoCard/EditPaymentInfoCard';
@@ -24,7 +24,6 @@ import { FeatureProps } from '#components/home-page/features';
 import { isUserLinked } from '../../../lib/firebase/firestore/user'
 
 const Profile: NextPage = () => {
-  const router = useRouter();
   const [linked, setLinked] = useState<boolean | null>(null);
   const [checkingLinked, setCheckingLinked] = useState(true);
   const { user, loading, discordUsername } = useLayoutContext();
@@ -70,7 +69,7 @@ const Profile: NextPage = () => {
     window.location.href = `https://discord.com/api/oauth2/authorize?${params.toString()}`;
   };
 
-  if (loading || checkingLinked) {
+  if (loading) {
     return (
       <Center minH="100vh">
         <Spinner />
@@ -87,25 +86,38 @@ const Profile: NextPage = () => {
       </Box>
       <VStack w={{ base: 'full', md: '85%' }} spacing={{ base: 4, md: 8 }}>
         {/* Discord Card */}
-        <Card w="full">
-          <CardHeader display="flex" flexDirection={{ base: 'column', md: 'row' }} gap={4}>
-            <Heading size="lg">{discordUsername}</Heading>
-            <Spacer />
-            {!linked && linked !== null && (
-              <Button colorScheme="green" variant="solid" onClick={handleLinkDiscord}>
-                Link Discord
-              </Button>
-            )}
-          </CardHeader>
-          <CardBody>
-            <PropertyList>
-              <Property
-                label="Discord"
-                value={linked ? 'Linked' : 'Not linked'}
-                textColor={linked ? 'green.500' : 'red.500'}
-              />
-            </PropertyList>
-          </CardBody>
+        <Card w="full" minH={"200px"}>
+          {checkingLinked && <AbsoluteCenter>
+            <Spinner/>
+          </AbsoluteCenter>}
+          {!checkingLinked && <>
+            <CardHeader display="flex" flexDirection={{ base: 'column', md: 'row' }} gap={4}>
+              <Heading size="lg">Osnovne informacije</Heading>
+              {!linked && linked !== null && (
+                <Button colorScheme="green" variant="solid" onClick={handleLinkDiscord}>
+                  Link Discord
+                </Button>
+              )}
+            </CardHeader>
+            <CardBody>
+              <PropertyList>
+                <Property
+                  label="Discord"
+                  value={linked ? discordUsername : 'Nije povezan'}
+                  textColor={linked ? '#5865F2' : 'red.500'}
+                  fontWeight={"bold"}
+                />
+                <Property
+                  label="Email"
+                  value={user?.email}
+                  fontWeight={"bold"}
+
+                />
+              </PropertyList>
+            </CardBody>
+          </>
+          }
+
         </Card>
 
         {/* Statistics Card */}

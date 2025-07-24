@@ -36,7 +36,7 @@ import { useLayoutContext } from '../../dashboard/context'
 import { IVideo } from '../../../lib/models/video'
 import { getCampaign } from '../../../lib/firebase/firestore/campaign'
 import { userAccountExists } from '../../../lib/firebase/firestore/account'
-import { accountVideoExists, addVideo, getVideoInfo } from '../../../lib/firebase/firestore/video'
+import { accountVideoExists, addVideo } from '../../../lib/firebase/firestore/video'
 
 interface ICampaign {
   id: string;
@@ -151,7 +151,8 @@ const Page = () => {
       }
 
       // fetch video information
-      video = await getVideoInfo(videoId, "TikTok", process.env.NEXT_PUBLIC_RAPIDAPI_KEY!);
+      const responseJson = await fetch('/api/campaign/video/get-info', {method: "PUT", body: JSON.stringify({platform:"TikTok", videoId, api_key:process.env.NEXT_PUBLIC_RAPIDAPI_KEY!})}).then(res => res.json());
+      video = responseJson.videoInfo as IVideo;
       if(!video) {
         setMessage("Greška pri pribavljanju videa!")
         return
@@ -161,7 +162,8 @@ const Page = () => {
       const videoId = videoUrl.split('/')[4];
 
       // fetch video information
-      video = await getVideoInfo(videoId, "Instagram", process.env.NEXT_PUBLIC_RAPIDAPI_KEY!);
+      const responseJson = await fetch('/api/campaign/video/get-info', {method: "PUT", body: JSON.stringify({platform:"Instagram", videoId, api_key:process.env.NEXT_PUBLIC_RAPIDAPI_KEY!})}).then(res => res.json());
+      video = responseJson.videoInfo as IVideo;
       if(!video) {
         setMessage("Greška pri pribavljanju videa!")
         return

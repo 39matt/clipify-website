@@ -26,10 +26,12 @@ import { FiHome, FiUsers, FiSettings, FiHelpCircle, FiCompass, FiUser } from 're
 import { LayoutProvider, useLayoutContext } from './dashboard/context';
 import { logout } from '../lib/firebase/auth';
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react'
 import { RiAdminLine } from 'react-icons/ri'
 import { MdAdminPanelSettings } from 'react-icons/md'
 import { GrUserAdmin } from 'react-icons/gr'
+import Cookies from 'js-cookie'
+import { getIdToken } from '@firebase/auth'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -41,8 +43,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { user, loading, discordUsername } = useLayoutContext();
+  const { user, loading, discordUsername, isAdmin } = useLayoutContext();
+  const [showAdmin, setShowAdmin] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setShowAdmin(isAdmin!);
+  }, [isAdmin])
 
   useEffect(() => {
     if (!loading && !user) {
@@ -74,7 +81,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           <SidebarToggleButton />
           <SidebarSection direction="row">
             <Image
-              src="/public/logo.svg"
+              src="/logo.svg"
               boxSize="7"
             />
             <Spacer />
@@ -85,7 +92,6 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                   <PersonaAvatar
                     presence="online"
                     size="xs"
-                    src="/showcase-avatar.jpg"
                   />
                 }
                 variant="ghost"
@@ -102,7 +108,9 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
                 Aktivne kampanje
               </NavItem>
               <NavItem icon={<FiSettings />} onClick={()=>router.push('/dashboard/accounts')} isActive={pathname.includes("/accounts")}>Vaši nalozi</NavItem>
-              <NavItem icon={<GrUserAdmin />} onClick={()=>router.push('/dashboard/admin')} isActive={pathname.includes("/admin")}>Admin panel</NavItem>
+              {showAdmin && <NavItem icon={<GrUserAdmin />} onClick={ async ()=>{
+                router.push('/dashboard/admin')
+              }} isActive={pathname.includes("/admin")}>Admin panel</NavItem>}
 
             </NavGroup>
 
