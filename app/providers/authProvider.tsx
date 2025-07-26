@@ -43,7 +43,6 @@ export function AuthProvider({ children }) {
             sameSite: 'lax',
             path: '/'
           })
-          console.log("Initial token set:", Cookies.get('authToken'))
 
         } catch (error) {
           console.error('Error getting initial ID token:', error)

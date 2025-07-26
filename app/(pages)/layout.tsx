@@ -103,64 +103,32 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           </SidebarSection>
           <SidebarSection flex="1">
             <NavGroup>
-              <NavItem icon={<FiUser />} onClick={()=>router.push('/dashboard/profile')} isActive={pathname.includes("/profile")}>Profil</NavItem>
-              <NavItem icon={<FiCompass />} onClick={()=>router.push('/campaigns')} isActive={pathname.includes("/campaigns")}>
+              <NavItem _hover={{cursor:"pointer"}} icon={<FiUser />} onClick={()=>router.push('/dashboard/profile')} isActive={pathname.includes("/profile")}>Profil</NavItem>
+              <NavItem _hover={{cursor:"pointer"}} icon={<FiCompass />} onClick={()=>router.push('/campaigns')} isActive={pathname.includes("/campaigns")}>
                 Aktivne kampanje
               </NavItem>
-              <NavItem icon={<FiSettings />} onClick={()=>router.push('/dashboard/accounts')} isActive={pathname.includes("/accounts")}>Vaši nalozi</NavItem>
-              {showAdmin && <NavItem icon={<GrUserAdmin />} onClick={ async ()=>{
+              <NavItem _hover={{cursor:"pointer"}} icon={<FiSettings />} onClick={()=>router.push('/dashboard/accounts')} isActive={pathname.includes("/accounts")}>Vaši nalozi</NavItem>
+              {showAdmin && <NavItem _hover={{cursor:"pointer"}} icon={<GrUserAdmin />} onClick={ async ()=>{
                 router.push('/dashboard/admin')
               }} isActive={pathname.includes("/admin")}>Admin panel</NavItem>}
 
             </NavGroup>
 
-            <NavGroup title="Vaše kampanje" isCollapsible>
-              <NavItem>Baka Prase - Gamba</NavItem>
-              <NavItem>Guh Saiyan - IRL</NavItem>
-            </NavGroup>
-
-            {/*<NavGroup title="Tags" isCollapsible>*/}
-            {/*  <NavItem*/}
-            {/*    icon={*/}
-            {/*      <Badge bg="purple.500" boxSize="2" borderRadius="full" />*/}
-            {/*    }*/}
-            {/*  >*/}
-            {/*    <Text>Lead</Text>*/}
-            {/*    <Badge*/}
-            {/*      opacity="0.6"*/}
-            {/*      borderRadius="full"*/}
-            {/*      bg="none"*/}
-            {/*      ms="auto"*/}
-            {/*    >*/}
-            {/*      83*/}
-            {/*    </Badge>*/}
-            {/*  </NavItem>*/}
-            {/*  <NavItem*/}
-            {/*    icon={<Badge bg="cyan.500" boxSize="2" borderRadius="full" />}*/}
-            {/*  >*/}
-            {/*    <Text>Customer</Text>*/}
-            {/*    <Badge*/}
-            {/*      opacity="0.6"*/}
-            {/*      borderRadius="full"*/}
-            {/*      bg="none"*/}
-            {/*      ms="auto"*/}
-            {/*    >*/}
-            {/*      210*/}
-            {/*    </Badge>*/}
-            {/*  </NavItem>*/}
+            {/*<NavGroup title="Vaše kampanje" isCollapsible>*/}
+            {/*  <NavItem>Baka Prase - Gamba</NavItem>*/}
+            {/*  <NavItem>Guh Saiyan - IRL</NavItem>*/}
             {/*</NavGroup>*/}
+
+
           </SidebarSection>
-          {/*<SidebarSection>*/}
-          {/*  <NavItem icon={<FiHelpCircle />}>Documentation</NavItem>*/}
-          {/*</SidebarSection>*/}
         </Sidebar>
       }
     >
       <Flex
-          ml={{ base: 0, md: '250px' }} // Offset for the sidebar
-          justify="center" // Centers content horizontally
-          align="center" // Centers content vertically
-          p={6} // Padding for spacing
+          ml={{ base: 0, md: '250px' }}
+          justify="center"
+          align="center"
+          p={6}
       >
           {children}
       </Flex>

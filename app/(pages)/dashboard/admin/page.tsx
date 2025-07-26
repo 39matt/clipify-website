@@ -2,7 +2,6 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import AdminPanelClient from './AdminPanelClient';
 
-// Server Component - runs on the server
 export default async function AdminPage() {
   const cookieStore = cookies();
   const authToken = cookieStore.get('authToken')?.value;
@@ -29,13 +28,10 @@ export default async function AdminPage() {
 
     const adminData = await response.json();
 
-    // Check if user is actually an admin
     if (!adminData.isAdmin) {
       redirect('/dashboard/profile');
     }
 
-    // If we get here, user is authenticated and is an admin
-    // Render the client component
     return <AdminPanelClient />;
   } catch (error) {
     console.error('Error verifying admin status:', error);
