@@ -29,7 +29,6 @@ export default function AdminPanelClient() {
   const router = useRouter();
 
   useEffect(() => {
-    // Since we're here, we're already authorized via server component
     const getCampaigns = async () => {
       try {
         const response = await fetch('/api/campaign/get-all', {

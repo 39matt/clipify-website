@@ -19,8 +19,6 @@ import {
   Card,
   CardBody,
   CardHeader,
-  CardFooter,
-  Spacer,
   Button,
   HStack,
   IconButton,
@@ -29,14 +27,21 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody, Input, useDisclosure, ModalFooter, Flex,
-} from '@chakra-ui/react'
-import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa'
-import { useLayoutContext } from '../../dashboard/context'
-import { IVideo } from '../../../lib/models/video'
-import { getCampaign } from '../../../lib/firebase/firestore/campaign'
-import { userAccountExists } from '../../../lib/firebase/firestore/account'
-import { accountVideoExists, addVideo } from '../../../lib/firebase/firestore/video'
+  ModalBody,
+  Input,
+  useDisclosure,
+  ModalFooter,
+  Flex,
+  SimpleGrid,
+  AspectRatio,
+  Badge,
+} from '@chakra-ui/react';
+import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
+import { useLayoutContext } from '../../dashboard/context';
+import { IVideo } from '../../../lib/models/video';
+import { getCampaign } from '../../../lib/firebase/firestore/campaign';
+import { userAccountExists } from '../../../lib/firebase/firestore/account';
+import { accountVideoExists, addVideo } from '../../../lib/firebase/firestore/video';
 
 interface ICampaign {
   id: string;
@@ -53,12 +58,149 @@ interface ICampaign {
   minViewsPerPayout: number;
 }
 
+const VideosCard = ({
+                      userVideos,
+                      videosLoading
+                    }: {
+  userVideos: IVideo[];
+  videosLoading: boolean;
+}) => {
+  const totalViews = userVideos.reduce((sum, video) => sum + (video.views || 0), 0);
+  const totalLikes = userVideos.reduce((sum, video) => sum + (video.likes || 0), 0);
+  const totalComments = userVideos.reduce((sum, video) => sum + (video.comments || 0), 0);
+  const totalShares = userVideos.reduce((sum, video) => sum + (video.shares || 0), 0);
+
+  return (
+    <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} w="full">
+      <CardHeader textAlign="center">
+        <Heading size="lg" color="green.400" mb={4}>
+          Vaši poslati videi
+        </Heading>
+      </CardHeader>
+      <CardBody>
+        {/* Summary Stats */}
+        <StatGroup mb={6}>
+          <Stat textAlign="center">
+            <StatLabel>Ukupno pregleda</StatLabel>
+            <StatNumber color="blue.400">{totalViews.toLocaleString()}</StatNumber>
+          </Stat>
+          <Stat textAlign="center">
+            <StatLabel>Ukupno lajkova</StatLabel>
+            <StatNumber color="red.400">{totalLikes.toLocaleString()}</StatNumber>
+          </Stat>
+          <Stat textAlign="center">
+            <StatLabel>Ukupno komentara</StatLabel>
+            <StatNumber color="yellow.400">{totalComments.toLocaleString()}</StatNumber>
+          </Stat>
+          <Stat textAlign="center">
+            <StatLabel>Ukupno deljenja</StatLabel>
+            <StatNumber color="green.400">{totalShares.toLocaleString()}</StatNumber>
+          </Stat>
+        </StatGroup>
+
+        <Divider mb={6} />
+
+        {/* Videos Grid */}
+        {videosLoading ? (
+          <Center py={8}>
+            <Spinner size="lg" />
+            <Text ml={4}>Učitavanje videa...</Text>
+          </Center>
+        ) : userVideos.length === 0 ? (
+          <Center py={8}>
+            <Text color="gray.400" fontSize="lg">
+              Niste još uvek poslali nijedan video za ovu kampanju.
+            </Text>
+          </Center>
+        ) : (
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
+            {userVideos.map((video, index) => (
+              <Card key={video.id || index} bg="gray.700" borderRadius="md" overflow="hidden">
+                <AspectRatio ratio={9/16} maxH="200px">
+                  <Image
+                    src={video.coverUrl}
+                    alt={video.name || 'Video'}
+                    objectFit="cover"
+                    fallback={
+                      <Box bg="gray.600" w="full" h="full" display="flex" alignItems="center" justifyContent="center">
+                        <Text color="gray.400">Nema slike</Text>
+                      </Box>
+                    }
+                  />
+                </AspectRatio>
+                <CardBody p={3}>
+                  <VStack spacing={2} align="stretch">
+                    <HStack justify="space-between" align="center">
+                      <Text fontSize="sm" fontWeight="bold" noOfLines={1}>
+                        @{video.accountName}
+                      </Text>
+                      <Badge
+                        colorScheme={
+                          video.approved === true
+                            ? "green"
+                            : video.approved === false
+                              ? "red"
+                              : "yellow"
+                        }
+                        size="sm"
+                      >
+                        {video.approved === true
+                          ? "Odobreno"
+                          : video.approved === false
+                            ? "Odbačeno"
+                            : "Na čekanju"
+                        }
+                      </Badge>
+                    </HStack>
+
+                    <Text fontSize="xs" color="gray.400" noOfLines={2}>
+                      {video.name || 'Bez naziva'}
+                    </Text>
+
+                    <SimpleGrid columns={2} spacing={2} fontSize="xs">
+                      <Stat size="sm">
+                        <StatLabel color="blue.300">Pregledi</StatLabel>
+                        <StatNumber fontSize="sm">{(video.views || 0).toLocaleString()}</StatNumber>
+                      </Stat>
+                      <Stat size="sm">
+                        <StatLabel color="red.300">Lajkovi</StatLabel>
+                        <StatNumber fontSize="sm">{(video.likes || 0).toLocaleString()}</StatNumber>
+                      </Stat>
+                      <Stat size="sm">
+                        <StatLabel color="yellow.300">Komentari</StatLabel>
+                        <StatNumber fontSize="sm">{(video.comments || 0).toLocaleString()}</StatNumber>
+                      </Stat>
+                      <Stat size="sm">
+                        <StatLabel color="green.300">Deljenja</StatLabel>
+                        <StatNumber fontSize="sm">{(video.shares || 0).toLocaleString()}</StatNumber>
+                      </Stat>
+                    </SimpleGrid>
+
+                    <Text fontSize="xs" color="gray.500" textAlign="center">
+                      {video.createdAt
+                        ? new Date(video.createdAt).toLocaleDateString('sr-RS')
+                        : 'Nepoznat datum'
+                      }
+                    </Text>
+                  </VStack>
+                </CardBody>
+              </Card>
+            ))}
+          </SimpleGrid>
+        )}
+      </CardBody>
+    </Card>
+  );
+};
+
 const Page = () => {
   const pathname = usePathname();
   const campaignId = pathname.split('/').pop();
   const [campaign, setCampaign] = useState<ICampaign | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [userVideos, setUserVideos] = useState<IVideo[]>([]);
+  const [videosLoading, setVideosLoading] = useState(false);
   const { user, discordUsername } = useLayoutContext();
   const videoAgeInHours = 24;
 
@@ -66,23 +208,178 @@ const Page = () => {
   const [videoUrl, setVideoUrl] = useState('');
   const [message, setMessage] = useState('');
 
+  // Fetch campaign and videos
   useEffect(() => {
-    if (!campaignId || Array.isArray(campaignId)) return;
+    if (!campaignId || Array.isArray(campaignId) || !discordUsername) return;
 
-    const fetchCampaign = async () => {
+    const fetchData = async () => {
       try {
+
+        setLoading(true);
         const camp = await getCampaign(campaignId);
         setCampaign(camp);
-      } catch (err) {
-        console.error('Greška prilikom učitavanja kampanje:', err);
-        setError('Došlo je do greške prilikom učitavanja kampanje.');
-      } finally {
         setLoading(false);
+
+        // Fetch user videos
+        setVideosLoading(true);
+        const response = await fetch(
+          `/api/campaign/get-user-videos?campaignId=${campaignId}&userId=${discordUsername}`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('API Response:', data); // Debug log
+
+          let videos: IVideo[] = [];
+
+          // Handle different response formats
+          if (Array.isArray(data)) {
+            videos = data;
+          } else if (data && Array.isArray(data.videos)) {
+            videos = data.videos;
+          } else if (data && typeof data === 'object') {
+            videos = [data];
+          } else {
+            console.warn('Unexpected API response format:', data);
+            videos = [];
+          }
+
+          console.log('Processed videos:', videos); // Debug log
+          setUserVideos(videos);
+          setVideosLoading(false);
+        } else {
+          console.error('Failed to fetch videos');
+          setUserVideos([]);
+        }
+
+      } catch (err) {
+        console.error('Error loading data:', err);
+        setError('Došlo je do greške prilikom učitavanja podataka.');
+        setUserVideos([]);
       }
     };
 
-    fetchCampaign();
-  }, [campaignId]);
+    fetchData();
+  }, [campaignId, discordUsername]);
+
+  const handleAddVideo = async () => {
+    if (!videoUrl.trim()) {
+      setMessage('Molimo unesite URL videa.');
+      return;
+    }
+
+    try {
+      // Validate URL
+      const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/reels\/[a-zA-Z0-9_-]+\/?$/;
+      const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
+
+      if (!instagramReelRegex.test(videoUrl) && !tiktokVideoRegex.test(videoUrl)) {
+        setMessage('Molimo vas unesite validan Instagram/TikTok video URL.');
+        return;
+      }
+
+      let accountName = "";
+      let video: IVideo | null = null;
+
+      if (videoUrl.includes('tiktok')) {
+        accountName = videoUrl.split('/')[3].replace("@", '');
+        const videoId = videoUrl.split('/')[5];
+
+        // Check if user owns account
+        const accExists = await userAccountExists(discordUsername!, accountName, "TikTok");
+        if (!accExists) {
+          setMessage("Nalog mora biti vaš!");
+          return;
+        }
+
+        // Check if video already exists
+        const videoExists = await accountVideoExists(discordUsername!, accountName, "TikTok", videoUrl);
+        if (videoExists) {
+          setMessage("Video je već dodat!");
+          return;
+        }
+
+        // Fetch video info
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: "PUT",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            platform: "TikTok",
+            videoId,
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
+          })
+        });
+
+        const responseJson = await response.json();
+        video = responseJson.videoInfo as IVideo;
+
+      } else if (videoUrl.includes('instagram')) {
+        const videoId = videoUrl.split('/')[4];
+
+        // Fetch video info
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: "PUT",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            platform: "Instagram",
+            videoId,
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
+          })
+        });
+
+        const responseJson = await response.json();
+        video = responseJson.videoInfo as IVideo;
+
+        if (!video) {
+          setMessage("Greška pri pribavljanju videa!");
+          return;
+        }
+
+        accountName = video.accountName;
+
+        // Check if user owns account
+        const accExists = await userAccountExists(discordUsername!, accountName, "Instagram");
+        if (!accExists) {
+          setMessage("Nalog mora biti vaš!");
+          return;
+        }
+
+        // Check if video already exists
+        const videoExists = await accountVideoExists(discordUsername!, accountName, "Instagram", videoUrl);
+        if (videoExists) {
+          setMessage("Video je već dodat!");
+          return;
+        }
+      }
+
+      if (!video) {
+        setMessage("Greška pri pribavljanju videa!");
+        return;
+      }
+
+      // Add video
+      await addVideo(discordUsername!, accountName, campaignId!, video);
+
+      // Update local state
+      setUserVideos(prev => [...prev, video]);
+
+      setMessage('Video je uspešno dodat!');
+      setVideoUrl('');
+
+      setTimeout(() => {
+        onClose();
+        setMessage('');
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error adding video:', error);
+      setMessage('Došlo je do greške prilikom dodavanja videa.');
+    }
+  };
 
   if (loading) {
     return (
@@ -115,95 +412,9 @@ const Page = () => {
     );
   }
 
-  const handleAddVideo = async () => {
-    if (!videoUrl) {
-      setMessage('Molimo unesite URL videa.');
-      return;
-    }
-    // validate link
-    const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/reelsq\/[a-zA-Z0-9_-]+\/?$/;
-    const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
-    if (!instagramReelRegex.test(videoUrl) && !tiktokVideoRegex.test(videoUrl)) {
-      setMessage('Molimo vas unesite validan Instagram/TikTok video URL.');
-      return;
-    }
-
-    let accountName = ""
-    let video: IVideo | null = null
-
-    // tiktok or instagram
-    if(videoUrl.includes('tiktok')) {
-      accountName = videoUrl.split('/')[3].replace("@", '');
-      const videoId = videoUrl.split('/')[5];
-
-      // check if user has account
-      const accExists = await userAccountExists(discordUsername!, accountName, "TikTok");
-      if(!accExists) {
-        setMessage("Nalog mora biti vaš!");
-        return
-      }
-
-      // check if video is already added
-      const videoExists = await accountVideoExists(discordUsername!, accountName, "TikTok", videoUrl);
-      if(videoExists) {
-        setMessage("Video je već dodat!");
-        return
-      }
-
-      // fetch video information
-      const responseJson = await fetch('/api/campaign/video/get-info', {method: "PUT", body: JSON.stringify({platform:"TikTok", videoId, api_key:process.env.NEXT_PUBLIC_RAPIDAPI_KEY!})}).then(res => res.json());
-      video = responseJson.videoInfo as IVideo;
-      if(!video) {
-        setMessage("Greška pri pribavljanju videa!")
-        return
-      }
-    }
-    else if(videoUrl.includes('instagram')){
-      const videoId = videoUrl.split('/')[4];
-
-      // fetch video information
-      const responseJson = await fetch('/api/campaign/video/get-info', {method: "PUT", body: JSON.stringify({platform:"Instagram", videoId, api_key:process.env.NEXT_PUBLIC_RAPIDAPI_KEY!})}).then(res => res.json());
-      video = responseJson.videoInfo as IVideo;
-      if(!video) {
-        setMessage("Greška pri pribavljanju videa!")
-        return
-      }
-
-      accountName = video.accountName;
-
-      // check if user has account
-      const accExists = await userAccountExists(discordUsername!, accountName, "Instagram");
-      if(!accExists) {
-        setMessage("Nalog mora biti vaš!");
-        return
-      }
-
-      // check if user has already added video
-      const videoExists = await accountVideoExists(discordUsername!, accountName, "Instagram", videoUrl);
-      if(videoExists) {
-        setMessage("Video je već dodat!");
-        return
-      }
-    }
-
-    const createdAt = new Date(video?.createdAt!)
-    const currentTime = new Date()
-    // if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
-    //   setMessage(`Video je stariji od ${videoAgeInHours}h`)
-    //   return
-    // }
-
-    await addVideo(discordUsername!, accountName, campaignId!, video as IVideo);
-
-    setMessage('Video je uspešno dodat!');
-    setVideoUrl('');
-    setTimeout(() => {
-      onClose()
-    }, 2000)
-  };
-
   return (
     <Box bg="gray.900" color="white" maxH="90vh" minW="60vw">
+      {/* Header */}
       <Box
         position="relative"
         bg="gray.800"
@@ -226,7 +437,6 @@ const Page = () => {
           filter="blur(8px)"
           opacity={0.6}
         />
-
         <Heading size="4xl" mb={2} opacity={1}>
           {campaign.influencer}
         </Heading>
@@ -236,14 +446,15 @@ const Page = () => {
       </Box>
 
       <VStack spacing={6}>
-        <Card w={"full"} bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
+        {/* Main Campaign Card */}
+        <Card w="full" bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
           <CardHeader textAlign="center">
             <Heading size="xl" color="green.400" mb={4}>
               Cena po milion pregleda
             </Heading>
           </CardHeader>
           <CardBody textAlign="center">
-            <Text fontSize="6xl" fontWeight="bold" >
+            <Text fontSize="6xl" fontWeight="bold">
               ${campaign.perMillion.toFixed(2)}
             </Text>
             <Text fontSize="sm" color="gray.400" mb={4}>
@@ -278,14 +489,10 @@ const Page = () => {
             </HStack>
           </CardBody>
         </Card>
-        <Flex justify="center" gap={4} width="full" flexDirection={{base:"column", md:"row"}}>
-          <Card
-            bg="gray.800"
-            borderRadius="lg"
-            boxShadow="lg"
-            p={6}
-            flex="1"
-          >
+
+        {/* Campaign Details */}
+        <Flex justify="center" gap={4} width="full" flexDirection={{ base: "column", md: "row" }}>
+          <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
             <CardHeader textAlign="center">
               <Heading size="lg" color="green.400" mb={4}>
                 Napredak kampanje
@@ -314,41 +521,36 @@ const Page = () => {
             </CardBody>
           </Card>
 
-          <Card
-            bg="gray.800"
-            borderRadius="lg"
-            boxShadow="lg"
-            p={6}
-            flex="1"
-          >
+          <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
             <CardHeader textAlign="center">
               <Heading size="lg" color="green.400" mb={4}>
                 Detalji kampanje
               </Heading>
             </CardHeader>
-            <CardBody>
-              <StatGroup>
-                <Stat>
-                  <StatLabel>Maksimalan broj prijava</StatLabel>
-                  <StatNumber>{campaign.maxSubmissions} po nalogu</StatNumber>
-                </Stat>
-                <Stat>
-                  <StatLabel>Maksimalna zarada</StatLabel>
-                  <StatNumber>{campaign.maxEarnings}</StatNumber>
-                </Stat>
-              </StatGroup>
+            <CardBody textAlign="center">
+              <Stat>
+                <StatLabel>Maksimalan broj prijava</StatLabel>
+                <StatNumber>{campaign.maxSubmissions} po nalogu</StatNumber>
+              </Stat>
               <Divider my={4} />
-              <StatGroup>
-                <Stat>
-                  <StatLabel>Maksimalna zarada po objavi</StatLabel>
-                  <StatNumber>${campaign.maxEarningsPerPost}</StatNumber>
-                </Stat>
-              </StatGroup>
+              <Stat>
+                <StatLabel>Maksimalna zarada</StatLabel>
+                <StatNumber>${campaign.maxEarnings}</StatNumber>
+              </Stat>
+              <Divider my={4} />
+              <Stat>
+                <StatLabel>Maksimalna zarada po objavi</StatLabel>
+                <StatNumber>${campaign.maxEarningsPerPost}</StatNumber>
+              </Stat>
             </CardBody>
           </Card>
         </Flex>
 
+        {/* Videos Card */}
+        <VideosCard userVideos={userVideos} videosLoading={videosLoading} />
       </VStack>
+
+      {/* Add Video Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.800" color="white">
