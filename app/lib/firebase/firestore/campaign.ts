@@ -1,6 +1,7 @@
 import { collection, doc, getDoc, getDocs } from '@firebase/firestore'
 import { db } from '../firebaseClient'
 import { IVideo } from '../../models/video'
+import { ICampaign } from '../../models/campaign'
 
 export async function getAllCampaigns() {
   try {
@@ -30,13 +31,13 @@ export async function getCampaign(id: string): Promise<ICampaign | null> {
         imageUrl: data.imageUrl,
         progress: data.progress,
         budget: data.budget,
-        perMillion: data.per_million,
+        perMillion: data.perMillion,
         createdAt: data.createdAt,
-        maxEarnings: data.max_earnings,
-        maxEarningsPerPost: data.max_earnings_per_post,
-        maxSubmissions: data.max_submissions,
-        minViewsPerPayout: data.min_views_for_payout,
-      }
+        maxEarnings: data.maxEarnings,
+        maxEarningsPerPost: data.maxEarningsPerPost,
+        maxSubmissions: data.maxSubmissions,
+        minViewsPerPayout: data.minViewsForPayout,
+      } as ICampaign
     } else {
       console.log('Could not find campaign')
       return null

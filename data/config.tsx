@@ -29,15 +29,15 @@ const siteConfig = {
         label: 'FAQ',
         href: '',
       },
-      // {
-      //   label: 'Login',
-      //   href: '/login',
-      // },
-      // {
-      //   label: 'Register',
-      //   href: '/signup',
-      //   variant: 'primary',
-      // },
+      {
+        label: 'Login',
+        href: '/login',
+      },
+      {
+        label: 'Register',
+        href: '/signup',
+        variant: 'primary',
+      },
     ],
   },
   footer: {

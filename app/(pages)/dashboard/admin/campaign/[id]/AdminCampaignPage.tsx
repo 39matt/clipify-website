@@ -24,6 +24,7 @@ import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import Image from 'next/image';
 import { IVideo } from '../../../../../lib/models/video';
 import { useLayoutContext } from '../../../context'
+import { ICampaign } from '../../../../../lib/models/campaign'
 
 interface AccountPageProps {
   idToken: string;
@@ -51,7 +52,7 @@ const AccountPage:React.FC<AccountPageProps> = ({idToken}) => {
         const cmp = responseJson['campaign'];
         setCampaign(cmp);
 
-        const vids = responseJson['videos'];
+        const vids = responseJson['videos'] as IVideo[];
         setVideos(vids);
 
         setLoading(false);
@@ -96,6 +97,7 @@ const AccountPage:React.FC<AccountPageProps> = ({idToken}) => {
     );
   }
 
+  // Group videos by user
   const groupedVideos = videos?.reduce((acc, video) => {
     const owner = video.uid!;
     if (!acc[owner]) {
@@ -105,11 +107,17 @@ const AccountPage:React.FC<AccountPageProps> = ({idToken}) => {
     return acc;
   }, {} as Record<string, IVideo[]>);
 
+  // Filter to only show users who have videos pending approval (approved == null)
+  const filteredGroupedVideos = groupedVideos ?
+    Object.entries(groupedVideos).filter(([owner, videos]) =>
+      videos.some(video => video.approved == null)
+    ) : [];
+
   const handleUpdateViews = async () => {
     try {
       const updatedVideos:IVideo[] = [];
       for (const video of videos || []) {
-        const getVideoResponse = await fetch('/api/campaign/video/get-video-info',
+        const getVideoResponse = await fetch('/api/campaign/video/get-info',
           {
             method: "PUT",
             body: JSON.stringify({
@@ -127,7 +135,11 @@ const AccountPage:React.FC<AccountPageProps> = ({idToken}) => {
         const getVideoResponseJson = await getVideoResponse.json();
         const newVideo = getVideoResponseJson['videoInfo'] as IVideo;
 
-        const updateVideoResponse = await fetch('/api/campaign/video/update-info', {method: 'PUT', body: JSON.stringify({video:newVideo, campaignId}) });
+        const updateVideoResponse = await fetch('/api/campaign/video/update-info', {method: 'PUT',
+          headers: { 'Content-Type': 'application/json',
+            'Authorization': `Bearer ${idToken}`
+          },
+          body: JSON.stringify({video:newVideo, campaignId}) });
         if(updateVideoResponse.status !== 200) {
           console.error('Error updating video');
           setError("Error updating video info (update info)");
@@ -142,6 +154,14 @@ const AccountPage:React.FC<AccountPageProps> = ({idToken}) => {
         updatedVideos.push(newVideo);
       }
 
+      const response = await fetch('/api/campaign/calculate-progress', {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          campaignId: campaignId,
+        }),
+      })
+      console.log(response)
       setVideos(updatedVideos);
       setSuccess("Successfully updated videos!");
     } catch(error) {
@@ -171,10 +191,26 @@ const AccountPage:React.FC<AccountPageProps> = ({idToken}) => {
 
       <Divider />
 
-      {groupedVideos &&
-        Object.entries(groupedVideos).map(([owner, videos]) => (
-          <UserVideosDropdown key={owner} owner={owner} videos={videos} campaignId={campaignId!} setVideos={setVideos} idToken={idToken} />
-        ))}
+      {/* Show message if no pending videos */}
+      {filteredGroupedVideos.length === 0 ? (
+        <Center py={8}>
+          <Text color="gray.400" fontSize="lg">
+            Nema videa na čekanju za odobrenje.
+          </Text>
+        </Center>
+      ) : (
+        // Only show users who have videos pending approval
+        filteredGroupedVideos.map(([owner, videos]) => (
+          <UserVideosDropdown
+            key={owner}
+            owner={owner}
+            videos={videos}
+            campaignId={campaignId!}
+            setVideos={setVideos}
+            idToken={idToken}
+          />
+        ))
+      )}
     </VStack>
   );
 };
@@ -193,6 +229,9 @@ const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({ owner, videos, 
   const [success, setSuccessMessage] = useState<string | null>(null);
   const toggle = () => setIsOpen(!isOpen);
 
+  // Count pending videos for this user
+  const pendingVideosCount = videos.filter(video => video.approved == null).length;
+
   const handleApproveVideo = async (videoId: string) => {
     try {
       const response = await fetch(`/api/campaign/video/approve?campaignId=${campaignId}&videoId=${videoId}`
@@ -206,7 +245,13 @@ const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({ owner, videos, 
         return
       }
       setSuccessMessage(`Successfully approved!`);
-      setVideos(videos.filter((video) => video.id !== videoId));
+
+      // Update the videos state to remove the approved video from the current view
+      setVideos(videos.map(video =>
+        video.id === videoId
+          ? { ...video, approved: true }
+          : video
+      ));
     } catch (err) {
       console.error(err);
       setErrorMessage("Greška pri odobrenju videa: " + err);
@@ -221,11 +266,22 @@ const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({ owner, videos, 
         return
       }
       setSuccessMessage("Successfully denied!");
-      setVideos(videos.filter((video) => video.id !== videoId));
+
+      // Update the videos state to remove the denied video from the current view
+      setVideos(videos.map(video =>
+        video.id === videoId
+          ? { ...video, approved: false }
+          : video
+      ));
     } catch (err) {
       console.error(err);
-      setErrorMessage("Greška pri odobrenju videa: " + err);
+      setErrorMessage("Greška pri odbacivanju videa: " + err);
     }
+  }
+
+  // Don't render if no pending videos
+  if (pendingVideosCount === 0) {
+    return null;
   }
 
   return (
@@ -240,7 +296,7 @@ const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({ owner, videos, 
     >
       <Flex justify="space-between" align="center">
         <Heading size="md" textColor="green.400" fontSize={{ base: '16px', md: '20px' }}>
-          User: {owner}
+          User: {owner} ({pendingVideosCount} pending)
         </Heading>
         <Icon as={isOpen ? FiChevronUp : FiChevronDown} boxSize={{ base: 4, md: 5 }} />
       </Flex>
@@ -267,11 +323,10 @@ const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({ owner, videos, 
                 <Th textAlign="center">Comments</Th>
                 <Th textAlign="center">Cover</Th>
                 <Th textAlign="center">Action</Th>
-                {/*<Th textAlign="center">Approved</Th>*/}
               </Tr>
             </Thead>
             <Tbody>
-              {videos.map((video, index) => (
+              {videos.filter(video => video.approved == null).map((video, index) => (
                 <Tr key={index}>
                   <Td textAlign="center">{video.name}</Td>
                   <Td textAlign="center">
@@ -298,11 +353,6 @@ const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({ owner, videos, 
                       <Button colorScheme="red" onClick={() => handleDenyVideo(video.id!)}>Deny</Button>
                     </Flex>
                   </Td>
-                  {/*<Td>*/}
-                  {/*  <Flex justifyContent="space-around" direction="row" gap={2}>*/}
-                  {/*  {video.approved ? <FcCheckmark/> : <FaXmark/>}*/}
-                  {/*  </Flex>*/}
-                  {/*</Td>*/}
                 </Tr>
               ))}
             </Tbody>

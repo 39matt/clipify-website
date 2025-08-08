@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 
     const videosSnap = await videosQ.get()
     if(videosSnap.empty) {
-      return NextResponse.json({ error: "No videos found!"}, {status: 404})
+      return NextResponse.json({ message: "No videos found!"}, {status: 200})
     }
 
     return NextResponse.json({ videos: videosSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() })) }, { status: 200 });

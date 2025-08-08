@@ -37,6 +37,7 @@ const ConnectedAccounts: NextPage = () => {
   const [isVerifyEnabled, setIsVerifyEnabled] = useState(false);
   const [accounts, setAccounts] = useState<IAccount[]>([]);
   const [message, setMessage] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
   const { user, loading, discordUsername } = useLayoutContext();
   const router = useRouter()
 
@@ -65,6 +66,7 @@ const ConnectedAccounts: NextPage = () => {
                 : `https://tiktok.com/@${verificationExist.username}`
             );
             setIsVerifyEnabled(true);
+            setMessage('Molimo postavite kod u opis vašeg profila i kliknite "Verifikujte Nalog".');
           }
         } catch (error) {
           console.error('Greška prilikom preuzimanja podataka o verifikaciji:', error);
@@ -77,19 +79,25 @@ const ConnectedAccounts: NextPage = () => {
 
   const handleAddAccount = async () => {
     try {
+      setMessage(''); // Clear previous messages
+
       const instagramRegex = /^https:\/\/(www\.)?instagram\.com\/?[a-zA-Z0-9_.]+$/;
       const tiktokRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+$/;
+
       if (!instagramRegex.test(accountLink) && !tiktokRegex.test(accountLink)) {
         setMessage('Uneti link nije validan. Molimo unesite ispravan link naloga.');
         return;
       }
+
       const username = accountLink.includes('tiktok')
         ? accountLink.split('@')[1]
         : accountLink.split('/')[accountLink.split('/').length - 1];
+
       if (await accountExists(username)) {
         setMessage('Nalog se već koristi.');
         return;
       }
+
       const verification = await addVerification(discordUsername!, accountLink);
       setVerificationCode(verification.code);
       setAccountLink(
@@ -98,7 +106,10 @@ const ConnectedAccounts: NextPage = () => {
           : `https://tiktok.com/@${verification.username}`
       );
       setIsVerifyEnabled(true);
-      setMessage('Nalog je uspešno dodat!');
+
+      // Show instruction message instead of success
+      setMessage('Molimo postavite kod u opis vašeg profila i kliknite "Verifikujte Nalog".');
+
     } catch (error) {
       console.error('Greška prilikom dodavanja naloga:', error);
       setMessage('Dodavanje naloga nije uspelo. Pokušajte ponovo.');
@@ -107,17 +118,37 @@ const ConnectedAccounts: NextPage = () => {
 
   const handleVerifyAccount = async () => {
     try {
+      setIsVerifying(true);
+      setMessage('Verifikacija u toku...');
+
       const verification = {
         platform: accountLink.toLowerCase().includes('tiktok') ? 'TikTok' : 'Instagram',
-        username: accountLink.split('@')[1],
+        username: accountLink.includes('tiktok')
+          ? accountLink.split('@')[1]
+          : accountLink.split('/')[accountLink.split('/').length - 1],
         code: verificationCode!,
       };
+
       await verifyVerification(discordUsername!, verification, process.env.NEXT_PUBLIC_RAPIDAPI_KEY!);
-      setMessage('Nalog je uspešno verifikovan!');
-      resetForm();
+
+      // Show success message and keep it visible
+      setMessage('Nalog je uspešno verifikovan i dodat!');
+
+      // Refresh accounts list
+      const updatedAccounts = await getAllAccounts(discordUsername!);
+      setAccounts(updatedAccounts);
+
+      // Close modal after a delay to show the success message
+      setTimeout(() => {
+        resetForm();
+        onClose();
+      }, 2000);
+
     } catch (error) {
       console.error('Greška prilikom verifikacije naloga:', error);
-      setMessage('Verifikacija nije uspela. Pokušajte ponovo.');
+      setMessage('Verifikacija nije uspela. Proverite da li je kod postavljen u opis profila.');
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -126,8 +157,13 @@ const ConnectedAccounts: NextPage = () => {
     setVerificationCode(null);
     setIsVerifyEnabled(false);
     setMessage('');
+    setIsVerifying(false);
   };
 
+  const handleAccountDelete = (deletedAccountId: string) => {
+    // Remove the deleted account from local state
+    setAccounts(prev => prev.filter(account => account.id !== deletedAccountId));
+  };
 
   return (
     <VStack align="center" minH="100vh" bg="gray.900" color="white" px={6}>
@@ -172,7 +208,14 @@ const ConnectedAccounts: NextPage = () => {
         {accounts && accounts.length > 0 ? (
           <SimpleGrid columns={[1, 2, 3]} spacing={6} w="full">
             {accounts.map((account, index) => (
-              <AccountCard account={account} index={index} router={router}/>
+              <AccountCard
+                key={account.id}
+                account={account}
+                index={index}
+                router={router}
+                userId={discordUsername!}
+                onDelete={handleAccountDelete}
+              />
             ))}
           </SimpleGrid>
         ) : (
@@ -202,6 +245,7 @@ const ConnectedAccounts: NextPage = () => {
               bg="gray.700"
               borderColor="gray.600"
               _placeholder={{ color: 'gray.400' }}
+              isDisabled={verificationCode !== null}
             />
             {verificationCode && (
               <Box mt={4}>
@@ -211,7 +255,10 @@ const ConnectedAccounts: NextPage = () => {
                 </Heading>
                 <Text mt={2}>Korisničko ime:</Text>
                 <Heading size="md" color="green.400">
-                  {accountLink.split('@')[1]}
+                  {accountLink.includes('tiktok')
+                    ? accountLink.split('@')[1]
+                    : accountLink.split('/')[accountLink.split('/').length - 1]
+                  }
                 </Heading>
                 <Text mt={4}>Vaš verifikacioni kod:</Text>
                 <Heading size="lg" color="green.400">
@@ -220,7 +267,17 @@ const ConnectedAccounts: NextPage = () => {
               </Box>
             )}
             {message && (
-              <Text mt={4} color={message.includes('uspešno') ? 'green.400' : 'red.400'}>
+              <Text
+                mt={4}
+                color={
+                  message.includes('uspešno')
+                    ? 'green.400'
+                    : message.includes('Molimo') || message.includes('u toku')
+                      ? 'blue.400'
+                      : 'red.400'
+                }
+                fontWeight={message.includes('uspešno') ? 'bold' : 'normal'}
+              >
                 {message}
               </Text>
             )}
@@ -236,6 +293,8 @@ const ConnectedAccounts: NextPage = () => {
                 mr={3}
                 onClick={handleVerifyAccount}
                 isDisabled={!isVerifyEnabled}
+                isLoading={isVerifying}
+                loadingText="Verifikacija..."
               >
                 Verifikujte Nalog
               </Button>
@@ -246,6 +305,7 @@ const ConnectedAccounts: NextPage = () => {
                 resetForm();
                 onClose();
               }}
+              isDisabled={isVerifying}
             >
               Otkaži
             </Button>

@@ -13,7 +13,6 @@ export async function GET(req: NextRequest) {
 
   try {
     // Step 1: Exchange code for Discord token
-    console.log(1);
     const params = new URLSearchParams({
       client_id: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID!,
       client_secret: process.env.NEXT_PUBLIC_DISCORD_CLIENT_SECRET!,
@@ -22,26 +21,22 @@ export async function GET(req: NextRequest) {
       redirect_uri: process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI!,
       scope: 'identify email',
     });
-    console.log(2);
 
     const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: params,
     });
-    console.log(3);
 
     const tokenData = await tokenRes.json();
     if (!tokenData.access_token) {
       return NextResponse.json({ error: 'Failed to retrieve access token' }, { status: 400 });
     }
-    console.log(4);
 
     // Step 2: Fetch user info from Discord
     const userRes = await fetch('https://discord.com/api/users/@me', {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
-    console.log(5);
 
     const userData = await userRes.json();
     if (!userData.username) {
@@ -53,8 +48,16 @@ export async function GET(req: NextRequest) {
     const discordUsername = userData.username;
 
     // Step 4: Link Discord account to Firestore
-    await addUser(websiteEmail, discordUsername);
+    const addUserRes = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/user/add`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: websiteEmail, discordUsername }),
+    });
 
+    if (!addUserRes.ok) {
+      const errorData = await addUserRes.json();
+      return NextResponse.json({ error: errorData.error || 'Failed to add user' }, { status: 500 });
+    }
     // Step 5: Return success response
     return NextResponse.json({ success: true, discordUsername });
   } catch (error) {

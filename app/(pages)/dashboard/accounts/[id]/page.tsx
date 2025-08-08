@@ -52,7 +52,7 @@ const AccountPage = () => {
         if (!id) {
           throw new Error('Account ID is missing');
         }
-        // const acc = await getAccountAndVideos(discordUsername!, id);
+        // const acc = await getAccountAndVideo(discordUsername!, id);
         // setAccount(acc);
       } catch (err) {
         console.error('Error fetching account:', err);

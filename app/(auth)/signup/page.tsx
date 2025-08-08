@@ -59,7 +59,9 @@ const SignUp: NextPage = () => {
       setSuccess(
         'Uspešno ste napravili nalog! Proverite vaš mail kako bi ste se verifikovali.',
       )
-      router.push('/login')
+      setTimeout(() => {
+        router.push('/login')
+      }, 2000);
     } catch (err: any) {
       let code = ''
       if (err.code) {
@@ -136,9 +138,9 @@ const SignUp: NextPage = () => {
           </Flex>
 
           <Flex align="center" justify="center" h="100%" flexDirection="column" justifyContent="space-around">
-            <Alert status="error" maxW="75%">
-              <AlertIcon/>
-              Trenutno nije moguća registracija, radimo na tome!</Alert>
+            {/*<Alert status="error" maxW="75%">*/}
+            {/*  <AlertIcon/>*/}
+            {/*  Trenutno nije moguća registracija, radimo na tome!</Alert>*/}
             <Card maxW="400px" w="full" boxShadow="lg" paddingX="10px" paddingY="5px">
               <CardHeader>
                 <Heading size="md" textAlign="center">
@@ -151,7 +153,7 @@ const SignUp: NextPage = () => {
                   fields={{
                     submit: {
                       children: 'Kreiraj nalog',
-                      isDisabled: true
+                      // isDisabled: true
                     },
                     email: {
                       isRequired: true,
@@ -163,7 +165,7 @@ const SignUp: NextPage = () => {
                   }
                 }
                 >
-                  <Field id="confirmPassword" name="confirmPassword" label="Potvrdi lozinku" isRequired />
+                  <Field type="password" id="confirmPassword" name="confirmPassword" label="Potvrdi lozinku" isRequired />
                   {/*<Field name="username" label="Korisničko ime" isRequired />*/}
                   {error && (
                     <Alert status="error">

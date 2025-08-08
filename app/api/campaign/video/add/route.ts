@@ -1,0 +1,82 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { adminDb } from '../../../../lib/firebase/firebaseAdmin'
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const { video, campaignId, accId, uid } = body
+
+    // Better validation with specific error messages
+    if (!video) {
+      return NextResponse.json(
+        { error: "Video data is required" },
+        { status: 400 }
+      );
+    }
+    if (!campaignId) {
+      return NextResponse.json(
+        { error: "Campaign ID is required" },
+        { status: 400 }
+      );
+    }
+    if (!accId) {
+      return NextResponse.json(
+        { error: "Account ID is required" },
+        { status: 400 }
+      );
+    }
+    if (!uid) {
+      return NextResponse.json(
+        { error: "User ID is required" },
+        { status: 400 }
+      );
+    }
+
+    // Get collection references
+    const videoColRef = adminDb.collection('campaigns').doc(campaignId).collection('videos');
+    const userAccountRef = adminDb.collection('users').doc(uid).collection('accounts').doc(accId);
+
+    // Prepare video data
+    const videoData = {
+      ...video,
+      userAccountRef: userAccountRef,
+      accountName: accId,
+      uid: uid,
+      createdAt: new Date().toISOString(), // Add timestamp
+      approved: null // Set initial approval status
+    };
+
+    // Add video to campaign videos collection
+    const newVideoDocRef = await videoColRef.add(videoData);
+
+    // Add reference to user's videos collection
+    const userVideoColRef = userAccountRef.collection("videos");
+    await userVideoColRef.add({
+      videoRef: newVideoDocRef,
+      campaignId: campaignId,
+      createdAt: new Date().toISOString()
+    });
+
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/campaign/calculate-progress`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        campaignId: campaignId,
+      }),
+    })
+
+    return NextResponse.json({
+      message: "Successfully added video!",
+      videoId: newVideoDocRef.id
+    }, { status: 201 }); // 201 for created
+
+
+  } catch (error) {
+    console.error('Error adding video:', error);
+
+    return NextResponse.json(
+      { error: 'Failed to add video' },
+      { status: 500 }
+    );
+  }
+}

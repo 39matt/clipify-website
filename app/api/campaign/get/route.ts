@@ -1,34 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server'
 import {adminDb} from '../../../lib/firebase/firebaseAdmin'
 import { IVideo } from '../../../lib/models/video'
+import { ICampaign } from '../../../lib/models/campaign'
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
     const campaignId = searchParams.get('id')
 
-    let campaign: ICampaign | null = null
-    let videos: IVideo[] | null = null
-    if (campaignId) {
-      const snapshot = await adminDb.collection('campaigns')
-        .doc(campaignId).get();
-      if (!snapshot.exists) {
-        return NextResponse.json(
-          { error: `Campaign with ID ${campaignId} not found` },
-          { status: 404 }
-        );
-      }
-      campaign = snapshot.data() as ICampaign;
-
-      const videosSnapshot = await adminDb.collection('campaigns')
-        .doc(campaignId).collection('videos').where("approved", "==", false).get();
-      videos = videosSnapshot.docs.map((video) => {
-        const vid: IVideo = video.data() as IVideo;
-        vid.id = video.id
-        return vid
-      });
+    if (!campaignId) {
+      return NextResponse.json(
+        { error: 'Campaign ID is required' },
+        { status: 400 }
+      );
     }
-    return NextResponse.json({ campaign, videos });
+
+    const snapshot = await adminDb.collection('campaigns')
+      .doc(campaignId).get();
+
+    if (!snapshot.exists) {
+      return NextResponse.json(
+        { error: `Campaign with ID ${campaignId} not found` },
+        { status: 404 }
+      );
+    }
+
+    const campaign = {
+      id: snapshot.id,
+      ...snapshot.data()
+    } as ICampaign;
+
+    // If you also want to return videos, uncomment this:
+    const videosSnapshot = await adminDb.collection('campaigns')
+      .doc(campaignId).collection('videos').get();
+    const videos = videosSnapshot.docs.map((video) => ({
+      id: video.id,
+      ...video.data()
+    })) as IVideo[];
+
+    return NextResponse.json({ campaign, videos }, { status: 200 });
   } catch (error) {
     console.error('Error getting campaign:', error);
     return NextResponse.json(

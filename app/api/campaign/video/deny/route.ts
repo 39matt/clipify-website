@@ -37,7 +37,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "Video doesn't exist!"}, {status: 404})
     }
 
-    await videoRef.delete()
+    await videoRef.update({ approved: false });
 
     return NextResponse.json({ message: "Video denied successfully!" }, { status: 200 });
   } catch (error) {

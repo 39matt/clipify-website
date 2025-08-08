@@ -42,21 +42,7 @@ import { IVideo } from '../../../lib/models/video';
 import { getCampaign } from '../../../lib/firebase/firestore/campaign';
 import { userAccountExists } from '../../../lib/firebase/firestore/account';
 import { accountVideoExists, addVideo } from '../../../lib/firebase/firestore/video';
-
-interface ICampaign {
-  id: string;
-  influencer: string;
-  activity: string;
-  imageUrl: string;
-  progress: number;
-  budget: string;
-  perMillion: number;
-  createdAt: string;
-  maxEarnings: number;
-  maxEarningsPerPost: number;
-  maxSubmissions: number;
-  minViewsPerPayout: number;
-}
+import { ICampaign } from '../../../lib/models/campaign'
 
 const VideosCard = ({
                       userVideos,
@@ -69,7 +55,6 @@ const VideosCard = ({
   const totalLikes = userVideos.reduce((sum, video) => sum + (video.likes || 0), 0);
   const totalComments = userVideos.reduce((sum, video) => sum + (video.comments || 0), 0);
   const totalShares = userVideos.reduce((sum, video) => sum + (video.shares || 0), 0);
-
   return (
     <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} w="full">
       <CardHeader textAlign="center">
@@ -208,7 +193,6 @@ const Page = () => {
   const [videoUrl, setVideoUrl] = useState('');
   const [message, setMessage] = useState('');
 
-  // Fetch campaign and videos
   useEffect(() => {
     if (!campaignId || Array.isArray(campaignId) || !discordUsername) return;
 
@@ -216,7 +200,12 @@ const Page = () => {
       try {
 
         setLoading(true);
-        const camp = await getCampaign(campaignId);
+        const campaignResp = await fetch(`/api/campaign/get?id=${campaignId}`, {
+          method: 'GET',
+        });
+        const responseJson =  await campaignResp.json();
+        const camp = responseJson.campaign as ICampaign
+        console.log(camp);
         setCampaign(camp);
         setLoading(false);
 
@@ -232,8 +221,6 @@ const Page = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('API Response:', data); // Debug log
-
           let videos: IVideo[] = [];
 
           // Handle different response formats
@@ -241,19 +228,28 @@ const Page = () => {
             videos = data;
           } else if (data && Array.isArray(data.videos)) {
             videos = data.videos;
+          } else if (data && data.message) {
+            // Handle the case where API returns {message: "No videos found!"}
+            videos = [];
           } else if (data && typeof data === 'object') {
-            videos = [data];
+            // Make sure it's a valid video object, not just any object
+            if (data.id || data.accountName || data.views !== undefined) {
+              videos = [data];
+            } else {
+              videos = [];
+            }
           } else {
             console.warn('Unexpected API response format:', data);
             videos = [];
           }
 
-          console.log('Processed videos:', videos); // Debug log
+          console.log('Processed videos:', videos);
           setUserVideos(videos);
           setVideosLoading(false);
         } else {
           console.error('Failed to fetch videos');
           setUserVideos([]);
+          setVideosLoading(false);
         }
 
       } catch (err) {
@@ -361,20 +357,36 @@ const Page = () => {
         return;
       }
 
-      // Add video
-      await addVideo(discordUsername!, accountName, campaignId!, video);
+      const response = await fetch('/api/campaign/video/add', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          video: video,
+          campaignId: campaignId,
+          accId: accountName,
+          uid: discordUsername,
+        })
+      });
 
-      // Update local state
-      setUserVideos(prev => [...prev, video]);
+      if (response.ok) {
+        setMessage('Video je uspešno dodat!');
+        setVideoUrl('');
 
-      setMessage('Video je uspešno dodat!');
-      setVideoUrl('');
+        // Refresh videos from server instead of just adding to local state
+        const videosResponse = await fetch(
+          `/api/campaign/get-user-videos?campaignId=${campaignId}&userId=${discordUsername}`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
 
-      setTimeout(() => {
-        onClose();
-        setMessage('');
-      }, 2000);
-
+        if (videosResponse.ok) {
+          const data = await videosResponse.json();
+          const videos = Array.isArray(data) ? data : data.videos || [];
+          setUserVideos(videos);
+        }
+      }
     } catch (error) {
       console.error('Error adding video:', error);
       setMessage('Došlo je do greške prilikom dodavanja videa.');
@@ -413,8 +425,15 @@ const Page = () => {
   }
 
   return (
-    <Box bg="gray.900" color="white" maxH="90vh" minW="60vw">
-      {/* Header */}
+    <Box
+      bg="gray.900"
+      color="white"
+      maxH="90vh"
+      w="full"
+      maxW="1200px" // Add max width
+      mx="auto" // Center the content
+      px={4} // Add horizontal padding
+    >      {/* Header */}
       <Box
         position="relative"
         bg="gray.800"
@@ -433,7 +452,7 @@ const Page = () => {
           h="full"
           bgImage={`url(${campaign.imageUrl})`}
           bgSize="cover"
-          bgPosition="center"
+          bgPosition="top"
           filter="blur(8px)"
           opacity={0.6}
         />
@@ -506,7 +525,7 @@ const Page = () => {
                 </Stat>
                 <Stat>
                   <StatLabel>Iskorišćeno</StatLabel>
-                  <StatNumber>${campaign.progress.toFixed(2)}</StatNumber>
+                  <StatNumber>${campaign.moneySpent?.toFixed(2)}</StatNumber>
                 </Stat>
               </StatGroup>
               <Progress
@@ -516,7 +535,7 @@ const Page = () => {
                 mt={4}
               />
               <Text fontSize="sm" color="gray.400" mt={2} textAlign="center">
-                {campaign.progress}% Završeno
+                {campaign.progress.toFixed(2)}% Završeno
               </Text>
             </CardBody>
           </Card>

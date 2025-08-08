@@ -21,6 +21,7 @@ export async function accountVideoExists(uid: string, accountName:string, platfo
 export async function addVideo(uid: string, accId: string, campaignId: string, video: IVideo) {
   try {
 
+    //
     const campaignDocRef = doc(db, 'campaigns', campaignId);
     const videoColRef = collection(campaignDocRef, 'videos');
 

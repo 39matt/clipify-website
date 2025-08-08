@@ -101,7 +101,7 @@ export async function verifyVerification(uid: string, verification: IVerificatio
       await addAccount(uid, account);
     }
     else {
-      throw new Error('Kod se ne nalazi u bio-u!');
+      throw new Error(`Kod se ne nalazi u bio-u (bio: ${bio})`);
     }
   } catch (error) {
     console.error('Error verifying verification:', error);

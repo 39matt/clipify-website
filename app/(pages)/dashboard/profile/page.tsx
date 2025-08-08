@@ -121,22 +121,22 @@ const Profile: NextPage = () => {
         </Card>
 
         {/* Statistics Card */}
-        <Card w="full">
-          <CardHeader display="flex" flexDirection="row">
-            <Heading size="lg">Statistike</Heading>
-            <Spacer />
-          </CardHeader>
-          <CardBody>
-            <Grid
-              templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
-              gap={{ base: 4, md: 8 }}
-            >
-              <BoxFeature title="Broj videa" description="0" />
-              <BoxFeature title="Zarađen novac" description="0" />
-              <BoxFeature title="Ukupan broj pregleda" description="0" />
-            </Grid>
-          </CardBody>
-        </Card>
+        {/*<Card w="full">*/}
+        {/*  <CardHeader display="flex" flexDirection="row">*/}
+        {/*    <Heading size="lg">Statistike</Heading>*/}
+        {/*    <Spacer />*/}
+        {/*  </CardHeader>*/}
+        {/*  <CardBody>*/}
+        {/*    <Grid*/}
+        {/*      templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}*/}
+        {/*      gap={{ base: 4, md: 8 }}*/}
+        {/*    >*/}
+        {/*      <BoxFeature title="Broj videa" description="0" />*/}
+        {/*      <BoxFeature title="Zarađen novac" description="0" />*/}
+        {/*      <BoxFeature title="Ukupan broj pregleda" description="0" />*/}
+        {/*    </Grid>*/}
+        {/*  </CardBody>*/}
+        {/*</Card>*/}
 
         {/* Payment Info and Change Password Cards */}
         <HStack

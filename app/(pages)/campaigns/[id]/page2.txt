@@ -1,0 +1,960 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import {
+  Box,
+  Image,
+  Text,
+  VStack,
+  Progress,
+  Heading,
+  Divider,
+  Spinner,
+  Center,
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatGroup,
+  Card,
+  CardBody,
+  CardHeader,
+  Button,
+  HStack,
+  IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  Input,
+  useDisclosure,
+  ModalFooter,
+  Flex,
+  SimpleGrid,
+  AspectRatio,
+  Badge,
+  Container,
+  useColorModeValue,
+  Icon,
+  Tooltip,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  useToast,
+  Fade,
+  ScaleFade,
+  Textarea,
+} from '@chakra-ui/react';
+import {
+  FaMeh,
+  FaThumbsDown,
+  FaThumbsUp,
+  FaEye,
+  FaHeart,
+  FaComment,
+  FaShare,
+  FaCalendarAlt,
+  FaDollarSign,
+  FaUsers,
+  FaTrophy,
+  FaVideo,
+  FaInstagram,
+  FaTiktok,
+  FaPlus
+} from 'react-icons/fa';
+import { useLayoutContext } from '../../dashboard/context';
+import { IVideo } from '../../../lib/models/video';
+import { getCampaign } from '../../../lib/firebase/firestore/campaign';
+import { userAccountExists } from '../../../lib/firebase/firestore/account';
+import { accountVideoExists, addVideo } from '../../../lib/firebase/firestore/video';
+import { ICampaign } from '../../../lib/models/campaign';
+
+const VideosCard = ({
+  userVideos,
+  videosLoading
+}: {
+  userVideos: IVideo[];
+  videosLoading: boolean;
+}) => {
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const textColor = useColorModeValue('gray.600', 'gray.300');
+  const headingColor = useColorModeValue('gray.800', 'white');
+
+  const totalViews = userVideos.reduce((sum, video) => sum + (video.views || 0), 0);
+  const totalLikes = userVideos.reduce((sum, video) => sum + (video.likes || 0), 0);
+  const totalComments = userVideos.reduce((sum, video) => sum + (video.comments || 0), 0);
+  const totalShares = userVideos.reduce((sum, video) => sum + (video.shares || 0), 0);
+
+  return (
+    <Card
+      bg={cardBg}
+      borderRadius="2xl"
+      boxShadow="xl"
+      border="1px"
+      borderColor={borderColor}
+      overflow="hidden"
+      w="full"
+    >
+      <CardHeader
+        textAlign="center"
+        bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+        color="white"
+        py={8}
+      >
+        <Icon as={FaVideo} boxSize={8} mb={4} />
+        <Heading size="lg" fontWeight="bold">
+          Vaši poslati videi
+        </Heading>
+        <Text fontSize="sm" opacity={0.9} mt={2}>
+          Pregled svih vaših objava za ovu kampanju
+        </Text>
+      </CardHeader>
+
+      <CardBody p={8}>
+        {/* Summary Stats */}
+        <SimpleGrid columns={{ base: 2, md: 4 }} spacing={6} mb={8}>
+          <Box textAlign="center" p={4} bg={useColorModeValue('blue.50', 'blue.900')} borderRadius="xl">
+            <Icon as={FaEye} color="blue.500" boxSize={6} mb={2} />
+            <Text fontSize="2xl" fontWeight="bold" color="blue.500">
+              {totalViews.toLocaleString()}
+            </Text>
+            <Text fontSize="sm" color={textColor}>Pregledi</Text>
+          </Box>
+          <Box textAlign="center" p={4} bg={useColorModeValue('red.50', 'red.900')} borderRadius="xl">
+            <Icon as={FaHeart} color="red.500" boxSize={6} mb={2} />
+            <Text fontSize="2xl" fontWeight="bold" color="red.500">
+              {totalLikes.toLocaleString()}
+            </Text>
+            <Text fontSize="sm" color={textColor}>Lajkovi</Text>
+          </Box>
+          <Box textAlign="center" p={4} bg={useColorModeValue('yellow.50', 'yellow.900')} borderRadius="xl">
+            <Icon as={FaComment} color="yellow.500" boxSize={6} mb={2} />
+            <Text fontSize="2xl" fontWeight="bold" color="yellow.500">
+              {totalComments.toLocaleString()}
+            </Text>
+            <Text fontSize="sm" color={textColor}>Komentari</Text>
+          </Box>
+          <Box textAlign="center" p={4} bg={useColorModeValue('green.50', 'green.900')} borderRadius="xl">
+            <Icon as={FaShare} color="green.500" boxSize={6} mb={2} />
+            <Text fontSize="2xl" fontWeight="bold" color="green.500">
+              {totalShares.toLocaleString()}
+            </Text>
+            <Text fontSize="sm" color={textColor}>Deljenja</Text>
+          </Box>
+        </SimpleGrid>
+
+        <Divider mb={8} />
+
+        {/* Videos Grid */}
+        {videosLoading ? (
+          <Center py={12}>
+            <VStack spacing={4}>
+              <Spinner size="xl" color="blue.500" thickness="4px" />
+              <Text color={textColor} fontSize="lg">Učitavanje videa...</Text>
+            </VStack>
+          </Center>
+        ) : userVideos.length === 0 ? (
+          <Center py={12}>
+            <VStack spacing={4} textAlign="center">
+              <Icon as={FaVideo} boxSize={16} color="gray.400" />
+              <Text color={textColor} fontSize="xl" fontWeight="semibold">
+                Niste još uvek poslali nijedan video
+              </Text>
+              <Text color="gray.400" fontSize="md">
+                Kliknite na "Pošalji sadržaj" da dodate svoj prvi video
+              </Text>
+            </VStack>
+          </Center>
+        ) : (
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+            {userVideos.map((video, index) => (
+              <ScaleFade key={video.id || index} in={true} initialScale={0.9}>
+                <Card
+                  bg={useColorModeValue('gray.50', 'gray.700')}
+                  borderRadius="xl"
+                  overflow="hidden"
+                  transition="all 0.3s ease"
+                  _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+                  border="1px"
+                  borderColor={borderColor}
+                >
+                  <Box position="relative">
+                    <AspectRatio ratio={9/16} maxH="250px">
+                      <Image
+                        src={video.coverUrl}
+                        alt={video.name || 'Video'}
+                        objectFit="cover"
+                        fallback={
+                          <Box
+                            bg="gray.600"
+                            w="full"
+                            h="full"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
+                          >
+                            <Icon as={FaVideo} color="gray.400" boxSize={8} />
+                          </Box>
+                        }
+                      />
+                    </AspectRatio>
+
+                    <Badge
+                      position="absolute"
+                      top={3}
+                      right={3}
+                      colorScheme={
+                        video.approved === true
+                          ? "green"
+                          : video.approved === false
+                            ? "red"
+                            : "yellow"
+                      }
+                      borderRadius="full"
+                      px={3}
+                      py={1}
+                      fontSize="xs"
+                      fontWeight="bold"
+                    >
+                      {video.approved === true
+                        ? "✓ Odobreno"
+                        : video.approved === false
+                          ? "✗ Odbačeno"
+                          : "⏳ Na čekanju"
+                      }
+                    </Badge>
+
+                    <Box
+                      position="absolute"
+                      top={3}
+                      left={3}
+                      bg="blackAlpha.700"
+                      borderRadius="full"
+                      p={2}
+                    >
+                      <Icon
+                        as={video.url?.includes('tiktok') ? FaTiktok : FaInstagram}
+                        color="white"
+                        boxSize={4}
+                      />
+                    </Box>
+                  </Box>
+
+                  <CardBody p={4}>
+                    <VStack spacing={3} align="stretch">
+                      <HStack justify="space-between" align="center">
+                        <Text fontSize="sm" fontWeight="bold" color={headingColor} noOfLines={1}>
+                          @{video.accountName}
+                        </Text>
+                      </HStack>
+
+                      <Text fontSize="xs" color={textColor} noOfLines={2} minH="32px">
+                        {video.name || 'Bez naziva'}
+                      </Text>
+
+                      <SimpleGrid columns={2} spacing={3} fontSize="xs">
+                        <VStack spacing={1}>
+                          <HStack spacing={1}>
+                            <Icon as={FaEye} color="blue.400" />
+                            <Text fontWeight="semibold">{(video.views || 0).toLocaleString()}</Text>
+                          </HStack>
+                          <Text color={textColor} fontSize="2xs">Pregledi</Text>
+                        </VStack>
+                        <VStack spacing={1}>
+                          <HStack spacing={1}>
+                            <Icon as={FaHeart} color="red.400" />
+                            <Text fontWeight="semibold">{(video.likes || 0).toLocaleString()}</Text>
+                          </HStack>
+                          <Text color={textColor} fontSize="2xs">Lajkovi</Text>
+                        </VStack>
+                        <VStack spacing={1}>
+                          <HStack spacing={1}>
+                            <Icon as={FaComment} color="yellow.400" />
+                            <Text fontWeight="semibold">{(video.comments || 0).toLocaleString()}</Text>
+                          </HStack>
+                          <Text color={textColor} fontSize="2xs">Komentari</Text>
+                        </VStack>
+                        <VStack spacing={1}>
+                          <HStack spacing={1}>
+                            <Icon as={FaShare} color="green.400" />
+                            <Text fontWeight="semibold">{(video.shares || 0).toLocaleString()}</Text>
+                          </HStack>
+                          <Text color={textColor} fontSize="2xs">Deljenja</Text>
+                        </VStack>
+                      </SimpleGrid>
+
+                      <Divider />
+
+                      <HStack justify="center" spacing={1}>
+                        <Icon as={FaCalendarAlt} color="gray.400" boxSize={3} />
+                        <Text fontSize="2xs" color="gray.500" textAlign="center">
+                          {video.createdAt
+                            ? new Date(video.createdAt).toLocaleDateString('sr-RS')
+                            : 'Nepoznat datum'
+                          }
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  </CardBody>
+                </Card>
+              </ScaleFade>
+            ))}
+          </SimpleGrid>
+        )}
+      </CardBody>
+    </Card>
+  );
+};
+
+const Page = () => {
+  const pathname = usePathname();
+  const campaignId = pathname.split('/').pop();
+  const [campaign, setCampaign] = useState<ICampaign | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [userVideos, setUserVideos] = useState<IVideo[]>([]);
+  const [videosLoading, setVideosLoading] = useState(false);
+  const { user, discordUsername } = useLayoutContext();
+  const toast = useToast();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [videoUrl, setVideoUrl] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const bgGradient = useColorModeValue(
+    'linear(to-br, blue.50, purple.50, pink.50)',
+    'linear(to-br, gray.900, blue.900, purple.900)'
+  );
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const textColor = useColorModeValue('gray.600', 'gray.300');
+  const headingColor = useColorModeValue('gray.800', 'white');
+
+  useEffect(() => {
+    if (!campaignId || Array.isArray(campaignId) || !discordUsername) return;
+
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const camp = await getCampaign(campaignId);
+        setCampaign(camp);
+        setLoading(false);
+
+        // Fetch user videos
+        setVideosLoading(true);
+        const response = await fetch(
+          `/api/campaign/get-user-videos?campaignId=${campaignId}&userId=${discordUsername}`,
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          let videos: IVideo[] = [];
+
+          if (Array.isArray(data)) {
+            videos = data;
+          } else if (data && Array.isArray(data.videos)) {
+            videos = data.videos;
+          } else if (data && typeof data === 'object') {
+            videos = [data];
+          } else {
+            videos = [];
+          }
+
+          setUserVideos(videos);
+        } else {
+          console.error('Failed to fetch videos');
+          setUserVideos([]);
+        }
+        setVideosLoading(false);
+
+      } catch (err) {
+        console.error('Error loading data:', err);
+        setError('Došlo je do greške prilikom učitavanja podataka.');
+        setUserVideos([]);
+        setLoading(false);
+        setVideosLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [campaignId, discordUsername]);
+
+  const handleAddVideo = async () => {
+    if (!videoUrl.trim()) {
+      setMessage('Molimo unesite URL videa.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // Validate URL
+      const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/reels\/[a-zA-Z0-9_-]+\/?$/;
+      const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
+
+      if (!instagramReelRegex.test(videoUrl) && !tiktokVideoRegex.test(videoUrl)) {
+        setMessage('Molimo vas unesite validan Instagram/TikTok video URL.');
+        return;
+      }
+
+      let accountName = "";
+      let video: IVideo | null = null;
+
+      if (videoUrl.includes('tiktok')) {
+        accountName = videoUrl.split('/')[3].replace("@", '');
+        const videoId = videoUrl.split('/')[5];
+
+        const accExists = await userAccountExists(discordUsername!, accountName, "TikTok");
+        if (!accExists) {
+          setMessage("Nalog mora biti vaš!");
+          return;
+        }
+
+        const videoExists = await accountVideoExists(discordUsername!, accountName, "TikTok", videoUrl);
+        if (videoExists) {
+          setMessage("Video je već dodat!");
+          return;
+        }
+
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: "PUT",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            platform: "TikTok",
+            videoId,
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
+          })
+        });
+
+        const responseJson = await response.json();
+        video = responseJson.videoInfo as IVideo;
+
+      } else if (videoUrl.includes('instagram')) {
+        const videoId = videoUrl.split('/')[4];
+
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: "PUT",
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            platform: "Instagram",
+            videoId,
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
+          })
+        });
+
+        const responseJson = await response.json();
+        video = responseJson.videoInfo as IVideo;
+
+        if (!video) {
+          setMessage("Greška pri pribavljanju videa!");
+          return;
+        }
+
+        accountName = video.accountName;
+
+        const accExists = await userAccountExists(discordUsername!, accountName, "Instagram");
+        if (!accExists) {
+          setMessage("Nalog mora biti vaš!");
+          return;
+        }
+
+        const videoExists = await accountVideoExists(discordUsername!, accountName, "Instagram", videoUrl);
+        if (videoExists) {
+          setMessage("Video je već dodat!");
+          return;
+        }
+      }
+
+      if (!video) {
+        setMessage("Greška pri pribavljanju videa!");
+        return;
+      }
+
+      const response = await fetch('/api/campaign/video/add', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          video: video,
+          campaignId: campaignId,
+          accId: accountName,
+          uid: discordUsername,
+        })
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Uspeh!",
+          description: "Video je uspešno dodat!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setVideoUrl('');
+        setUserVideos(prev => [...prev, video]);
+        onClose();
+      } else {
+        setMessage('Greška pri dodavanju videa!');
+      }
+
+    } catch (error) {
+      console.error('Error adding video:', error);
+      setMessage('Došlo je do greške prilikom dodavanja videa.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box minH="100vh" bgGradient={bgGradient}>
+        <Center minH="100vh">
+          <VStack spacing={6}>
+            <Box position="relative">
+              <Spinner size="xl" color="blue.500" thickness="4px" speed="0.8s" />
+              <Box
+                position="absolute"
+                top="50%"
+                left="50%"
+                transform="translate(-50%, -50%)"
+              >
+                <Icon as={FaTrophy} color="blue.500" boxSize={6} />
+              </Box>
+            </Box>
+            <VStack spacing={2} textAlign="center">
+              <Text fontSize="xl" fontWeight="semibold" color={headingColor}>
+                Učitavanje kampanje...
+              </Text>
+              <Text fontSize="md" color={textColor}>
+                Molimo sačekajte trenutak
+              </Text>
+            </VStack>
+          </VStack>
+        </Center>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box minH="100vh" bgGradient={bgGradient}>
+        <Container maxW="container.lg" py={12}>
+          <Center minH="50vh">
+            <Alert
+              status="error"
+              variant="subtle"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
+              height="200px"
+              borderRadius="xl"
+            >
+              <AlertIcon boxSize="40px" mr={0} />
+              <AlertTitle mt={4} mb={1} fontSize="lg">
+                Greška!
+              </AlertTitle>
+              <AlertDescription maxWidth="sm">
+                {error}
+              </AlertDescription>
+            </Alert>
+          </Center>
+        </Container>
+      </Box>
+    );
+  }
+
+  if (!campaign) {
+    return (
+      <Box minH="100vh" bgGradient={bgGradient}>
+        <Container maxW="container.lg" py={12}>
+          <Center minH="50vh">
+            <VStack spacing={4} textAlign="center">
+              <Icon as={FaTrophy} boxSize={16} color="gray.400" />
+              <Text color={textColor} fontSize="xl" fontWeight="semibold">
+                Kampanja nije pronađena
+              </Text>
+            </VStack>
+          </Center>
+        </Container>
+      </Box>
+    );
+  }
+
+  return (
+    <Box minH="100vh" bgGradient={bgGradient}>
+      <Container maxW="container.xl" py={8}>
+        <VStack spacing={8}>
+          {/* Hero Header */}
+          <Fade in={true}>
+            <Card
+              w="full"
+              bg={cardBg}
+              borderRadius="3xl"
+              overflow="hidden"
+              boxShadow="2xl"
+              border="1px"
+              borderColor={borderColor}
+            >
+              <Box
+                position="relative"
+                h="300px"
+                bgImage={`url(${campaign.imageUrl})`}
+                bgSize="cover"
+                bgPosition="center"
+              >
+                <Box
+                  position="absolute"
+                  top={0}
+                  left={0}
+                  w="full"
+                  h="full"
+                  bg="blackAlpha.600"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <VStack spacing={4} textAlign="center" color="white">
+                    <Heading size="3xl" fontWeight="black" textShadow="2px 2px 4px rgba(0,0,0,0.5)">
+                      {campaign.influencer}
+                    </Heading>
+                    <Text fontSize="xl" fontWeight="medium" textShadow="1px 1px 2px rgba(0,0,0,0.5)">
+                      {campaign.activity}
+                    </Text>
+                    <Badge colorScheme="green" fontSize="md" px={4} py={2} borderRadius="full">
+                      Aktivna kampanja
+                    </Badge>
+                  </VStack>
+                </Box>
+              </Box>
+            </Card>
+          </Fade>
+
+          {/* Main Content Grid */}
+          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={8} w="full">
+            {/* Pricing Card */}
+            <ScaleFade in={true} initialScale={0.9}>
+              <Card
+                bg={cardBg}
+                borderRadius="2xl"
+                boxShadow="xl"
+                border="1px"
+                borderColor={borderColor}
+                h="fit-content"
+              >
+                <CardHeader
+                  textAlign="center"
+                  bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                  color="white"
+                  py={8}
+                  borderTopRadius="2xl"
+                >
+                  <Icon as={FaDollarSign} boxSize={8} mb={4} />
+                  <Heading size="lg" fontWeight="bold">
+                    Cena po milion pregleda
+                  </Heading>
+                </CardHeader>
+
+                <CardBody textAlign="center" py={8}>
+                  <Text fontSize="5xl" fontWeight="black" color="green.500" mb={2}>
+                    ${campaign.perMillion.toFixed(2)}
+                  </Text>
+                  <Text fontSize="md" color={textColor} mb={8}>
+                    Po milion pregleda na svim podržanim platformama
+                  </Text>
+
+                  <Button
+                    colorScheme="green"
+                    size="lg"
+                    onClick={onOpen}
+                    leftIcon={<FaPlus />}
+                    borderRadius="xl"
+                    px={8}
+                    py={6}
+                    fontSize="lg"
+                    fontWeight="bold"
+                    _hover={{ transform: 'translateY(-2px)', shadow: 'xl' }}
+                    transition="all 0.3s ease"
+                  >
+                    Pošalji sadržaj
+                  </Button>
+
+                  <Divider my={8} />
+
+                  <VStack spacing={4}>
+                    <Text fontSize="sm" color={textColor} fontWeight="medium">
+                      Kako ocenjujete ovu kampanju?
+                    </Text>
+                    <HStack spacing={4}>
+                      <Tooltip label="Sviđa mi se" hasArrow>
+                        <IconButton
+                          icon={<FaThumbsUp />}
+                          aria-label="Sviđa mi se"
+                          colorScheme="green"
+                          variant="outline"
+                          size="lg"
+                          borderRadius="xl"
+                          _hover={{ transform: 'scale(1.1)' }}
+                        />
+                      </Tooltip>
+                      <Tooltip label="Neutralno" hasArrow>
+                        <IconButton
+                          icon={<FaMeh />}
+                          aria-label="Neutralno"
+                          colorScheme="yellow"
+                          variant="outline"
+                          size="lg"
+                          borderRadius="xl"
+                          _hover={{ transform: 'scale(1.1)' }}
+                        />
+                      </Tooltip>
+                      <Tooltip label="Ne sviđa mi se" hasArrow>
+                        <IconButton
+                          icon={<FaThumbsDown />}
+                          aria-label="Ne sviđa mi se"
+                          colorScheme="red"
+                          variant="outline"
+                          size="lg"
+                          borderRadius="xl"
+                          _hover={{ transform: 'scale(1.1)' }}
+                        />
+                      </Tooltip>
+                    </HStack>
+                  </VStack>
+                </CardBody>
+              </Card>
+            </ScaleFade>
+
+            {/* Campaign Details */}
+            <VStack spacing={6}>
+              {/* Progress Card */}
+              <ScaleFade in={true} initialScale={0.9}>
+                <Card
+                  bg={cardBg}
+                  borderRadius="2xl"
+                  boxShadow="xl"
+                  border="1px"
+                  borderColor={borderColor}
+                  w="full"
+                >
+                  <CardHeader
+                    textAlign="center"
+                    bg="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
+                    color="white"
+                    py={6}
+                    borderTopRadius="2xl"
+                  >
+                    <Icon as={FaTrophy} boxSize={6} mb={2} />
+                    <Heading size="md" fontWeight="bold">
+                      Napredak kampanje
+                    </Heading>
+                  </CardHeader>
+
+                  <CardBody p={6}>
+                    <SimpleGrid columns={2} spacing={6} mb={6}>
+                      <Stat textAlign="center">
+                        <StatLabel color={textColor}>Ukupan budžet</StatLabel>
+                        <StatNumber color="blue.500" fontSize="2xl">
+                          ${campaign.budget.toLocaleString()}
+                        </StatNumber>
+                      </Stat>
+                      <Stat textAlign="center">
+                        <StatLabel color={textColor}>Iskorišćeno</StatLabel>
+                        <StatNumber color="green.500" fontSize="2xl">
+                          ${campaign.progress.toFixed(2)}
+                        </StatNumber>
+                      </Stat>
+                    </SimpleGrid>
+
+                    <Box>
+                      <Progress
+                        value={campaign.progress}
+                        colorScheme="green"
+                        size="lg"
+                        borderRadius="full"
+                        bg={useColorModeValue('gray.100', 'gray.700')}
+                      />
+                      <Text fontSize="sm" color={textColor} mt={2} textAlign="center" fontWeight="medium">
+                        {campaign.progress.toFixed(1)}% Završeno
+                      </Text>
+                    </Box>
+                  </CardBody>
+                </Card>
+              </ScaleFade>
+
+              {/* Details Card */}
+              <ScaleFade in={true} initialScale={0.9}>
+                <Card
+                  bg={cardBg}
+                  borderRadius="2xl"
+                  boxShadow="xl"
+                  border="1px"
+                  borderColor={borderColor}
+                  w="full"
+                >
+                  <CardHeader
+                    textAlign="center"
+                    bg="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+                    color="white"
+                    py={6}
+                    borderTopRadius="2xl"
+                  >
+                    <Icon as={FaUsers} boxSize={6} mb={2} />
+                    <Heading size="md" fontWeight="bold">
+                      Detalji kampanje
+                    </Heading>
+                  </CardHeader>
+
+                  <CardBody p={6}>
+                    <VStack spacing={6}>
+                      <Stat textAlign="center">
+                        <StatLabel color={textColor}>Maksimalan broj prijava</StatLabel>
+                        <StatNumber color="purple.500" fontSize="2xl">
+                          {campaign.maxSubmissions}
+                        </StatNumber>
+                        <Text fontSize="sm" color={textColor}>po nalogu</Text>
+                      </Stat>
+
+                      <Divider />
+
+                      <Stat textAlign="center">
+                        <StatLabel color={textColor}>Maksimalna zarada</StatLabel>
+                        <StatNumber color="orange.500" fontSize="2xl">
+                          ${campaign.maxEarnings.toLocaleString()}
+                        </StatNumber>
+                      </Stat>
+
+                      <Divider />
+
+                      <Stat textAlign="center">
+                        <StatLabel color={textColor}>Maksimalna zarada po objavi</StatLabel>
+                        <StatNumber color="teal.500" fontSize="2xl">
+                          ${campaign.maxEarningsPerPost.toLocaleString()}
+                        </StatNumber>
+                      </Stat>
+                    </VStack>
+                  </CardBody>
+                </Card>
+              </ScaleFade>
+            </VStack>
+          </SimpleGrid>
+
+          {/* Videos Section */}
+          <Fade in={true}>
+            <VideosCard userVideos={userVideos} videosLoading={videosLoading} />
+          </Fade>
+        </VStack>
+      </Container>
+
+      {/* Enhanced Add Video Modal */}
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+        <ModalOverlay backdropFilter="blur(10px)" />
+        <ModalContent
+          bg={cardBg}
+          borderRadius="2xl"
+          border="1px"
+          borderColor={borderColor}
+          mx={4}
+        >
+          <ModalHeader
+            bg="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+            color="white"
+            borderTopRadius="2xl"
+            textAlign="center"
+            py={6}
+          >
+            <VStack spacing={2}>
+              <Icon as={FaVideo} boxSize={6} />
+              <Text fontSize="xl" fontWeight="bold">Dodajte Video</Text>
+            </VStack>
+          </ModalHeader>
+          <ModalCloseButton color="white" />
+
+          <ModalBody p={8}>
+            <VStack spacing={6} align="stretch">
+              <Text color={textColor} fontSize="md" textAlign="center">
+                Unesite URL vašeg TikTok ili Instagram Reels videa:
+              </Text>
+
+              <Input
+                placeholder="https://tiktok.com/@username/video/12345"
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                size="lg"
+                borderRadius="xl"
+                bg={useColorModeValue('gray.50', 'gray.700')}
+                border="2px"
+                borderColor={useColorModeValue('gray.200', 'gray.600')}
+                _focus={{ borderColor: 'blue.500', shadow: 'lg' }}
+              />
+
+              <Box
+                bg={useColorModeValue('blue.50', 'blue.900')}
+                p={4}
+                borderRadius="xl"
+                border="1px"
+                borderColor={useColorModeValue('blue.200', 'blue.700')}
+              >
+                <Text fontSize="sm" color="blue.600" fontWeight="medium" mb={2}>
+                  💡 Saveti:
+                </Text>
+                <VStack align="start" spacing={1} fontSize="xs" color={textColor}>
+                  <Text>• Video mora biti sa vašeg verifikovanog naloga</Text>
+                  <Text>• Podržani su TikTok i Instagram Reels linkovi</Text>
+                  <Text>• Video će biti pregledan pre odobravanja</Text>
+                </VStack>
+              </Box>
+
+              {message && (
+                <Alert
+                  status={message.includes('uspešno') ? 'success' : 'error'}
+                  borderRadius="xl"
+                  variant="subtle"
+                >
+                  <AlertIcon />
+                  <Text fontSize="sm">{message}</Text>
+                </Alert>
+              )}
+            </VStack>
+          </ModalBody>
+
+          <ModalFooter p={8} pt={0}>
+            <HStack spacing={4} w="full">
+              <Button
+                variant="ghost"
+                onClick={onClose}
+                size="lg"
+                borderRadius="xl"
+                flex={1}
+              >
+                Otkaži
+              </Button>
+              <Button
+                colorScheme="green"
+                onClick={handleAddVideo}
+                size="lg"
+                borderRadius="xl"
+                flex={2}
+                isLoading={isSubmitting}
+                loadingText="Dodajem..."
+                leftIcon={<FaPlus />}
+                _hover={{ transform: 'translateY(-1px)', shadow: 'lg' }}
+              >
+                Dodaj Video
+              </Button>
+            </HStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </Box>
+  );
+};
+
+export default Page;
