@@ -81,17 +81,39 @@ const ConnectedAccounts: NextPage = () => {
     try {
       setMessage(''); // Clear previous messages
 
-      const instagramRegex = /^https:\/\/(www\.)?instagram\.com\/?[a-zA-Z0-9_.]+$/;
-      const tiktokRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+$/;
+      const instagramRegex = /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/;
+      const tiktokRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/?$/;
 
       if (!instagramRegex.test(accountLink) && !tiktokRegex.test(accountLink)) {
         setMessage('Uneti link nije validan. Molimo unesite ispravan link naloga.');
         return;
       }
 
-      const username = accountLink.includes('tiktok')
-        ? accountLink.split('@')[1]
-        : accountLink.split('/')[accountLink.split('/').length - 1];
+      let username = '';
+
+      if (accountLink.includes('tiktok')) {
+        // Handle TikTok URLs with or without @
+        if (accountLink.includes('@')) {
+          username = accountLink.split('@')[1].replace('/', ''); // Remove trailing slash
+        } else {
+          // Extract from URL path: https://tiktok.com/username
+          const parts = accountLink.split('/');
+          username = parts[parts.length - 1] || parts[parts.length - 2];
+        }
+      } else {
+        // Handle Instagram URLs
+        const parts = accountLink.split('/').filter(part => part !== ''); // Remove empty parts
+        username = parts[parts.length - 1]; // Get the last non-empty part
+      }
+
+      // Validate extracted username
+      if (!username || username.trim() === '') {
+        setMessage('Nije moguće izdvojiti korisničko ime iz linka.');
+        return;
+      }
+
+      username = username.trim();
+      console.log('Extracted username:', username);
 
       if (await accountExists(username)) {
         setMessage('Nalog se već koristi.');
@@ -107,7 +129,6 @@ const ConnectedAccounts: NextPage = () => {
       );
       setIsVerifyEnabled(true);
 
-      // Show instruction message instead of success
       setMessage('Molimo postavite kod u opis vašeg profila i kliknite "Verifikujte Nalog".');
 
     } catch (error) {
