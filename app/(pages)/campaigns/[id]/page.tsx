@@ -357,6 +357,12 @@ const Page = () => {
         return;
       }
 
+      const createdAt = new Date(video?.createdAt!)
+      const currentTime = new Date()
+      if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
+        setMessage(`Video je stariji od ${videoAgeInHours}h`)
+        return
+      }
       const response = await fetch('/api/campaign/video/add', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
