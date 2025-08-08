@@ -41,8 +41,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
   }
 
   const getProgressColor = (progress: number) => {
-    // if (progress >= 80) return 'green'
-    // if (progress >= 50) return 'yellow'
+    if (progress >= 80) return 'green'
+    if (progress >= 50) return 'yellow'
     return 'red'
   }
 
