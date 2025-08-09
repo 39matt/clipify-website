@@ -30,20 +30,20 @@ const Profile: NextPage = () => {
 
   useEffect(() => {
     const checkLinkedStatus = async () => {
+      setCheckingLinked(true);
+
       if (discordUsername) {
-        setCheckingLinked(true);
         const isLinked = await isUserLinked(discordUsername);
         setLinked(isLinked);
-        setCheckingLinked(false);
       } else {
-        setLinked(false);
-        setCheckingLinked(false);
+        setLinked(false); // explicitly mark as not linked
       }
+
+      setCheckingLinked(false);
     };
-    if (discordUsername) {
-      checkLinkedStatus();
-    }
-    }, [discordUsername]);
+
+    checkLinkedStatus();
+  }, [discordUsername]);
 
   const handleLinkDiscord = async () => {
     if (!user?.email) {
