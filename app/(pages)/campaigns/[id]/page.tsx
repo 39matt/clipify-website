@@ -81,6 +81,15 @@ const VideosCard = ({
           </Stat>
         </StatGroup>
 
+        {/*<Divider mb={6} />*/}
+        {/*<StatGroup mb={6}>*/}
+        {/*  <Stat textAlign="center">*/}
+        {/*    <StatLabel>Realizovana zarada</StatLabel>*/}
+        {/*    <StatNumber color="blue.400">20</StatNumber>*/}
+        {/*  </Stat>*/}
+        {/*</StatGroup>*/}
+
+
         <Divider mb={6} />
 
         {videosLoading ? (

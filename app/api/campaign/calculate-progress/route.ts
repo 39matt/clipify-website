@@ -27,7 +27,7 @@ export async function PUT(req: NextRequest) {
     const videosSnap = await videoColRef.get()
 
     // Calculate total views correctly
-    const totalViews = videosSnap.docs.reduce((accumulator, doc) => {
+    const totalViews = videosSnap.docs.filter((video) => video.data()["approved"] !== false).reduce((accumulator, doc) => {
       const videoData = doc.data() as IVideo;
       return accumulator + (videoData.views || 0); // Add null check
     }, 0);
