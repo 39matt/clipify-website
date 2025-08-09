@@ -17,7 +17,6 @@ import {
 } from '@chakra-ui/react'
 import { Property, PropertyList } from '@saas-ui/core';
 import { Select, SelectButton, SelectList } from '@saas-ui/react';
-import { updateWalletAddress } from '../../../app/lib/firebase/firestore/user'
 
 interface EditPaymentInfoCardProps {
   discordUsername: string | null;
@@ -45,7 +44,16 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
     }
     try {
       console.log('Submitting wallet address:', walletAddress);
-      await updateWalletAddress(discordUsername!, walletAddress);
+      const response = await fetch('/api/user/update-wallet-address', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ walletAddress, discordUsername }),
+      });
+      if(!response.ok) {
+        setError('Promena adrese nije uspela. Molimo vas pokušajte ponovo!');
+        setLoading(false);
+        return;
+      }
       setSuccess('Uspešno izmenjena adresa!');
     } catch (error) {
       console.error('Error updating wallet address:', error);
