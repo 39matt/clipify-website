@@ -186,6 +186,7 @@ const Page = () => {
   const [error, setError] = useState<string | null>(null);
   const [userVideos, setUserVideos] = useState<IVideo[]>([]);
   const [videosLoading, setVideosLoading] = useState(false);
+  const [addingVideo, setAddingVideo] = useState(false);
   const { user, discordUsername } = useLayoutContext();
   const videoAgeInHours = 24;
 
@@ -194,7 +195,7 @@ const Page = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (!campaignId || Array.isArray(campaignId) || !discordUsername) return;
+    if (!campaignId || Array.isArray(campaignId)) return;
 
     const fetchData = async () => {
       try {
@@ -269,8 +270,10 @@ const Page = () => {
     }
 
     try {
+      setAddingVideo(true);
+      setMessage('');
       // Validate URL
-      const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/reels\/[a-zA-Z0-9_-]+\/?$/;
+      const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/(reel|p)\/[a-zA-Z0-9_-]+\/?$/;
       const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
 
       if (!instagramReelRegex.test(videoUrl) && !tiktokVideoRegex.test(videoUrl)) {
@@ -322,7 +325,7 @@ const Page = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             platform: "Instagram",
-            videoId,
+            videoUrl,
             api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
           })
         });
@@ -359,10 +362,10 @@ const Page = () => {
 
       const createdAt = new Date(video?.createdAt!)
       const currentTime = new Date()
-      if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
-        setMessage(`Video je stariji od ${videoAgeInHours}h`)
-        return
-      }
+      // if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
+      //   setMessage(`Video je stariji od ${videoAgeInHours}h`)
+      //   return
+      // }
       const response = await fetch('/api/campaign/video/add', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
@@ -396,6 +399,8 @@ const Page = () => {
     } catch (error) {
       console.error('Error adding video:', error);
       setMessage('Došlo je do greške prilikom dodavanja videa.');
+    } finally {
+      setAddingVideo(false);
     }
   };
 
@@ -580,7 +585,7 @@ const Page = () => {
         <ModalOverlay />
         <ModalContent bg="gray.800" color="white">
           <ModalHeader>Dodajte Video</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton isDisabled={addingVideo} />
           <ModalBody>
             <Text mb={4}>Unesite URL vašeg videa:</Text>
             <Input
@@ -590,6 +595,7 @@ const Page = () => {
               bg="gray.700"
               borderColor="gray.600"
               _placeholder={{ color: 'gray.400' }}
+              isDisabled={addingVideo}
             />
             {message && (
               <Text mt={4} color={message.includes('uspešno') ? 'green.400' : 'red.400'}>
@@ -598,16 +604,26 @@ const Page = () => {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="green" mr={3} onClick={handleAddVideo}>
+            <Button
+              colorScheme="green"
+              mr={3}
+              onClick={handleAddVideo}
+              isLoading={addingVideo}
+              loadingText="Dodaje se..."
+              isDisabled={addingVideo}
+            >
               Dodajte Video
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button
+              variant="ghost"
+              onClick={onClose}
+              isDisabled={addingVideo}
+            >
               Otkaži
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>
-    </Box>
+      </Modal>    </Box>
   );
 };
 

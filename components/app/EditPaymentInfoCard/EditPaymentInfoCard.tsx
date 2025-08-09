@@ -64,7 +64,7 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
   }
 
   return (
-    <Card w={{ base: '100%', md: '40%' }} minH="30vh">
+    <Card w={{ base: '100%', md: '40%' }} minH="30vh" bg="gray.800">
       <CardHeader>
         <Heading size="lg">Informacije o isplati</Heading>
         <Spacer />

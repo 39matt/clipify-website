@@ -11,7 +11,7 @@ import {
   Heading,
   HStack,
   Spacer,
-  Spinner,
+  Spinner, Text,
   VStack,
 } from '@chakra-ui/react'
 import { Property, PropertyList } from '@saas-ui/core';
@@ -25,13 +25,8 @@ import { isUserLinked } from '../../../lib/firebase/firestore/user'
 
 const Profile: NextPage = () => {
   const [linked, setLinked] = useState<boolean | null>(null);
-  const [checkingLinked, setCheckingLinked] = useState(true);
+  const [checkingLinked, setCheckingLinked] = useState(false);
   const { user, loading, discordUsername } = useLayoutContext();
-  const features: FeatureProps[] = [
-    { title: 'Broj videa', description: '0' },
-    { title: 'Zarađen novac', description: '0' },
-    { title: 'Ukupan broj pregleda', description: '0' },
-  ];
 
   useEffect(() => {
     const checkLinkedStatus = async () => {
@@ -45,8 +40,10 @@ const Profile: NextPage = () => {
         setCheckingLinked(false);
       }
     };
-    checkLinkedStatus();
-  }, [discordUsername]);
+    if (discordUsername) {
+      checkLinkedStatus();
+    }
+    }, [discordUsername]);
 
   const handleLinkDiscord = async () => {
     if (!user?.email) {
@@ -79,65 +76,157 @@ const Profile: NextPage = () => {
 
   return (
     <VStack minW="full">
-      <Box my={{ base: 4, md: 8 }}>
-        <Heading textAlign="center" fontSize={{ base: '32px', md: '48px' }} textColor="green.400">
+      <Box textAlign="center" maxW="2xl">
+        <Heading
+          fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
+          fontWeight="bold"
+          bgGradient="linear(to-r, green.400, teal.500)"
+          bgClip="text"
+          mb={4}
+        >
           Korisnički profil
         </Heading>
       </Box>
       <VStack w={{ base: 'full', md: '85%' }} spacing={{ base: 4, md: 8 }}>
         {/* Discord Card */}
-        <Card w="full" minH={"200px"}>
-          {checkingLinked && <AbsoluteCenter>
-            <Spinner/>
-          </AbsoluteCenter>}
-          {!checkingLinked && <>
-            <CardHeader display="flex" flexDirection={{ base: 'column', md: 'row' }} gap={4}>
-              <Heading size="lg">Osnovne informacije</Heading>
-              {!linked && linked !== null && (
-                <Button colorScheme="green" variant="solid" onClick={handleLinkDiscord}>
-                  Link Discord
-                </Button>
-              )}
-            </CardHeader>
-            <CardBody>
-              <PropertyList>
-                <Property
-                  label="Discord"
-                  value={linked ? discordUsername : 'Nije povezan'}
-                  textColor={linked ? '#5865F2' : 'red.500'}
-                  fontWeight={"bold"}
-                />
-                <Property
-                  label="Email"
-                  value={user?.email}
-                  fontWeight={"bold"}
+        <Card w="full" minH="200px" position="relative" bg="gray.800">
+          <CardHeader display="flex" flexDirection={{ base: 'column', md: 'row' }} gap={4}>
+            <Heading size="lg">Osnovne informacije</Heading>
+            {/* Only show button after checking is done AND user is not linked */}
+            {linked === false && !checkingLinked && (
+              <Button
+                colorScheme="green"
+                variant="solid"
+                onClick={handleLinkDiscord}
+              >
+                Link Discord
+              </Button>
+            )}
+          </CardHeader>
+          <CardBody>
+            <PropertyList>
+              <Property
+                label="Discord"
+                value={
+                  checkingLinked
+                    ? "Proverava..."
+                    : linked
+                      ? discordUsername
+                      : 'Nije povezan'
+                }
+                textColor={
+                  checkingLinked
+                    ? 'gray.500'
+                    : linked
+                      ? '#5865F2'
+                      : 'red.500'
+                }
+                fontWeight="bold"
+              />
+              <Property
+                label="Email"
+                value={user?.email}
+                fontWeight="bold"
+              />
+            </PropertyList>
+          </CardBody>
 
-                />
-              </PropertyList>
-            </CardBody>
-          </>
-          }
-
+          {/* Optional: Show a subtle loading indicator */}
+          {checkingLinked && (
+            <Box position="absolute" top={2} right={2}>
+              <Spinner size="sm" color="gray.400" />
+            </Box>
+          )}
         </Card>
-
         {/* Statistics Card */}
-        {/*<Card w="full">*/}
-        {/*  <CardHeader display="flex" flexDirection="row">*/}
-        {/*    <Heading size="lg">Statistike</Heading>*/}
-        {/*    <Spacer />*/}
-        {/*  </CardHeader>*/}
-        {/*  <CardBody>*/}
-        {/*    <Grid*/}
-        {/*      templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}*/}
-        {/*      gap={{ base: 4, md: 8 }}*/}
-        {/*    >*/}
-        {/*      <BoxFeature title="Broj videa" description="0" />*/}
-        {/*      <BoxFeature title="Zarađen novac" description="0" />*/}
-        {/*      <BoxFeature title="Ukupan broj pregleda" description="0" />*/}
-        {/*    </Grid>*/}
-        {/*  </CardBody>*/}
-        {/*</Card>*/}
+        <Card
+          w="full"
+          bg="gray.800"
+          borderRadius="lg"
+          boxShadow="lg"
+        >
+          <CardHeader>
+            <Heading
+              size="lg"
+              mb={4}
+            >
+              Statistike
+            </Heading>
+          </CardHeader>
 
+          <CardBody>
+            <Grid
+              templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
+              gap={{ base: 4, md: 6 }}
+            >
+              {/* Video Count */}
+              <Card
+                bg="gray.700"
+                borderRadius="md"
+                p={4}
+                textAlign="center"
+                transition="all 0.2s"
+                _hover={{
+                  bg: "gray.600",
+                  transform: "translateY(-2px)"
+                }}
+              >
+                <VStack spacing={2}>
+                  <Text fontSize="2xl" color="blue.400" fontWeight="bold">
+                    0
+                  </Text>
+                  <Text fontSize="sm" color="gray.300">
+                    Broj videa
+                  </Text>
+                </VStack>
+              </Card>
+
+              {/* Earnings */}
+              <Card
+                bg="gray.700"
+                borderRadius="md"
+                p={4}
+                textAlign="center"
+                transition="all 0.2s"
+                _hover={{
+                  bg: "gray.600",
+                  transform: "translateY(-2px)"
+                }}
+              >
+                <VStack spacing={2}>
+                  <Text fontSize="2xl" color="green.400" fontWeight="bold">
+                    $0
+                  </Text>
+                  <Text fontSize="sm" color="gray.300">
+                    Zarađen novac
+                  </Text>
+                </VStack>
+              </Card>
+
+              {/* Total Views */}
+              <Card
+                bg="gray.700"
+                borderRadius="md"
+                p={4}
+                textAlign="center"
+                transition="all 0.2s"
+                _hover={{
+                  bg: "gray.600",
+                  transform: "translateY(-2px)"
+                }}
+              >
+                <VStack spacing={2}>
+                  <Text fontSize="2xl" color="yellow.400" fontWeight="bold">
+                    0
+                  </Text>
+                  <Text fontSize="sm" color="gray.300">
+                    Ukupan broj pregleda
+                  </Text>
+                </VStack>
+              </Card>
+            </Grid>
+          </CardBody>
+        </Card>
         {/* Payment Info and Change Password Cards */}
         <HStack
           w="full"

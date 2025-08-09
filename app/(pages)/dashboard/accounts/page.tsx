@@ -197,8 +197,14 @@ const ConnectedAccounts: NextPage = () => {
         maxW="1200px"
         mb={8}
       >
-        <Box my={{ base: 4, md: 8 }}>
-          <Heading textAlign="center" fontSize={{ base: '32px', md: '48px' }} textColor="green.400">
+        <Box textAlign="center" maxW="2xl">
+          <Heading
+            fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
+            fontWeight="bold"
+            bgGradient="linear(to-r, green.400, teal.500)"
+            bgClip="text"
+            mb={4}
+          >
             Povezani nalozi
           </Heading>
         </Box>

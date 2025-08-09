@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function PUT(req: NextRequest) {
   try {
-    const {platform, api_key, videoId} = await req.json();
+    const {platform, api_key, videoUrl, videoId} = await req.json();
     const url = platform === 'Instagram'
-        ? `https://instagram-looter2.p.rapidapi.com/post?id=${videoId}`
+        ? `https://instagram-looter2.p.rapidapi.com/post?url=${videoUrl}`
         : `https://tiktok-api23.p.rapidapi.com/api/post/detail?videoId=${videoId}`;
     const response = await fetch(url, {
       method: 'GET',

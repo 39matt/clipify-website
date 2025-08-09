@@ -76,23 +76,21 @@ export default function AdminPanelClient() {
           <Thead>
             <Tr>
               <Th>Ime</Th>
-              <Th>Broj videa</Th>
+              {/*<Th>Broj videa</Th>*/}
             </Tr>
           </Thead>
           <Tbody>
             {campaigns.map((campaign, index) => (
-              <Tr key={index}>
+              <Tr key={index}   onClick={() => {
+                router.push(`/dashboard/admin/campaign/${campaign.id}`);
+              }}
+                  _hover={{ cursor: 'pointer' }}>
                 <Td>
-                  <Text
-                    onClick={() => {
-                      router.push(`/dashboard/admin/campaign/${campaign.id}`);
-                    }}
-                    _hover={{ cursor: 'pointer' }}
-                  >
+                  <Text>
                     {campaign.influencer} - {campaign.activity}
                   </Text>
                 </Td>
-                <Td>2</Td>
+                {/*<Td>2</Td>*/}
               </Tr>
             ))}
           </Tbody>

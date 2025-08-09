@@ -88,7 +88,7 @@ const ChangePasswordCard: React.FC<ChangePasswordCardProps> = ({user}) => {
   }
 
   return (
-    <Card w={{ base: '100%', md: '60%' }} minH="30vh">
+    <Card w={{ base: '100%', md: '60%' }} minH="30vh" bg="gray.800">
       <CardHeader>
         <Heading size="lg">Izmeni šifru</Heading>
         <Spacer />
