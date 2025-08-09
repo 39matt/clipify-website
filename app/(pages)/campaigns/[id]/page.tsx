@@ -39,7 +39,6 @@ import {
 import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { useLayoutContext } from '../../dashboard/context';
 import { IVideo } from '../../../lib/models/video';
-import { getCampaign } from '../../../lib/firebase/firestore/campaign';
 import { userAccountExists } from '../../../lib/firebase/firestore/account';
 import { accountVideoExists, addVideo } from '../../../lib/firebase/firestore/video';
 import { ICampaign } from '../../../lib/models/campaign'
@@ -63,7 +62,6 @@ const VideosCard = ({
         </Heading>
       </CardHeader>
       <CardBody>
-        {/* Summary Stats */}
         <StatGroup mb={6}>
           <Stat textAlign="center">
             <StatLabel>Ukupno pregleda</StatLabel>
@@ -85,7 +83,6 @@ const VideosCard = ({
 
         <Divider mb={6} />
 
-        {/* Videos Grid */}
         {videosLoading ? (
           <Center py={8}>
             <Spinner size="lg" />
@@ -362,10 +359,10 @@ const Page = () => {
 
       const createdAt = new Date(video?.createdAt!)
       const currentTime = new Date()
-      // if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
-      //   setMessage(`Video je stariji od ${videoAgeInHours}h`)
-      //   return
-      // }
+      if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
+        setMessage(`Video je stariji od ${videoAgeInHours}h`)
+        return
+      }
       const response = await fetch('/api/campaign/video/add', {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
@@ -441,10 +438,10 @@ const Page = () => {
       color="white"
       maxH="90vh"
       w="full"
-      maxW="1200px" // Add max width
-      mx="auto" // Center the content
-      px={4} // Add horizontal padding
-    >      {/* Header */}
+      maxW="1200px"
+      mx="auto"
+      px={4}
+    >
       <Box
         position="relative"
         bg="gray.800"
@@ -476,7 +473,6 @@ const Page = () => {
       </Box>
 
       <VStack spacing={6}>
-        {/* Main Campaign Card */}
         <Card w="full" bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
           <CardHeader textAlign="center">
             <Heading size="xl" color="green.400" mb={4}>
@@ -520,7 +516,6 @@ const Page = () => {
           </CardBody>
         </Card>
 
-        {/* Campaign Details */}
         <Flex justify="center" gap={4} width="full" flexDirection={{ base: "column", md: "row" }}>
           <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
             <CardHeader textAlign="center">
@@ -576,11 +571,9 @@ const Page = () => {
           </Card>
         </Flex>
 
-        {/* Videos Card */}
         <VideosCard userVideos={userVideos} videosLoading={videosLoading} />
       </VStack>
 
-      {/* Add Video Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.800" color="white">
@@ -623,7 +616,8 @@ const Page = () => {
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal>    </Box>
+      </Modal>
+    </Box>
   );
 };
 
