@@ -97,7 +97,6 @@ const AccountPage:React.FC<AccountPageProps> = ({idToken}) => {
     );
   }
 
-  // Group videos by user
   const groupedVideos = videos?.reduce((acc, video) => {
     const owner = video.uid!;
     if (!acc[owner]) {
@@ -107,7 +106,6 @@ const AccountPage:React.FC<AccountPageProps> = ({idToken}) => {
     return acc;
   }, {} as Record<string, IVideo[]>);
 
-  // Filter to only show users who have videos pending approval (approved == null)
   const filteredGroupedVideos = groupedVideos ?
     Object.entries(groupedVideos).filter(([owner, videos]) =>
       videos.some(video => video.approved == null)
@@ -121,8 +119,9 @@ const AccountPage:React.FC<AccountPageProps> = ({idToken}) => {
           {
             method: "PUT",
             body: JSON.stringify({
-              platform:video.link.includes("Instagram") ? "Instagram" : "TikTok",
+              platform:video.link.includes("instagram") ? "Instagram" : "TikTok",
               videoId: video.link.split('/')[5],
+              videoUrl: video.link,
               api_key:process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
             })
           }

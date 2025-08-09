@@ -139,94 +139,94 @@ const Profile: NextPage = () => {
           )}
         </Card>
         {/* Statistics Card */}
-        <Card
-          w="full"
-          bg="gray.800"
-          borderRadius="lg"
-          boxShadow="lg"
-        >
-          <CardHeader>
-            <Heading
-              size="lg"
-              mb={4}
-            >
-              Statistike
-            </Heading>
-          </CardHeader>
+        {/*<Card*/}
+        {/*  w="full"*/}
+        {/*  bg="gray.800"*/}
+        {/*  borderRadius="lg"*/}
+        {/*  boxShadow="lg"*/}
+        {/*>*/}
+        {/*  <CardHeader>*/}
+        {/*    <Heading*/}
+        {/*      size="lg"*/}
+        {/*      mb={4}*/}
+        {/*    >*/}
+        {/*      Statistike*/}
+        {/*    </Heading>*/}
+        {/*  </CardHeader>*/}
 
-          <CardBody>
-            <Grid
-              templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
-              gap={{ base: 4, md: 6 }}
-            >
-              {/* Video Count */}
-              <Card
-                bg="gray.700"
-                borderRadius="md"
-                p={4}
-                textAlign="center"
-                transition="all 0.2s"
-                _hover={{
-                  bg: "gray.600",
-                  transform: "translateY(-2px)"
-                }}
-              >
-                <VStack spacing={2}>
-                  <Text fontSize="2xl" color="blue.400" fontWeight="bold">
-                    0
-                  </Text>
-                  <Text fontSize="sm" color="gray.300">
-                    Broj videa
-                  </Text>
-                </VStack>
-              </Card>
+        {/*  <CardBody>*/}
+        {/*    <Grid*/}
+        {/*      templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}*/}
+        {/*      gap={{ base: 4, md: 6 }}*/}
+        {/*    >*/}
+        {/*      /!* Video Count *!/*/}
+        {/*      <Card*/}
+        {/*        bg="gray.700"*/}
+        {/*        borderRadius="md"*/}
+        {/*        p={4}*/}
+        {/*        textAlign="center"*/}
+        {/*        transition="all 0.2s"*/}
+        {/*        _hover={{*/}
+        {/*          bg: "gray.600",*/}
+        {/*          transform: "translateY(-2px)"*/}
+        {/*        }}*/}
+        {/*      >*/}
+        {/*        <VStack spacing={2}>*/}
+        {/*          <Text fontSize="2xl" color="blue.400" fontWeight="bold">*/}
+        {/*            0*/}
+        {/*          </Text>*/}
+        {/*          <Text fontSize="sm" color="gray.300">*/}
+        {/*            Broj videa*/}
+        {/*          </Text>*/}
+        {/*        </VStack>*/}
+        {/*      </Card>*/}
 
-              {/* Earnings */}
-              <Card
-                bg="gray.700"
-                borderRadius="md"
-                p={4}
-                textAlign="center"
-                transition="all 0.2s"
-                _hover={{
-                  bg: "gray.600",
-                  transform: "translateY(-2px)"
-                }}
-              >
-                <VStack spacing={2}>
-                  <Text fontSize="2xl" color="green.400" fontWeight="bold">
-                    $0
-                  </Text>
-                  <Text fontSize="sm" color="gray.300">
-                    Zarađen novac
-                  </Text>
-                </VStack>
-              </Card>
+        {/*      /!* Earnings *!/*/}
+        {/*      <Card*/}
+        {/*        bg="gray.700"*/}
+        {/*        borderRadius="md"*/}
+        {/*        p={4}*/}
+        {/*        textAlign="center"*/}
+        {/*        transition="all 0.2s"*/}
+        {/*        _hover={{*/}
+        {/*          bg: "gray.600",*/}
+        {/*          transform: "translateY(-2px)"*/}
+        {/*        }}*/}
+        {/*      >*/}
+        {/*        <VStack spacing={2}>*/}
+        {/*          <Text fontSize="2xl" color="green.400" fontWeight="bold">*/}
+        {/*            $0*/}
+        {/*          </Text>*/}
+        {/*          <Text fontSize="sm" color="gray.300">*/}
+        {/*            Zarađen novac*/}
+        {/*          </Text>*/}
+        {/*        </VStack>*/}
+        {/*      </Card>*/}
 
-              {/* Total Views */}
-              <Card
-                bg="gray.700"
-                borderRadius="md"
-                p={4}
-                textAlign="center"
-                transition="all 0.2s"
-                _hover={{
-                  bg: "gray.600",
-                  transform: "translateY(-2px)"
-                }}
-              >
-                <VStack spacing={2}>
-                  <Text fontSize="2xl" color="yellow.400" fontWeight="bold">
-                    0
-                  </Text>
-                  <Text fontSize="sm" color="gray.300">
-                    Ukupan broj pregleda
-                  </Text>
-                </VStack>
-              </Card>
-            </Grid>
-          </CardBody>
-        </Card>
+        {/*      /!* Total Views *!/*/}
+        {/*      <Card*/}
+        {/*        bg="gray.700"*/}
+        {/*        borderRadius="md"*/}
+        {/*        p={4}*/}
+        {/*        textAlign="center"*/}
+        {/*        transition="all 0.2s"*/}
+        {/*        _hover={{*/}
+        {/*          bg: "gray.600",*/}
+        {/*          transform: "translateY(-2px)"*/}
+        {/*        }}*/}
+        {/*      >*/}
+        {/*        <VStack spacing={2}>*/}
+        {/*          <Text fontSize="2xl" color="yellow.400" fontWeight="bold">*/}
+        {/*            0*/}
+        {/*          </Text>*/}
+        {/*          <Text fontSize="sm" color="gray.300">*/}
+        {/*            Ukupan broj pregleda*/}
+        {/*          </Text>*/}
+        {/*        </VStack>*/}
+        {/*      </Card>*/}
+        {/*    </Grid>*/}
+        {/*  </CardBody>*/}
+        {/*</Card>*/}
         {/* Payment Info and Change Password Cards */}
         <HStack
           w="full"

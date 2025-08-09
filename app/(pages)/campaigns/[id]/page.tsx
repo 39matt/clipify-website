@@ -58,7 +58,7 @@ const VideosCard = ({
     <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} w="full">
       <CardHeader textAlign="center">
         <Heading size="lg" color="green.400" mb={4}>
-          Vaši poslati videi
+          Vaša kampanja
         </Heading>
       </CardHeader>
       <CardBody>

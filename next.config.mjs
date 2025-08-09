@@ -16,6 +16,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: '*.tiktokcdn.com',
       },
+      {
+        protocol: 'https',
+        hostname: '*.cdninstagram.com',
+      },
     ],
   },
   webpack(config) {
