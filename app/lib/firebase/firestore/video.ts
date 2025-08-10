@@ -17,26 +17,3 @@ export async function accountVideoExists(uid: string, accountName:string, platfo
     throw new Error('Failed to validate video');
   }
 }
-
-export async function addVideo(uid: string, accId: string, campaignId: string, video: IVideo) {
-  try {
-
-    //
-    const campaignDocRef = doc(db, 'campaigns', campaignId);
-    const videoColRef = collection(campaignDocRef, 'videos');
-
-    const userDocRef = doc(db, 'users', uid);
-    video.userAccountRef = doc(userDocRef, 'accounts', accId);
-    video.accountName = accId;
-    video.uid = uid;
-    video.approved = false;
-
-    const userVideoColRef = collection(video.userAccountRef, 'videos');
-
-    const newVideoDocRef = await addDoc(videoColRef, video);
-    const newUserVideoDocRef = await addDoc(userVideoColRef, {video: newVideoDocRef, campaignId: campaignId});
-  } catch (error) {
-    console.error('Error adding video:', error);
-    throw new Error('Failed to add video');
-  }
-}

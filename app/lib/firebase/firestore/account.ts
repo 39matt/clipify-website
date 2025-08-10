@@ -8,6 +8,7 @@ export async function getAllAccounts(uid: string) {
     const userDocRef = doc(db, 'users', uid)
     const accountColRef = collection(userDocRef, 'accounts')
     const snapshot = await getDocs(accountColRef)
+    console.log("accounts", snapshot.docs.map(doc => doc.data()))
     return snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -90,9 +91,12 @@ export async function accountExists(username: string) {
 
 export async function userAccountExists(uid: string, accountName: string, platform: string): Promise<boolean> {
   try {
-    const accounts = await getAllAccounts(uid);
+    const response = await fetch(`/api/user/account/get-all?uid=${uid}`, {
+      method: 'GET',
+      headers: {'Content-Type': 'application/json'},
+    })
+    const accounts = await response.json() as IAccount[];
     for (const account of accounts) {
-
       if (account.username === accountName && account.platform === platform) {
         return true;
       }

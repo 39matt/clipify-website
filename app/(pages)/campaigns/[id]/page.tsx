@@ -32,15 +32,11 @@ import {
   useDisclosure,
   ModalFooter,
   Flex,
-  SimpleGrid,
-  AspectRatio,
-  Badge,
 } from '@chakra-ui/react';
 import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { useLayoutContext } from '../../dashboard/context';
 import { IVideo } from '../../../lib/models/video';
 import { userAccountExists } from '../../../lib/firebase/firestore/account';
-import { accountVideoExists, addVideo } from '../../../lib/firebase/firestore/video';
 import { ICampaign } from '../../../lib/models/campaign'
 import VideosSection from '#components/app/VideosSection/VideosSection'
 
@@ -156,6 +152,26 @@ const Page = () => {
       let accountName = "";
       let video: IVideo | null = null;
 
+      // check if video already exists
+      const params = new URLSearchParams({
+        campaignId: campaignId!,
+        videoLink: rawVideoUrl,
+      });
+      console.log("radi?")
+      const res = await fetch(`/api/user/account/video-exists?${params.toString()}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!res.ok) {
+        throw new Error('Failed to validate video');
+      }
+      const data = await res.json();
+      if (data.exists) {
+        setMessage("Video je već dodat!");
+        return;
+      }
+      console.log("radi!")
+
       if (rawVideoUrl.includes('tiktok')) {
         accountName = videoUrl.split('/')[3].replace("@", '');
         const videoId = rawVideoUrl.split('/')[5];
@@ -164,13 +180,6 @@ const Page = () => {
         const accExists = await userAccountExists(discordUsername!, accountName, "TikTok");
         if (!accExists) {
           setMessage("Nalog mora biti vaš!");
-          return;
-        }
-
-        // Check if video already exists
-        const videoExists = await accountVideoExists(discordUsername!, accountName, "TikTok", rawVideoUrl);
-        if (videoExists) {
-          setMessage("Video je već dodat!");
           return;
         }
 
@@ -188,9 +197,8 @@ const Page = () => {
         const responseJson = await response.json();
         video = responseJson.videoInfo as IVideo;
 
-      } else if (rawVideoUrl.includes('instagram')) {
-        const videoId = rawVideoUrl.split('/')[4];
-
+      }
+      else if (rawVideoUrl.includes('instagram')) {
         // Fetch video info
         const response = await fetch('/api/campaign/video/get-info', {
           method: "PUT",
@@ -216,13 +224,6 @@ const Page = () => {
         const accExists = await userAccountExists(discordUsername!, accountName, "Instagram");
         if (!accExists) {
           setMessage("Nalog mora biti vaš!");
-          return;
-        }
-
-        // Check if video already exists
-        const videoExists = await accountVideoExists(discordUsername!, accountName, "Instagram", rawVideoUrl);
-        if (videoExists) {
-          setMessage("Video je već dodat!");
           return;
         }
       }
