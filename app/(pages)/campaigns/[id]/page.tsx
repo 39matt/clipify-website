@@ -140,7 +140,10 @@ const Page = () => {
       setAddingVideo(true);
       setMessage('');
 
-      const rawVideoUrl = videoUrl.split("?")[0]
+      let rawVideoUrl = videoUrl
+      if(videoUrl.includes('?')) {
+        rawVideoUrl = videoUrl.split("?")[0]
+      }
       // Validate URL
       const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[a-zA-Z0-9_-]+\/?$/;
       const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
@@ -194,7 +197,7 @@ const Page = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             platform: "Instagram",
-            rawVideoUrl,
+            videoUrl: rawVideoUrl,
             api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
           })
         });

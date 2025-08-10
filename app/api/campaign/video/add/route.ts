@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
     await userVideoColRef.add({
       videoRef: newVideoDocRef,
       campaignId: campaignId,
-      createdAt: new Date().toISOString()
+      uploadedAt: new Date().toISOString()
     });
 
     const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/campaign/calculate-progress`, {
