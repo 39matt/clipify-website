@@ -42,147 +42,8 @@ import { IVideo } from '../../../lib/models/video';
 import { userAccountExists } from '../../../lib/firebase/firestore/account';
 import { accountVideoExists, addVideo } from '../../../lib/firebase/firestore/video';
 import { ICampaign } from '../../../lib/models/campaign'
+import VideosSection from '#components/app/VideosSection/VideosSection'
 
-const VideosCard = ({
-                      userVideos,
-                      videosLoading
-                    }: {
-  userVideos: IVideo[];
-  videosLoading: boolean;
-}) => {
-  const totalViews = userVideos.reduce((sum, video) => sum + (video.views || 0), 0);
-  const totalLikes = userVideos.reduce((sum, video) => sum + (video.likes || 0), 0);
-  const totalComments = userVideos.reduce((sum, video) => sum + (video.comments || 0), 0);
-  const totalShares = userVideos.reduce((sum, video) => sum + (video.shares || 0), 0);
-  return (
-    <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} w="full">
-      <CardHeader textAlign="center">
-        <Heading size="lg" color="green.400" mb={4}>
-          Vaša kampanja
-        </Heading>
-      </CardHeader>
-      <CardBody>
-        <StatGroup mb={6}>
-          <Stat textAlign="center">
-            <StatLabel>Ukupno pregleda</StatLabel>
-            <StatNumber color="blue.400">{totalViews.toLocaleString()}</StatNumber>
-          </Stat>
-          <Stat textAlign="center">
-            <StatLabel>Ukupno lajkova</StatLabel>
-            <StatNumber color="red.400">{totalLikes.toLocaleString()}</StatNumber>
-          </Stat>
-          <Stat textAlign="center">
-            <StatLabel>Ukupno komentara</StatLabel>
-            <StatNumber color="yellow.400">{totalComments.toLocaleString()}</StatNumber>
-          </Stat>
-          <Stat textAlign="center">
-            <StatLabel>Ukupno deljenja</StatLabel>
-            <StatNumber color="green.400">{totalShares.toLocaleString()}</StatNumber>
-          </Stat>
-        </StatGroup>
-
-        {/*<Divider mb={6} />*/}
-        {/*<StatGroup mb={6}>*/}
-        {/*  <Stat textAlign="center">*/}
-        {/*    <StatLabel>Realizovana zarada</StatLabel>*/}
-        {/*    <StatNumber color="blue.400">20</StatNumber>*/}
-        {/*  </Stat>*/}
-        {/*</StatGroup>*/}
-
-
-        <Divider mb={6} />
-
-        {videosLoading ? (
-          <Center py={8}>
-            <Spinner size="lg" />
-            <Text ml={4}>Učitavanje videa...</Text>
-          </Center>
-        ) : userVideos.length === 0 ? (
-          <Center py={8}>
-            <Text color="gray.400" fontSize="lg">
-              Niste još uvek poslali nijedan video za ovu kampanju.
-            </Text>
-          </Center>
-        ) : (
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
-            {userVideos.map((video, index) => (
-              <Card key={video.id || index} bg="gray.700" borderRadius="md" overflow="hidden">
-                <AspectRatio ratio={9/16} maxH="200px">
-                  <Image
-                    src={video.coverUrl}
-                    alt={video.name || 'Video'}
-                    objectFit="cover"
-                    fallback={
-                      <Box bg="gray.600" w="full" h="full" display="flex" alignItems="center" justifyContent="center">
-                        <Text color="gray.400">Nema slike</Text>
-                      </Box>
-                    }
-                  />
-                </AspectRatio>
-                <CardBody p={3}>
-                  <VStack spacing={2} align="stretch">
-                    <HStack justify="space-between" align="center">
-                      <Text fontSize="sm" fontWeight="bold" noOfLines={1}>
-                        @{video.accountName}
-                      </Text>
-                      <Badge
-                        colorScheme={
-                          video.approved === true
-                            ? "green"
-                            : video.approved === false
-                              ? "red"
-                              : "yellow"
-                        }
-                        size="sm"
-                      >
-                        {video.approved === true
-                          ? "Odobreno"
-                          : video.approved === false
-                            ? "Odbačeno"
-                            : "Na čekanju"
-                        }
-                      </Badge>
-                    </HStack>
-
-                    <Text fontSize="xs" color="gray.400" noOfLines={2}>
-                      {video.name || 'Bez naziva'}
-                    </Text>
-
-                    <SimpleGrid columns={2} spacing={2} fontSize="xs">
-                      <Stat size="sm">
-                        <StatLabel color="blue.300">Pregledi</StatLabel>
-                        <StatNumber fontSize="sm">{(video.views || 0).toLocaleString()}</StatNumber>
-                      </Stat>
-                      <Stat size="sm">
-                        <StatLabel color="red.300">Lajkovi</StatLabel>
-                        <StatNumber fontSize="sm">{(video.likes || 0).toLocaleString()}</StatNumber>
-                      </Stat>
-                      <Stat size="sm">
-                        <StatLabel color="yellow.300">Komentari</StatLabel>
-                        <StatNumber fontSize="sm">{(video.comments || 0).toLocaleString()}</StatNumber>
-                      </Stat>
-                      <Stat size="sm">
-                        <StatLabel color="green.300">Deljenja</StatLabel>
-                        <StatNumber fontSize="sm">{(video.shares || 0).toLocaleString()}</StatNumber>
-                      </Stat>
-                    </SimpleGrid>
-
-                    <Text fontSize="xs" color="gray.500" textAlign="center">
-                      {video.createdAt
-                        ? new Date(video.createdAt).toLocaleDateString('sr-RS')
-                        : 'Nepoznat datum'
-                      }
-                    </Text>
-                  </VStack>
-                </CardBody>
-              </Card>
-            ))}
-          </SimpleGrid>
-        )}
-      </CardBody>
-    </Card>
-  );
-};
 
 const Page = () => {
   const pathname = usePathname();
@@ -278,11 +139,13 @@ const Page = () => {
     try {
       setAddingVideo(true);
       setMessage('');
+
+      const rawVideoUrl = videoUrl.split("?")[0]
       // Validate URL
       const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/(reel|p)\/[a-zA-Z0-9_-]+\/?$/;
       const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
 
-      if (!instagramReelRegex.test(videoUrl) && !tiktokVideoRegex.test(videoUrl)) {
+      if (!instagramReelRegex.test(rawVideoUrl) && !tiktokVideoRegex.test(rawVideoUrl)) {
         setMessage('Molimo vas unesite validan Instagram/TikTok video URL.');
         return;
       }
@@ -290,9 +153,9 @@ const Page = () => {
       let accountName = "";
       let video: IVideo | null = null;
 
-      if (videoUrl.includes('tiktok')) {
+      if (rawVideoUrl.includes('tiktok')) {
         accountName = videoUrl.split('/')[3].replace("@", '');
-        const videoId = videoUrl.split('/')[5];
+        const videoId = rawVideoUrl.split('/')[5];
 
         // Check if user owns account
         const accExists = await userAccountExists(discordUsername!, accountName, "TikTok");
@@ -302,7 +165,7 @@ const Page = () => {
         }
 
         // Check if video already exists
-        const videoExists = await accountVideoExists(discordUsername!, accountName, "TikTok", videoUrl);
+        const videoExists = await accountVideoExists(discordUsername!, accountName, "TikTok", rawVideoUrl);
         if (videoExists) {
           setMessage("Video je već dodat!");
           return;
@@ -322,8 +185,8 @@ const Page = () => {
         const responseJson = await response.json();
         video = responseJson.videoInfo as IVideo;
 
-      } else if (videoUrl.includes('instagram')) {
-        const videoId = videoUrl.split('/')[4];
+      } else if (rawVideoUrl.includes('instagram')) {
+        const videoId = rawVideoUrl.split('/')[4];
 
         // Fetch video info
         const response = await fetch('/api/campaign/video/get-info', {
@@ -331,7 +194,7 @@ const Page = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             platform: "Instagram",
-            videoUrl,
+            rawVideoUrl,
             api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
           })
         });
@@ -354,7 +217,7 @@ const Page = () => {
         }
 
         // Check if video already exists
-        const videoExists = await accountVideoExists(discordUsername!, accountName, "Instagram", videoUrl);
+        const videoExists = await accountVideoExists(discordUsername!, accountName, "Instagram", rawVideoUrl);
         if (videoExists) {
           setMessage("Video je već dodat!");
           return;
@@ -580,7 +443,7 @@ const Page = () => {
           </Card>
         </Flex>
 
-        <VideosCard userVideos={userVideos} videosLoading={videosLoading} />
+        <VideosSection userVideos={userVideos} videosLoading={videosLoading} />
       </VStack>
 
       <Modal isOpen={isOpen} onClose={onClose}>
