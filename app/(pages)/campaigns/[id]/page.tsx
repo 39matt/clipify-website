@@ -142,7 +142,7 @@ const Page = () => {
 
       const rawVideoUrl = videoUrl.split("?")[0]
       // Validate URL
-      const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/(reel|p)\/[a-zA-Z0-9_-]+\/?$/;
+      const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/(reels|p)\/[a-zA-Z0-9_-]+\/?$/;
       const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
 
       if (!instagramReelRegex.test(rawVideoUrl) && !tiktokVideoRegex.test(rawVideoUrl)) {
