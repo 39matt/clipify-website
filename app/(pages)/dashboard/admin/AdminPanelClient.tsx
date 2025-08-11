@@ -12,7 +12,7 @@ import {
   Td,
   Text,
   Spinner,
-  Center,
+  Center, Button, Flex,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -81,14 +81,27 @@ export default function AdminPanelClient() {
           </Thead>
           <Tbody>
             {campaigns.map((campaign, index) => (
-              <Tr key={index}   onClick={() => {
-                router.push(`/dashboard/admin/campaign/${campaign.id}`);
-              }}
+              <Tr key={index}
                   _hover={{ cursor: 'pointer' }}>
                 <Td>
                   <Text>
                     {campaign.influencer} - {campaign.activity}
                   </Text>
+
+                </Td>
+                <Td>
+                  <Flex justify="space-around" align="flex-end" w="100%">
+                    <Button
+                      onClick={() => {
+                        router.push(`/dashboard/admin/campaign/${campaign.id}`);
+                      }}>
+                      Svi</Button>
+                    <Button
+                      onClick={() => {
+                      router.push(`/dashboard/admin/campaign/${campaign.id}/unapproved`);
+                    }}>
+                      Neodobreni</Button>
+                  </Flex>
                 </Td>
                 {/*<Td>2</Td>*/}
               </Tr>

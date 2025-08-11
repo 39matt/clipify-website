@@ -17,9 +17,10 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { FiUser, FiActivity, FiDollarSign, FiTrendingUp } from 'react-icons/fi'
+import { FiUser, FiActivity, FiDollarSign, FiTrendingUp, FiTarget } from 'react-icons/fi'
 import { ICampaign } from '../../../app/lib/models/campaign'
 import { FaBurn } from 'react-icons/fa'
+import { TargetIcon } from 'lucide-react'
 
 interface CampaignCardProps {
   campaign: ICampaign
@@ -127,19 +128,19 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
             noOfLines={2}
             minH="48px" // Fixed height for consistency
           >
-            {campaign.activity}
+            {campaign.influencer}
           </Heading>
 
           {/* Influencer Info */}
           <HStack spacing={2}>
-            <Icon as={FiUser} color="green.500" />
+            <Icon as={TargetIcon} color="green.500" />
             <Text
               fontSize="sm"
               color={textColor}
               fontWeight="medium"
               noOfLines={1}
             >
-              {campaign.influencer}
+              {campaign.activity}
             </Text>
           </HStack>
 
@@ -149,7 +150,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
               <HStack spacing={1}>
                 <Icon as={FiTrendingUp} color="green.500" size="sm" />
                 <Text fontSize="xs" color={textColor} fontWeight="medium">
-                  Progress
+                  Napredak
                 </Text>
               </HStack>
               <Text fontSize="xs" color={textColor} fontWeight="bold">
@@ -170,7 +171,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
             <HStack spacing={1}>
               <Icon as={FiDollarSign} color="green.500" />
               <Text fontSize="sm" color={textColor} fontWeight="medium">
-                Budget
+                Budžet
               </Text>
             </HStack>
             <Text
@@ -201,7 +202,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
             router.push(`/campaigns/${campaign.id}`)
           }}
         >
-          View Details
+          Detalji
         </Button>
       </CardFooter>
     </Card>

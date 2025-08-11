@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import AdminCampaignPage from './AdminCampaignPage'
+import UnapprovedVideos from './UnapprovedVideosPage'
 
 export default async function AdminPage() {
   const cookieStore = cookies();
@@ -33,7 +33,7 @@ export default async function AdminPage() {
       redirect('/dashboard/profile');
     }
 
-    return <AdminCampaignPage idToken={authToken} />;
+    return <UnapprovedVideos idToken={authToken} />;
   } catch (error) {
     console.error('Error verifying admin status:', error);
     redirect('/dashboard/profile');

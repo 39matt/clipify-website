@@ -14,4 +14,5 @@ export interface IVideo {
   views: number;
   coverUrl: string;
   approved?: boolean;
+  isManual?: boolean;
 }

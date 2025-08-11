@@ -46,10 +46,8 @@ export async function POST(req: NextRequest) {
       approved: null // Set initial approval status
     };
 
-    // Add video to campaign videos collection
     const newVideoDocRef = await videoColRef.add(videoData);
 
-    // Add reference to user's videos collection
     const userVideoColRef = userAccountRef.collection("videos");
     await userVideoColRef.add({
       videoRef: newVideoDocRef,

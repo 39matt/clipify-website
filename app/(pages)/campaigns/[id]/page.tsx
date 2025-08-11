@@ -255,6 +255,7 @@ const Page = () => {
         });
 
         const responseJson = await response.json();
+        console.log(responseJson);
         video = responseJson.videoInfo;
 
         if (!video) {

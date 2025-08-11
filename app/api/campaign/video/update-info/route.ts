@@ -19,7 +19,7 @@ export async function PUT(req: NextRequest) {
 
     const {video, campaignId} = await req.json()
     if (!video) {
-      return NextResponse.json({message: 'Empty video!'}, {status: 400});
+      return NextResponse.json({message: 'Empty video!'}, {status: 200});
     }
 
     const snap = await adminDb.collection('campaigns')
