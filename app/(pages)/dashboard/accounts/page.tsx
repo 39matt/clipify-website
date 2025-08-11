@@ -79,7 +79,7 @@ const ConnectedAccounts: NextPage = () => {
 
   const handleAddAccount = async () => {
     try {
-      setMessage(''); // Clear previous messages
+      setMessage('');
 
       const instagramRegex = /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/;
       const tiktokRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/?$/;
@@ -92,18 +92,23 @@ const ConnectedAccounts: NextPage = () => {
       let username = '';
 
       if (accountLink.includes('tiktok')) {
-        // Handle TikTok URLs with or without @
         if (accountLink.includes('@')) {
-          username = accountLink.split('@')[1].replace('/', ''); // Remove trailing slash
+          username = accountLink.split('@')[1].replace('/', '');
         } else {
-          // Extract from URL path: https://tiktok.com/username
           const parts = accountLink.split('/');
           username = parts[parts.length - 1] || parts[parts.length - 2];
         }
+        if (await accountExists(username, "TikTok")) {
+          setMessage('Nalog se već koristi.');
+          return;
+        }
       } else {
-        // Handle Instagram URLs
-        const parts = accountLink.split('/').filter(part => part !== ''); // Remove empty parts
-        username = parts[parts.length - 1]; // Get the last non-empty part
+        const parts = accountLink.split('/').filter(part => part !== '');
+        username = parts[parts.length - 1];
+        if (await accountExists(username, "Instagram")) {
+          setMessage('Nalog se već koristi.');
+          return;
+        }
       }
 
       // Validate extracted username
@@ -114,11 +119,6 @@ const ConnectedAccounts: NextPage = () => {
 
       username = username.trim();
       console.log('Extracted username:', username);
-
-      if (await accountExists(username)) {
-        setMessage('Nalog se već koristi.');
-        return;
-      }
 
       const verification = await addVerification(discordUsername!, accountLink);
       setVerificationCode(verification.code);
