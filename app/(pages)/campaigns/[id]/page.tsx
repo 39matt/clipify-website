@@ -128,90 +128,134 @@ const Page = () => {
 
   const handleAddVideo = async () => {
     if (!videoUrl.trim()) {
-      setMessage('Molimo unesite URL videa.');
+      setMessage("Molimo unesite URL videa.");
       return;
     }
 
     try {
       setAddingVideo(true);
-      setMessage('');
+      setMessage("");
 
-      let rawVideoUrl = videoUrl
-      if(videoUrl.includes('?')) {
-        rawVideoUrl = videoUrl.split("?")[0]
-      }
-      // Validate URL
-      const instagramReelRegex = /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[a-zA-Z0-9_-]+\/?$/;
-      const tiktokVideoRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
+      // Remove query params
+      let rawVideoUrl = videoUrl.split("?")[0];
 
-      if (!instagramReelRegex.test(rawVideoUrl) && !tiktokVideoRegex.test(rawVideoUrl)) {
-        setMessage('Molimo vas unesite validan Instagram/TikTok video URL.');
+      // Regex patterns
+      const instagramReelRegex =
+        /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[a-zA-Z0-9_-]+\/?$/;
+      const tiktokDesktopRegex =
+        /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
+      const tiktokMobileRegex =
+        /^https:\/\/vm\.tiktok\.com\/[A-Za-z0-9]+\/?$/;
+
+      // Detect platform
+      let platform: string;
+      if (instagramReelRegex.test(rawVideoUrl)) {
+        platform = "Instagram";
+      } else if (
+        tiktokDesktopRegex.test(rawVideoUrl) ||
+        tiktokMobileRegex.test(rawVideoUrl)
+      ) {
+        platform = "TikTok";
+      } else {
+        setMessage("Molimo vas unesite validan Instagram/TikTok video URL.");
         return;
       }
 
-      let accountName = "";
-      let video: IVideo | null = null;
-
-      // check if video already exists
+      // Check if video already exists
       const params = new URLSearchParams({
         campaignId: campaignId!,
         videoLink: rawVideoUrl,
       });
-      console.log("radi?")
-      const res = await fetch(`/api/user/account/video-exists?${params.toString()}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!res.ok) {
-        throw new Error('Failed to validate video');
-      }
-      const data = await res.json();
-      if (data.exists) {
+
+      const existsRes = await fetch(
+        `/api/user/account/video-exists?${params.toString()}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (!existsRes.ok) throw new Error("Failed to validate video");
+
+      const existsData = await existsRes.json();
+      if (existsData.exists) {
         setMessage("Video je već dodat!");
         return;
       }
-      console.log("radi!")
 
-      if (rawVideoUrl.includes('tiktok')) {
-        accountName = videoUrl.split('/')[3].replace("@", '');
-        const videoId = rawVideoUrl.split('/')[5];
+      let accountName = "";
+      let videoId = "";
+      let video;
 
-        // Check if user owns account
-        const accExists = await userAccountExists(discordUsername!, accountName, "TikTok");
+      // TikTok handling
+      if (platform === "TikTok") {
+        let finalUrl = rawVideoUrl;
+
+        // If mobile link, follow redirect
+        if (tiktokMobileRegex.test(rawVideoUrl)) {
+          const res = await fetch(
+            `/api/resolve-tiktok?url=${encodeURIComponent(rawVideoUrl)}`
+          );
+          if (!res.ok) {
+            setMessage("Greška pri pribavljanju videa!");
+            return;
+          }
+          const data = await res.json();
+          finalUrl = data.finalUrl;
+        }
+
+        // Extract account name + video ID
+        const match = finalUrl.match(
+          /tiktok\.com\/@([^/]+)\/video\/(\d+)/
+        );
+        if (!match) {
+          setMessage("Greška pri pribavljanju videa!");
+          return;
+        }
+
+        accountName = match[1];
+        videoId = match[2];
+
+        // Check account ownership
+        const accExists = await userAccountExists(
+          discordUsername!,
+          accountName,
+          "TikTok"
+        );
         if (!accExists) {
           setMessage("Nalog mora biti vaš!");
           return;
         }
 
         // Fetch video info
-        const response = await fetch('/api/campaign/video/get-info', {
+        const response = await fetch("/api/campaign/video/get-info", {
           method: "PUT",
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             platform: "TikTok",
             videoId,
-            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
-          })
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+          }),
         });
 
         const responseJson = await response.json();
-        video = responseJson.videoInfo as IVideo;
-
+        video = responseJson.videoInfo;
       }
-      else if (rawVideoUrl.includes('instagram')) {
-        // Fetch video info
-        const response = await fetch('/api/campaign/video/get-info', {
+
+      // Instagram handling
+      if (platform === "Instagram") {
+        const response = await fetch("/api/campaign/video/get-info", {
           method: "PUT",
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             platform: "Instagram",
             videoUrl: rawVideoUrl,
-            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
-          })
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+          }),
         });
 
         const responseJson = await response.json();
-        video = responseJson.videoInfo as IVideo;
+        video = responseJson.videoInfo;
 
         if (!video) {
           setMessage("Greška pri pribavljanju videa!");
@@ -220,46 +264,56 @@ const Page = () => {
 
         accountName = video.accountName;
 
-        // Check if user owns account
-        const accExists = await userAccountExists(discordUsername!, accountName, "Instagram");
+        // Check account ownership
+        const accExists = await userAccountExists(
+          discordUsername!,
+          accountName,
+          "Instagram"
+        );
         if (!accExists) {
           setMessage("Nalog mora biti vaš!");
           return;
         }
       }
 
+      // Validate video age
       if (!video) {
         setMessage("Greška pri pribavljanju videa!");
         return;
       }
 
-      const createdAt = new Date(video?.createdAt!)
-      const currentTime = new Date()
-      if(currentTime.getTime() - createdAt.getTime() > videoAgeInHours * 60 * 60 * 1000) {
-        setMessage(`Video je stariji od ${videoAgeInHours}h`)
-        return
+      const createdAt = new Date(video.createdAt);
+      const currentTime = new Date();
+      if (
+        currentTime.getTime() - createdAt.getTime() >
+        videoAgeInHours * 60 * 60 * 1000
+      ) {
+        setMessage(`Video je stariji od ${videoAgeInHours}h`);
+        return;
       }
-      const response = await fetch('/api/campaign/video/add', {
+
+      // Add video to campaign
+      const addRes = await fetch("/api/campaign/video/add", {
         method: "POST",
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          video: video,
-          campaignId: campaignId,
+          video,
+          campaignId,
           accId: accountName,
           uid: discordUsername,
-        })
+        }),
       });
 
-      if (response.ok) {
-        setMessage('Video je uspešno dodat!');
-        setVideoUrl('');
+      if (addRes.ok) {
+        setMessage("Video je uspešno dodat!");
+        setVideoUrl("");
 
-        // Refresh videos from server instead of just adding to local state
+        // Refresh videos
         const videosResponse = await fetch(
           `/api/campaign/get-user-videos?campaignId=${campaignId}&userId=${discordUsername}`,
           {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
           }
         );
 
@@ -270,13 +324,12 @@ const Page = () => {
         }
       }
     } catch (error) {
-      console.error('Error adding video:', error);
-      setMessage('Došlo je do greške prilikom dodavanja videa.');
+      console.error("Error adding video:", error);
+      setMessage("Došlo je do greške prilikom dodavanja videa.");
     } finally {
       setAddingVideo(false);
     }
   };
-
   if (loading) {
     return (
       <Center minH="100vh" flex={1} flexDirection="column">
