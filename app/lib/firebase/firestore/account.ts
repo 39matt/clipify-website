@@ -77,12 +77,17 @@ export async function addAccount(uid: string, account: IAccount) {
   }
 }
 
-export async function accountExists(username: string) {
+export async function accountExists(username: string, platform: string): Promise<boolean> {
   try {
     const accountRef = doc(db, 'accounts', username);
     const accountDoc = await getDoc(accountRef);
 
-    return accountDoc.exists();
+    if(accountDoc.exists()) {
+      if(accountDoc.data()["platform"] === platform) {
+        return true;
+      }
+    }
+    return false;
   } catch (error) {
     console.error('Error checking if account exists:', error);
     throw new Error('Failed to check if account exists');
