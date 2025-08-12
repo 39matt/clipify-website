@@ -7,7 +7,7 @@ import { IVideo } from '../../../../../lib/models/video';
 import {
   Alert,
   AlertIcon,
-  Box,
+  Box, Button,
   Center,
   Divider,
   Heading, SimpleGrid,
@@ -74,7 +74,8 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           duration: 3000, // milliseconds
           isClosable: true,
           position: 'top-right', // "top", "top-right", "bottom-left", etc.
-        });        return;
+        });
+        return;
       }
       toast({
         title: 'Video deleted.',
@@ -122,11 +123,88 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
     );
   }
 
+  const handleUpdateViews = async () => {
+    try {
+      const updatedVideos:IVideo[] = [];
+      for (const video of videos || []) {
+        const getVideoResponse = await fetch('/api/campaign/video/get-info',
+          {
+            method: "PUT",
+            body: JSON.stringify({
+              platform:video.link.includes("instagram") ? "Instagram" : "TikTok",
+              videoId: video.link.split('/')[5],
+              videoUrl: video.link,
+              api_key:process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
+            })
+          }
+        );
+        if (getVideoResponse.status !== 200) {
+          console.error('Error getting video info');
+          setError("Error getting video info (update info)");
+          return
+        }
+        const getVideoResponseJson = await getVideoResponse.json();
+        const newVideo = getVideoResponseJson['videoInfo'] as IVideo;
+
+        console.log("New video:", newVideo);
+        if(!newVideo || !newVideo.accountName) {
+          continue
+        }
+        const updateVideoResponse = await fetch('/api/campaign/video/update-info', {method: 'PUT',
+          headers: { 'Content-Type': 'application/json',
+            'Authorization': `Bearer ${idToken}`
+          },
+          body: JSON.stringify({video:newVideo, campaignId}) });
+        if(updateVideoResponse.status !== 200) {
+          console.error('Error updating video');
+          setError("Error updating video info (update info)");
+          return
+        }
+        const matchingVideo = videos?.find((vid) =>  vid.link === newVideo.link );
+        if (matchingVideo) {
+          newVideo.userAccountRef = matchingVideo.userAccountRef;
+          newVideo.uid = matchingVideo.uid;
+          newVideo.id = matchingVideo.id;
+        }
+        updatedVideos.push(newVideo);
+      }
+
+      const response = await fetch('/api/campaign/calculate-progress', {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          campaignId: campaignId,
+        }),
+      })
+      console.log(response)
+      setVideos(updatedVideos);
+      toast({
+        title: 'Success!',
+        description: 'Successfully updated video views.',
+        status: 'success', // "success" | "error" | "warning" | "info"
+        duration: 3000, // milliseconds
+        isClosable: true,
+        position: 'top-right', // "top", "top-right", "bottom-left", etc.
+      });
+    } catch(error) {
+      console.error(error);
+      toast({
+        title: 'Error!',
+        description: 'Error while updating video views.',
+        status: 'error', // "success" | "error" | "warning" | "info"
+        duration: 3000, // milliseconds
+        isClosable: true,
+        position: 'top-right', // "top", "top-right", "bottom-left", etc.
+      });    }
+  }
+
   return (
     <VStack spacing={6} width="90%" mx="auto" py={6}>
       <Heading textAlign="center" color="green.400">
         {campaign.influencer} - {campaign.activity}
       </Heading>
+
+      <Button colorScheme={"green"} ml={"auto"} size={"lg"} onClick={handleUpdateViews}>Update views</Button>
 
       <Divider />
 

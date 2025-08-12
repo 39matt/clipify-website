@@ -158,6 +158,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
     }
   };
 
+
   return (
     <VStack spacing={8} width={'90%'} mx="auto">
       <Box my={{ base: 4, md: 8 }}>
@@ -182,7 +183,6 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
           {error}
         </Alert>
       )}
-
       <Divider />
 
       {filteredGroupedVideos.length === 0 ? (
