@@ -1,13 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { IAccount } from '../../../../lib/models/account'
-import { removeVerification } from '../remove/route'
+import { adminDb } from '../../../../lib/firebase/firebaseAdmin'
 
-export async function verifyVerification(
-  uid: string,
-  verification: IVerification,
-  api_key: string
-) {
+export async function POST(req: NextRequest) {
   try {
+    const body = await req.json();
+    const { uid, verification, api_key } = body;
+
+    if (!uid || !verification) {
+      return NextResponse.json(
+        { message: 'UID and verification are mandatory!' },
+        { status: 400 }
+      );
+    }
+
+    if (!api_key) {
+      return NextResponse.json(
+        { message: 'Missing RapidAPI key' },
+        { status: 400 }
+      );
+    }
+
     const url =
       verification.platform === 'Instagram'
         ? `https://instagram-looter2.p.rapidapi.com/profile?username=${verification.username}`
@@ -27,7 +40,6 @@ export async function verifyVerification(
     const parsedBody = await response.json();
 
     let bio: string | null = null;
-
     if (verification.platform === 'Instagram') {
       bio = parsedBody.biography || null;
     } else if (verification.platform === 'TikTok') {
@@ -42,71 +54,44 @@ export async function verifyVerification(
           verification.platform === 'Instagram'
             ? `https://www.instagram.com/${verification.username}`
             : `https://www.tiktok.com/@${verification.username}`,
-
       };
 
-      await removeVerification(uid);
+      const verificationsRef = adminDb
+        .collection('users')
+        .doc(uid)
+        .collection('verifications');
 
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+      const snapshot = await verificationsRef.get();
+      const batch = adminDb.batch();
+      snapshot.forEach((doc) => batch.delete(doc.ref));
+      await batch.commit();
 
-      await fetch(`${baseUrl}/api/user/account/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          uid,
-          account,
-        }),
-      });
+      const userAccountRef = adminDb
+        .collection('users')
+        .doc(uid)
+        .collection('accounts')
+        .doc(account.username);
+      await userAccountRef.set(account);
 
-      return { success: true, account };
+      const globalAccountRef = adminDb
+        .collection('accounts')
+        .doc(account.username);
+      await globalAccountRef.set(account);
+
+      return NextResponse.json(
+        { success: true, account, message: 'Verification successful' },
+        { status: 200 }
+      );
     } else {
-      return { success: false };
+      return NextResponse.json(
+        { success: false, message: 'Verification code not found in bio' },
+        { status: 400 }
+      );
     }
   } catch (error) {
-    console.error('Error verifying verification:', error);
-    throw new Error('Verification failed!');
-  }
-}
-
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const { uid, verification, api_key } = body;
-
-    if (!uid || !verification) {
-      return NextResponse.json(
-        { message: 'UID and verification are mandatory!' },
-        { status: 400 }
-      );
-    }
-
-    if (!api_key) {
-      return NextResponse.json(
-        { message: 'Missing RapidAPI key in environment variables' },
-        { status: 400 }
-      );
-    }
-
-    const result = await verifyVerification(uid, verification, api_key);
-
+    console.error('Error verifying account:', error);
     return NextResponse.json(
-      {
-        result,
-      },
-      { status: 200 }
-    );
-  } catch (err) {
-    console.error('Error verifying account:', err);
-
-    return NextResponse.json(
-      {
-        error:
-          err instanceof Error
-            ? err.message
-            : 'Failed to verify account due to unknown error',
-      },
+      { error: 'Verification failed!' },
       { status: 500 }
     );
   }

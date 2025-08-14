@@ -1,53 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '../../../../lib/firebase/firebaseAdmin'
-
-async function verificationExists(uid: string): Promise<IVerification | undefined> {
-  if (!uid || uid.trim() === '') {
-    console.error('Invalid UID provided to verificationExists:', uid);
-    throw new Error('UID is required and must be a non-empty string');
-  }
-
-  try {
-    const cleanUid = uid.trim();
-    console.log('Checking verification for UID:', cleanUid);
-
-    const verificationColRef = adminDb
-      .collection('users')
-      .doc(cleanUid)
-      .collection('verifications');
-
-    const querySnapshot = await verificationColRef.get();
-
-    if (!querySnapshot.empty) {
-      return querySnapshot.docs[0].data() as IVerification;
-    }
-
-    return undefined;
-  } catch (error) {
-    console.error('Error checking verification existence:', error);
-    throw new Error('Failed to check verification existence');
-  }
-}
+import { adminDb } from '../../../../lib/firebase/firebaseAdmin';
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const uid = searchParams.get('uid');
 
-    if (!uid) {
+    if (!uid || uid.trim() === '') {
       return NextResponse.json(
         { message: 'UID is mandatory!' },
         { status: 400 }
       );
     }
 
-    const verification = await verificationExists(uid);
+    const verificationColRef = adminDb
+      .collection('users')
+      .doc(uid.trim())
+      .collection('verifications');
+
+    const querySnapshot = await verificationColRef.get();
+
+    if (!querySnapshot.empty) {
+      const verification = querySnapshot.docs[0].data() as IVerification;
+      return NextResponse.json(
+        {
+          status: 200,
+          exists: true,
+          verification,
+        },
+        { status: 200 }
+      );
+    }
 
     return NextResponse.json(
       {
         status: 200,
-        exists: !!verification,
-        verification: verification || null,
+        exists: false,
+        verification: null,
       },
       { status: 200 }
     );

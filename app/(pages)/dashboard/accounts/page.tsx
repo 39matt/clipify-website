@@ -180,7 +180,7 @@ const ConnectedAccounts: NextPage = () => {
       })
       // await verifyVerification(discordUsername!, verification, process.env.NEXT_PUBLIC_RAPIDAPI_KEY!);
       const responseJson = await response.json();
-      if(responseJson.result.success) {
+      if(responseJson.success) {
         setMessage('Nalog je uspešno verifikovan!');
         const updatedAccounts = await getAllAccounts(discordUsername!);
         setAccounts(updatedAccounts);

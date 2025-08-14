@@ -1,34 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '../../../../lib/firebase/firebaseAdmin'
 
-
-export async function removeVerification(uid: string): Promise<void> {
-  if (!uid || uid.trim() === '') {
-    throw new Error('UID is required and must be a non-empty string');
-  }
-
-  const cleanUid = uid.trim();
-  const verificationsRef = adminDb
-    .collection('users')
-    .doc(cleanUid)
-    .collection('verifications');
-
-  const snapshot = await verificationsRef.get();
-
-  if (snapshot.empty) {
-    console.log(`No verifications found for UID: ${cleanUid}`);
-    return;
-  }
-
-  const batch = adminDb.batch();
-  snapshot.forEach((doc) => {
-    batch.delete(doc.ref);
-  });
-
-  await batch.commit();
-  console.log(`Removed all verifications for UID: ${cleanUid}`);
-}
-
 export async function DELETE(req: NextRequest) {
   try {
     const body = await req.json();
@@ -41,24 +13,43 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    await removeVerification(uid);
+    if (!uid || uid.trim() === '') {
+      return NextResponse.json(
+        { message: 'UID is required and must be a non-empty string' },
+        { status: 400 }
+      );
+    }
+
+    const cleanUid = uid.trim();
+    const verificationsRef = adminDb
+      .collection('users')
+      .doc(cleanUid)
+      .collection('verifications')
+
+    const snapshot = await verificationsRef.get();
+
+    if (snapshot.empty) {
+      console.log(`No verification found for UID: ${cleanUid}`);
+      return;
+    }
+
+    await snapshot.docs[0].ref.delete();
 
     return NextResponse.json(
       {
-        status: 200,
-        message: 'All verifications removed successfully!',
+        message: 'Verification removed successfully!',
       },
       { status: 200 }
     );
   } catch (err) {
-    console.error('Error removing verifications:', err);
+    console.error('Error removing verification:', err);
 
     return NextResponse.json(
       {
         error:
           err instanceof Error
             ? err.message
-            : 'Failed to remove verifications due to unknown error',
+            : 'Failed to remove verification due to unknown error',
       },
       { status: 500 }
     );
