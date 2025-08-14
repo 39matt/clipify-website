@@ -62,20 +62,20 @@ export async function getAccount(uid: string, accId: string): Promise<IAccount> 
 //   }
 // }
 
-export async function addAccount(uid: string, account: IAccount) {
-  try {
-    const userAccountRef = doc(collection(doc(db, 'users', uid), 'accounts'), account.username);
-    await setDoc(userAccountRef, account);
-
-    const globalAccountRef = doc(db, 'accounts', account.username);
-    await setDoc(globalAccountRef, account);
-
-    console.log('Account added successfully');
-  } catch (error) {
-    console.error('Error adding account:', error);
-    throw new Error('Failed to add account');
-  }
-}
+// export async function addAccount(uid: string, account: IAccount) {
+//   try {
+//     const userAccountRef = doc(collection(doc(db, 'users', uid), 'accounts'), account.username);
+//     await setDoc(userAccountRef, account);
+//
+//     const globalAccountRef = doc(db, 'accounts', account.username);
+//     await setDoc(globalAccountRef, account);
+//
+//     console.log('Account added successfully');
+//   } catch (error) {
+//     console.error('Error adding account:', error);
+//     throw new Error('Failed to add account');
+//   }
+// }
 
 export async function accountExists(username: string, platform: string): Promise<boolean> {
   try {
