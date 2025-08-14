@@ -30,7 +30,8 @@ const Campaigns: NextPage = () => {
     const getCampaigns = async () => {
       try {
         const response = await fetch('/api/campaign/get-all', {
-          method:"GET"
+          method:"GET",
+          cache: 'no-store',
         })
         const campaigns = await response.json() as ICampaign[]
         setCampaignList(campaigns)

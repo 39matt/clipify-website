@@ -42,18 +42,17 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
   }
 
   const getProgressColor = (progress: number) => {
-    if (progress >= 80) return 'green'
+    if (progress >= 80) return 'red'
     if (progress >= 50) return 'yellow'
-    return 'red'
+    return 'green'
   }
 
-  // Round progress to 2 decimal places
   const roundedProgress = Math.round(campaign.progress * 100) / 100
 
   return (
     <Card
-      w="320px" // Fixed width
-      h="480px" // Fixed height
+      w="320px"
+      h="480px"
       bg={cardBg}
       borderWidth="1px"
       borderColor={borderColor}
