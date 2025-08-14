@@ -1,80 +1,69 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '../../../../lib/firebase/firebaseAdmin'
-
-async function addVerification(
-  uid: string,
-  accountLink: string
-): Promise<IVerification> {
-  if (!uid || uid.trim() === '') {
-    throw new Error('UID is required and must be a non-empty string');
-  }
-
-  if (
-    !accountLink ||
-    accountLink.trim() === ''
-  ) {
-    throw new Error('Account link is required and must be a non-empty string');
-  }
-
-  const cleanUid = uid.trim();
-  const cleanAccountLink = accountLink.trim();
-
-  console.log(
-    'Adding verification for UID:',
-    cleanUid,
-    'Link:',
-    cleanAccountLink
-  );
-
-  let username = '';
-  let platform: 'Instagram' | 'TikTok' = 'Instagram';
-
-  if (cleanAccountLink.toLowerCase().includes('tiktok')) {
-    platform = 'TikTok';
-    if (cleanAccountLink.includes('@')) {
-      username = cleanAccountLink.split('@')[1].split('/')[0];
-    } else {
-      const parts = cleanAccountLink.split('/').filter((part) => part !== '');
-      username = parts[parts.length - 1];
-    }
-  } else {
-    const parts = cleanAccountLink.split('/').filter((part) => part !== '');
-    username = parts[parts.length - 1];
-  }
-
-  if (!username || username.trim() === '') {
-    throw new Error('Could not extract username from account link');
-  }
-
-  const verification: IVerification = {
-    platform,
-    username: username.trim(),
-    code: Math.floor(100000 + Math.random() * 900000),
-  };
-
-  await adminDb
-    .collection('users')
-    .doc(cleanUid)
-    .collection('verifications')
-    .add(verification);
-
-  return verification;
-}
-
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { uid, accountLink } = body;
 
-    if (!uid || !accountLink) {
+    if (!uid || uid.trim() === '') {
       return NextResponse.json(
-        { message: 'UID and accountLink are mandatory!' },
+        { message: 'UID is required and must be a non-empty string' },
         { status: 400 }
       );
     }
 
-    const verification = await addVerification(uid, accountLink);
+    if (!accountLink || accountLink.trim() === '') {
+      return NextResponse.json(
+        { message: 'Account link is required and must be a non-empty string' },
+        { status: 400 }
+      );
+    }
+
+    const cleanUid = uid.trim();
+    const cleanAccountLink = accountLink.trim();
+
+    console.log(
+      'Adding verification for UID:',
+      cleanUid,
+      'Link:',
+      cleanAccountLink
+    );
+
+    let username = '';
+    let platform: 'Instagram' | 'TikTok' = 'Instagram';
+
+    if (cleanAccountLink.toLowerCase().includes('tiktok')) {
+      platform = 'TikTok';
+      if (cleanAccountLink.includes('@')) {
+        username = cleanAccountLink.split('@')[1].split('/')[0];
+      } else {
+        const parts = cleanAccountLink.split('/').filter((part) => part !== '');
+        username = parts[parts.length - 1];
+      }
+    } else {
+      const parts = cleanAccountLink.split('/').filter((part) => part !== '');
+      username = parts[parts.length - 1];
+    }
+
+    if (!username || username.trim() === '') {
+      return NextResponse.json(
+        { message: 'Could not extract username from account link' },
+        { status: 400 }
+      );
+    }
+
+    const verification: IVerification = {
+      platform,
+      username: username.trim(),
+      code: Math.floor(100000 + Math.random() * 900000),
+    };
+
+    await adminDb
+      .collection('users')
+      .doc(cleanUid)
+      .collection('verifications')
+      .add(verification);
 
     return NextResponse.json(
       {
