@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
     const globalAccountRef = adminDb
       .collection('accounts')
-      .doc(account.username);
+      .doc(`${account.username}_${account.platform}`);
 
     await globalAccountRef.set(account);
 

@@ -70,12 +70,12 @@ export async function POST(req: NextRequest) {
         .collection('users')
         .doc(uid)
         .collection('accounts')
-        .doc(account.username);
+        .doc(`${account.username}_${account.platform}`);
       await userAccountRef.set(account);
 
       const globalAccountRef = adminDb
         .collection('accounts')
-        .doc(account.username);
+        .doc(`${account.username}_${account.platform}`);
       await globalAccountRef.set(account);
 
       return NextResponse.json(
