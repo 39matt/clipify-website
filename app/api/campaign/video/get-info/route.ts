@@ -1,12 +1,15 @@
-import { IVideo } from '../../../../lib/models/video'
-import { NextRequest, NextResponse } from 'next/server'
+import { IVideo } from '../../../../lib/models/video';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function PUT(req: NextRequest) {
   try {
-    const {platform, api_key, videoUrl, videoId} = await req.json();
-    const url = platform === 'Instagram'
+    const { platform, api_key, videoUrl, videoId } = await req.json();
+
+    const url =
+      platform === 'Instagram'
         ? `https://instagram-looter2.p.rapidapi.com/post?url=${videoUrl}`
         : `https://tiktok-api23.p.rapidapi.com/api/post/detail?videoId=${videoId}`;
+
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -17,34 +20,56 @@ export async function PUT(req: NextRequest) {
             : 'tiktok-api23.p.rapidapi.com',
       },
     });
-    const parsedBody = await response.json();
 
-      let videoInfo: IVideo | null = null;
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('API Error Response:', errorText);
+      return NextResponse.json(
+        { error: 'Failed to fetch video info', details: errorText },
+        { status: response.status }
+      );
+    }
 
-      if (platform === 'Instagram') {
-        const instagramData = parsedBody;
+    let parsedBody: any;
+    try {
+      parsedBody = await response.json();
+    } catch (err) {
+      const rawText = await response.text();
+      console.error('Non-JSON response:', rawText);
+      return NextResponse.json(
+        { error: 'Invalid JSON from API', raw: rawText },
+        { status: 500 }
+      );
+    }
 
-        videoInfo = {
-          comments: instagramData.edge_media_to_parent_comment?.count || 0,
-          createdAt: new Date(instagramData.taken_at_timestamp * 1000).toISOString(),
-          likes: instagramData.edge_media_preview_like?.count || 0,
-          link: `https://www.instagram.com/p/${instagramData.shortcode}/`,
-          name: instagramData.edge_media_to_caption?.edges[0]?.node?.text || '',
-          accountName: instagramData.owner?.username || '',
-          shares: 0,
-          views: instagramData.video_play_count || 0,
-          coverUrl: instagramData.thumbnail_src || '',
-        };
-        return NextResponse.json({ message: 'Successfully get video info.', videoInfo }, { status: 200 });
+    let videoInfo: IVideo | null = null;
 
-      } else if (platform === 'TikTok') {
-        if(parsedBody.statusCode === 0) {
+    if (platform === 'Instagram') {
+      const instagramData = parsedBody;
 
-          const tiktokData = parsedBody.itemInfo.itemStruct;
+      videoInfo = {
+        comments: instagramData.edge_media_to_parent_comment?.count || 0,
+        createdAt: new Date(
+          instagramData.taken_at_timestamp * 1000
+        ).toISOString(),
+        likes: instagramData.edge_media_preview_like?.count || 0,
+        link: `https://www.instagram.com/p/${instagramData.shortcode}/`,
+        name:
+          instagramData.edge_media_to_caption?.edges[0]?.node?.text || '',
+        accountName: instagramData.owner?.username || '',
+        shares: 0,
+        views: instagramData.video_play_count || 0,
+        coverUrl: instagramData.thumbnail_src || '',
+      };
+    } else if (platform === 'TikTok') {
+      if (parsedBody.statusCode === 0) {
+        const tiktokData = parsedBody.itemInfo.itemStruct;
 
         videoInfo = {
           comments: tiktokData.stats?.commentCount || 0,
-          createdAt: new Date(parseInt(tiktokData.createTime) * 1000).toISOString(),
+          createdAt: new Date(
+            parseInt(tiktokData.createTime) * 1000
+          ).toISOString(),
           likes: tiktokData.stats?.diggCount || 0,
           link: `https://www.tiktok.com/@${tiktokData.author?.uniqueId}/video/${tiktokData.id}`,
           name: tiktokData.desc || '',
@@ -53,16 +78,23 @@ export async function PUT(req: NextRequest) {
           views: tiktokData.stats?.playCount || 0,
           coverUrl: tiktokData.video.cover || '',
         };
-          return NextResponse.json({ message: 'Successfully get video info.', videoInfo }, { status: 200 });
-
-        }
-        return NextResponse.json({ message: 'Unable to fetch video.' }, { status: 200 });
-
+      } else {
+        return NextResponse.json(
+          { message: 'Unable to fetch video.' },
+          { status: 200 }
+        );
       }
+    }
 
-
+    return NextResponse.json(
+      { message: 'Successfully got video info.', videoInfo },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error getting video info:', error);
-    return NextResponse.json({ error: "Error getting video info" }, {status: 500});
+    return NextResponse.json(
+      { error: 'Error getting video info' },
+      { status: 500 }
+    );
   }
 }

@@ -139,14 +139,19 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           }
         );
         if (getVideoResponse.status !== 200) {
-          console.error('Error getting video info');
-          setError("Error getting video info (update info)");
-          return
+          toast({
+            title: 'Error!',
+            description: `Error getting video info for \n${video.name}`,
+            status: 'error', // "success" | "error" | "warning" | "info"
+            duration: 3000, // milliseconds
+            isClosable: true,
+            position: 'top-right', // "top", "top-right", "bottom-left", etc.
+          });
+          continue;
         }
         const getVideoResponseJson = await getVideoResponse.json();
         const newVideo = getVideoResponseJson['videoInfo'] as IVideo;
 
-        console.log("New video:", newVideo);
         if(!newVideo || !newVideo.accountName) {
           continue
         }
@@ -157,8 +162,7 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           body: JSON.stringify({video:newVideo, campaignId}) });
         if(updateVideoResponse.status !== 200) {
           console.error('Error updating video');
-          setError("Error updating video info (update info)");
-          return
+          continue
         }
         const matchingVideo = videos?.find((vid) =>  vid.link === newVideo.link );
         if (matchingVideo) {
@@ -167,6 +171,14 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           newVideo.id = matchingVideo.id;
         }
         updatedVideos.push(newVideo);
+        toast({
+          title: 'Success!',
+          description: `Successfully updated video views for \n${video.name}`,
+          status: 'success', // "success" | "error" | "warning" | "info"
+          duration: 3000, // milliseconds
+          isClosable: true,
+          position: 'top-right', // "top", "top-right", "bottom-left", etc.
+        });
       }
 
       const response = await fetch('/api/campaign/calculate-progress', {
@@ -178,14 +190,6 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       })
       console.log(response)
       setVideos(updatedVideos);
-      toast({
-        title: 'Success!',
-        description: 'Successfully updated video views.',
-        status: 'success', // "success" | "error" | "warning" | "info"
-        duration: 3000, // milliseconds
-        isClosable: true,
-        position: 'top-right', // "top", "top-right", "bottom-left", etc.
-      });
     } catch(error) {
       console.error(error);
       toast({
