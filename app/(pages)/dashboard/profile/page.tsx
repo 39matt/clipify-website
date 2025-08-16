@@ -22,10 +22,12 @@ import ChangePasswordCard from '#components/app/ChangePasswordCard/ChangePasswor
 import { BoxFeature, BoxFeatures } from '#components/home-page/features/box-features';
 import { FeatureProps } from '#components/home-page/features';
 import { isUserLinked } from '../../../lib/firebase/firestore/user'
+import { IUser } from '../../../lib/models/user'
 
 const Profile: NextPage = () => {
   const [linked, setLinked] = useState<boolean | null>(null);
   const [checkingLinked, setCheckingLinked] = useState(false);
+  const [userInfo, setUserInfo] = useState<IUser | null>(null)
   const { user, loading, discordUsername } = useLayoutContext();
 
   useEffect(() => {
@@ -35,6 +37,14 @@ const Profile: NextPage = () => {
       if (discordUsername) {
         const isLinked = await isUserLinked(discordUsername);
         setLinked(isLinked);
+
+        const response = await fetch(`/api/user/get?uid=${discordUsername}`, {
+          method:"GET"
+        })
+        if(response.ok) {
+          const responseJson = await response.json();
+          setUserInfo(responseJson["user"]);
+        }
       } else {
         setLinked(false); // explicitly mark as not linked
       }
@@ -234,7 +244,7 @@ const Profile: NextPage = () => {
           flexDirection={{ base: 'column', md: 'row' }}
           spacing={{ base: 4, md: 8 }}
         >
-          <EditPaymentInfoCard discordUsername={discordUsername} />
+          <EditPaymentInfoCard discordUsername={discordUsername} userInfo={userInfo} />
           <ChangePasswordCard user={user} />
         </HStack>
       </VStack>

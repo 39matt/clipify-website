@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import {
   Editable,
   EditableInput,
@@ -17,16 +17,24 @@ import {
 } from '@chakra-ui/react'
 import { Property, PropertyList } from '@saas-ui/core';
 import { Select, SelectButton, SelectList } from '@saas-ui/react';
+import { IUser } from '../../../app/lib/models/user'
 
 interface EditPaymentInfoCardProps {
   discordUsername: string | null;
+  userInfo: IUser | null;
 }
 
-const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUsername }) => {
+const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUsername, userInfo }) => {
   const [walletAddress, setWalletAddress] = useState('Enter wallet address');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (userInfo?.walletAddress) {
+      setWalletAddress(userInfo.walletAddress);
+    }
+  }, [userInfo]);
 
   const validateWalletAddress = (address: string): boolean => {
     const ethereumAddressRegex = /^0x[a-fA-F0-9]{40}$/;
@@ -115,18 +123,22 @@ const EditPaymentInfoCard: React.FC<EditPaymentInfoCardProps> = ({ discordUserna
               }
               value={
                 <Editable
-                  defaultValue={walletAddress}
+                  value={walletAddress}
                   onChange={(value) => setWalletAddress(value)}
                   isTruncated
                 >
                   <EditablePreview
-                    display="flex"
-                    alignItems="center"
+                    whiteSpace="pre-wrap"
+                    wordBreak="break-all"
                     px="3"
                     fontSize="sm"
-                    w="100%" // Ensures it doesn't overflow
+                    w="100%"
                     minH="8"
-                    _hover={{ bg: 'gray.100', borderRadius: 'md', cursor: 'pointer' }}
+                    _hover={{
+                      bg: 'gray.100',
+                      borderRadius: 'md',
+                      cursor: 'pointer',
+                    }}
                     _dark={{
                       _hover: {
                         bg: 'whiteAlpha.100',

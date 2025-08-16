@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { email, discordUsername } = body
 
-    // Better validation with specific error messages
     if (!email) {
       return NextResponse.json(
         { error: "Email is required" },
