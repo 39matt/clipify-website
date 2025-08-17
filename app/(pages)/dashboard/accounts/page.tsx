@@ -26,8 +26,16 @@ const ConnectedAccounts: NextPage = () => {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const accounts = await getAllAccounts(discordUsername!);
-        setAccounts(accounts);
+        if(discordUsername) {
+          const response = await fetch(`/api/user/account/get-all?uid=${discordUsername}`, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'},
+          })
+          if(response.ok){
+            const accounts = await response.json() as IAccount[];
+            setAccounts(accounts);
+          }
+        }
       } catch (error) {
         console.error('Error fetching accounts:', error);
       }
@@ -66,7 +74,10 @@ const ConnectedAccounts: NextPage = () => {
   const handleAddAccount = async () => {
     try {
       setMessage('');
-
+      if(accounts.length > 5) {
+        setMessage("Možeš imati maksimalno 3 Instagram i 3 TikTok naloga")
+        return
+      }
       const instagramRegex = /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/;
       const tiktokRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/?$/;
 
@@ -78,6 +89,10 @@ const ConnectedAccounts: NextPage = () => {
       let username = '';
 
       if (accountLink.includes('tiktok')) {
+        if(accounts.filter(acc => acc.platform === 'TikTok').length > 2) {
+          setMessage("Možeš imati maksimalno 3 TikTok naloga")
+          return
+        }
         if (accountLink.includes('@')) {
           username = accountLink.split('@')[1].replace('/', '');
         } else {
@@ -89,6 +104,10 @@ const ConnectedAccounts: NextPage = () => {
           return;
         }
       } else {
+        if(accounts.filter(acc => acc.platform === 'Instagram').length > 2) {
+          setMessage("Možeš imati maksimalno 3 Instagram naloga")
+          return
+        }
         const parts = accountLink.split('/').filter(part => part !== '');
         username = parts[parts.length - 1];
         if (await accountExists(username, "Instagram")) {
