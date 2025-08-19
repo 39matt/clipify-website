@@ -125,10 +125,9 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
       }
     >
       <Flex
-          ml={{ base: 0, md: '250px' }}
+          ml={{ base: 0, md: '280px' }}
           justify="center"
           align="center"
-          p={6}
       >
           {children}
       </Flex>

@@ -64,9 +64,9 @@ const Campaigns: NextPage = () => {
   }
 
   return (
-    <Box minH="100vh" bgGradient={bgGradient}>
-      <Container maxW="container.xl" py={{ base: 6, md: 12 }}>
-        <VStack spacing={{ base: 8, md: 12 }}>
+    <Box minH="100vh" minW="full" >
+      <Box minW="full" py={{ base: 6, md: 12 }}>
+        <VStack minW="full" spacing={{ base: 8, md: 12 }}>
           {/* Header Section */}
           <Box textAlign="center" maxW="2xl">
             <Heading
@@ -91,30 +91,35 @@ const Campaigns: NextPage = () => {
 
           {/* Campaigns Grid */}
           {campaignList && campaignList.length > 0 ? (
-            <Grid
-              templateColumns={{
-                base: '1fr',
-                md: 'repeat(2, 1fr)',
-                lg: 'repeat(3, 1fr)',
-                xl: 'repeat(4, 1fr)',
-              }}
-              gap={{ base: 6, md: 8 }}
-              w="full"
-            >
-              {campaignList.map((campaign, index) => (
-                <Box
-                  key={campaign.id || index}
-                  transform="scale(1)"
-                  transition="all 0.2s ease-in-out"
-                  _hover={{
-                    transform: 'translateY(-4px)',
-                    shadow: 'xl',
-                  }}
-                >
-                  <CampaignCard campaign={campaign} router={router} />
-                </Box>
-              ))}
-            </Grid>
+            <Box w="full" display="flex" justifyContent="center">
+              <Grid
+                templateColumns={{
+                  base: '1fr',
+                  md: 'repeat(2, 1fr)',
+                  lg: 'repeat(3, 1fr)',
+                  xl: 'repeat(4, 1fr)',
+                }}
+                gap={{ base: 6, md: 8 }}
+                w="full"
+                maxW="1200px"
+                display="flex"
+                justifyContent="center"
+              >
+                {campaignList.map((campaign, index) => (
+                  <Box
+                    key={campaign.id || index}
+                    transform="scale(1)"
+                    transition="all 0.2s ease-in-out"
+                    _hover={{
+                      transform: 'translateY(-4px)',
+                      shadow: 'xl',
+                    }}
+                  >
+                    <CampaignCard campaign={campaign} router={router} />
+                  </Box>
+                ))}
+              </Grid>
+            </Box>
           ) : (
             <VStack spacing={4} py={12}>
               <Text fontSize="xl" color="gray.500" textAlign="center">
@@ -126,7 +131,7 @@ const Campaigns: NextPage = () => {
             </VStack>
           )}
         </VStack>
-      </Container>
+      </Box>
     </Box>
   )
 }
