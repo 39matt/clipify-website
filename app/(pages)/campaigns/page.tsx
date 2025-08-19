@@ -29,9 +29,14 @@ const Campaigns: NextPage = () => {
   useEffect(() => {
     const getCampaigns = async () => {
       try {
-        const response = await fetch('/api/campaign/get-all', {
+        const timestamp = Date.now()
+        const response = await fetch(`/api/campaign/get-all?t=${timestamp}`, {
           method:"GET",
           cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
         })
         const campaigns = await response.json() as ICampaign[]
         setCampaignList(campaigns)
