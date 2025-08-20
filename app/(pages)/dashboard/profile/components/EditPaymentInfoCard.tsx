@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { Property, PropertyList } from '@saas-ui/core';
 import { Select, SelectButton, SelectList } from '@saas-ui/react';
-import { IUser } from '../../../app/lib/models/user'
+import { IUser } from '../../../../lib/models/user'
 
 interface EditPaymentInfoCardProps {
   discordUsername: string | null;

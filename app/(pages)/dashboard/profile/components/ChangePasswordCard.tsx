@@ -17,9 +17,9 @@ import {
   FormErrorMessage, Box,
 } from '@chakra-ui/react'
 import { PasswordInput } from '@saas-ui/react'
-import { changePassword } from '../../../app/lib/firebase/auth'
+import { changePassword } from '../../../../lib/firebase/auth'
 import { User } from '@firebase/auth'
-import { firebaseResetPasswordErrorMap } from '../../../app/lib/firebase/errors'
+import { firebaseResetPasswordErrorMap } from '../../../../lib/firebase/errors'
 
 interface ChangePasswordCardProps {
   user: User | null;

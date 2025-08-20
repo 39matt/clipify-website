@@ -3,4 +3,6 @@ export interface IUser {
   connected: boolean;
   email: string;
   walletAddress: string;
+  balance: number;
+  payoutRequested: string;
 }

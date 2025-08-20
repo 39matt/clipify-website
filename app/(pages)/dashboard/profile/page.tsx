@@ -11,24 +11,26 @@ import {
   Heading,
   HStack,
   Spacer,
-  Spinner, Text,
+  Spinner, Text, useToast,
   VStack,
 } from '@chakra-ui/react'
 import { Property, PropertyList } from '@saas-ui/core';
 import { useEffect, useState } from 'react';
 import { useLayoutContext } from '../context';
-import EditPaymentInfoCard from '#components/app/EditPaymentInfoCard/EditPaymentInfoCard';
-import ChangePasswordCard from '#components/app/ChangePasswordCard/ChangePasswordCard';
+import EditPaymentInfoCard from './components/EditPaymentInfoCard';
+import ChangePasswordCard from './components/ChangePasswordCard';
 import { BoxFeature, BoxFeatures } from '#components/home-page/features/box-features';
 import { FeatureProps } from '#components/home-page/features';
 import { isUserLinked } from '../../../lib/firebase/firestore/user'
 import { IUser } from '../../../lib/models/user'
+import BalanceCard from './components/BalanceCard'
 
 const Profile: NextPage = () => {
   const [linked, setLinked] = useState<boolean | null>(null);
   const [checkingLinked, setCheckingLinked] = useState(false);
   const [userInfo, setUserInfo] = useState<IUser | null>(null)
   const { user, loading, discordUsername } = useLayoutContext();
+  const toast = useToast();
 
   useEffect(() => {
     const checkLinkedStatus = async () => {
@@ -247,6 +249,7 @@ const Profile: NextPage = () => {
           <EditPaymentInfoCard discordUsername={discordUsername} userInfo={userInfo} />
           <ChangePasswordCard user={user} />
         </HStack>
+        <BalanceCard balance={userInfo?.balance!} uid={discordUsername!} toast={toast} payoutRequested={userInfo?.payoutRequested!}/>
       </VStack>
     </VStack>
   );

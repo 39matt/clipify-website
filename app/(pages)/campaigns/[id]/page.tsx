@@ -136,10 +136,8 @@ const Page = () => {
       setAddingVideo(true);
       setMessage("");
 
-      // Remove query params
       let rawVideoUrl = videoUrl.split("?")[0];
 
-      // Regex patterns
       const instagramReelRegex =
         /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[a-zA-Z0-9_-]+\/?$/;
       const tiktokDesktopRegex =
@@ -147,7 +145,6 @@ const Page = () => {
       const tiktokMobileRegex =
         /^https:\/\/vm\.tiktok\.com\/[A-Za-z0-9]+\/?$/;
 
-      // Detect platform
       let platform: string;
       if (instagramReelRegex.test(rawVideoUrl)) {
         platform = "Instagram";
@@ -161,7 +158,6 @@ const Page = () => {
         return;
       }
 
-      // Check if video already exists
       const params = new URLSearchParams({
         campaignId: campaignId!,
         videoLink: rawVideoUrl,
@@ -187,7 +183,6 @@ const Page = () => {
       let videoId = "";
       let video;
 
-      // TikTok handling
       if (platform === "TikTok") {
         let finalUrl = rawVideoUrl;
 
@@ -242,7 +237,6 @@ const Page = () => {
         video = responseJson.videoInfo;
       }
 
-      // Instagram handling
       if (platform === "Instagram") {
         const response = await fetch("/api/campaign/video/get-info", {
           method: "PUT",
