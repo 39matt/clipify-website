@@ -14,15 +14,15 @@ export async function PATCH(req: NextRequest) {
     const userDocRef = adminDb.collection('users').doc(uid);
     const userSnapshot = await userDocRef.get()
     const user = userSnapshot.data() as IUser
-    if (user.balance! >= 50) {
-      await adminDb.collection('users').doc(uid)
-        .set({
-          payoutRequested: new Date(Date.now()).toISOString(),
-        }, {merge:true});
+    if (user.balance! < 3) {
+      return NextResponse.json({message: "User has to have at least $3 balance!"}, {status: 400})
     }
-
-
+    await adminDb.collection('users').doc(uid)
+      .set({
+        payoutRequested: new Date(Date.now()).toISOString(),
+      }, {merge:true});
     return NextResponse.json({message: "Successfully requested payout!"}, {status: 200})
+
   } catch (error) {
     console.error(error);
     return NextResponse.json({ message: error }, {status: 500});
