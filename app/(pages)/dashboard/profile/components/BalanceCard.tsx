@@ -63,7 +63,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({balance, uid, toast, payoutReq
             <Text fontSize="4xl" fontWeight="bold" textAlign="center">
               ${balance}
             </Text>
-            <Button isDisabled={balance < 50 || Date.now() - new Date(payoutRequested).getTime() / 1000 / 60 / 60 / 24 > 1} onClick={requestPayout} colorScheme="green" w="75%" mx="auto">
+            <Button isDisabled={balance < 3 || Date.now() - new Date(payoutRequested).getTime() / 1000 / 60 / 60 / 24 > 1} onClick={requestPayout} colorScheme="green" w="75%" mx="auto">
               Zatraži isplatu
             </Button>
           </VStack>
@@ -77,7 +77,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({balance, uid, toast, payoutReq
           whiteSpace="pre-line"
           maxHeight="sm"
         >
-          Minimalni iznos koji možete da isplatite je $50.
+          Minimalni iznos koji možete da isplatite je $3.
           {"\n"}
           Nakon svake kampanje vam se sabiraju pregledi validnih videa i dodaju na vaš balance.
         </Text>
