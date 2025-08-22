@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { getAllCampaigns } from '../../lib/firebase/firestore/campaign'
 import { ICampaign } from '../../lib/models/campaign'
+import { cookies } from 'next/headers'
 
 const Campaigns: NextPage = () => {
   const router = useRouter()
@@ -35,11 +36,11 @@ const Campaigns: NextPage = () => {
           cache: 'no-store',
           headers: {
             'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
+            'Pragma': 'no-cache',
           }
         })
         const campaigns = await response.json() as ICampaign[]
-        setCampaignList(campaigns)
+        setCampaignList(campaigns.filter((campaign) => campaign.isActive))
       } catch (error) {
         console.error('Error fetching campaigns:', error)
       } finally {

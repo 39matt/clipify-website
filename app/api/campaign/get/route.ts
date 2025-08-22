@@ -30,13 +30,6 @@ export async function GET(req: NextRequest) {
       ...snapshot.data()
     } as ICampaign;
 
-    if (!campaign.isActive) {
-      return NextResponse.json(
-        { error: `Campaign with ID ${campaignId} not found` },
-        { status: 404 }
-      );
-    }
-
     const videosSnapshot = await adminDb.collection('campaigns')
       .doc(campaignId).collection('videos').get();
     const videos = videosSnapshot.docs.map((video) => ({
