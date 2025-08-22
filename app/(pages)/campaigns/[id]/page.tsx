@@ -69,8 +69,7 @@ const Page = () => {
         });
         const responseJson =  await campaignResp.json();
         const camp = responseJson.campaign as ICampaign
-        console.log(camp);
-        setCampaign(camp);
+        setCampaign(camp.isActive ? camp : null);
         setLoading(false);
 
         // Fetch user videos
