@@ -13,8 +13,8 @@ import {
   Button,
   Alert,
   AlertIcon,
-  Collapse,
-} from '@chakra-ui/react';
+  Collapse, useToast,
+} from '@chakra-ui/react'
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
@@ -34,6 +34,7 @@ const RevenueApprovalAdminPage: React.FC<UnapprovedVideosProps> = ({ idToken }) 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
     const fetchData = async () => {
