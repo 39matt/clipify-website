@@ -9,7 +9,7 @@ interface AdminVideoCardProps {
   onDeny?: (id: string) => void;
 }
 
-const UnapprovedVideoCard: React.FC<AdminVideoCardProps> = ({ video, onApprove, onDeny }) => {
+const RevenueApprovalVideoCard: React.FC<AdminVideoCardProps> = ({ video, onApprove, onDeny }) => {
   return (
     <Box
       borderWidth="1px"
@@ -30,7 +30,7 @@ const UnapprovedVideoCard: React.FC<AdminVideoCardProps> = ({ video, onApprove, 
 
         <Flex flex="1" direction="column" justify="space-between">
           <Box>
-            <Text fontWeight="bold" fontSize="lg">
+            <Text fontWeight="bold" fontSize="lg" maxW="50%" overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">
               {video.name || 'Untitled Video'}
             </Text>
             <Link
@@ -52,25 +52,49 @@ const UnapprovedVideoCard: React.FC<AdminVideoCardProps> = ({ video, onApprove, 
               <Button
                 colorScheme="green"
                 size="sm"
-                onClick={() => onApprove(video.id!)}
+                onClick={() => {
+                  onApprove(video.id!);
+                }
+                  }
               >
-                Approve
+                Approve revenue
               </Button>
             )}
             {onDeny && (
               <Button
                 colorScheme="red"
                 size="sm"
-                onClick={() => onDeny(video.id!)}
+                onClick={() => {
+                  onDeny(video.id!);
+                }
+                }
               >
-                Deny
+                Deny revenue
               </Button>
             )}
           </Flex>
         </Flex>
+        <Box
+          w={20}
+          h={20}
+          borderRadius="md"
+          borderWidth="1px"
+          borderColor={video.revenueStatus == "Approved" ? "green.500"
+          : video.revenueStatus == "Denied" ? "red.500"
+            : "orange.500"}
+          color={video.revenueStatus == "Approved" ? "green.500"
+            : video.revenueStatus == "Denied" ? "red.500"
+              : "orange.500"}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          alignSelf="center"
+        >
+          {video.revenueStatus || "Awaiting"}
+        </Box>
       </Flex>
     </Box>
   );
 };
 
-export default UnapprovedVideoCard;
+export default RevenueApprovalVideoCard;

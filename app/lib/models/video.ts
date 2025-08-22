@@ -15,4 +15,5 @@ export interface IVideo {
   coverUrl: string;
   approved?: boolean;
   isManual?: boolean;
+  revenueStatus: string;
 }

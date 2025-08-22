@@ -21,6 +21,7 @@ import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { IVideo } from '../../../../../../lib/models/video';
 import { ICampaign } from '../../../../../../lib/models/campaign';
 import UnapprovedVideoCard from '#components/app/UnapprovedVideoCard/UnapprovedVideoCard'
+import RevenueApprovalVideoCard from './components/RevenueApprovalVideoCard'
 
 interface UnapprovedVideosProps {
   idToken: string;
@@ -31,7 +32,6 @@ const RevenueApprovalAdminPage: React.FC<UnapprovedVideosProps> = ({ idToken }) 
   const campaignId = pathname.split('/')[pathname.split('/').length - 2];
   const [campaign, setCampaign] = useState<ICampaign | null>(null);
   const [videos, setVideos] = useState<IVideo[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
@@ -42,7 +42,13 @@ const RevenueApprovalAdminPage: React.FC<UnapprovedVideosProps> = ({ idToken }) 
         setLoading(true);
         if (!campaignId) {
           setLoading(false);
-          setError('Campaign ID is missing');
+          toast({
+            title: 'Greška',
+            description: 'Campaign ID is missing.',
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
           return;
         }
         const responseJson = await fetch(`/api/campaign/get?id=${campaignId}`, {
@@ -54,7 +60,13 @@ const RevenueApprovalAdminPage: React.FC<UnapprovedVideosProps> = ({ idToken }) 
       } catch (err) {
         setLoading(false);
         console.error('Error fetching campaign:', err);
-        setError('Došlo je do greške prilikom učitavanja kampanje.');
+        toast({
+          title: 'Greška',
+          description: 'Došlo je do greške prilikom učitavanja kampanje.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
       }
     };
 
@@ -67,16 +79,6 @@ const RevenueApprovalAdminPage: React.FC<UnapprovedVideosProps> = ({ idToken }) 
         <Spinner size="xl" />
         <Text mt={4} fontSize="lg" color="gray.500">
           Učitavanje kampanje...
-        </Text>
-      </Center>
-    );
-  }
-
-  if (error) {
-    return (
-      <Center minH="100vh">
-        <Text color="red.500" fontSize="lg">
-          {error}
         </Text>
       </Center>
     );
@@ -120,48 +122,93 @@ const RevenueApprovalAdminPage: React.FC<UnapprovedVideosProps> = ({ idToken }) 
         }
       );
       if (!response.ok) {
-        setError('Failed to approve revenue for video!');
+        toast({
+          title: 'Greška',
+          description: 'Greška pri dodeljivanju prihoda!.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'top-right',
+        });
         return;
       }
-      setSuccess('Successfully approved!');
+      toast({
+        title: 'Greška',
+        description: 'Uspešno dodeljen prihod!.',
+        status: 'success',
+        duration: 5000,
+        position: 'top-right',
+        isClosable: true,
+      });
       setVideos(
         (prev) =>
           prev?.map((video) =>
-            video.id === videoId ? { ...video, approved: true } : video
+            video.id === videoId ? { ...video, revenueStatus: "Approved" } : video
           ) || null
       );
     } catch (err) {
       console.error(err);
-      setError('Greška pri odobrenju videa: ' + err);
+      toast({
+        title: 'Greška',
+        description: 'Greška pri dodeljavnaju prihoda!',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+
+      });
     }
   };
 
   const handleDenyRevenue = async (videoId: string) => {
     try {
       const response = await fetch(
-        `/api/campaign/video/deny?campaignId=${campaignId}&videoId=${videoId}`,
-        { method: 'PUT' }
+        `/api/campaign/video/deny-revenue?campaignId=${campaignId}&videoId=${videoId}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        }
       );
       if (!response.ok) {
         toast({
           title: 'Greška',
-          description: 'Došlo je do greške pri odobravanju.',
+          description: 'Došlo je do greške pri odbijanju prihoda!',
           status: 'error',
           duration: 5000,
           isClosable: true,
+          position: 'top-right',
+
         });
         return;
       }
-      setSuccess('Successfully denied!');
+      toast({
+        title: 'Uspeh',
+        description: 'Uspešno odbijen prihod!',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+
+      });
       setVideos(
         (prev) =>
           prev?.map((video) =>
-            video.id === videoId ? { ...video, approved: false } : video
+            video.id === videoId ? { ...video, revenueStatus: "Denied" } : video
           ) || null
       );
     } catch (err) {
       console.error(err);
-      setError('Greška pri odbacivanju videa: ' + err);
+      toast({
+        title: 'Greška',
+        description: 'Došlo je do greške pri odbijanju prihoda.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+
+      });
     }
   };
 
@@ -246,7 +293,7 @@ const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({
       <Collapse in={isOpen} animateOpacity>
         <VStack spacing={4} mt={4}>
           {approvedVideos.map((video) => (
-            <UnapprovedVideoCard
+            <RevenueApprovalVideoCard
               key={video.id}
               video={video}
               onApprove={onApproveRevenue}
