@@ -34,7 +34,7 @@ async function updateFields() {
     console.log('Editing user -> ', userData.email);
 
     batch.update(doc.ref, {
-      payoutRequested: false
+      payoutRequested: ""
     });
     count++;
 
