@@ -80,7 +80,7 @@ export async function PUT(req: NextRequest) {
         };
       } else {
         return NextResponse.json(
-          { message: 'Unable to fetch video.' },
+          { message: 'Video is deleted or not found!', videoInfo },
           { status: 200 }
         );
       }

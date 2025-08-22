@@ -3,7 +3,7 @@ import {adminDb} from '../../../lib/firebase/firebaseAdmin'
 
 export async function GET() {
   try {
-    const snapshot = await adminDb.collection('campaigns').get();
+    const snapshot = await adminDb.collection('campaigns').where("isActive", "==", true).get();
     return NextResponse.json(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
   } catch (error) {
     console.error('Error getting campaigns:', error);
