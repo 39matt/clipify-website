@@ -1,4 +1,4 @@
-import { IVideo } from '../../../../lib/models/video';
+import { IVideo } from '../../../../lib/models/video'
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function PUT(req: NextRequest) {

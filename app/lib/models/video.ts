@@ -15,5 +15,13 @@ export interface IVideo {
   coverUrl: string;
   approved?: boolean;
   isManual?: boolean;
-  revenueStatus: string;
+  revenueStatus?: string;
 }
+
+// export type IVideoAPI = Omit<
+//   IVideo,
+//   "id" | "uid" | "userAccountRef" | "approved" | "isManual" | "revenueStatus"
+// >;
+// function toIVideo(api: IVideoAPI, rest: Omit<IVideo, keyof IVideoAPI>): IVideo {
+//   return { ...api, ...rest };
+// }
