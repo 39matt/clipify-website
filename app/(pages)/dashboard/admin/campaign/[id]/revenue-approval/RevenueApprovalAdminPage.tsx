@@ -26,7 +26,7 @@ interface UnapprovedVideosProps {
   idToken: string;
 }
 
-const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
+const RevenueApprovalAdminPage: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
   const pathname = usePathname();
   const campaignId = pathname.split('/')[pathname.split('/').length - 2];
   const [campaign, setCampaign] = useState<ICampaign | null>(null);
@@ -103,14 +103,14 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
 
   const filteredGroupedVideos = groupedVideos
     ? Object.entries(groupedVideos).filter(([_, vids]) =>
-      vids.some((video) => video.approved == null)
+      vids.some((video) => video.approved == true)
     )
     : [];
 
-  const handleApproveVideo = async (videoId: string) => {
+  const handleApproveRevenue = async (videoId: string) => {
     try {
       const response = await fetch(
-        `/api/campaign/video/approve?campaignId=${campaignId}&videoId=${videoId}`,
+        `/api/campaign/video/approve-revenue?campaignId=${campaignId}&videoId=${videoId}`,
         {
           method: 'PUT',
           headers: {
@@ -119,7 +119,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
         }
       );
       if (!response.ok) {
-        setError('Failed to approve video!');
+        setError('Failed to approve revenue for video!');
         return;
       }
       setSuccess('Successfully approved!');
@@ -135,14 +135,20 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
     }
   };
 
-  const handleDenyVideo = async (videoId: string) => {
+  const handleDenyRevenue = async (videoId: string) => {
     try {
       const response = await fetch(
         `/api/campaign/video/deny?campaignId=${campaignId}&videoId=${videoId}`,
         { method: 'PUT' }
       );
       if (!response.ok) {
-        setError('Failed to deny video!');
+        toast({
+          title: 'Greška',
+          description: 'Došlo je do greške pri odobravanju.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
         return;
       }
       setSuccess('Successfully denied!');
@@ -157,6 +163,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
       setError('Greška pri odbacivanju videa: ' + err);
     }
   };
+
 
 
   return (
@@ -174,22 +181,9 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
           fontSize={{ base: '12px', md: '16px', lg: '24px' }}
           textColor="green.300"
         >
-          Unapproved Videos
+          Revenue approval
         </Heading>
       </Box>
-
-      {success && (
-        <Alert status="success">
-          <AlertIcon />
-          {success}
-        </Alert>
-      )}
-      {error && (
-        <Alert status="error">
-          <AlertIcon />
-          {error}
-        </Alert>
-      )}
       <Divider />
 
       {filteredGroupedVideos.length === 0 ? (
@@ -204,8 +198,8 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
             key={owner}
             owner={owner}
             videos={vids}
-            onApprove={handleApproveVideo}
-            onDeny={handleDenyVideo}
+            onApproveRevenue={handleApproveRevenue}
+            onDenyRevenue={handleDenyRevenue}
           />
         ))
       )}
@@ -216,22 +210,22 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
 interface UserVideosDropdownProps {
   owner: string;
   videos: IVideo[];
-  onApprove: (id: string) => void;
-  onDeny: (id: string) => void;
+  onApproveRevenue: (id: string) => void;
+  onDenyRevenue: (id: string) => void;
 }
 
 const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({
                                                                  owner,
                                                                  videos,
-                                                                 onApprove,
-                                                                 onDeny,
+                                                                 onApproveRevenue,
+                                                                 onDenyRevenue,
                                                                }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
 
-  const pendingVideos = videos.filter((video) => video.approved == null);
+  const approvedVideos = videos.filter((video) => video.approved == true);
 
-  if (pendingVideos.length === 0) return null;
+  if (approvedVideos.length === 0) return null;
 
   return (
     <Box
@@ -243,19 +237,19 @@ const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({
     >
       <Flex justify="space-between" align="center" onClick={toggle} cursor="pointer">
         <Heading size="md" textColor="green.400" fontSize={{ base: '16px', md: '20px' }}>
-          User: {owner} ({pendingVideos.length} pending)
+          User: {owner} ({approvedVideos.length} approved)
         </Heading>
         <Icon as={isOpen ? FiChevronUp : FiChevronDown} boxSize={{ base: 4, md: 5 }} />
       </Flex>
 
       <Collapse in={isOpen} animateOpacity>
         <VStack spacing={4} mt={4}>
-          {pendingVideos.map((video) => (
+          {approvedVideos.map((video) => (
             <UnapprovedVideoCard
               key={video.id}
               video={video}
-              onApprove={onApprove}
-              onDeny={onDeny}
+              onApprove={onApproveRevenue}
+              onDeny={onDenyRevenue}
             />
           ))}
         </VStack>
@@ -264,4 +258,4 @@ const UserVideosDropdown: React.FC<UserVideosDropdownProps> = ({
   );
 };
 
-export default UnapprovedVideos;
+export default RevenueApprovalAdminPage;

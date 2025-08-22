@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { FiExternalLink } from 'react-icons/fi';
 import { useRef } from 'react';
-import { IVideo } from '../../../app/lib/models/video';
+import { IVideo } from '../../../../../../../lib/models/video';
 
 interface AdminVideoCardProps {
   video: IVideo;
@@ -66,6 +66,10 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({ video, onDelete }) => {
         {/* Title */}
         <Text fontWeight="bold" fontSize="md" noOfLines={1}>
           {video.name || 'Untitled Video'}
+        </Text>
+
+        <Text fontWeight="light" color="gray.500" fontSize="md" noOfLines={1}>
+          {new Date(video.createdAt).toDateString() || ''}
         </Text>
 
         {/* View Link */}

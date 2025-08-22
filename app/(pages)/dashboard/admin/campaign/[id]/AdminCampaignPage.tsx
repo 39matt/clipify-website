@@ -1,13 +1,13 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import { ICampaign } from '../../../../../lib/models/campaign';
 import { IVideo } from '../../../../../lib/models/video';
 import {
   Alert,
   AlertIcon,
-  Box, Button,
+  Box, Button, ButtonGroup,
   Center,
   Divider,
   Heading, SimpleGrid,
@@ -16,7 +16,7 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import UnapprovedVideoCard from '#components/app/UnapprovedVideoCard/UnapprovedVideoCard'
-import AdminVideoCard from '#components/app/AdminVideoCard/AdminVideoCard'
+import AdminVideoCard from './all-videos/components/AdminVideoCard'
 
 interface AdminCampaignPageProps {
   idToken: string;
@@ -29,6 +29,7 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
   const [videos, setVideos] = useState<IVideo[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const toast = useToast();
 
   useEffect(() => {
@@ -56,41 +57,6 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
 
     fetchData();
   }, [campaignId]);
-
-  const handleDeleteVideo = async (videoId: string) => {
-    try {
-      const res = await fetch(
-        `/api/campaign/video/delete`,
-        { method: 'DELETE',
-        headers: { 'Content-Type': 'multipart/form-data' },
-        body: JSON.stringify({ videoId: videoId, campaignId: campaignId }),
-        }
-      );
-      if (!res.ok) {
-        toast({
-          title: 'Failed!',
-          description: 'Failed to remove the video.',
-          status: 'error', // "success" | "error" | "warning" | "info"
-          duration: 3000, // milliseconds
-          isClosable: true,
-          position: 'top-right', // "top", "top-right", "bottom-left", etc.
-        });
-        return;
-      }
-      toast({
-        title: 'Video deleted.',
-        description: 'The video has been successfully removed.',
-        status: 'success', // "success" | "error" | "warning" | "info"
-        duration: 3000, // milliseconds
-        isClosable: true,
-        position: 'top-right', // "top", "top-right", "bottom-left", etc.
-      });
-      setVideos((prev) => prev?.filter((v) => v.id !== videoId) || null);
-    } catch (err) {
-      console.error(err);
-      setError('Error deleting video: ' + err);
-    }
-  };
 
   if (loading) {
     return (
@@ -123,108 +89,31 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
     );
   }
 
-  const handleUpdateViews = async () => {
-    try {
-      const updatedVideos:IVideo[] = [];
-      for (const video of videos || []) {
-        const getVideoResponse = await fetch('/api/campaign/video/get-info',
-          {
-            method: "PUT",
-            body: JSON.stringify({
-              platform:video.link.includes("instagram") ? "Instagram" : "TikTok",
-              videoId: video.link.split('/')[5],
-              videoUrl: video.link,
-              api_key:process.env.NEXT_PUBLIC_RAPIDAPI_KEY!
-            })
-          }
-        );
-        if (getVideoResponse.status !== 200) {
-          toast({
-            title: 'Error!',
-            description: `Error getting video info for \n${video.name}`,
-            status: 'error', // "success" | "error" | "warning" | "info"
-            duration: 3000, // milliseconds
-            isClosable: true,
-            position: 'top-right', // "top", "top-right", "bottom-left", etc.
-          });
-          continue;
-        }
-        const getVideoResponseJson = await getVideoResponse.json();
-        const newVideo = getVideoResponseJson['videoInfo'] as IVideo;
-
-        if(!newVideo || !newVideo.accountName) {
-          continue
-        }
-        const updateVideoResponse = await fetch('/api/campaign/video/update-info', {method: 'PUT',
-          headers: { 'Content-Type': 'application/json',
-            'Authorization': `Bearer ${idToken}`
-          },
-          body: JSON.stringify({video:newVideo, campaignId}) });
-        if(updateVideoResponse.status !== 200) {
-          console.error('Error updating video');
-          continue
-        }
-        const matchingVideo = videos?.find((vid) =>  vid.link === newVideo.link );
-        if (matchingVideo) {
-          newVideo.userAccountRef = matchingVideo.userAccountRef;
-          newVideo.uid = matchingVideo.uid;
-          newVideo.id = matchingVideo.id;
-        }
-        updatedVideos.push(newVideo);
-        toast({
-          title: 'Success!',
-          description: `Successfully updated video views for \n${video.name}`,
-          status: 'success', // "success" | "error" | "warning" | "info"
-          duration: 3000, // milliseconds
-          isClosable: true,
-          position: 'top-right', // "top", "top-right", "bottom-left", etc.
-        });
-      }
-
-      const response = await fetch('/api/campaign/calculate-progress', {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          campaignId: campaignId,
-        }),
-      })
-      console.log(response)
-      setVideos(updatedVideos);
-    } catch(error) {
-      console.error(error);
-      toast({
-        title: 'Error!',
-        description: 'Error while updating video views.',
-        status: 'error', // "success" | "error" | "warning" | "info"
-        duration: 3000, // milliseconds
-        isClosable: true,
-        position: 'top-right', // "top", "top-right", "bottom-left", etc.
-      });    }
-  }
-
   return (
     <VStack spacing={6} width="90%" mx="auto" py={6}>
       <Heading textAlign="center" color="green.400">
         {campaign.influencer} - {campaign.activity}
       </Heading>
 
-      <Button colorScheme={"green"} ml={"auto"} size={"lg"} onClick={handleUpdateViews}>Update views</Button>
 
-      <Divider />
+    <ButtonGroup w="50%">
+      <Button
+        w="full"
+        h="96px"
+        onClick={()=> router.push(`/dashboard/admin/campaign/${campaignId}/all-videos`)}
+      >Svi videi</Button>
+      <Button
+        w="full"
+        h="96px"
+        onClick={()=> router.push(`/dashboard/admin/campaign/${campaignId}/unapproved-videos`)}
+      >Neodobreni videi</Button>
 
-      {videos && videos.length > 0 ? (
-        <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} w="100%">
-          {videos?.map((video) => (
-            <AdminVideoCard
-              key={video.id}
-              video={video}
-              onDelete={handleDeleteVideo}
-            />
-          ))}
-        </SimpleGrid>
-      ) : (
-        <Text color="gray.500">Nema videa u ovoj kampanji.</Text>
-      )}
+    </ButtonGroup>
+      <Button
+        w="50%"
+        h="96px"
+        onClick={()=> router.push(`/dashboard/admin/campaign/${campaignId}/revenue-approval`)}
+      >Unovcavanje odobrenih videa</Button>
     </VStack>
   );
 };

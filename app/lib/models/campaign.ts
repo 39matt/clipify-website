@@ -12,4 +12,5 @@ export interface ICampaign {
   maxSubmissions: number;
   minViewsPerPayout: number;
   moneySpent: number;
+  isActive: boolean;
 }
