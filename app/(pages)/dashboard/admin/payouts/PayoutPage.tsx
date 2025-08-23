@@ -61,6 +61,21 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
     );
   }
 
+  const convertDate = (date: string) => {
+    const newDate = new Date(date);
+    return (
+      newDate.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }) +
+      " " +
+      newDate.toLocaleTimeString("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    );
+  };
   const resetBalance = async (uid: string) => {
     try {
       setIsProcessing(true);
@@ -108,7 +123,7 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
         </Heading>
       </Box>
 
-      <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={6}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 4}} spacing={6}>
         {users.sort((a, b) => {
           if (!a.payoutRequested) return 1;
           if (!b.payoutRequested) return -1;
@@ -116,7 +131,7 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
         }).map((user) => (
           <VStack
             key={user.id}
-            w="220px"
+            w="280px"
             py={6}
             px={4}
             bgGradient="linear(to-br, blue.400, blue.600)"
@@ -124,6 +139,7 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
             rounded="lg"
             shadow="xl"
             spacing={4}
+            justifyContent="space-between"
           >
             <Text fontWeight="bold" fontSize="2xl" textAlign="center">
               {user.id}
@@ -134,7 +150,7 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
             {user.payoutRequested &&
                 <Box>
                   <Text color="gray.800">
-                    Requested: {user.payoutRequested}
+                    Requested: {convertDate(user.payoutRequested)}
                   </Text>
                   <Divider borderColor="whiteAlpha.500" />
                 </Box>
