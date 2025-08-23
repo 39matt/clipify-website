@@ -37,7 +37,8 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
   useEffect(() => {
     const getPayouts = async () => {
       try {
-        const response = await fetch('/api/user/get-all-requested-payout', {
+        const timestamp = Date.now();
+        const response = await fetch(`/api/user/get-all-requested-payout?t=${timestamp}`, {
           method: 'GET',
         });
         const users = await response.json();
@@ -108,7 +109,11 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
       </Box>
 
       <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={6}>
-        {users.map((user) => (
+        {users.sort((a, b) => {
+          if (!a.payoutRequested) return 1;
+          if (!b.payoutRequested) return -1;
+          return new Date(b.payoutRequested).getTime() - new Date(a.payoutRequested).getTime();
+        }).map((user) => (
           <VStack
             key={user.id}
             w="220px"
@@ -125,6 +130,17 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
             </Text>
 
             <Divider borderColor="whiteAlpha.500" />
+
+            {user.payoutRequested &&
+                <Box>
+                  <Text color="gray.800">
+                    Requested: {user.payoutRequested}
+                  </Text>
+                  <Divider borderColor="whiteAlpha.500" />
+                </Box>
+            }
+
+
 
             <Text fontSize="lg" fontWeight="semibold">
               Balance: ${user.balance}
