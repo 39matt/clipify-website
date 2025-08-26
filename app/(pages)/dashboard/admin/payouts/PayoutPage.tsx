@@ -40,6 +40,11 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
         const timestamp = Date.now();
         const response = await fetch(`/api/user/get-all-requested-payout?t=${timestamp}`, {
           method: 'GET',
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+          }
         });
         const users = await response.json();
         setUsers(users ?? []);
