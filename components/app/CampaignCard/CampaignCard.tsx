@@ -74,11 +74,10 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
         <AspectRatio ratio={16 / 9}>
           <Box position="relative" w="full" h="full">
             <Image
-              backgroundPosition={"top"}
+              backgroundPosition={"bottom"}
               src={campaign.imageUrl}
               alt={`${campaign.influencer} campaign`}
               objectFit="cover"
-              objectPosition="top"
               transition="transform 0.3s ease"
               _hover={{ transform: 'scale(1.05)' }}
               w="full"
@@ -104,7 +103,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
           position="absolute"
           top={3}
           right={3}
-          colorScheme={getProgressColor(roundedProgress)}
+          colorScheme={getProgressColor(100)}
           borderRadius="full"
           px={3}
           py={1}
