@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { adminAuth, adminDb } from '../../../lib/firebase/firebaseAdmin'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   try {
     const snapshot = await adminDb.collection('campaigns').get();
