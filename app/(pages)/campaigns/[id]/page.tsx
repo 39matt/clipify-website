@@ -480,7 +480,6 @@ const Page = () => {
                 <StatLabel>Maksimalan broj prijava</StatLabel>
                 <StatNumber>{campaign.maxSubmissions} po nalogu</StatNumber>
               </Stat>
-              <Divider my={4} />
               <Stat>
                 <StatLabel>Maksimalna zarada</StatLabel>
                 <StatNumber>${campaign.maxEarnings}</StatNumber>

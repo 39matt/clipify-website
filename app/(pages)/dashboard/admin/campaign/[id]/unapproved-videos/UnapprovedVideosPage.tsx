@@ -139,7 +139,11 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
     try {
       const response = await fetch(
         `/api/campaign/video/deny?campaignId=${campaignId}&videoId=${videoId}`,
-        { method: 'PUT' }
+        { method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          }
+        }
       );
       if (!response.ok) {
         setError('Failed to deny video!');
