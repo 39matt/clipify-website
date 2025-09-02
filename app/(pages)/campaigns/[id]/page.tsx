@@ -354,6 +354,7 @@ const Page = () => {
       // maxW="1200px"
       mx="auto"
       px={4}
+      mt={16}
     >
       <Box
         position="relative"

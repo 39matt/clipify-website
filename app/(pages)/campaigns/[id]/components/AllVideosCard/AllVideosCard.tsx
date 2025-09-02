@@ -47,18 +47,19 @@ const AllVideosCard: React.FC<AdminVideoCardProps> = ({ video, index }) => {
           w="100%"
           h="200px"
           objectFit="cover"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
         />
       </Link>
 
       <VStack align="start" spacing={3} p={4} flex="1">
         <Box display="flex" flexDirection="column" justifyContent="space-between" w="full">
           <Text fontWeight="light" fontSize="sm" noOfLines={1}>
-            {video.name || 'Untitled Video'}
+            {video.name || ''}
           </Text>
           <Box p={1}/>
-          <Text fontWeight="bold" fontSize="md" noOfLines={1} textAlign="center" w="full">
-            @{video.uid}
-          </Text>
+
         </Box>
 
 
