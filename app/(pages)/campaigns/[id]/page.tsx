@@ -38,7 +38,8 @@ import { useLayoutContext } from '../../dashboard/context';
 import { IVideo } from '../../../lib/models/video';
 import { userAccountExists } from '../../../lib/firebase/firestore/account';
 import { ICampaign } from '../../../lib/models/campaign'
-import VideosSection from '#components/app/VideosSection/VideosSection'
+import AllVideosSection from "./components/AllVideosSection/AllVideosSection";
+import YourVideosSection from "./components/YourVideosSection/YourVideosSection";
 
 
 const Page = () => {
@@ -48,6 +49,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userVideos, setUserVideos] = useState<IVideo[]>([]);
+  const [videos, setVideos] = useState<IVideo[]>([]);
   const [videosLoading, setVideosLoading] = useState(false);
   const [addingVideo, setAddingVideo] = useState(false);
   const { user, discordUsername } = useLayoutContext();
@@ -69,11 +71,12 @@ const Page = () => {
         });
         const responseJson =  await campaignResp.json();
         const camp = responseJson.campaign as ICampaign
+        const vids = responseJson.videos as IVideo[]
+        // setVideos(vids.sort((a, b) => b.views- a.views));
+        setVideos(vids);
         setCampaign(camp.isActive ? camp : null);
         setLoading(false);
 
-        // Fetch user videos
-        setVideosLoading(true);
         const response = await fetch(
           `/api/campaign/get-user-videos?campaignId=${campaignId}&userId=${discordUsername}`,
           {
@@ -86,16 +89,13 @@ const Page = () => {
           const data = await response.json();
           let videos: IVideo[] = [];
 
-          // Handle different response formats
           if (Array.isArray(data)) {
             videos = data;
           } else if (data && Array.isArray(data.videos)) {
             videos = data.videos;
           } else if (data && data.message) {
-            // Handle the case where API returns {message: "No videos found!"}
             videos = [];
           } else if (data && typeof data === 'object') {
-            // Make sure it's a valid video object, not just any object
             if (data.id || data.accountName || data.views !== undefined) {
               videos = [data];
             } else {
@@ -335,16 +335,6 @@ const Page = () => {
     );
   }
 
-  if (error) {
-    return (
-      <Center minH="100vh">
-        <Text color="red.500" fontSize="lg">
-          {error}
-        </Text>
-      </Center>
-    );
-  }
-
   if (!campaign) {
     return (
       <Center minH="100vh">
@@ -361,7 +351,7 @@ const Page = () => {
       color="white"
       maxH="90vh"
       w="full"
-      maxW="1200px"
+      // maxW="1200px"
       mx="auto"
       px={4}
     >
@@ -369,6 +359,8 @@ const Page = () => {
         position="relative"
         bg="gray.800"
         borderRadius="lg"
+        maxW="1200px"
+        mx="auto"
         p={16}
         mb={6}
         textAlign="center"
@@ -396,7 +388,7 @@ const Page = () => {
       </Box>
 
       <VStack spacing={6}>
-        <Card w="full" bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
+        <Card w="full" maxW="1200px" mx="auto" bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
           <CardHeader textAlign="center">
             <Heading size="xl" color="green.400" mb={4}>
               Cena po milion pregleda
@@ -439,7 +431,7 @@ const Page = () => {
           </CardBody>
         </Card>
 
-        <Flex justify="center" gap={4} width="full" flexDirection={{ base: "column", md: "row" }}>
+        <Flex w="full" maxW="1200px" mx="auto" justify="center" gap={4} width="full" flexDirection={{ base: "column", md: "row" }}>
           <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
             <CardHeader textAlign="center">
               <Heading size="lg" color="green.400" mb={4}>
@@ -480,6 +472,7 @@ const Page = () => {
                 <StatLabel>Maksimalan broj prijava</StatLabel>
                 <StatNumber>{campaign.maxSubmissions} po nalogu</StatNumber>
               </Stat>
+              <Divider my={4} />
               <Stat>
                 <StatLabel>Maksimalna zarada</StatLabel>
                 <StatNumber>${campaign.maxEarnings}</StatNumber>
@@ -493,7 +486,8 @@ const Page = () => {
           </Card>
         </Flex>
 
-        <VideosSection userVideos={userVideos} videosLoading={videosLoading} />
+        <YourVideosSection userVideos={userVideos} videosLoading={videosLoading} />
+        <AllVideosSection videos={videos} videosLoading={loading} />
       </VStack>
 
       <Modal isOpen={isOpen} onClose={onClose}>

@@ -1,5 +1,5 @@
 
-import { IVideo } from '../../../app/lib/models/video'
+import { IVideo } from '../../../../../lib/models/video'
 import {
   AspectRatio, Badge, Box,
   Card,
@@ -13,9 +13,10 @@ import {
   StatLabel,
   StatNumber, Text, VStack,
 } from '@chakra-ui/react'
-import VideoCard from '#components/app/VideoCard/VideoCard'
+import VideoCard from '../YourVideoCard/YourVideoCard'
+import YourVideoCard from '../YourVideoCard/YourVideoCard'
 
-const VideosSection = ({
+const YourVideosSection = ({
                       userVideos,
                       videosLoading
                     }: {
@@ -27,7 +28,7 @@ const VideosSection = ({
   const totalComments = userVideos.reduce((sum, video) => sum + (video.comments || 0), 0);
   const totalShares = userVideos.reduce((sum, video) => sum + (video.shares || 0), 0);
   return (
-    <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} w="full">
+    <Card w="full" maxW="1200px" mx="auto" bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} >
       <CardHeader textAlign="center">
         <Heading size="lg" color="green.400" mb={4}>
           Vaša kampanja
@@ -78,7 +79,7 @@ const VideosSection = ({
         ) : (
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
             {userVideos.map((video, index) => (
-              <VideoCard video={video} index={index}/>
+              <YourVideoCard video={video} index={index}/>
             ))}
           </SimpleGrid>
         )}
@@ -87,4 +88,4 @@ const VideosSection = ({
   );
 };
 
-export default VideosSection;
+export default YourVideosSection;

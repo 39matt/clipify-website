@@ -16,11 +16,11 @@ import {
   Tooltip,
   useToast,
 } from '@chakra-ui/react';
-import { IVideo } from '../../../app/lib/models/video';
+import { IVideo } from '../../../../../lib/models/video';
 import { useState } from 'react';
 import { DeleteIcon } from 'lucide-react'
 
-const VideoCard = ({
+const YourVideoCard = ({
                      video,
                      index,
                      onRemove,
@@ -178,4 +178,4 @@ const VideoCard = ({
   );
 };
 
-export default VideoCard;
+export default YourVideoCard;

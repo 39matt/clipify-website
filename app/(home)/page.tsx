@@ -193,7 +193,7 @@ const HeroSection: React.FC = () => {
             delay: 0.4,
           },
           {
-            title: '1',
+            title: '2',
             icon: ImBullhorn,
             description:
               'Pokrenutih kampanja',
