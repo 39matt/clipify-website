@@ -14,8 +14,8 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogBody,
-  AlertDialogFooter,
-} from '@chakra-ui/react';
+  AlertDialogFooter, Divider,
+} from '@chakra-ui/react'
 import { FiExternalLink } from 'react-icons/fi';
 import { IVideo } from '../../../../../lib/models/video'
 
@@ -51,9 +51,16 @@ const AllVideosCard: React.FC<AdminVideoCardProps> = ({ video, index }) => {
       </Link>
 
       <VStack align="start" spacing={3} p={4} flex="1">
-        <Text fontWeight="bold" fontSize="md" noOfLines={1}>
-          {video.name || 'Untitled Video'}
-        </Text>
+        <Box display="flex" flexDirection="column" justifyContent="space-between" w="full">
+          <Text fontWeight="light" fontSize="sm" noOfLines={1}>
+            {video.name || 'Untitled Video'}
+          </Text>
+          <Box p={1}/>
+          <Text fontWeight="bold" fontSize="md" noOfLines={1} textAlign="center" w="full">
+            @{video.uid}
+          </Text>
+        </Box>
+
 
         <Text fontWeight="light" color="gray.500" fontSize="md" noOfLines={1}>
           {new Date(video.createdAt).toDateString() || ''}
