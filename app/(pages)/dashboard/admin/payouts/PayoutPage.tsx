@@ -21,6 +21,8 @@ import { useEffect, useState, useRef } from 'react';
 import { IUser } from '../../../../lib/models/user';
 import CopyableText from './components/CopyableText'
 
+export const dynamic = 'force-dynamic'
+
 interface PayoutPageProps {
   idToken: string;
 }

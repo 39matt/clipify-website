@@ -140,6 +140,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
         );
 
         if (getVideoResponse.status !== 200) {
+          console.log("Error getting video info for: ", video)
           toast({
             title: 'Error!',
             description: `Error getting video info for \n${video.name}`,
