@@ -81,6 +81,8 @@ const PayoutPage: React.FC<PayoutPageProps> = ({ idToken }) => {
       })
     );
   };
+
+  //TODO reset balance stavlja i payout requested na 0 to treba odvojeno
   const resetBalance = async (uid: string) => {
     try {
       setIsProcessing(true);

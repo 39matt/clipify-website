@@ -31,7 +31,8 @@ export async function POST(req: NextRequest) {
 
     await userDocRef.set(
       {
-        balance: 0
+        balance: 0,
+        payoutRequested: ""
       },
       {merge:true}
     )

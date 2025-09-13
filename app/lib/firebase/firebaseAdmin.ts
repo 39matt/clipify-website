@@ -31,11 +31,11 @@ async function updateFields() {
     // if (userData.email !== "matkodxd@gmail.com") {
     //   continue;
     // }
-    console.log('Editing user -> ', userData.email);
+      console.log('Editing user -> ', userData.email);
+      batch.update(doc.ref, {
+        payoutRequested: ""
+      });
 
-    batch.update(doc.ref, {
-      payoutRequested: ""
-    });
     count++;
 
     if (count % 500 === 0) {
