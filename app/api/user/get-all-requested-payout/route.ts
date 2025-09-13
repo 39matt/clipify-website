@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '../../../lib/firebase/firebaseAdmin'
 import { IUser } from '../../../lib/models/user'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: NextRequest) {
   try {
     const querySnapshot = await adminDb
