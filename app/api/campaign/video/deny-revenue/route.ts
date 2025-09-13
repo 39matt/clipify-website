@@ -47,7 +47,7 @@ export async function PUT(req: NextRequest) {
     }
 
     //TODO PROMENITI DA SE U BAZU VIDEO DODAJE SA REVENUESTATUS=AWAITING
-    if(video.revenueStatus!.length < 1 || video.revenueStatus == "Approved") {
+    if(video.revenueStatus == "Approved") {
       const userSnap = await userRef.get();
       const user = userSnap.data() as IUser;
 

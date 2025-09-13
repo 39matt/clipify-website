@@ -12,7 +12,7 @@ export async function signUp(email: string, password: string): Promise<any> {
     email,
     password,
   )
-  await sendEmailVerification(userCredential.user)
+  // await sendEmailVerification(userCredential.user)
 }
 
 

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '../../../lib/firebase/firebaseAdmin'
+import { IUser } from '../../../lib/models/user'
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,7 +26,8 @@ export async function POST(req: NextRequest) {
       {
         email,
         connected: true,
-      },
+        balance: 0
+      } as IUser,
     )
     return NextResponse.json({
       message: "Successfully added user!",
