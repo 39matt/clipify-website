@@ -49,13 +49,27 @@ const SignUp: NextPage = () => {
   const handleSignup = async (data: PasswordSubmitParams) => {
     try {
       const confirmPassword = (document.getElementById('confirmPassword') as HTMLInputElement)?.value;
+      const affiliateCode = (document.getElementById('affiliateCode') as HTMLInputElement)?.value;
 
       if (data.password !== confirmPassword) {
         setError('Lozinka i potvrda lozinke se ne podudaraju.');
         return;
       }
+      if (affiliateCode !== "cecko" && affiliateCode?.length > 0) {
+        setError('Uneli ste nepostojeći affiliate kod');
+        return;
+      }
 
-      await signUp(data.email, data.password)
+      const response = await fetch(`/api/affiliate/add-count?code=${affiliateCode}`, {
+        method:"PUT",
+      })
+      if(!response.ok) {
+        setError('Greška pri verifikaciji koda');
+        return;
+      }
+
+      await signUp(data.email, data.password);
+
       setSuccess(
         'Uspešno ste napravili nalog! Proverite vaš mail kako bi ste se verifikovali.',
       )
@@ -76,6 +90,7 @@ const SignUp: NextPage = () => {
       )
     }
   }
+
   return (
     <Flex
       direction="column"
@@ -166,6 +181,8 @@ const SignUp: NextPage = () => {
                 }
                 >
                   <Field type="password" id="confirmPassword" name="confirmPassword" label="Potvrdi lozinku" isRequired />
+                  <Field type="text" id="affiliateCode" name="affiliateCode" label="Affiliate kod" />
+
                   {/*<Field name="username" label="Korisničko ime" isRequired />*/}
                   {error && (
                     <Alert status="error">
