@@ -155,6 +155,18 @@ export default function AdminPanelClient() {
           >
             <Text>Isplate</Text>
           </Card>
+          <Card
+            w="320px"
+            h="64px"
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            bg="blue.500"
+            _hover={{cursor: "pointer"}}
+            onClick={()=> router.push(`/dashboard/admin/affiliates`)}
+          >
+            <Text>Affiliates</Text>
+          </Card>
         </HStack>
       </VStack>
     </VStack>
