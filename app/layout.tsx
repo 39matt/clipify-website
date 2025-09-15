@@ -9,13 +9,7 @@ export default function Layout(props: { children: React.ReactNode }) {
     <html lang="en" data-theme={colorMode} style={{ colorScheme: colorMode }}>
       <head>
         <title>Clipify</title>
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/static/favicons/favicon-32x32.png"
-        />
-        <link rel="manifest" href="/static/favicons/manifest.json" />
+        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
       </head>
       <body className={`chakra-ui-${colorMode}`}>
         <ColorModeScript initialColorMode={colorMode} />
