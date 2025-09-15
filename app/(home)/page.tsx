@@ -170,14 +170,14 @@ const HeroSection: React.FC = () => {
         pt="20"
         features={[
           {
-            title: '1K+',
+            title: '100.000+',
             icon: DollarSign,
-            description: 'Isplaćeno kliperima',
+            description: 'Dinara splaćeno kliperima',
             iconPosition: 'left',
             delay: 0,
           },
           {
-            title: '100+',
+            title: '250+',
             icon: User,
             description:
               'Aktivnih klipera',
