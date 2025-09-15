@@ -85,7 +85,7 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                 </PricingFeatures>
 
                 <ButtonLink
-                  maxW={{ base: "100%", md: "280px" }}
+                  maxW={{ base: "100%", md: "300px" }}
                   mx="auto"
                   w="full"
                   size="lg"
@@ -94,6 +94,8 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                   overflow="hidden"
                   fontWeight="semibold"
                   px={8}
+                  whiteSpace="normal"
+                  textAlign="center"
                   {...plan.action}
                   _before={{
                     content: '""',

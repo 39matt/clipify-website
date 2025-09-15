@@ -172,7 +172,7 @@ const HeroSection: React.FC = () => {
           {
             title: '100.000+',
             icon: DollarSign,
-            description: 'Dinara splaćeno kliperima',
+            description: 'Dinara isplaćeno kliperima',
             iconPosition: 'left',
             delay: 0,
           },
