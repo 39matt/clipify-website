@@ -16,24 +16,26 @@ const siteConfig = {
   privacyUrl: '/politika-privatnosti',
   header: {
     links: [
+      // {
+      //   id: 'funkcionalnosti',
+      //   label: 'O nama',
+      // },
+      // {
+      //   id: 'kreni',
+      //   label: 'Kreni',
+      // },
+      // {
+      //   id: 'faq',
+      //   label: 'FAQ',
+      //   href: '',
+      // },
       {
-        id: 'funkcionalnosti',
-        label: 'O nama',
-      },
-      {
-        id: 'kreni',
-        label: 'Kreni',
-      },
-      {
-        id: 'faq',
-        label: 'FAQ',
-        href: '',
-      },
-      {
+        id: 'login',
         label: 'Login',
         href: '/login',
       },
       {
+        id: 'register',
         label: 'Register',
         href: '/signup',
         variant: 'primary',

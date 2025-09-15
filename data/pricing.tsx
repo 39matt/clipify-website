@@ -10,7 +10,7 @@ export default {
       title: 'Kreator',
       description:
         'Kampanja sa jasnim ciljem i kontrolisanim budžetom. Plaćate isključivo kada vidite konkretne rezultate.',
-      price: 'Besplatno za registraciju',
+      price: '',
       features: [
         {
           title: 'Kreiranje i objava kampanja sa jasnim ciljevima',
@@ -30,7 +30,7 @@ export default {
       ],
       action: {
         href: '/kontakt',
-        label: 'Započni!'
+        label: 'Započni svoju prvu kampanju!'
       },
     },
     {
@@ -38,7 +38,7 @@ export default {
       title: 'Kliper',
       description:
         'Kreirajte klipove, ucestvujte u kampanjama i zarađujte neograničeno – što više pregleda, to veća zarada.',
-      price: 'Besplatno za registraciju',
+      price: '',
       features: [
         {
           title: 'Možete učestvovati u svim dostupnim kampanjama',
@@ -57,8 +57,8 @@ export default {
         },
       ],
       action: {
-        href: '/signup',
-        label: 'Registruj se!'
+        href: '/login',
+        label: 'Pridruži se kao kliper!'
       },
     },
   ],

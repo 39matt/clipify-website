@@ -6,7 +6,7 @@ import {
   SimpleGrid,
   StackProps,
   Text,
-  VStack,
+  VStack, Divider,
 } from '@chakra-ui/react'
 import { FiCheck } from 'react-icons/fi'
 
@@ -65,10 +65,10 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                 sx={
                   plan.isRecommended
                     ? {
-                      borderColor: 'primary.500',
+                      borderColor: "primary.500",
                       _dark: {
-                        borderColor: 'primary.500',
-                        bg: 'blackAlpha.300',
+                        borderColor: "primary.500",
+                        bg: "blackAlpha.300",
                       },
                     }
                     : {}
@@ -80,11 +80,37 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                       <PricingFeature key={i} {...feature} />
                     ) : (
                       <br key={i} />
-                    ),
+                    )
                   )}
                 </PricingFeatures>
-                <ButtonLink colorScheme="primary" {...plan.action}>
-                  {plan.action.label || 'Sign Up'}
+
+                <ButtonLink
+                  size="lg"
+                  colorScheme="primary"
+                  position="relative"
+                  overflow="hidden"
+                  fontWeight="semibold"
+                  px={8}
+                  {...plan.action}
+                  _before={{
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: "-75%",
+                    width: "50%",
+                    height: "100%",
+                    background:
+                      "linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%)",
+                    transform: "skewX(-20deg)",
+                  }}
+                  _hover={{
+                    _before: {
+                      left: "125%",
+                      transition: "left 0.75s ease-in-out",
+                    },
+                  }}
+                >
+                  {plan.action.label || "Akcija"}
                 </ButtonLink>
               </PricingBox>
             </MotionBox>
@@ -121,7 +147,7 @@ const PricingFeature: React.FC<PricingFeatureProps> = (props) => {
   const { title, iconColor = 'primary.500' } = props
   return (
     <HStack>
-      <Icon as={FiCheck} color={iconColor} />
+      <Icon as={FiCheck} color={iconColor} fontSize="3xl" />
       <Text flex="1" fontSize="sm">
         {title}
       </Text>
@@ -134,7 +160,6 @@ export interface PricingBoxProps extends Omit<StackProps, 'title'> {
   description: React.ReactNode
   price: React.ReactNode
 }
-
 const PricingBox: React.FC<PricingBoxProps> = (props) => {
   const { title, description, price, children, ...rest } = props
   return (
@@ -143,26 +168,48 @@ const PricingBox: React.FC<PricingBoxProps> = (props) => {
       bg="whiteAlpha.600"
       borderRadius="md"
       p="8"
-      flex="1 0 auto" // Ensures the box grows and shrinks equally
+      h="100%"
       alignItems="stretch"
       border="1px solid"
       borderColor="gray.400"
       _dark={{
-        bg: 'blackAlpha.300',
-        borderColor: 'gray.800',
+        bg: "blackAlpha.300",
+        borderColor: "gray.800",
       }}
-      minHeight="100%" // Ensures all boxes have the same height
       {...rest}
     >
-      <Heading as="h3" size="md" fontWeight="bold" fontSize="lg" mb="2">
+      {/* Title framed with pill style */}
+      <Box
+        w="fit-content"
+        px="4"
+        py="1"
+        border="1px solid"
+        borderColor="primary.500"
+        borderRadius="full"
+        fontWeight="light"
+        fontSize="sm"
+        mb="4"
+      >
         {title}
-      </Heading>
-      <Box color="muted">{description}</Box>
-      <Box fontSize="2xl" fontWeight="bold" py="4">
-        {price}
       </Box>
-      <VStack align="stretch" justifyContent="stretch" spacing="4" flex="1">
-        {children}
+
+      {/* Description big and bold */}
+      <Box textAlign="center" fontSize="2xl" fontWeight="bold" mb="4">
+        {description}
+      </Box>
+
+      <Divider my="4" />
+
+      {/* Price (if needed as separate emphasis) */}
+      {price && (
+        <Box textAlign="center" fontSize="3xl" fontWeight="extrabold" mb="4">
+          {price}
+        </Box>
+      )}
+
+      {/* Features + CTA, pushed to bottom */}
+      <VStack align="stretch" justify="space-between" flex="1">
+        <Box>{children}</Box>
       </VStack>
     </VStack>
   )

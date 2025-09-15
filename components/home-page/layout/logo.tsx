@@ -13,7 +13,7 @@ export interface LogoProps {
 export const Logo = ({ href = '/', onClick }: LogoProps) => {
   let logo
   if (siteConfig.logo) {
-    logo = <Box as={siteConfig.logo} height="48px" mt="-4px" />
+    logo = <Box as={siteConfig.logo} height="64px" mt="-4px" />
   } else {
     logo = (
       <Heading as="h1" size="md">
@@ -23,7 +23,7 @@ export const Logo = ({ href = '/', onClick }: LogoProps) => {
   }
 
   return (
-    <Flex h="12" flexShrink="0" alignItems="flex-start">
+    <Flex h="24" flexShrink="0" alignItems="flex-start">
       <Link
         my={"auto"}
         href={href}

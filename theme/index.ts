@@ -36,6 +36,9 @@ export const theme = extendTheme(
             bg: 'gray.900',
           },
         },
+        html: {
+          scrollBehavior: "smooth",
+        }
       }),
     },
     fonts: {

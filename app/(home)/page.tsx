@@ -185,7 +185,7 @@ const HeroSection: React.FC = () => {
             delay: 0.2,
           },
           {
-            title: '5M+',
+            title: '10M+',
             icon: EyeIcon,
             description:
               'Organskih pregleda',
@@ -193,7 +193,7 @@ const HeroSection: React.FC = () => {
             delay: 0.4,
           },
           {
-            title: '2',
+            title: '3',
             icon: ImBullhorn,
             description:
               'Pokrenutih kampanja',
