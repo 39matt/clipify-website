@@ -85,6 +85,9 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                 </PricingFeatures>
 
                 <ButtonLink
+                  maxW={{ base: "100%", md: "280px" }}
+                  mx="auto"
+                  w="full"
                   size="lg"
                   colorScheme="primary"
                   position="relative"
