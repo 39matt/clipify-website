@@ -107,9 +107,9 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
               <NavItem _hover={{cursor:"pointer"}} icon={<FiCompass />} onClick={()=>router.push('/campaigns')} isActive={pathname.includes("/campaigns") && !pathname.includes("/finished")}>
                 Aktivne kampanje
               </NavItem>
-              <NavItem _hover={{cursor:"pointer"}} icon={<FiFlag />} onClick={()=>router.push('/campaigns/finished')} isActive={pathname.includes("/campaigns/finished")}>
-                Završene kampanje
-              </NavItem>
+              {/*<NavItem _hover={{cursor:"pointer"}} icon={<FiFlag />} onClick={()=>router.push('/campaigns/finished')} isActive={pathname.includes("/campaigns/finished")}>*/}
+              {/*  Završene kampanje*/}
+              {/*</NavItem>*/}
               <NavItem _hover={{cursor:"pointer"}} icon={<FiSettings />} onClick={()=>router.push('/dashboard/accounts')} isActive={pathname.includes("/accounts")}>Vaši nalozi</NavItem>
               {showAdmin && <NavItem _hover={{cursor:"pointer"}} icon={<GrUserAdmin />} onClick={ async ()=>{
                 router.push('/dashboard/admin')
