@@ -1,5 +1,4 @@
 
-import { IVideo } from '../../../../../lib/models/video'
 import {
   AspectRatio, Badge, Box,
   Card,
@@ -15,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import VideoCard from '../YourVideoCard/YourVideoCard'
 import YourVideoCard from '../YourVideoCard/YourVideoCard'
+import { IVideo } from '../../../../../../lib/models/video'
 
 const YourVideosSection = ({
                       userVideos,
