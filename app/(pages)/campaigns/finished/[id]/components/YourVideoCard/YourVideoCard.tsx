@@ -16,9 +16,9 @@ import {
   Tooltip,
   useToast,
 } from '@chakra-ui/react';
-import { IVideo } from '../../../../../lib/models/video';
 import { useState } from 'react';
 import { DeleteIcon } from 'lucide-react'
+import { IVideo } from '../../../../../../lib/models/video'
 
 const YourVideoCard = ({
                      video,

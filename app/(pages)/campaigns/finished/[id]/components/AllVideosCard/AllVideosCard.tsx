@@ -17,7 +17,7 @@ import {
   AlertDialogFooter, Divider,
 } from '@chakra-ui/react'
 import { FiExternalLink } from 'react-icons/fi';
-import { IVideo } from '../../../../../lib/models/video'
+import { IVideo } from '../../../../../../lib/models/video'
 
 interface AdminVideoCardProps {
   video: IVideo;

@@ -1,4 +1,3 @@
-import { IVideo } from '../../../../../lib/models/video'
 import {
   Card,
   CardBody,
@@ -14,6 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { useState, useMemo } from 'react'
 import AllVideosCard from '../AllVideosCard/AllVideosCard'
+import { IVideo } from '../../../../../../lib/models/video'
 
 const AllVideosSection = ({
                             videos,
