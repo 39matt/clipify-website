@@ -129,7 +129,6 @@ const Page = () => {
     );
   }
 
-  if (!campaign) {
     return (
       <Center minH="100vh">
         <Text color="gray.500" fontSize="lg">
@@ -137,7 +136,7 @@ const Page = () => {
         </Text>
       </Center>
     );
-  }
+
 
   return (
     <Box
