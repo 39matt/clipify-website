@@ -13,9 +13,8 @@ import { NextPage } from 'next'
 import CampaignCard from '#components/app/CampaignCard/CampaignCard'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { getAllCampaigns } from '../../lib/firebase/firestore/campaign'
-import { ICampaign } from '../../lib/models/campaign'
 import { cookies } from 'next/headers'
+import { ICampaign } from '../../../lib/models/campaign'
 
 const Campaigns: NextPage = () => {
   const router = useRouter()
@@ -40,7 +39,7 @@ const Campaigns: NextPage = () => {
           }
         })
         const campaigns = await response.json() as ICampaign[]
-        setCampaignList(campaigns.filter((campaign) => campaign.isActive))
+        setCampaignList(campaigns.filter((campaign) => !campaign.isActive))
       } catch (error) {
         console.error('Error fetching campaigns:', error)
       } finally {
@@ -77,7 +76,7 @@ const Campaigns: NextPage = () => {
               bgClip="text"
               mb={4}
             >
-              Aktivne kampanje
+              Završene kampanje
             </Heading>
             <Text
               fontSize={{ base: 'md', md: 'lg' }}
@@ -89,8 +88,6 @@ const Campaigns: NextPage = () => {
               ciljeva
             </Text>
           </Box>
-
-          {/* Campaigns Grid */}
           {campaignList && campaignList.length > 0 ? (
             <Box w="full" display="flex" justifyContent="center">
               <Grid
@@ -115,6 +112,7 @@ const Campaigns: NextPage = () => {
                       transform: 'translateY(-4px)',
                       shadow: 'xl',
                     }}
+                    onClick={()=>{router.push(`/campaigns/finished/${campaign.id}`)}}
                   >
                     <CampaignCard campaign={campaign} router={router} />
                   </Box>
@@ -124,10 +122,7 @@ const Campaigns: NextPage = () => {
           ) : (
             <VStack spacing={4} py={12}>
               <Text fontSize="xl" color="gray.500" textAlign="center">
-                Trenutno nema aktivnih kampanja
-              </Text>
-              <Text fontSize="md" color="gray.400" textAlign="center">
-                Proverite ponovo uskoro za nove kampanje
+                Trenutno nema zavrsenih kampanja
               </Text>
             </VStack>
           )}

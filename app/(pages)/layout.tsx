@@ -22,7 +22,7 @@ import {
   Spinner,
   Center, Box, Flex,
 } from '@chakra-ui/react';
-import { FiHome, FiUsers, FiSettings, FiHelpCircle, FiCompass, FiUser } from 'react-icons/fi'
+import { FiHome, FiUsers, FiSettings, FiHelpCircle, FiCompass, FiUser, FiFlag } from 'react-icons/fi'
 import { LayoutProvider, useLayoutContext } from './dashboard/context';
 import { logout } from '../lib/firebase/auth';
 import { usePathname, useRouter } from 'next/navigation'
@@ -106,6 +106,9 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
               <NavItem _hover={{cursor:"pointer"}} icon={<FiUser />} onClick={()=>router.push('/dashboard/profile')} isActive={pathname.includes("/profile")}>Profil</NavItem>
               <NavItem _hover={{cursor:"pointer"}} icon={<FiCompass />} onClick={()=>router.push('/campaigns')} isActive={pathname.includes("/campaigns")}>
                 Aktivne kampanje
+              </NavItem>
+              <NavItem _hover={{cursor:"pointer"}} icon={<FiFlag />} onClick={()=>router.push('/campaigns/finished')} isActive={pathname.includes("/campaigns/finished")}>
+                Završene kampanje
               </NavItem>
               <NavItem _hover={{cursor:"pointer"}} icon={<FiSettings />} onClick={()=>router.push('/dashboard/accounts')} isActive={pathname.includes("/accounts")}>Vaši nalozi</NavItem>
               {showAdmin && <NavItem _hover={{cursor:"pointer"}} icon={<GrUserAdmin />} onClick={ async ()=>{
