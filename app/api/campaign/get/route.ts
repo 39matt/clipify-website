@@ -37,7 +37,7 @@ export async function GET(req: NextRequest) {
       ...video.data()
     })) as IVideo[];
 
-    return NextResponse.json({ campaign, videos }, { status: 200, headers: { "Access-Control-Allow-Origin": "*", "Content-Type": "application/json",} });
+    return NextResponse.json({ campaign, videos }, { status: 200 });
   } catch (error) {
     console.error('Error getting campaign:', error);
     return NextResponse.json(

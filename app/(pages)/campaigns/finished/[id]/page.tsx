@@ -50,13 +50,8 @@ const Page = () => {
   const [userVideos, setUserVideos] = useState<IVideo[]>([]);
   const [videos, setVideos] = useState<IVideo[]>([]);
   const [videosLoading, setVideosLoading] = useState(false);
-  const [addingVideo, setAddingVideo] = useState(false);
   const { user, discordUsername } = useLayoutContext();
-  const videoAgeInHours = 24;
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [videoUrl, setVideoUrl] = useState('');
-  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (!campaignId || Array.isArray(campaignId)) return;
@@ -71,7 +66,6 @@ const Page = () => {
         const responseJson =  await campaignResp.json();
         const camp = responseJson.campaign as ICampaign
         const vids = responseJson.videos as IVideo[]
-        // setVideos(vids.sort((a, b) => b.views- a.views));
         setVideos(vids);
         setCampaign(!camp.isActive ? camp : null);
         setLoading(false);
