@@ -104,7 +104,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           <SidebarSection flex="1">
             <NavGroup>
               <NavItem _hover={{cursor:"pointer"}} icon={<FiUser />} onClick={()=>router.push('/dashboard/profile')} isActive={pathname.includes("/profile")}>Profil</NavItem>
-              <NavItem _hover={{cursor:"pointer"}} icon={<FiCompass />} onClick={()=>router.push('/campaigns')} isActive={pathname.includes("/campaigns")}>
+              <NavItem _hover={{cursor:"pointer"}} icon={<FiCompass />} onClick={()=>router.push('/campaigns')} isActive={pathname.includes("/campaigns") && !pathname.includes("/finsihed")}>
                 Aktivne kampanje
               </NavItem>
               <NavItem _hover={{cursor:"pointer"}} icon={<FiFlag />} onClick={()=>router.push('/campaigns/finished')} isActive={pathname.includes("/campaigns/finished")}>
