@@ -138,150 +138,150 @@ const Page = () => {
     );
 
 
-  return (
-    <Box
-      bg="gray.900"
-      color="white"
-      maxH="90vh"
-      w="full"
-      // maxW="1200px"
-      mx="auto"
-      px={4}
-      mt={16}
-    >
-      <Box
-        position="relative"
-        bg="gray.800"
-        borderRadius="lg"
-        maxW="1200px"
-        mx="auto"
-        p={16}
-        mb={6}
-        textAlign="center"
-        boxShadow="lg"
-        overflow="hidden"
-      >
-        <Box
-          position="absolute"
-          top={0}
-          left={0}
-          w="full"
-          h="full"
-          bgImage={`url(${campaign.imageUrl})`}
-          bgSize="cover"
-          bgPosition="top"
-          filter="blur(8px)"
-          opacity={0.6}
-        />
-        <Heading size="4xl" mb={2} opacity={1}>
-          {campaign.influencer}
-        </Heading>
-        <Text fontSize="lg" color="gray.300" opacity={1}>
-          {campaign.activity}
-        </Text>
-      </Box>
-
-      <VStack spacing={6}>
-        <Card w="full" maxW="1200px" mx="auto" bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
-          <CardHeader textAlign="center">
-            <Heading size="xl" color="green.400" mb={4}>
-              Cena po milion pregleda
-            </Heading>
-          </CardHeader>
-          <CardBody textAlign="center">
-            <Text fontSize="6xl" fontWeight="bold">
-              ${campaign.perMillion.toFixed(2)}
-            </Text>
-            <Text fontSize="sm" color="gray.400" mb={4}>
-              Po milion pregleda na svim podržanim platformama
-            </Text>
-            <Divider my={4} />
-            <Text fontSize="sm" color="gray.400" mb={2}>
-              Kako ocenjujete ovu kampanju?
-            </Text>
-            <HStack justify="center" spacing={4}>
-              <IconButton
-                icon={<FaThumbsUp />}
-                aria-label="Sviđa mi se"
-                colorScheme="green"
-                variant="outline"
-              />
-              <IconButton
-                icon={<FaMeh />}
-                aria-label="Neutralno"
-                colorScheme="yellow"
-                variant="outline"
-              />
-              <IconButton
-                icon={<FaThumbsDown />}
-                aria-label="Ne sviđa mi se"
-                colorScheme="red"
-                variant="outline"
-              />
-            </HStack>
-          </CardBody>
-        </Card>
-
-        <Flex w="full" maxW="1200px" mx="auto" justify="center" gap={4} width="full" flexDirection={{ base: "column", md: "row" }}>
-          <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
-            <CardHeader textAlign="center">
-              <Heading size="lg" color="green.400" mb={4}>
-                Napredak kampanje
-              </Heading>
-            </CardHeader>
-            <CardBody>
-              <StatGroup>
-                <Stat>
-                  <StatLabel>Ukupan budžet</StatLabel>
-                  <StatNumber>${campaign.budget}</StatNumber>
-                </Stat>
-                <Stat>
-                  <StatLabel>Iskorišćeno</StatLabel>
-                  <StatNumber>${campaign.moneySpent?.toFixed(2)}</StatNumber>
-                </Stat>
-              </StatGroup>
-              <Progress
-                value={campaign.progress}
-                colorScheme="green"
-                size="lg"
-                mt={4}
-              />
-              <Text fontSize="sm" color="gray.400" mt={2} textAlign="center">
-                {campaign.progress.toFixed(2)}% Završeno
-              </Text>
-            </CardBody>
-          </Card>
-
-          <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
-            <CardHeader textAlign="center">
-              <Heading size="lg" color="green.400" mb={4}>
-                Detalji kampanje
-              </Heading>
-            </CardHeader>
-            <CardBody textAlign="center">
-              <Stat>
-                <StatLabel>Maksimalan broj prijava</StatLabel>
-                <StatNumber>{campaign.maxSubmissions} po nalogu</StatNumber>
-              </Stat>
-              <Divider my={4} />
-              <Stat>
-                <StatLabel>Maksimalna zarada</StatLabel>
-                <StatNumber>${campaign.maxEarnings}</StatNumber>
-              </Stat>
-              <Divider my={4} />
-              <Stat>
-                <StatLabel>Maksimalna zarada po objavi</StatLabel>
-                <StatNumber>${campaign.maxEarningsPerPost}</StatNumber>
-              </Stat>
-            </CardBody>
-          </Card>
-        </Flex>
-
-        <YourVideosSection userVideos={userVideos} videosLoading={videosLoading} />
-        <AllVideosSection videos={videos} videosLoading={loading} />
-      </VStack>
-    </Box>
-  );
+  // return (
+  //   <Box
+  //     bg="gray.900"
+  //     color="white"
+  //     maxH="90vh"
+  //     w="full"
+  //     // maxW="1200px"
+  //     mx="auto"
+  //     px={4}
+  //     mt={16}
+  //   >
+  //     <Box
+  //       position="relative"
+  //       bg="gray.800"
+  //       borderRadius="lg"
+  //       maxW="1200px"
+  //       mx="auto"
+  //       p={16}
+  //       mb={6}
+  //       textAlign="center"
+  //       boxShadow="lg"
+  //       overflow="hidden"
+  //     >
+  //       <Box
+  //         position="absolute"
+  //         top={0}
+  //         left={0}
+  //         w="full"
+  //         h="full"
+  //         bgImage={`url(${campaign.imageUrl})`}
+  //         bgSize="cover"
+  //         bgPosition="top"
+  //         filter="blur(8px)"
+  //         opacity={0.6}
+  //       />
+  //       <Heading size="4xl" mb={2} opacity={1}>
+  //         {campaign.influencer}
+  //       </Heading>
+  //       <Text fontSize="lg" color="gray.300" opacity={1}>
+  //         {campaign.activity}
+  //       </Text>
+  //     </Box>
+  //
+  //     <VStack spacing={6}>
+  //       <Card w="full" maxW="1200px" mx="auto" bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
+  //         <CardHeader textAlign="center">
+  //           <Heading size="xl" color="green.400" mb={4}>
+  //             Cena po milion pregleda
+  //           </Heading>
+  //         </CardHeader>
+  //         <CardBody textAlign="center">
+  //           <Text fontSize="6xl" fontWeight="bold">
+  //             ${campaign.perMillion.toFixed(2)}
+  //           </Text>
+  //           <Text fontSize="sm" color="gray.400" mb={4}>
+  //             Po milion pregleda na svim podržanim platformama
+  //           </Text>
+  //           <Divider my={4} />
+  //           <Text fontSize="sm" color="gray.400" mb={2}>
+  //             Kako ocenjujete ovu kampanju?
+  //           </Text>
+  //           <HStack justify="center" spacing={4}>
+  //             <IconButton
+  //               icon={<FaThumbsUp />}
+  //               aria-label="Sviđa mi se"
+  //               colorScheme="green"
+  //               variant="outline"
+  //             />
+  //             <IconButton
+  //               icon={<FaMeh />}
+  //               aria-label="Neutralno"
+  //               colorScheme="yellow"
+  //               variant="outline"
+  //             />
+  //             <IconButton
+  //               icon={<FaThumbsDown />}
+  //               aria-label="Ne sviđa mi se"
+  //               colorScheme="red"
+  //               variant="outline"
+  //             />
+  //           </HStack>
+  //         </CardBody>
+  //       </Card>
+  //
+  //       <Flex w="full" maxW="1200px" mx="auto" justify="center" gap={4} width="full" flexDirection={{ base: "column", md: "row" }}>
+  //         <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
+  //           <CardHeader textAlign="center">
+  //             <Heading size="lg" color="green.400" mb={4}>
+  //               Napredak kampanje
+  //             </Heading>
+  //           </CardHeader>
+  //           <CardBody>
+  //             <StatGroup>
+  //               <Stat>
+  //                 <StatLabel>Ukupan budžet</StatLabel>
+  //                 <StatNumber>${campaign.budget}</StatNumber>
+  //               </Stat>
+  //               <Stat>
+  //                 <StatLabel>Iskorišćeno</StatLabel>
+  //                 <StatNumber>${campaign.moneySpent?.toFixed(2)}</StatNumber>
+  //               </Stat>
+  //             </StatGroup>
+  //             <Progress
+  //               value={campaign.progress}
+  //               colorScheme="green"
+  //               size="lg"
+  //               mt={4}
+  //             />
+  //             <Text fontSize="sm" color="gray.400" mt={2} textAlign="center">
+  //               {campaign.progress.toFixed(2)}% Završeno
+  //             </Text>
+  //           </CardBody>
+  //         </Card>
+  //
+  //         <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
+  //           <CardHeader textAlign="center">
+  //             <Heading size="lg" color="green.400" mb={4}>
+  //               Detalji kampanje
+  //             </Heading>
+  //           </CardHeader>
+  //           <CardBody textAlign="center">
+  //             <Stat>
+  //               <StatLabel>Maksimalan broj prijava</StatLabel>
+  //               <StatNumber>{campaign.maxSubmissions} po nalogu</StatNumber>
+  //             </Stat>
+  //             <Divider my={4} />
+  //             <Stat>
+  //               <StatLabel>Maksimalna zarada</StatLabel>
+  //               <StatNumber>${campaign.maxEarnings}</StatNumber>
+  //             </Stat>
+  //             <Divider my={4} />
+  //             <Stat>
+  //               <StatLabel>Maksimalna zarada po objavi</StatLabel>
+  //               <StatNumber>${campaign.maxEarningsPerPost}</StatNumber>
+  //             </Stat>
+  //           </CardBody>
+  //         </Card>
+  //       </Flex>
+  //
+  //       <YourVideosSection userVideos={userVideos} videosLoading={videosLoading} />
+  //       <AllVideosSection videos={videos} videosLoading={loading} />
+  //     </VStack>
+  //   </Box>
+  // );
 };
 
 export default Page;
