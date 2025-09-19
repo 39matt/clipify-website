@@ -99,9 +99,8 @@ const Campaigns: NextPage = () => {
               {campaignList.map((campaign, index) => (
                 <Box
                   key={campaign.id || index}
-                  flexBasis={{ base: "100%", md: "calc(50% - 12px)", lg: "calc(33.333% - 16px)", xl: "calc(25% - 18px)" }}
-                  maxW="300px"
-                  minW="280px"
+                  maxW="320px"
+                  w="full"
                   transform="scale(1)"
                   transition="all 0.2s ease-in-out"
                   _hover={{

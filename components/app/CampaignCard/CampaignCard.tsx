@@ -51,7 +51,8 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
 
   return (
     <Card
-      w="320px"
+      w="full"
+      maxW="320px"
       h="480px"
       bg={cardBg}
       borderWidth="1px"
