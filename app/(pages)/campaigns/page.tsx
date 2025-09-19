@@ -3,19 +3,17 @@ import {
   Box,
   Heading,
   VStack,
-  Grid,
   Container,
   Spinner,
   Text,
   useColorModeValue,
+  Flex,
 } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import CampaignCard from '#components/app/CampaignCard/CampaignCard'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { getAllCampaigns } from '../../lib/firebase/firestore/campaign'
 import { ICampaign } from '../../lib/models/campaign'
-import { cookies } from 'next/headers'
 
 const Campaigns: NextPage = () => {
   const router = useRouter()
@@ -32,14 +30,14 @@ const Campaigns: NextPage = () => {
       try {
         const timestamp = Date.now()
         const response = await fetch(`/api/campaign/get-all?t=${timestamp}`, {
-          method:"GET",
+          method: 'GET',
           cache: 'no-store',
           headers: {
             'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache',
-          }
+            Pragma: 'no-cache',
+          },
         })
-        const campaigns = await response.json() as ICampaign[]
+        const campaigns = (await response.json()) as ICampaign[]
         setCampaignList(campaigns.filter((campaign) => campaign.isActive))
       } catch (error) {
         console.error('Error fetching campaigns:', error)
@@ -65,9 +63,9 @@ const Campaigns: NextPage = () => {
   }
 
   return (
-    <Box minH="100vh" minW="full" >
-      <Box minW="full" py={{ base: 6, md: 12 }}>
-        <VStack minW="full" spacing={{ base: 8, md: 12 }}>
+    <Box minH="100vh" minW="full" bgGradient={bgGradient}>
+      <Container maxW="container.xl" py={{ base: 6, md: 12 }}>
+        <VStack spacing={{ base: 8, md: 12 }}>
           {/* Header Section */}
           <Box textAlign="center" maxW="2xl">
             <Heading
@@ -92,35 +90,29 @@ const Campaigns: NextPage = () => {
 
           {/* Campaigns Grid */}
           {campaignList && campaignList.length > 0 ? (
-            <Box w="full" display="flex" justifyContent="center">
-              <Grid
-                templateColumns={{
-                  base: '1fr',
-                  md: 'repeat(2, 1fr)',
-                  lg: 'repeat(3, 1fr)',
-                  xl: 'repeat(4, 1fr)',
-                }}
-                gap={{ base: 6, md: 8 }}
-                w="full"
-                maxW="1200px"
-                display="flex"
-                justifyContent="center"
-              >
-                {campaignList.map((campaign, index) => (
-                  <Box
-                    key={campaign.id || index}
-                    transform="scale(1)"
-                    transition="all 0.2s ease-in-out"
-                    _hover={{
-                      transform: 'translateY(-4px)',
-                      shadow: 'xl',
-                    }}
-                  >
-                    <CampaignCard campaign={campaign} router={router} />
-                  </Box>
-                ))}
-              </Grid>
-            </Box>
+            <Flex
+              flexWrap="wrap"
+              justifyContent="space-around"
+              gap={24}
+              w="full"
+            >
+              {campaignList.map((campaign, index) => (
+                <Box
+                  key={campaign.id || index}
+                  flexBasis={{ base: "100%", md: "calc(50% - 12px)", lg: "calc(33.333% - 16px)", xl: "calc(25% - 18px)" }}
+                  maxW="300px"
+                  minW="280px"
+                  transform="scale(1)"
+                  transition="all 0.2s ease-in-out"
+                  _hover={{
+                    transform: 'translateY(-4px)',
+                    shadow: 'xl',
+                  }}
+                >
+                  <CampaignCard campaign={campaign} router={router} />
+                </Box>
+              ))}
+            </Flex>
           ) : (
             <VStack spacing={4} py={12}>
               <Text fontSize="xl" color="gray.500" textAlign="center">
@@ -132,7 +124,7 @@ const Campaigns: NextPage = () => {
             </VStack>
           )}
         </VStack>
-      </Box>
+      </Container>
     </Box>
   )
 }
