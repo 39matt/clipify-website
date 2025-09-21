@@ -93,7 +93,7 @@ const Campaigns: NextPage = () => {
             <Flex
               flexWrap="wrap"
               justifyContent="space-around"
-              gap={24}
+              gap={12}
               w="full"
             >
               {campaignList.map((campaign, index) => (

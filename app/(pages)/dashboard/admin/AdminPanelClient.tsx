@@ -4,15 +4,12 @@ import {
   Box,
   Heading,
   VStack,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   Text,
   Spinner,
-  Center, Button, Flex, Card, HStack,
+  Center,
+  Card,
+  SimpleGrid,
+  useBreakpointValue,
 } from '@chakra-ui/react'
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -22,6 +19,12 @@ export default function AdminPanelClient() {
   const [campaigns, setCampaigns] = useState<ICampaign[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  // Responsive values
+  const cardWidth = useBreakpointValue({ base: "280px", md: "320px" });
+  const campaignCardHeight = useBreakpointValue({ base: "200px", md: "240px" });
+  const userCardHeight = useBreakpointValue({ base: "56px", md: "64px" });
+  const containerWidth = useBreakpointValue({ base: "95%", md: "90%", lg: "75%" });
 
   useEffect(() => {
     const getCampaigns = async () => {
@@ -48,126 +51,168 @@ export default function AdminPanelClient() {
 
   if (loading) {
     return (
-      <Center minH="100vh">
-        <Spinner />
-        <Text ml={4}>Loading campaigns...</Text>
+      <Center minH="100vh" px={4}>
+        <VStack spacing={4}>
+          <Spinner size="xl" color="green.400" />
+          <Text>Loading campaigns...</Text>
+        </VStack>
       </Center>
     );
   }
 
   return (
-    <VStack minW="full">
-      <Box my={{ base: 4, md: 8 }}>
+    <VStack
+      minW="full"
+      spacing={{ base: 6, md: 8 }}
+      px={{ base: 4, md: 6 }}
+      py={{ base: 4, md: 8 }}
+    >
+      {/* Header */}
+      <Box textAlign="center">
         <Heading
-          textAlign="center"
-          fontSize={{ base: '32px', md: '48px' }}
-          textColor="green.400"
+          fontSize={{ base: '28px', md: '36px', lg: '48px' }}
+          color="green.400"
         >
           Admin Panel
         </Heading>
       </Box>
-      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-        <Heading>Kampanje</Heading>
-        <Box
-          w="75%"
-          overflowX="auto"
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
+
+      {/* Campaigns Section */}
+      <VStack spacing={{ base: 4, md: 6 }} w="full">
+        <Heading
+          fontSize={{ base: 'xl', md: '2xl' }}
+          textAlign="center"
         >
-          {campaigns.map((campaign) => (
+          Kampanje
+        </Heading>
+
+        <Box w={containerWidth} maxW="1200px">
+          {campaigns.length > 0 ? (
+            <SimpleGrid
+              columns={{ base: 1, md: 2, lg: 3 }}
+              spacing={{ base: 4, md: 6 }}
+              justifyItems="center"
+            >
+              {campaigns.map((campaign) => (
+                <Card
+                  key={campaign.id}
+                  w={cardWidth}
+                  h={campaignCardHeight}
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  bg="green.500"
+                  color="white"
+                  cursor="pointer"
+                  transition="all 0.2s"
+                  _hover={{
+                    transform: 'translateY(-2px)',
+                    shadow: 'lg',
+                    bg: 'green.600'
+                  }}
+                  onClick={() => router.push(`/dashboard/admin/campaign/${campaign.id}`)}
+                  p={4}
+                >
+                  <Text
+                    textAlign="center"
+                    fontSize={{ base: 'sm', md: 'md' }}
+                    fontWeight="medium"
+                  >
+                    {campaign.influencer} - {campaign.activity}
+                  </Text>
+                </Card>
+              ))}
+            </SimpleGrid>
+          ) : (
+            <Center py={8}>
+              <Text color="gray.500">No campaigns found</Text>
+            </Center>
+          )}
+        </Box>
+      </VStack>
+
+      {/* Users Section */}
+      <VStack spacing={{ base: 4, md: 6 }} w="full">
+        <Heading
+          fontSize={{ base: 'xl', md: '2xl' }}
+          textAlign="center"
+        >
+          Korisnici
+        </Heading>
+
+        <Box w={containerWidth} maxW="1200px">
+          <SimpleGrid
+            columns={{ base: 1, md: 2, lg: 3 }}
+            spacing={{ base: 4, md: 6 }}
+            justifyItems="center"
+          >
             <Card
-              w="320px"
-              h="240px"
-              key={campaign.id}
+              w={cardWidth}
+              h={userCardHeight}
               display="flex"
               justifyContent="center"
               alignItems="center"
-              bg="green.500"
-              _hover={{cursor: "pointer"}}
-              onClick={()=> router.push(`/dashboard/admin/campaign/${campaign.id}`)}
+              bg="blue.500"
+              color="white"
+              cursor="pointer"
+              transition="all 0.2s"
+              _hover={{
+                transform: 'translateY(-2px)',
+                shadow: 'lg',
+                bg: 'blue.600'
+              }}
+              onClick={() => router.push('/dashboard/admin/users')}
             >
-              <Text>{campaign.influencer} - {campaign.activity}</Text>
+              <Text fontWeight="medium" fontSize={{ base: 'sm', md: 'md' }}>
+                Korisnici
+              </Text>
             </Card>
-          ))}
-          {/*<Table variant="striped" colorScheme="green">*/}
-          {/*  <Thead>*/}
-          {/*    <Tr>*/}
-          {/*      <Th>Ime</Th>*/}
-          {/*      /!*<Th>Broj videa</Th>*!/*/}
-          {/*    </Tr>*/}
-          {/*  </Thead>*/}
-          {/*  <Tbody>*/}
-          {/*    {campaigns.map((campaign, index) => (*/}
-          {/*      <Tr key={index}*/}
-          {/*          _hover={{ cursor: 'pointer' }}>*/}
-          {/*        <Td>*/}
-          {/*          <Text>*/}
-          {/*            {campaign.influencer} - {campaign.activity}*/}
-          {/*          </Text>*/}
 
-          {/*        </Td>*/}
-          {/*        <Td>*/}
-          {/*          <Flex justify="space-around" align="flex-end" w="100%">*/}
-          {/*            <Button*/}
-          {/*              onClick={() => {*/}
-          {/*                router.push(`/dashboard/admin/campaign/${campaign.id}/all-videos`);*/}
-          {/*              }}>*/}
-          {/*              Svi</Button>*/}
-          {/*            <Button*/}
-          {/*              onClick={() => {*/}
-          {/*              router.push(`/dashboard/admin/campaign/${campaign.id}/unapproved`);*/}
-          {/*            }}>*/}
-          {/*              Neodobreni</Button>*/}
-          {/*          </Flex>*/}
-          {/*        </Td>*/}
-          {/*        /!*<Td>2</Td>*!/*/}
-          {/*      </Tr>*/}
-          {/*    ))}*/}
-          {/*  </Tbody>*/}
-          {/*</Table>*/}
+            <Card
+              w={cardWidth}
+              h={userCardHeight}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              bg="blue.500"
+              color="white"
+              cursor="pointer"
+              transition="all 0.2s"
+              _hover={{
+                transform: 'translateY(-2px)',
+                shadow: 'lg',
+                bg: 'blue.600'
+              }}
+              onClick={() => router.push('/dashboard/admin/payouts')}
+            >
+              <Text fontWeight="medium" fontSize={{ base: 'sm', md: 'md' }}>
+                Isplate
+              </Text>
+            </Card>
+
+            <Card
+              w={cardWidth}
+              h={userCardHeight}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              bg="blue.500"
+              color="white"
+              cursor="pointer"
+              transition="all 0.2s"
+              _hover={{
+                transform: 'translateY(-2px)',
+                shadow: 'lg',
+                bg: 'blue.600'
+              }}
+              onClick={() => router.push('/dashboard/admin/affiliates')}
+            >
+              <Text fontWeight="medium" fontSize={{ base: 'sm', md: 'md' }}>
+                Affiliates
+              </Text>
+            </Card>
+          </SimpleGrid>
         </Box>
-      </Box>
-      <VStack justifyContent="center" alignItems="center">
-        <Heading>Korisnici</Heading>
-        <HStack spacing={2}>
-          <Card
-            w="320px"
-            h="64px"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            bg="blue.500"
-            _hover={{cursor: "pointer"}}
-            onClick={()=> router.push(`/dashboard/admin/users`)}
-          >
-            <Text>Korisnici</Text>
-          </Card>
-          <Card
-            w="320px"
-            h="64px"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            bg="blue.500"
-            _hover={{cursor: "pointer"}}
-            onClick={()=> router.push(`/dashboard/admin/payouts`)}
-          >
-            <Text>Isplate</Text>
-          </Card>
-          <Card
-            w="320px"
-            h="64px"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            bg="blue.500"
-            _hover={{cursor: "pointer"}}
-            onClick={()=> router.push(`/dashboard/admin/affiliates`)}
-          >
-            <Text>Affiliates</Text>
-          </Card>
-        </HStack>
       </VStack>
     </VStack>
   );
