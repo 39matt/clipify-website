@@ -138,11 +138,7 @@ export function MobileNavContent(props: MobileNavContentProps) {
                         key={i}
                         onClick={(e) => {
                           e.preventDefault() // Prevent default navigation behavior
-                          if (id) {
-                            handleScrollToSection(id) // Scroll to the section with the given id
-                          } else if (href) {
                             router.push(href) // Navigate to the href if no id is provided
-                          }
                         }}
                         {...(props as any)}
                       >
