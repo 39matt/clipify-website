@@ -36,7 +36,7 @@ const Contact: NextPage = () => {
   const [state, handleSubmit] = useForm("mzzvzkvp");
 
   return (
-    <Section minH="80vh" display="flex" alignItems="center" mx="auto">
+    <Section minH="90vh" display="flex" alignItems="center" mx="auto"   pt={{ base: "120px", md: "140px" }}>
       <BackgroundGradient zIndex="-1" />
 
       <PageTransition width="100%">
