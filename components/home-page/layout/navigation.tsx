@@ -47,7 +47,7 @@ const Navigation: React.FC = () => {
           href="/register"
           onClick={(e) => {
             e.preventDefault()
-            router.push("/register")
+            router.push("/signup")
           }}
           size="lg"
           colorScheme="primary"
