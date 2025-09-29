@@ -81,21 +81,34 @@ const Home: NextPage = () => {
 
 const HeroSection: React.FC = () => {
   return (
-    <Flex direction="column" justifyContent="space-around" position="relative" overflow="hidden" w="full" minH="100vh" h="full" >
+    <Flex
+      direction="column"
+      justifyContent="space-around"
+      position="relative"
+      overflow="hidden"
+      w="full"
+      minH="100vh"
+      h="full"
+    >
       <BackgroundGradient height="100%" zIndex="-1" />
-      <Container maxW="85%" w="full" pt={{ base: 24, md: 48 }}>
+      <Container
+        maxW={{ base: "95%", md: "85%" }}
+        w="full"
+        pt={{ base: 16, md: 48 }}
+        px={{ base: 4, md: 6 }}
+      >
         <Flex
           direction={{ base: 'column', md: 'row' }}
           align={{ base: "center", md: "center" }}
           justify="space-between"
-          gap={{ base: 8, lg: 0 }}
-          mt={{ base: 12, md: 0 }}
+          gap={{ base: 0, md: 8, lg: 0 }}
+          mt={{ base: 24, md: 0 }}
         >
           <Box
-            flex="0 1 40%" // Increased text area slightly
+            flex={{ base: "none", md: "0 1 40%" }}
             pr={{ base: 0, lg: 4 }}
-            mb={{ base: 8, lg: 0 }}
-            w={{ base: "100%", lg: "auto" }}
+            mb={{ base: 6, lg: 0 }}
+            w="full"
             display="flex"
             alignItems="center"
           >
@@ -103,7 +116,7 @@ const HeroSection: React.FC = () => {
               px="0"
               title={
                 <FallInPlace>
-                  <Text fontSize={{ base: "42px", md: "64px" }}>
+                  <Text fontSize={{ base: "32px", sm: "36px", md: "64px" }}>
                     Sve-u-jednom alat za{" "}
                     <chakra.span
                       color="green.400"
@@ -127,7 +140,7 @@ const HeroSection: React.FC = () => {
               }
               description={
                 <FallInPlace delay={0.2} fontWeight="medium">
-                  <Text fontSize={{ base: "18px", md: "24px" }}>
+                  <Text fontSize={{ base: "16px", sm: "18px", md: "24px" }}>
                     Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi{" "}
                     <chakra.em
                       color="white"
@@ -150,23 +163,23 @@ const HeroSection: React.FC = () => {
               }
             >
               <FallInPlace delay={0.4}>
-                <HStack pt="4" pb="12" spacing="8"></HStack>
+                <HStack pt="4" pb={{ base: 6, md: 12 }} spacing="8"></HStack>
 
                 <ButtonGroup
                   spacing={{ base: 3, md: 6 }}
                   alignItems="center"
-                  flexDirection={{ base: "column", md: "row" }}
-                  width={{ base: "full", md: "auto" }}
+                  flexDirection={{ base: "column", sm: "column", md: "row" }}
+                  width="full"
                 >
                   <ButtonLink
                     href="/signup"
                     colorScheme="primary"
-                    size="lg"
-                    px={10}
-                    py={7}
-                    fontSize={{ base: "xl", md: "2xl" }}
+                    size={{ base: "md", md: "lg" }}
+                    px={{ base: 8, md: 10 }}
+                    py={{ base: 6, md: 7 }}
+                    fontSize={{ base: "lg", sm: "xl", md: "2xl" }}
                     width={{ base: "full", md: "auto" }}
-                    mb={{ base: "1.5em", md: 0 }}
+                    mb={{ base: 4, md: 0 }}
                     borderRadius="xl"
                     shadow="lg"
                     _hover={{ transform: "translateY(-2px)", shadow: "xl" }}
@@ -178,11 +191,11 @@ const HeroSection: React.FC = () => {
 
                   <ButtonLink
                     href="/kontakt"
-                    size="lg"
+                    size={{ base: "md", md: "lg" }}
                     variant="outline"
-                    px={10}
-                    py={7}
-                    fontSize={{ base: "xl", md: "2xl" }}
+                    px={{ base: 8, md: 10 }}
+                    py={{ base: 6, md: 7 }}
+                    fontSize={{ base: "lg", sm: "xl", md: "2xl" }}
                     width={{ base: "full", md: "auto" }}
                     borderRadius="xl"
                     shadow="sm"
@@ -203,21 +216,22 @@ const HeroSection: React.FC = () => {
           </Box>
 
           <Box
-            flex="0 1 50%" // Reduced from 70% to 50%
+            flex={{ base: "none", md: "0 1 50%" }}
             pl={{ base: 0, lg: 4 }}
-            w={{ base: "100%", lg: "auto" }}
+            w="full"
             display="flex"
-            justifyContent="center" // Stick to right
+            justifyContent="center"
             alignItems="center"
             overflow="hidden"
+            mt={{ base: 4, md: 0 }}
           >
             <FallInPlace delay={0.6}>
               <Box
-                width="auto" // Changed from "full" to "auto"
+                width="auto"
                 overflow="hidden"
                 display="flex"
                 alignItems="center"
-                justifyContent="flex-end"
+                justifyContent="center"
               >
                 <Image
                   src="/static/images/heroimg3.png"
@@ -230,7 +244,7 @@ const HeroSection: React.FC = () => {
                     width: "100%",
                     height: "auto",
                     maxWidth: "800px",
-                    maxHeight: "600px", // Reduced from 800px
+                    maxHeight: "600px",
                     objectFit: "contain"
                   }}
                 />
@@ -242,9 +256,12 @@ const HeroSection: React.FC = () => {
 
       <BoxFeatures
         w="full"
-        maxW="85%"
+        maxW={{ base: "95%", md: "85%" }}
+        mx="auto"
+        px={{ base: 4, md: 6 }}
+        mt={{ base: 12, md: 16 }}
         id="benefits"
-        columns={[1, 2, 4]}
+        columns={{ base: 1, sm: 2, md: 4 }}
         iconSize={4}
         features={[
           {
@@ -257,32 +274,28 @@ const HeroSection: React.FC = () => {
           {
             title: '250+',
             icon: User,
-            description:
-              'Aktivnih klipera',
+            description: 'Aktivnih klipera',
             iconPosition: 'left',
             delay: 0.2,
           },
           {
             title: '10M+',
             icon: EyeIcon,
-            description:
-              'Organskih pregleda',
+            description: 'Organskih pregleda',
             iconPosition: 'left',
             delay: 0.4,
           },
           {
             title: '3',
             icon: ImBullhorn,
-            description:
-              'Pokrenutih kampanja',
+            description: 'Pokrenutih kampanja',
             iconPosition: 'left',
             delay: 0.6,
           },
         ]}
         reveal={FallInPlace}
       />
-    </Flex>
-  )
+    </Flex>  )
 }
 
 const HighlightsSection = () => {
