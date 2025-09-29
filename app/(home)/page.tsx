@@ -116,7 +116,7 @@ const HeroSection: React.FC = () => {
               px="0"
               title={
                 <FallInPlace>
-                  <Text fontSize={{ base: "32px", sm: "36px", md: "64px" }}>
+                  <Text fontSize={{ base: "32px", sm: "36px", md: "56px" }}>
                     Sve-u-jednom alat za{" "}
                     <chakra.span
                       color="green.400"
@@ -140,7 +140,7 @@ const HeroSection: React.FC = () => {
               }
               description={
                 <FallInPlace delay={0.2} fontWeight="medium">
-                  <Text fontSize={{ base: "16px", sm: "18px", md: "24px" }}>
+                  <Text fontSize={{ base: "16px", sm: "18px", md: "22px" }}>
                     Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi{" "}
                     <chakra.em
                       color="white"
@@ -243,8 +243,8 @@ const HeroSection: React.FC = () => {
                   style={{
                     width: "100%",
                     height: "auto",
-                    maxWidth: "800px",
-                    maxHeight: "600px",
+                    maxWidth: "600px",
+                    maxHeight: "500px",
                     objectFit: "contain"
                   }}
                 />
