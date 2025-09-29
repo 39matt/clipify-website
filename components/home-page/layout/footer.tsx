@@ -30,7 +30,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
       boxShadow="md"
       {...rest}
     >
-      <Container maxW="85%" px="8" py="8">
+      <Container maxW={{base: "full", md:"85%"}} px="8" py="8">
         <SimpleGrid columns={columns}>
           <Stack spacing="8">
             <Stack alignItems="flex-start">
@@ -67,7 +67,7 @@ export const Copyright: React.FC<CopyrightProps> = ({
     content = `&copy; ${new Date().getFullYear()} - ${title}`
   }
   return (
-    <Text color="muted" fontSize="xl">
+    <Text color="muted" fontSize={{base: "lg", md:"2xl"}}>
       {content || children}
     </Text>
   )
@@ -78,7 +78,7 @@ export const FooterLink: React.FC<LinkProps> = (props) => {
   return (
     <Link
       color="muted"
-      fontSize="2xl"
+      fontSize={{base: "lg", md:"2xl"}}
       textDecoration="none"
       _hover={{
         color: 'white',
