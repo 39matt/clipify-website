@@ -55,11 +55,11 @@ const siteConfig = {
       },
       {
         href: 'https://www.tiktok.com/@clipify.rs',
-        label: <FaTiktok size="14" />,
+        label: <FaTiktok size="24" />,
       },
       {
         href: 'https://www.instagram.com/clipify.rs/',
-        label: <FaInstagram size="14" />,
+        label: <FaInstagram size="24" />,
       },
     ],
   },

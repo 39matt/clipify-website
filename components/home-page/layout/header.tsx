@@ -38,12 +38,12 @@ export const Header = (props: HeaderProps) => {
       borderColor="whiteAlpha.100"
       transitionProperty="common"
       transitionDuration="normal"
-      bg={y > height ? bg : ''}
-      boxShadow={y > height ? 'md' : ''}
-      borderBottomWidth={y > height ? '1px' : ''}
+      bg={bg}
+      boxShadow={'md'}
+      borderBottomWidth={'1px'}
       {...props}
     >
-      <Container maxW="container.2xl" px="8" py="4">
+      <Container maxW="85%" w="full" py="4">
         <Flex width="full" align="center" justify="space-between">
           <Logo
             onClick={(e) => {

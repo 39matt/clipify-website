@@ -23,7 +23,7 @@ export const Section: React.FC<SectionProps> = (props) => {
 
   return (
     <chakra.div __css={styles} {...ownProps}>
-      <Container height="full" maxW={innerWidth}>
+      <Container height="full">
         {children}
       </Container>
     </chakra.div>

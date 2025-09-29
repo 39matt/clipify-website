@@ -1,15 +1,15 @@
-import { HStack, Text } from '@chakra-ui/react'
 
 export default {
-  title: 'Kako naša platforma funkcioniše',
-  description:
-    'Povezujemo kreatore sa kliperima koji prave viralne klipove – bez ulaganja na početku, plaćate tek kada klipovi donesu rezultate',
+  title: 'Šta je tvoj cilj?',
+  description:'',
   plans: [
     {
       id: 'creator-start',
       title: 'Kreator',
-      description:
-        'Kampanja sa jasnim ciljem i kontrolisanim budžetom. Plaćate isključivo kada vidite konkretne rezultate.',
+      description1:
+        'Pokreni svoju kampanju.',
+      description2:
+        'Unapredi svoj brend.',
       price: '',
       features: [
         {
@@ -36,8 +36,10 @@ export default {
     {
       id: 'clipper',
       title: 'Kliper',
-      description:
-        'Kreirajte klipove, ucestvujte u kampanjama i zarađujte neograničeno – što više pregleda, to veća zarada.',
+      description1:
+        'Pridruži se platformi:',
+      description2:
+        'Klipuj, Okači, Zaradi.',
       price: '',
       features: [
         {
@@ -53,7 +55,7 @@ export default {
           title: 'Sigurna i brza isplata',
         },
         {
-          title: '24/7 Support',
+          title: '24/7 Korisnička podrška',
         },
       ],
       action: {

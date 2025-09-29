@@ -19,6 +19,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = (props) => {
 
   return (
     <VStack
+      pt={[20]}
       sx={styles.wrapper}
       alignItems={align === 'left' ? 'flex-start' : 'center'}
       spacing={4}

@@ -7,6 +7,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { Link, LinkProps } from '@saas-ui/react'
 
@@ -18,18 +19,24 @@ export interface FooterProps extends BoxProps {
 
 export const Footer: React.FC<FooterProps> = (props) => {
   const { columns = 2, ...rest } = props
+  const bg = useColorModeValue('whiteAlpha.700', 'rgba(29, 32, 37, 0.7)')
+
   return (
-    <Box bg="white" _dark={{ bg: 'gray.900' }} {...rest}>
-      <Container maxW="container.2xl" px="8" py="8">
+    <Box
+      bg={bg}
+      backdropFilter="blur(5px)"
+      borderColor="whiteAlpha.100"
+      borderTopWidth="1px"
+      boxShadow="md"
+      {...rest}
+    >
+      <Container maxW="85%" px="8" py="8">
         <SimpleGrid columns={columns}>
           <Stack spacing="8">
             <Stack alignItems="flex-start">
               <Flex>
-                <Box as={siteConfig.logo} flex="1" height="64px" />
+                {/*<Box as={siteConfig.logo} flex="1" height="64px" />*/}
               </Flex>
-              <Text fontSize="md" color="muted">
-                {siteConfig.seo.description}
-              </Text>
             </Stack>
             <Copyright>{siteConfig.footer.copyright}</Copyright>
           </Stack>
@@ -52,15 +59,15 @@ export interface CopyrightProps {
 }
 
 export const Copyright: React.FC<CopyrightProps> = ({
-  title,
-  children,
-}: CopyrightProps) => {
+                                                      title,
+                                                      children,
+                                                    }: CopyrightProps) => {
   let content
   if (title && !children) {
     content = `&copy; ${new Date().getFullYear()} - ${title}`
   }
   return (
-    <Text color="muted" fontSize="sm">
+    <Text color="muted" fontSize="xl">
       {content || children}
     </Text>
   )
@@ -71,7 +78,7 @@ export const FooterLink: React.FC<LinkProps> = (props) => {
   return (
     <Link
       color="muted"
-      fontSize="sm"
+      fontSize="2xl"
       textDecoration="none"
       _hover={{
         color: 'white',

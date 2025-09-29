@@ -4,7 +4,6 @@ import { Alert, AlertIcon, Box, Card, CardBody, CardHeader, Center, Flex, HStack
 import { PasswordForm } from '@saas-ui/auth';
 import { PasswordSubmitParams } from '@saas-ui/auth/src/components';
 import { Field } from '@saas-ui/react';
-import { Features } from 'components/home-page/features';
 import { NextPage } from 'next';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -24,6 +23,7 @@ import siteConfig from '#data/config';
 import { signUp } from '../../lib/firebase/auth';
 import { firebaseSignupErrorMap } from '../../lib/firebase/errors';
 import { useAuth } from '../../providers/authProvider';
+import { Features } from './components/features'
 
 
 const SignUp: NextPage = () => {

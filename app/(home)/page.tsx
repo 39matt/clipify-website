@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Box,
@@ -14,37 +14,48 @@ import {
   Text,
   VStack,
   Wrap,
+  chakra,
   useClipboard,
 } from '@chakra-ui/react'
-import { Br, Link } from '@saas-ui/react'
-import type { Metadata, NextPage } from 'next'
-import Image from 'next/image'
+import { Br, Link } from '@saas-ui/react';
+import { Faq } from 'components/home-page/faq';
+import { Features } from 'components/home-page/features';
+import { Hero } from 'components/home-page/hero';
+import { Highlights, HighlightsItem, HighlightsTestimonialItem } from 'components/home-page/highlights';
+import { Testimonial, Testimonials } from 'components/home-page/testimonials';
+import { Em } from 'components/home-page/typography';
 import {
-  FiArrowRight,
-} from 'react-icons/fi'
+  Award, BanknoteArrowUp,
+  ChartLine,
+  DollarSign,
+  EyeIcon,
+  MessageSquare,
+  Search,
+  Shield,
+  UploadCloud,
+  User,
+  Users,
+} from 'lucide-react'
+import type { Metadata, NextPage } from 'next';
+import Image from 'next/image';
+import { FiArrowRight } from 'react-icons/fi';
+import { ImBullhorn } from 'react-icons/im';
 
-import * as React from 'react'
 
-import { ButtonLink } from '#components/home-page/button-link/button-link'
-import { Faq } from 'components/home-page/faq'
-import { Features } from 'components/home-page/features'
-import { BackgroundGradient } from '#components/home-page/gradients/background-gradient'
-import { Hero } from 'components/home-page/hero'
-import {
-  Highlights,
-  HighlightsItem,
-  HighlightsTestimonialItem,
-} from 'components/home-page/highlights'
-import { FallInPlace } from '#components/home-page/motion/fall-in-place'
-import { Pricing } from '#components/home-page/pricing/pricing'
-import { Testimonial, Testimonials } from 'components/home-page/testimonials'
-import { Em } from 'components/home-page/typography'
-import faq from '#data/faq'
-import pricing from '#data/pricing'
-import testimonials from '#data/testimonials'
-import { Award, DollarSign, EyeIcon, MessageSquare, Search, Shield, UploadCloud, User, Users } from 'lucide-react'
-import { ImBullhorn } from 'react-icons/im'
-import { BoxFeatures } from '#components/home-page/features/box-features'
+
+import * as React from 'react';
+
+
+
+import { ButtonLink } from '#components/home-page/button-link/button-link';
+import { BoxFeatures } from '#components/home-page/features/box-features';
+import { BackgroundGradient } from '#components/home-page/gradients/background-gradient';
+import { FallInPlace } from '#components/home-page/motion/fall-in-place';
+import { Pricing } from '#components/home-page/pricing/pricing';
+import faq from '#data/faq';
+import pricing from '#data/pricing';
+import testimonials from '#data/testimonials';
+import Steps from '#components/home-page/steps/steps'
 
 
 const Home: NextPage = () => {
@@ -54,11 +65,14 @@ const Home: NextPage = () => {
 
       {/*<HighlightsSection />*/}
 
+      <PricingSection />
+
+      <StepsSection/>
+
       <FeaturesSection />
 
       {/*<TestimonialsSection />*/}
 
-      <PricingSection />
 
       <FaqSection />
     </Box>
@@ -67,32 +81,70 @@ const Home: NextPage = () => {
 
 const HeroSection: React.FC = () => {
   return (
-    <Box position="relative" overflow="hidden">
+    <Flex direction="column" justifyContent="space-around" position="relative" overflow="hidden" w="full" minH="100vh" h="full" >
       <BackgroundGradient height="100%" zIndex="-1" />
-      <Container maxW="container.xl" pt={{ base: 40, md: 60 }} pb="40">
+      <Container maxW="85%" w="full" pt={{ base: 24, md: 48 }}>
         <Flex
-          direction={{ base: 'column', lg: 'row' }}
-          align="center"
-          gap={{ base: 8, lg: 24 }}
+          direction={{ base: 'column', md: 'row' }}
+          align={{ base: "center", md: "center" }}
+          justify="space-between"
+          gap={{ base: 8, lg: 0 }}
+          mt={{ base: 12, md: 0 }}
         >
-          <Box flex="1"  pr={{ base: 0, lg: 8 }} mb={{ base: 8, lg: 0 }}>
+          <Box
+            flex="0 1 40%" // Increased text area slightly
+            pr={{ base: 0, lg: 4 }}
+            mb={{ base: 8, lg: 0 }}
+            w={{ base: "100%", lg: "auto" }}
+            display="flex"
+            alignItems="center"
+          >
             <Hero
-              id="home"
               px="0"
               title={
                 <FallInPlace>
-                  <Text fontSize={{ base: '3xl', md: '5xl' }}>
-                    Sve-u-jednom alat za
-                    <Br /> viralnost
+                  <Text fontSize={{ base: "42px", md: "64px" }}>
+                    Sve-u-jednom alat za{" "}
+                    <chakra.span
+                      color="green.400"
+                      fontWeight="extrabold"
+                      animation="pulseGlow 2s ease-in-out infinite"
+                      sx={{
+                        "@keyframes pulseGlow": {
+                          "0%, 100%": {
+                            textShadow: "0 0 5px rgba(72, 187, 120, 0.8), 0 0 20px rgba(72, 187, 120, 0.5)"
+                          },
+                          "50%": {
+                            textShadow: "0 0 10px rgba(72, 187, 120, 1), 0 0 30px rgba(72, 187, 120, 0.8)"
+                          },
+                        },
+                      }}
+                    >
+                      viralnost
+                    </chakra.span>
                   </Text>
                 </FallInPlace>
               }
               description={
                 <FallInPlace delay={0.2} fontWeight="medium">
-                  <Text>
-                    Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi{' '}
-                    <Em>rezultate</Em>, sve je usmereno na <Em>stvarne preglede</Em>,
-                    pravu publiku i vidljive rezultate.
+                  <Text fontSize={{ base: "18px", md: "24px" }}>
+                    Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi{" "}
+                    <chakra.em
+                      color="white"
+                      fontStyle="normal"
+                      fontWeight="semibold"
+                    >
+                      rezultate
+                    </chakra.em>
+                    , sve je usmereno na{" "}
+                    <chakra.em
+                      color="white"
+                      fontStyle="normal"
+                      fontWeight="semibold"
+                    >
+                      stvarne preglede
+                    </chakra.em>
+                    , pravu publiku i vidljive rezultate.
                   </Text>
                 </FallInPlace>
               }
@@ -101,60 +153,86 @@ const HeroSection: React.FC = () => {
                 <HStack pt="4" pb="12" spacing="8"></HStack>
 
                 <ButtonGroup
-                  spacing={{ base: 3, md: 4 }}
+                  spacing={{ base: 3, md: 6 }}
                   alignItems="center"
-                  flexDirection={{ base: 'column', md: 'row' }}
-                  width={{ base: 'full', md: 'auto' }}
+                  flexDirection={{ base: "column", md: "row" }}
+                  width={{ base: "full", md: "auto" }}
                 >
                   <ButtonLink
+                    href="/signup"
                     colorScheme="primary"
                     size="lg"
-                    href="/signup"
-                    width={{ base: 'full', md: 'auto' }}
-                    mb={{ base: '2em', md: 0 }}
+                    px={10}
+                    py={7}
+                    fontSize={{ base: "xl", md: "2xl" }}
+                    width={{ base: "full", md: "auto" }}
+                    mb={{ base: "1.5em", md: 0 }}
+                    borderRadius="xl"
+                    shadow="lg"
+                    _hover={{ transform: "translateY(-2px)", shadow: "xl" }}
+                    _active={{ transform: "translateY(0)" }}
+                    transition="all 0.2s ease"
                   >
-                    Pridruži se sada
+                    Zaradi kao kliper
                   </ButtonLink>
+
                   <ButtonLink
-                    size="lg"
                     href="/kontakt"
+                    size="lg"
                     variant="outline"
-                    width={{ base: 'full', md: 'auto' }}
+                    px={10}
+                    py={7}
+                    fontSize={{ base: "xl", md: "2xl" }}
+                    width={{ base: "full", md: "auto" }}
+                    borderRadius="xl"
+                    shadow="sm"
                     rightIcon={
                       <Icon
                         as={FiArrowRight}
-                        sx={{
-                          transitionProperty: 'common',
-                          transitionDuration: 'normal',
-                          '.chakra-button:hover &': {
-                            transform: 'translate(5px)',
-                          },
-                        }}
+                        transition="transform 0.2s ease"
+                        _groupHover={{ transform: "translateX(4px)" }}
                       />
                     }
+                    _hover={{ bg: "gray.50", _dark: { bg: "gray.700" } }}
                   >
-                    Saradnja sa nama
+                    Napravi svoju kampanju
                   </ButtonLink>
                 </ButtonGroup>
               </FallInPlace>
             </Hero>
           </Box>
 
-          <Box flex="1" pl={{ base: 0, lg: 8 }}>
+          <Box
+            flex="0 1 50%" // Reduced from 70% to 50%
+            pl={{ base: 0, lg: 4 }}
+            w={{ base: "100%", lg: "auto" }}
+            display="flex"
+            justifyContent="center" // Stick to right
+            alignItems="center"
+            overflow="hidden"
+          >
             <FallInPlace delay={0.6}>
               <Box
-                width="100%"
-                maxWidth="700px"
-                mx="auto"
+                width="auto" // Changed from "full" to "auto"
                 overflow="hidden"
+                display="flex"
+                alignItems="center"
+                justifyContent="flex-end"
               >
                 <Image
-                  src="/static/screenshots/example.png"
+                  src="/static/images/heroimg3.png"
                   alt="Snimak ekrana liste kampanja u Clipster-u"
                   quality={75}
                   priority
-                  width={2000}
-                  height={786}
+                  width={1080}
+                  height={1350}
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    maxWidth: "800px",
+                    maxHeight: "600px", // Reduced from 800px
+                    objectFit: "contain"
+                  }}
                 />
               </Box>
             </FallInPlace>
@@ -163,11 +241,11 @@ const HeroSection: React.FC = () => {
       </Container>
 
       <BoxFeatures
+        w="full"
+        maxW="85%"
         id="benefits"
         columns={[1, 2, 4]}
         iconSize={4}
-        innerWidth="container.xl"
-        pt="20"
         features={[
           {
             title: '100.000+',
@@ -203,7 +281,7 @@ const HeroSection: React.FC = () => {
         ]}
         reveal={FallInPlace}
       />
-    </Box>
+    </Flex>
   )
 }
 
@@ -320,81 +398,122 @@ const HighlightsSection = () => {
 
 const FeaturesSection = () => {
     return (
-        <Features
-            id="funkcionalnosti"
-            title={
-                <Heading
-                    lineHeight="short"
-                    fontSize={['2xl', null, '4xl']}
-                    textAlign="left"
-                    as="p"
-                >
-                    Povezujemo Kreatore i
-                    <Br /> Klipere za zajednički uspeh.
-                </Heading>
-            }
-            description={
-                <>
-                  Kreatori postavljaju kampanje sa jasnim ciljem, a kliperi stvaraju sadržaj koji privlači pažnju i donosi rezultate
-                </>
-            }
-            align="left"
-            columns={[1, 2, 3]}
-            iconSize={4}
-            features={[
-                {
-                    title: 'Jednostavno Kreiranje Kampanja',
-                    icon: UploadCloud,
-                    description:
-                        'Kreatori lako kreiraju kampanje sa jasnim pravilima i budžetom za klipere.',
-                    variant: 'inline',
-                    delay: 0
-                },
-                {
-                    title: 'Učestvovanje u kampanjama',
-                    icon: Search,
-                    description:
-                        'Kliperi imaju pristup svim dostupnim kampanjama i mogu učestvovati u onima koje im najviše odgovaraju.',
-                    variant: 'inline',
-                  delay: 0.5
-                },
-                {
-                    title: 'Sigurna i brza isplata',
-                    icon: Shield,
-                    description:
-                        'Kliperi dobijaju sigurnu i brzu isplatu za svaki pregled koji ostvare - bez čekanja i komplikacija.',
-                    variant: 'inline',
-                  delay: 1
-                },
-                {
-                    title: 'Kompletna statistika',
-                    icon: Award,
-                    description:
-                        'Kliperi u svakom trenutku imaju jasan pregled svoje zarade i broja pregleda.',
-                    variant: 'inline',
-                  delay: 1.5
-                },
-                {
-                    title: 'Mogucnost ostvarivanja bonusa',
-                    icon: MessageSquare,
-                    description:
-                        'Kliperi mogu ostvariti dodatne bonuse zasnovane na rezultatima i aktivnostima u kampanjamas',
-                    variant: 'inline',
-                  delay: 2
-                },
-                {
-                  title: 'Direktna i jasna komunikacija',
-                  icon: Users,
-                  description:
-                    'Kliperi imaju direktnu i jasnu komunikaciju sa timom, što omogućava brzo rešavanje problema.',
-                  variant: 'inline',
-                  delay: 2.5
-                },
-            ]}
-        />
+      <Features
+        id="funkcionalnosti"
+        title={
+          <Heading
+            as="h1"
+            fontSize={['32px', '44px', '56px']}
+            bgGradient="linear(to-r, white, #10b981)"
+            bgClip="text"
+            textAlign="center"
+            fontWeight="extrabold"
+            mt={24}
+            mb={12}
+          >
+            Povezujemo Kreatore i
+            <Br /> Klipere za zajednički uspeh.
+          </Heading>
+        }
+        description={
+          <>
+            Kreatori postavljaju kampanje sa jasnim ciljem, a kliperi stvaraju sadržaj koji privlači pažnju i donosi rezultate
+          </>
+        }
+        align="left"
+        columns={[1, 2, 3]}
+        iconSize={4}
+        features={[
+          {
+            title: 'Jednostavno Kreiranje Kampanja',
+            icon: UploadCloud,
+            description1:
+              'Kreatori lako kreiraju kampanje sa jasnim pravilima i budžetom za klipere.',
+            variant: 'inline',
+            delay: 0
+          },
+          {
+            title: 'Učestvovanje u kampanjama',
+            icon: Search,
+            description1:
+              'Kliperi imaju pristup svim dostupnim kampanjama i mogu učestvovati u onima koje im najviše odgovaraju.',
+            variant: 'inline',
+            delay: 0.2
+          },
+          {
+            title: 'Sigurna i brza isplata',
+            icon: Shield,
+            description1:
+              'Kliperi dobijaju sigurnu i brzu isplatu za svaki pregled koji ostvare - bez čekanja i komplikacija.',
+            variant: 'inline',
+            delay: 0.4
+          },
+          {
+            title: 'Kompletna statistika',
+            icon: ChartLine,
+            description1:
+              'Kliperi u svakom trenutku imaju jasan pregled svoje zarade i broja pregleda.',
+            variant: 'inline',
+            delay: 0.6
+          },
+          {
+            title: 'Mogucnost ostvarivanja bonusa',
+            icon: BanknoteArrowUp,
+            description1:
+              'Kliperi mogu ostvariti dodatne bonuse zasnovane na rezultatima i aktivnostima u kampanjamas',
+            variant: 'inline',
+            delay: 0.8
+          },
+          {
+            title: 'Direktna i jasna komunikacija',
+            icon: Users,
+            description1:
+              'Kliperi imaju direktnu i jasnu komunikaciju sa timom, što omogućava brzo rešavanje problema.',
+            variant: 'inline',
+            delay: 1
+          },
+        ]}
+      />
     )
 }
-
+const StepsSection = () => {
+  return (
+    <Steps
+      title="Kako Clipify Funkcioniše"
+      description=""
+      steps={[
+        {
+          number: "1",
+          title: "Brendovi pokreću kampanje za par minuta",
+          description: "Brendovi postave ciljeve i odrede budžet, a kampanja je odmah spremna – bilo da je u pitanju Klipping, Muzicka, Logo ili UGC kampanja.",
+          image: "/static/images/111.png",
+          alt: ""
+        },
+        {
+          number: "2",
+          title: "Kliperi se uključuju i prave sadržaj",
+          description: "Naša zajednica od preko 300 klipera bira kampanje koje im odgovaraju i objavljuje originalan, kvalitetan sadržaj na mrežama koje brendovi žele.",
+          image: "/static/images/2222.png",
+          alt: ""
+        },
+        {
+          number: "3",
+          title: "Clipify proverava rezultate",
+          description: "Naša AI tehnologija proverava da li su pregledi i interakcije stvarni, uklanja lažne aktivnosti i daje ti jasne rezultate kampanje u realnom vremenu.",
+          image: "/static/images/33.png",
+          alt: ""
+        },
+        {
+          number: "4",
+          title: "Svi su na dobitku",
+          description: "Brendovi plaćaju samo za ono što zaista daje rezultate, a kliperi odmah dobijaju isplatu za sadržaj koji donosi engagement.",
+          image: "/static/images/4.png",
+          alt: ""
+        }
+      ]}
+    />
+  )
+}
 const TestimonialsSection = () => {
   const columns = React.useMemo(() => {
     return testimonials.items.reduce<Array<typeof testimonials.items>>(
