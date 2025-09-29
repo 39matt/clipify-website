@@ -166,7 +166,7 @@ const HeroSection: React.FC = () => {
                 <HStack pt="4" pb={{ base: 6, md: 12 }} spacing="8"></HStack>
 
                 <ButtonGroup
-                  spacing={{ base: 3, md: 6 }}
+                  spacing={{ base: 0, md: 6 }}
                   alignItems="center"
                   flexDirection={{ base: "column", sm: "column", md: "row" }}
                   width="full"
