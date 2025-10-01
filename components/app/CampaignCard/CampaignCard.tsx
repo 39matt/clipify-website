@@ -6,7 +6,6 @@ import {
   Heading,
   Image,
   Progress,
-  Stack,
   Text,
   Box,
   Badge,
@@ -15,12 +14,17 @@ import {
   Icon,
   AspectRatio,
   useColorModeValue,
+  Flex,
 } from '@chakra-ui/react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import { FiUser, FiActivity, FiDollarSign, FiTrendingUp, FiTarget } from 'react-icons/fi'
+import {
+  FiDollarSign,
+  FiTrendingUp,
+  FiTarget,
+  FiArrowRight,
+} from 'react-icons/fi'
 import { ICampaign } from '../../../app/lib/models/campaign'
 import { FaBurn } from 'react-icons/fa'
-import { TargetIcon } from 'lucide-react'
 
 interface CampaignCardProps {
   campaign: ICampaign
@@ -29,21 +33,24 @@ interface CampaignCardProps {
 
 const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
   const cardBg = useColorModeValue('white', 'gray.800')
-  const borderColor = useColorModeValue('gray.200', 'gray.600')
-  const textColor = useColorModeValue('gray.600', 'gray.300')
-  const headingColor = useColorModeValue('gray.800', 'white')
+  const borderColor = useColorModeValue('gray.100', 'gray.700')
+  const textColor = useColorModeValue('gray.600', 'gray.400')
+  const headingColor = useColorModeValue('gray.900', 'white')
+  const mutedBg = useColorModeValue('gray.50', 'gray.700')
+  const accentColor = useColorModeValue('green.500', 'green.400')
 
   const formatBudget = (budget: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
       minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(budget)
   }
 
   const getProgressColor = (progress: number) => {
     if (progress >= 80) return 'red'
-    if (progress >= 50) return 'yellow'
+    if (progress >= 50) return 'orange'
     return 'green'
   }
 
@@ -52,87 +59,96 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
   return (
     <Card
       w="full"
-      maxW="320px"
-      h="480px"
+      maxW="340px"
       bg={cardBg}
       borderWidth="1px"
       borderColor={borderColor}
-      borderRadius="xl"
+      borderRadius="2xl"
       overflow="hidden"
-      shadow="md"
-      transition="all 0.3s ease"
+      shadow="sm"
+      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
       _hover={{
         shadow: '2xl',
-        transform: 'translateY(-2px)',
-        borderColor: 'green.300',
+        transform: 'translateY(-4px)',
+        borderColor: accentColor,
       }}
       cursor="pointer"
       onClick={() => router.push(`/campaigns/${campaign.id}`)}
       display="flex"
       flexDirection="column"
     >
+      {/* Image Section */}
       <Box position="relative" flexShrink={0}>
         <AspectRatio ratio={16 / 9}>
-          <Box position="relative" w="full" h="full">
+          <Box position="relative" w="full" h="full" overflow="hidden">
             <Image
-              backgroundPosition={"bottom"}
               src={campaign.imageUrl}
               alt={`${campaign.influencer} campaign`}
               objectFit="cover"
-              transition="transform 0.3s ease"
-              _hover={{ transform: 'scale(1.05)' }}
+              objectPosition="center"
+              transition="transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)"
+              _groupHover={{ transform: 'scale(1.08)' }}
               w="full"
               h="full"
             />
-            {/* Green tint overlay */}
+            {/* Gradient overlay */}
             <Box
               position="absolute"
               top={0}
               left={0}
               right={0}
               bottom={0}
-              bg="black"
-              opacity={0.15}
-              transition="opacity 0.3s ease"
-              _hover={{ opacity: 0.25 }}
+              bgGradient="linear(to-b, transparent 0%, blackAlpha.400 100%)"
             />
           </Box>
         </AspectRatio>
 
-        {/* Progress Badge Overlay */}
+        {/* Fire Badge */}
         <Badge
           position="absolute"
-          top={3}
-          right={3}
-          colorScheme={getProgressColor(100)}
+          top={4}
+          right={4}
+          bg="whiteAlpha.900"
+          backdropFilter="blur(10px)"
+          color="orange.500"
           borderRadius="full"
           px={3}
-          py={1}
-          fontSize="xs"
+          py={1.5}
+          fontSize="sm"
           fontWeight="bold"
-          zIndex={2}
+          display="flex"
+          alignItems="center"
+          gap={1}
+          shadow="lg"
         >
-          <FaBurn/>
+          <Icon as={FaBurn} />
         </Badge>
       </Box>
 
+      {/* Content Section */}
       <CardBody p={6} flex="1" display="flex" flexDirection="column">
-        <VStack align="stretch" spacing={4} flex="1">
+        <VStack align="stretch" spacing={5} flex="1">
           {/* Title */}
           <Heading
-            size="md"
+            fontSize={{ base: 'xl', md: '2xl' }}
             color={headingColor}
             fontWeight="bold"
-            lineHeight="1.3"
+            lineHeight="shorter"
             noOfLines={2}
-            minH="48px" // Fixed height for consistency
           >
             {campaign.influencer}
           </Heading>
 
-          {/* Influencer Info */}
-          <HStack spacing={2}>
-            <Icon as={TargetIcon} color="green.500" />
+          {/* Activity Tag */}
+          <HStack
+            spacing={2}
+            px={3}
+            py={2}
+            bg={mutedBg}
+            borderRadius="lg"
+            alignSelf="flex-start"
+          >
+            <Icon as={FiTarget} color={accentColor} boxSize={4} />
             <Text
               fontSize="sm"
               color={textColor}
@@ -145,56 +161,83 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
 
           {/* Progress Section */}
           <Box>
-            <HStack justify="space-between" mb={2}>
-              <HStack spacing={1}>
-                <Icon as={FiTrendingUp} color="green.500" size="sm" />
-                <Text fontSize="xs" color={textColor} fontWeight="medium">
+            <Flex justify="space-between" align="center" mb={2}>
+              <HStack spacing={2}>
+                <Icon as={FiTrendingUp} color={accentColor} boxSize={4} />
+                <Text fontSize="sm" color={textColor} fontWeight="medium">
                   Napredak
                 </Text>
               </HStack>
-              <Text fontSize="xs" color={textColor} fontWeight="bold">
+              <Badge
+                colorScheme={getProgressColor(roundedProgress)}
+                borderRadius="md"
+                px={2}
+                py={0.5}
+                fontSize="xs"
+                fontWeight="bold"
+              >
                 {roundedProgress}%
-              </Text>
-            </HStack>
+              </Badge>
+            </Flex>
             <Progress
               value={roundedProgress}
-              size="sm"
+              size="md"
               colorScheme={getProgressColor(roundedProgress)}
               borderRadius="full"
               bg={useColorModeValue('gray.100', 'gray.700')}
+              sx={{
+                '& > div': {
+                  transition: 'width 0.6s ease',
+                },
+              }}
             />
           </Box>
 
-          {/* Budget */}
-          <HStack justify="space-between" align="center" mt="auto">
-            <HStack spacing={1}>
-              <Icon as={FiDollarSign} color="green.500" />
-              <Text fontSize="sm" color={textColor} fontWeight="medium">
-                Budžet
-              </Text>
+          {/* Budget Section */}
+          <Box
+            mt="auto"
+            p={4}
+            bg={mutedBg}
+            borderRadius="xl"
+            borderWidth="1px"
+            borderColor={borderColor}
+          >
+            <HStack justify="space-between" align="center">
+              <VStack align="flex-start" spacing={0}>
+                <HStack spacing={1}>
+                  <Text fontSize="xs" color={textColor} fontWeight="medium">
+                    Budžet
+                  </Text>
+                </HStack>
+                <Text
+                  fontSize="3xl"
+                  fontWeight="extrabold"
+                  color={accentColor}
+                  lineHeight="shorter"
+                >
+                  {formatBudget(campaign.budget)}
+                </Text>
+              </VStack>
             </HStack>
-            <Text
-              fontSize="xl"
-              fontWeight="bold"
-              color="green.500"
-              letterSpacing="tight"
-            >
-              {formatBudget(campaign.budget)}
-            </Text>
-          </HStack>
+          </Box>
         </VStack>
       </CardBody>
 
+      {/* Footer */}
       <CardFooter pt={0} pb={6} px={6} flexShrink={0}>
         <Button
           w="full"
           colorScheme="green"
-          size="md"
-          borderRadius="lg"
+          size="lg"
+          borderRadius="xl"
           fontWeight="semibold"
+          rightIcon={<Icon as={FiArrowRight} />}
+          transition="all 0.2s"
           _hover={{
-            transform: 'translateY(-1px)',
-            shadow: 'lg',
+            transform: 'translateX(2px)',
+          }}
+          _active={{
+            transform: 'translateX(0px)',
           }}
           onClick={(e) => {
             e.stopPropagation()

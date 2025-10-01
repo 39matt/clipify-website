@@ -69,9 +69,10 @@ const Campaigns: NextPage = () => {
           {/* Header Section */}
           <Box textAlign="center" maxW="2xl">
             <Heading
-              fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
+              fontSize={{ base: 28, lg: 36 }}
               fontWeight="bold"
               bgGradient="linear(to-r, green.400, teal.500)"
+              // bg="white"
               bgClip="text"
               mb={4}
             >
@@ -92,7 +93,6 @@ const Campaigns: NextPage = () => {
           {campaignList && campaignList.length > 0 ? (
             <Flex
               flexWrap="wrap"
-              justifyContent="space-around"
               gap={12}
               w="full"
             >
@@ -101,6 +101,7 @@ const Campaigns: NextPage = () => {
                   key={campaign.id || index}
                   maxW="320px"
                   w="full"
+                  mx={{base:"auto", md: 0}}
                   transform="scale(1)"
                   transition="all 0.2s ease-in-out"
                   _hover={{
