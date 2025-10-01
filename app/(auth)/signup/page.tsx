@@ -55,23 +55,26 @@ const SignUp: NextPage = () => {
         setError('Lozinka i potvrda lozinke se ne podudaraju.');
         return;
       }
-      if (affiliateCode !== "cecko" && affiliateCode?.length > 0) {
-        setError('Uneli ste nepostojeći affiliate kod');
-        return;
+      if (affiliateCode?.length > 0) {
+        if (affiliateCode !== "cecko") {
+          setError('Uneli ste nepostojeći affiliate kod');
+          return;
+        }
+
+        const response = await fetch(`/api/affiliate/add-count?code=${affiliateCode}`, {
+          method:"PUT",
+        })
+        if(!response.ok) {
+          setError('Greška pri verifikaciji koda');
+          return;
+        }
       }
 
-      const response = await fetch(`/api/affiliate/add-count?code=${affiliateCode}`, {
-        method:"PUT",
-      })
-      if(!response.ok) {
-        setError('Greška pri verifikaciji koda');
-        return;
-      }
 
       await signUp(data.email, data.password);
 
       setSuccess(
-        'Uspešno ste napravili nalog! Proverite vaš mail kako bi ste se verifikovali.',
+        'Uspešno ste napravili nalog!',
       )
       setTimeout(() => {
         router.push('/login')
