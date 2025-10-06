@@ -1,38 +1,68 @@
 'use client';
 
-import { Box, Button, Center, Flex, Heading, Icon, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Heading,
+  Icon,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  SimpleGrid,
+  Text,
+  VStack,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { FiPlus } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
 import AccountCard from '#components/app/AccountCard/AccountCard';
-import { accountExists, getAllAccounts } from '../../../lib/firebase/firestore/account';
+import {
+  accountExists,
+  getAllAccounts,
+} from '../../../lib/firebase/firestore/account';
 import { IAccount } from '../../../lib/models/account';
 import { useLayoutContext } from '../context';
-import { Simulate } from 'react-dom/test-utils'
-
 
 const ConnectedAccounts: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDiscordWarningOpen,
+    onOpen: onDiscordWarningOpen,
+    onClose: onDiscordWarningClose,
+  } = useDisclosure();
   const [accountLink, setAccountLink] = useState('');
-  const [verificationCode, setVerificationCode] = useState<number | null>(null);
+  const [verificationCode, setVerificationCode] = useState<number | null>(
+    null
+  );
   const [isVerifyEnabled, setIsVerifyEnabled] = useState(false);
   const [accounts, setAccounts] = useState<IAccount[]>([]);
   const [message, setMessage] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const { user, loading, discordUsername } = useLayoutContext();
-  const router = useRouter()
+  const router = useRouter();
 
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        if(discordUsername) {
-          const response = await fetch(`/api/user/account/get-all?uid=${discordUsername}`, {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-          })
-          if(response.ok){
-            const accounts = await response.json() as IAccount[];
+        if (discordUsername) {
+          const response = await fetch(
+            `/api/user/account/get-all?uid=${discordUsername}`,
+            {
+              method: 'GET',
+              headers: { 'Content-Type': 'application/json' },
+            }
+          );
+          if (response.ok) {
+            const accounts = (await response.json()) as IAccount[];
             setAccounts(accounts);
           }
         }
@@ -47,11 +77,13 @@ const ConnectedAccounts: NextPage = () => {
     const fetchVerificationDetails = async () => {
       if (isOpen) {
         try {
-          // const verificationExist = await verificationExists(discordUsername!);
-          const response = await fetch(`/api/user/verification/exists?uid=${discordUsername}`, {
-            method:"GET"
-          })
-          const responseJson = await response.json()
+          const response = await fetch(
+            `/api/user/verification/exists?uid=${discordUsername}`,
+            {
+              method: 'GET',
+            }
+          );
+          const responseJson = await response.json();
           if (responseJson.verification) {
             setVerificationCode(responseJson.verification.code);
             setAccountLink(
@@ -60,10 +92,15 @@ const ConnectedAccounts: NextPage = () => {
                 : `https://tiktok.com/@${responseJson.verification.username}`
             );
             setIsVerifyEnabled(true);
-            setMessage('Molimo postavite kod u opis vašeg profila i kliknite "Verifikujte Nalog".');
+            setMessage(
+              'Molimo postavite kod u opis vašeg profila i kliknite "Verifikujte Nalog".'
+            );
           }
         } catch (error) {
-          console.error('Greška prilikom preuzimanja podataka o verifikaciji:', error);
+          console.error(
+            'Greška prilikom preuzimanja podataka o verifikaciji:',
+            error
+          );
         }
       }
     };
@@ -71,27 +108,43 @@ const ConnectedAccounts: NextPage = () => {
     fetchVerificationDetails();
   }, [isOpen, discordUsername]);
 
+  const handleAddAccountClick = () => {
+    console.log("dc: " + discordUsername)
+    if (!discordUsername) {
+      onDiscordWarningOpen();
+      return;
+    }
+    onOpen();
+  };
+
   const handleAddAccount = async () => {
     try {
       setMessage('');
-      if(accounts.length > 5) {
-        setMessage("Možeš imati maksimalno 3 Instagram i 3 TikTok naloga")
-        return
+      if (accounts.length > 5) {
+        setMessage('Možeš imati maksimalno 3 Instagram i 3 TikTok naloga');
+        return;
       }
-      const instagramRegex = /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/;
-      const tiktokRegex = /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/?$/;
+      const instagramRegex =
+        /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/;
+      const tiktokRegex =
+        /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/?$/;
 
-      if (!instagramRegex.test(accountLink) && !tiktokRegex.test(accountLink)) {
-        setMessage('Uneti link nije validan. Molimo unesite ispravan link naloga.');
+      if (
+        !instagramRegex.test(accountLink) &&
+        !tiktokRegex.test(accountLink)
+      ) {
+        setMessage(
+          'Uneti link nije validan. Molimo unesite ispravan link naloga.'
+        );
         return;
       }
 
       let username = '';
 
       if (accountLink.includes('tiktok')) {
-        if(accounts.filter(acc => acc.platform === 'TikTok').length > 2) {
-          setMessage("Možeš imati maksimalno 3 TikTok naloga")
-          return
+        if (accounts.filter((acc) => acc.platform === 'TikTok').length > 2) {
+          setMessage('Možeš imati maksimalno 3 TikTok naloga');
+          return;
         }
         if (accountLink.includes('@')) {
           username = accountLink.split('@')[1].replace('/', '');
@@ -99,24 +152,25 @@ const ConnectedAccounts: NextPage = () => {
           const parts = accountLink.split('/');
           username = parts[parts.length - 1] || parts[parts.length - 2];
         }
-        if (await accountExists(username, "TikTok")) {
+        if (await accountExists(username, 'TikTok')) {
           setMessage('Nalog se već koristi.');
           return;
         }
       } else {
-        if(accounts.filter(acc => acc.platform === 'Instagram').length > 2) {
-          setMessage("Možeš imati maksimalno 3 Instagram naloga")
-          return
+        if (
+          accounts.filter((acc) => acc.platform === 'Instagram').length > 2
+        ) {
+          setMessage('Možeš imati maksimalno 3 Instagram naloga');
+          return;
         }
-        const parts = accountLink.split('/').filter(part => part !== '');
+        const parts = accountLink.split('/').filter((part) => part !== '');
         username = parts[parts.length - 1];
-        if (await accountExists(username, "Instagram")) {
+        if (await accountExists(username, 'Instagram')) {
           setMessage('Nalog se već koristi.');
           return;
         }
       }
 
-      // Validate extracted username
       if (!username || username.trim() === '') {
         setMessage('Nije moguće izdvojiti korisničko ime iz linka.');
         return;
@@ -126,14 +180,14 @@ const ConnectedAccounts: NextPage = () => {
       console.log('Extracted username:', username);
 
       const response = await fetch('/api/user/verification/add', {
-        method: "POST",
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uid:discordUsername, accountLink }),
-      })
-      const responseJson = await response.json()
-      console.log(responseJson)
+        body: JSON.stringify({ uid: discordUsername, accountLink }),
+      });
+      const responseJson = await response.json();
+      console.log(responseJson);
       setVerificationCode(responseJson.verification.code);
       setAccountLink(
         responseJson.verification.platform === 'Instagram'
@@ -142,8 +196,9 @@ const ConnectedAccounts: NextPage = () => {
       );
       setIsVerifyEnabled(true);
 
-      setMessage('Molimo postavite kod u opis vašeg profila i kliknite "Verifikujte Nalog".');
-
+      setMessage(
+        'Molimo postavite kod u opis vašeg profila i kliknite "Verifikujte Nalog".'
+      );
     } catch (error) {
       console.error('Greška prilikom dodavanja naloga:', error);
       setMessage('Dodavanje naloga nije uspelo. Pokušajte ponovo.');
@@ -156,31 +211,30 @@ const ConnectedAccounts: NextPage = () => {
       setMessage('Brisanje u toku...');
 
       const response = await fetch('/api/user/verification/remove', {
-        method: "DELETE",
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ uid:discordUsername }),
-      })
-      console.log(response)
-      setIsVerifying(false)
-      if(response.ok) {
+        body: JSON.stringify({ uid: discordUsername }),
+      });
+      console.log(response);
+      setIsVerifying(false);
+      if (response.ok) {
         setMessage('Uspešno obrisana verifikacija!');
-        resetForm()
-        return
+        resetForm();
+        return;
       }
       setMessage('Greška pri brisanju verifikacije!');
-
     } catch (err) {
       console.error('Greška prilikom brisanja verifikacije:', err);
       setMessage('Brisanje verifikacije nije uspelo. Pokušajte ponovo.');
     }
-  }
+  };
 
   const handleVerifyAccount = async () => {
     try {
-      setIsVerifying(true)
-      setMessage('Verifikacija u toku...')
+      setIsVerifying(true);
+      setMessage('Verifikacija u toku...');
 
       const verification = {
         platform: accountLink.toLowerCase().includes('tiktok')
@@ -190,16 +244,19 @@ const ConnectedAccounts: NextPage = () => {
           ? accountLink.split('@')[1]
           : accountLink.split('/')[accountLink.split('/').length - 1],
         code: verificationCode!,
-      }
+      };
 
       const response = await fetch('/api/user/verification/verify', {
-        method:"POST",
-        headers: {    'Content-Type': 'application/json'},
-        body: JSON.stringify({uid: discordUsername, verification, api_key:process.env.NEXT_PUBLIC_RAPIDAPI_KEY!})
-      })
-      // await verifyVerification(discordUsername!, verification, process.env.NEXT_PUBLIC_RAPIDAPI_KEY!);
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uid: discordUsername,
+          verification,
+          api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+        }),
+      });
       const responseJson = await response.json();
-      if(responseJson.success) {
+      if (responseJson.success) {
         setMessage('Nalog je uspešno verifikovan!');
         const updatedAccounts = await getAllAccounts(discordUsername!);
         setAccounts(updatedAccounts);
@@ -208,19 +265,19 @@ const ConnectedAccounts: NextPage = () => {
           resetForm();
           onClose();
         }, 2000);
-      }
-      else {
-        console.log("false")
+      } else {
+        console.log('false');
         setMessage('Kod se ne nalazi u bio. Pokušajte ponovo.');
       }
     } catch (error) {
       console.error('Greška prilikom verifikacije naloga:', error);
-      setMessage('Verifikacija nije uspela. Proverite da li je kod postavljen u opis profila.');
+      setMessage(
+        'Verifikacija nije uspela. Proverite da li je kod postavljen u opis profila.'
+      );
     } finally {
       setIsVerifying(false);
     }
   };
-
 
   const resetForm = () => {
     setAccountLink('');
@@ -231,7 +288,9 @@ const ConnectedAccounts: NextPage = () => {
   };
 
   const handleAccountDelete = (deletedAccountId: string) => {
-    setAccounts(prev => prev.filter(account => account.id !== deletedAccountId));
+    setAccounts((prev) =>
+      prev.filter((account) => account.id !== deletedAccountId)
+    );
   };
 
   return (
@@ -260,7 +319,7 @@ const ConnectedAccounts: NextPage = () => {
           leftIcon={<Icon as={FiPlus} />}
           colorScheme="green"
           variant="solid"
-          onClick={onOpen}
+          onClick={handleAddAccountClick}
           borderRadius="full"
           px={6}
           py={4}
@@ -306,6 +365,27 @@ const ConnectedAccounts: NextPage = () => {
         )}
       </Center>
 
+      {/* Discord Warning Modal */}
+      <Modal isOpen={isDiscordWarningOpen} onClose={onDiscordWarningClose}>
+        <ModalOverlay />
+        <ModalContent bg="gray.800" color="white">
+          <ModalHeader>Discord nalog nije povezan</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Morate povezati Discord nalog pre nego što možete dodati naloge
+              sa društvenih mreža.
+            </Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="green" onClick={onDiscordWarningClose}>
+              Razumem
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      {/* Add Account Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bg="gray.800" color="white">
@@ -326,14 +406,17 @@ const ConnectedAccounts: NextPage = () => {
               <Box mt={4}>
                 <Text>Platforma:</Text>
                 <Heading size="md" color="green.400">
-                  {accountLink.toLowerCase().includes('tiktok') ? 'TikTok' : 'Instagram'}
+                  {accountLink.toLowerCase().includes('tiktok')
+                    ? 'TikTok'
+                    : 'Instagram'}
                 </Heading>
                 <Text mt={2}>Korisničko ime:</Text>
                 <Heading size="md" color="green.400">
                   {accountLink.includes('tiktok')
                     ? accountLink.split('@')[1]
-                    : accountLink.split('/')[accountLink.split('/').length - 1]
-                  }
+                    : accountLink.split('/')[
+                    accountLink.split('/').length - 1
+                      ]}
                 </Heading>
                 <Text mt={4}>Vaš verifikacioni kod:</Text>
                 <Heading size="lg" color="green.400">
@@ -347,7 +430,8 @@ const ConnectedAccounts: NextPage = () => {
                 color={
                   message.includes('uspešno')
                     ? 'green.400'
-                    : message.includes('Molimo') || message.includes('u toku')
+                    : message.includes('Molimo') ||
+                    message.includes('u toku')
                       ? 'blue.400'
                       : 'red.400'
                 }
