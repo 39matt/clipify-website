@@ -79,7 +79,7 @@ const YourVideosSection = ({
         ) : (
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
             {userVideos.map((video, index) => (
-              <YourVideoCard video={video} index={index}/>
+              <YourVideoCard key={index}  video={video} index={index}/>
             ))}
           </SimpleGrid>
         )}

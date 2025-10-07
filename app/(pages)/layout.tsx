@@ -81,6 +81,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
           <SidebarToggleButton />
           <SidebarSection direction="row">
             <Image
+              alt="Clipify Logo"
               src="/logo.svg"
               boxSize="7"
             />
