@@ -1,6 +1,5 @@
-import { addDoc, collection, deleteDoc, doc, getDocs } from '@firebase/firestore'
+import { collection, doc, getDocs } from '@firebase/firestore'
 import { db } from '../firebaseClient'
-import { IAccount } from '../../models/account'
 
 export async function verificationExists(uid: string): Promise<IVerification | undefined> {
   // Add input validation

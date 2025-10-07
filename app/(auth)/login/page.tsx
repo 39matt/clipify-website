@@ -1,7 +1,7 @@
 'use client'
 
 import { Alert, AlertIcon, Card, CardBody, CardHeader, Center, HStack, Spinner, Text } from '@chakra-ui/react'
-import { Auth, PasswordForm } from '@saas-ui/auth'
+import { PasswordForm } from '@saas-ui/auth'
 import { BackgroundGradient } from '#components/home-page/gradients/background-gradient'
 import { PageTransition } from '#components/home-page/motion/page-transition'
 import { Section } from 'components/home-page/section'

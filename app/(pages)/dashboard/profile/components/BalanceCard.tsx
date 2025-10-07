@@ -1,25 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   VStack,
-  Center,
-  Spinner,
-  Alert,
-  AlertIcon,
   CardHeader,
   Heading,
   Spacer,
   CardBody,
   Card,
-  Button,
-  Input,
-  FormControl,
-  FormLabel,
-  FormErrorMessage, Box, Text, CardFooter,
+  Button, Text, CardFooter,
 } from '@chakra-ui/react'
-import { PasswordInput } from '@saas-ui/react'
-import { changePassword } from '../../../../lib/firebase/auth'
-import { User } from '@firebase/auth'
-import { firebaseResetPasswordErrorMap } from '../../../../lib/firebase/errors'
 
 interface BalanceCardProps {
   balance: number,

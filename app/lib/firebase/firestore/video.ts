@@ -1,5 +1,4 @@
-import { IVideo } from '../../models/video'
-import { addDoc, collection, doc, getDocs, limit, query, where } from '@firebase/firestore'
+import { collection, doc, getDocs, limit, query, where } from '@firebase/firestore'
 import { db } from '../firebaseClient'
 
 export async function accountVideoExists(uid: string, accountName:string, platform :string, videoLink: string): Promise<boolean> {

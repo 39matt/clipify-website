@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '../../../lib/firebase/firebaseAdmin'
-import { IUser } from '../../../lib/models/user'
 
 export const dynamic = 'force-dynamic'
 

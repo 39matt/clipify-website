@@ -7,14 +7,13 @@ import {
   Heading,
   Text,
   Icon,
-  Circle,
   ResponsiveValue,
   useMultiStyleConfig,
   ThemingProps,
   SystemProps, Container,
 } from '@chakra-ui/react'
 
-import { Section, SectionTitle, SectionTitleProps } from '#components/home-page/section'
+import { SectionTitleProps } from '#components/home-page/section'
 import { MotionBox } from '#components/home-page/motion/box'
 
 const Revealer = ({ children }: any) => {

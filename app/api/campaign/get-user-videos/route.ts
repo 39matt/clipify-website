@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { adminDb } from '../../../lib/firebase/firebaseAdmin'
-import { IVideo } from '../../../lib/models/video'
 
 
 export async function GET(req: NextRequest) {

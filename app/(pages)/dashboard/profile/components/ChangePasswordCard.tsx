@@ -11,10 +11,7 @@ import {
   CardBody,
   Card,
   Button,
-  Input,
   FormControl,
-  FormLabel,
-  FormErrorMessage, Box,
 } from '@chakra-ui/react'
 import { PasswordInput } from '@saas-ui/react'
 import { changePassword } from '../../../../lib/firebase/auth'

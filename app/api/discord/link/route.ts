@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { addUser } from '../../../lib/firebase/firestore/user'
 
 
 export async function GET(req: NextRequest) {

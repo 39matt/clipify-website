@@ -4,19 +4,13 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react';
 import { ICampaign } from '../../../../../lib/models/campaign';
 import { IVideo } from '../../../../../lib/models/video';
-import {
-  Alert,
-  AlertIcon,
-  Box, Button, ButtonGroup,
+import { Button, ButtonGroup,
   Center,
-  Divider,
-  Heading, SimpleGrid,
+  Heading,
   Spinner,
   Text, useToast,
   VStack,
 } from '@chakra-ui/react'
-import UnapprovedVideoCard from '#components/app/UnapprovedVideoCard/UnapprovedVideoCard'
-import AdminVideoCard from './all-videos/components/AdminVideoCard'
 
 interface AdminCampaignPageProps {
   idToken: string;

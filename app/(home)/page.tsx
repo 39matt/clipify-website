@@ -8,35 +8,31 @@ import {
   HStack,
   Heading,
   Icon,
-  IconButton,
   Stack,
   Tag,
   Text,
   VStack,
   Wrap,
   chakra,
-  useClipboard,
 } from '@chakra-ui/react'
-import { Br, Link } from '@saas-ui/react';
+import { Br } from '@saas-ui/react';
 import { Faq } from 'components/home-page/faq';
 import { Features } from 'components/home-page/features';
 import { Hero } from 'components/home-page/hero';
 import { Highlights, HighlightsItem, HighlightsTestimonialItem } from 'components/home-page/highlights';
 import { Testimonial, Testimonials } from 'components/home-page/testimonials';
 import { Em } from 'components/home-page/typography';
-import {
-  Award, BanknoteArrowUp,
+import { BanknoteArrowUp,
   ChartLine,
   DollarSign,
   EyeIcon,
-  MessageSquare,
   Search,
   Shield,
   UploadCloud,
   User,
   Users,
 } from 'lucide-react'
-import type { Metadata, NextPage } from 'next';
+import type { NextPage } from 'next';
 import Image from 'next/image';
 import { FiArrowRight } from 'react-icons/fi';
 import { ImBullhorn } from 'react-icons/im';

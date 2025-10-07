@@ -21,7 +21,6 @@ import * as React from 'react'
 
 import { Logo } from '#components/home-page/layout/logo'
 import siteConfig from '#data/config'
-import { NextRouter } from 'next/router'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 interface NavLinkProps extends LinkProps {

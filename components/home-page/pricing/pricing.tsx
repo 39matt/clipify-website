@@ -3,11 +3,9 @@ import {
   HStack,
   Heading,
   Icon,
-  SimpleGrid,
   StackProps,
   Text,
-  VStack,
-  Divider, Container, Flex,
+  VStack, Container, Flex,
 } from '@chakra-ui/react'
 import { FiCheck, FiStar, FiZap } from 'react-icons/fi'
 
@@ -17,8 +15,7 @@ import {
   ButtonLink,
   ButtonLinkProps,
 } from '#components/home-page/button-link/button-link'
-import { BackgroundGradient } from '#components/home-page/gradients/background-gradient'
-import { Section, SectionProps, SectionTitle } from '#components/home-page/section'
+import { SectionProps } from '#components/home-page/section'
 import { MotionBox } from '#components/home-page/motion/box'
 
 export interface PricingPlan {

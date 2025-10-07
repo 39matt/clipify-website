@@ -15,7 +15,7 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
   AlertDialogBody,
-  AlertDialogFooter, useClipboard, Grid, SimpleGrid,
+  AlertDialogFooter, SimpleGrid,
 } from '@chakra-ui/react'
 import { useEffect, useState, useRef } from 'react';
 import { IUser } from '../../../../lib/models/user';

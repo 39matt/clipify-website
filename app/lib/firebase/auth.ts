@@ -1,6 +1,5 @@
 import {
-  createUserWithEmailAndPassword, EmailAuthProvider, reauthenticateWithCredential, reauthenticateWithRedirect,
-  sendEmailVerification, signInWithEmailAndPassword, signOut,
+  createUserWithEmailAndPassword, EmailAuthProvider, reauthenticateWithCredential, signInWithEmailAndPassword, signOut,
   updatePassword, User,
 } from '@firebase/auth'
 import { auth, db } from './firebaseClient'

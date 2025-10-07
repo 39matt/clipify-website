@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { adminDb } from '../../../lib/firebase/firebaseAdmin'
 import { IUser } from '../../../lib/models/user'
-import { serverTimestamp } from '@firebase/firestore/lite'
 
 export async function PATCH(req: NextRequest) {
   try {

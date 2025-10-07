@@ -4,7 +4,6 @@ import {
   EditableInput,
   EditablePreview,
   Button,
-  VStack,
   Center,
   Spinner,
   Alert,
@@ -13,7 +12,7 @@ import {
   Heading,
   Spacer,
   CardBody,
-  Card, Stack, Flex, Box,
+  Card, Flex, Box,
 } from '@chakra-ui/react'
 import { Property, PropertyList } from '@saas-ui/core';
 import { Select, SelectButton, SelectList } from '@saas-ui/react';

@@ -1,19 +1,14 @@
 'use client'
 import {
-  Box,
-  Heading,
   VStack,
-  Grid,
   Container,
   Spinner,
   Text,
   useColorModeValue, Center,
 } from '@chakra-ui/react'
 import { NextPage } from 'next'
-import CampaignCard from '#components/app/CampaignCard/CampaignCard'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { cookies } from 'next/headers'
 import { ICampaign } from '../../../lib/models/campaign'
 
 const Campaigns: NextPage = () => {

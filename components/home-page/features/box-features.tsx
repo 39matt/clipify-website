@@ -12,13 +12,11 @@ import {
   useMultiStyleConfig,
   ThemingProps,
   SystemProps,
-  Flex,
   Container,
 } from '@chakra-ui/react'
 import { MotionBox } from '#components/home-page/motion/box'
 
 import {
-  Section,
   SectionTitle,
   SectionTitleProps,
 } from "#components/home-page/section"

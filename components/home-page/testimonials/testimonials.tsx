@@ -1,12 +1,10 @@
-import { ResponsiveValue, SimpleGrid, Stack } from '@chakra-ui/react'
+import { ResponsiveValue, SimpleGrid } from '@chakra-ui/react'
 import {
   Section,
   SectionProps,
   SectionTitle,
   SectionTitleProps,
 } from '#components/home-page/section'
-import { Testimonial } from './testimonial'
-import { MotionBox } from '#components/home-page/motion/box'
 
 export interface TestimonialsProps
   extends Omit<SectionProps, 'title'>,

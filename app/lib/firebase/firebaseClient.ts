@@ -1,7 +1,5 @@
 import { getApp, getApps, initializeApp } from '@firebase/app';
 import {
-  clearIndexedDbPersistence,
-  getFirestore,
   initializeFirestore,
   persistentLocalCache,
   persistentMultipleTabManager,

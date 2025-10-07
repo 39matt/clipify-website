@@ -3,39 +3,10 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
-  Box,
-  Image,
   Text,
-  VStack,
-  Progress,
-  Heading,
-  Divider,
   Spinner,
   Center,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatGroup,
-  Card,
-  CardBody,
-  CardHeader,
-  Button,
-  HStack,
-  IconButton,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  Input,
-  useDisclosure,
-  ModalFooter,
-  Flex,
 } from '@chakra-ui/react';
-import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
-import AllVideosSection from "./components/AllVideosSection/AllVideosSection";
-import YourVideosSection from "./components/YourVideosSection/YourVideosSection";
 import { ICampaign } from '../../../../lib/models/campaign'
 import { IVideo } from '../../../../lib/models/video'
 import { useLayoutContext } from '../../../dashboard/context'

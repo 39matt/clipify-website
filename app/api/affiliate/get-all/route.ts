@@ -1,5 +1,5 @@
 // pages/api/affiliates.ts or app/api/affiliates/route.ts
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { adminDb } from '../../../lib/firebase/firebaseAdmin';
 
 export async function GET() {

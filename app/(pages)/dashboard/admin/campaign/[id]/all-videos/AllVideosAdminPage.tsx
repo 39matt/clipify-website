@@ -2,10 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import {
-  Alert,
-  AlertIcon,
-  Box, Button,
+import { Button,
   Center,
   Divider,
   Heading, SimpleGrid,
@@ -13,7 +10,6 @@ import {
   Text, useToast,
   VStack,
 } from '@chakra-ui/react'
-import UnapprovedVideoCard from '#components/app/UnapprovedVideoCard/UnapprovedVideoCard'
 import AdminVideoCard from './components/AdminVideoCard'
 import { ICampaign } from '../../../../../../lib/models/campaign'
 import { IVideo } from '../../../../../../lib/models/video'

@@ -1,6 +1,5 @@
-import { collection, doc, getDoc, getDocs, setDoc } from '@firebase/firestore'
+import { collection, doc, getDoc, getDocs } from '@firebase/firestore'
 import { db } from '../firebaseClient'
-import { IVideo } from '../../models/video'
 import { IAccount } from '../../models/account'
 
 export async function getAllAccounts(uid: string) {

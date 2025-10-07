@@ -4,19 +4,10 @@ import {
   Box,
   Image,
   Text,
-  Button,
   Link,
   VStack,
   HStack,
-  useDisclosure,
-  AlertDialog,
-  AlertDialogOverlay,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogBody,
-  AlertDialogFooter, Divider,
 } from '@chakra-ui/react'
-import { FiExternalLink } from 'react-icons/fi';
 import { IVideo } from '../../../../../../lib/models/video'
 
 interface AdminVideoCardProps {

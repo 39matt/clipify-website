@@ -18,7 +18,6 @@ import {
 } from '@chakra-ui/react'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {
-  FiDollarSign,
   FiTrendingUp,
   FiTarget,
   FiArrowRight,

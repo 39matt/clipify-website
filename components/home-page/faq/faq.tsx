@@ -1,5 +1,5 @@
-import { chakra, Box, Flex, Collapse, Icon, SimpleGrid, Container, Heading, VStack } from '@chakra-ui/react'
-import { Section, SectionProps, SectionTitle } from '#components/home-page/section';
+import { chakra, Box, Flex, Collapse, Icon, Container, Heading, VStack } from '@chakra-ui/react'
+import { SectionProps } from '#components/home-page/section';
 import { useState } from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 
