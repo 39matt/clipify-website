@@ -71,8 +71,8 @@ export const Feature: React.FC<FeatureProps> = (props) => {
       transition={{
         type: 'tween',
         ease: 'easeOut',
-        duration: 0.6,
-        delay,
+        duration: 0.6 as any,
+        delay: delay as any,
       }}
     >
       <Stack sx={styles.container} direction={direction} >

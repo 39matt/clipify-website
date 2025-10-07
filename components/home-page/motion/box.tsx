@@ -1,5 +1,6 @@
-import { ChakraProps, chakra } from '@chakra-ui/react'
-import { HTMLMotionProps, motion } from 'framer-motion'
+import { ChakraProps, chakra, shouldForwardProp } from '@chakra-ui/react'
+import { HTMLMotionProps, isValidMotionProp, motion } from 'framer-motion'
+import * as React from 'react'
 
 export interface MotionBoxProps
   extends Omit<HTMLMotionProps<'div'>, 'children' | 'style'>,
@@ -7,4 +8,10 @@ export interface MotionBoxProps
   children?: React.ReactNode
 }
 
-export const MotionBox = motion.create(chakra.div)
+const ChakraMotionDiv = chakra(motion.div, {
+  shouldForwardProp: (prop) => isValidMotionProp(prop) || shouldForwardProp(prop),
+})
+
+export const MotionBox: React.FC<MotionBoxProps> = (props) => {
+  return <ChakraMotionDiv {...(props as any)} />
+}
