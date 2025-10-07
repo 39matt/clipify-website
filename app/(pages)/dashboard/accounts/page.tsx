@@ -109,7 +109,6 @@ const ConnectedAccounts: NextPage = () => {
   }, [isOpen, discordUsername]);
 
   const handleAddAccountClick = () => {
-    console.log("dc: " + discordUsername)
     if (!discordUsername) {
       onDiscordWarningOpen();
       return;

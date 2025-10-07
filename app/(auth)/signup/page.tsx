@@ -184,7 +184,7 @@ const SignUp: NextPage = () => {
                 }
                 >
                   <Field type="password" id="confirmPassword" name="confirmPassword" label="Potvrdi lozinku" isRequired />
-                  <Field type="text" id="affiliateCode" name="affiliateCode" label="Affiliate kod" />
+                  {/*<Field type="text" id="affiliateCode" name="affiliateCode" label="Affiliate kod" />*/}
 
                   {/*<Field name="username" label="Korisničko ime" isRequired />*/}
                   {error && (
