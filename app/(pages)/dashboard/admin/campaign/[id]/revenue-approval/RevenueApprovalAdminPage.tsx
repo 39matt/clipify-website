@@ -71,7 +71,7 @@ const RevenueApprovalAdminPage: React.FC<UnapprovedVideosProps> = ({ idToken }) 
     };
 
     fetchData();
-  }, [campaignId]);
+  }, [campaignId, toast]);
 
   if (loading) {
     return (
