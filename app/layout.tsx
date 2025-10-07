@@ -1,6 +1,7 @@
 import { ColorModeScript } from '@chakra-ui/react'
 
 import { Provider } from './providers/provider'
+import { Analytics } from "@vercel/analytics/next"
 
 export default function Layout(props: { children: React.ReactNode }) {
   const colorMode = 'dark'
@@ -14,6 +15,7 @@ export default function Layout(props: { children: React.ReactNode }) {
       <body className={`chakra-ui-${colorMode}`}>
         <ColorModeScript initialColorMode={colorMode} />
         <Provider>{props.children}</Provider>
+        <Analytics/>
       </body>
     </html>
   )
