@@ -50,6 +50,9 @@ const ConnectedAccounts: NextPage = () => {
   const { user, loading, discordUsername } = useLayoutContext();
   const router = useRouter();
 
+  const instagramAccountLimit = 5;
+  const tiktokAccountLimit = 5;
+
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
@@ -119,10 +122,11 @@ const ConnectedAccounts: NextPage = () => {
   const handleAddAccount = async () => {
     try {
       setMessage('');
-      if (accounts.length > 5) {
-        setMessage('Možeš imati maksimalno 3 Instagram i 3 TikTok naloga');
+      if(accounts.length > tiktokAccountLimit + instagramAccountLimit - 1) {
+        setMessage('Možeš imati maksimalno 5 Instagram i 5 TikTok naloga');
         return;
       }
+
       const instagramRegex =
         /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/;
       const tiktokRegex =
@@ -141,8 +145,8 @@ const ConnectedAccounts: NextPage = () => {
       let username = '';
 
       if (accountLink.includes('tiktok')) {
-        if (accounts.filter((acc) => acc.platform === 'TikTok').length > 2) {
-          setMessage('Možeš imati maksimalno 3 TikTok naloga');
+        if (accounts.filter((acc) => acc.platform === 'TikTok').length > tiktokAccountLimit - 1) {
+          setMessage('Možeš imati maksimalno 5 TikTok naloga');
           return;
         }
         if (accountLink.includes('@')) {
@@ -156,10 +160,8 @@ const ConnectedAccounts: NextPage = () => {
           return;
         }
       } else {
-        if (
-          accounts.filter((acc) => acc.platform === 'Instagram').length > 2
-        ) {
-          setMessage('Možeš imati maksimalno 3 Instagram naloga');
+        if (accounts.filter((acc) => acc.platform === 'Instagram').length > instagramAccountLimit - 1) {
+          setMessage('Možeš imati maksimalno 5 Instagram naloga');
           return;
         }
         const parts = accountLink.split('/').filter((part) => part !== '');
