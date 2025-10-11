@@ -104,7 +104,7 @@ const SignUp: NextPage = () => {
       {/* Left side - Branding */}
       <Flex
         w={{ base: 'full', lg: '50%' }}
-        h={{ base: '33%', lg: 'auto' }}
+        h={{ base: '35%', lg: 'auto' }}
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
@@ -130,19 +130,6 @@ const SignUp: NextPage = () => {
               '50%': { transform: 'scale(1.1)', opacity: 0.8 },
             },
           }}
-        />
-
-        {/* Dot pattern */}
-        <Box
-          position="absolute"
-          top="0"
-          left="0"
-          right="0"
-          bottom="0"
-          opacity={0.03}
-          bgImage="radial-gradient(circle, currentColor 1px, transparent 1px)"
-          bgSize="30px 30px"
-          pointerEvents="none"
         />
 
         <VStack
