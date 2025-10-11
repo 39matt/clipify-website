@@ -268,7 +268,7 @@ const HeroSection: React.FC = () => {
             delay: 0,
           },
           {
-            title: '400+',
+            title: '600+',
             icon: User,
             description: 'Aktivnih klipera',
             iconPosition: 'left',
@@ -282,7 +282,7 @@ const HeroSection: React.FC = () => {
             delay: 0.4,
           },
           {
-            title: '4',
+            title: '5',
             icon: ImBullhorn,
             description: 'Pokrenutih kampanja',
             iconPosition: 'left',
