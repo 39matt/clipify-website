@@ -32,8 +32,12 @@ import {
   useDisclosure,
   ModalFooter,
   Flex,
+  List,
+  ListItem,
+  ListIcon,
 } from '@chakra-ui/react';
 import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
+import { FaDiscord } from 'react-icons/fa';
 import { useLayoutContext } from '../../dashboard/context';
 import { IVideo } from '../../../lib/models/video';
 import { userAccountExists } from '../../../lib/firebase/firestore/account';
@@ -324,6 +328,7 @@ const Page = () => {
       setAddingVideo(false);
     }
   };
+
   if (loading) {
     return (
       <Center minH="100vh" flex={1} flexDirection="column">
@@ -486,9 +491,51 @@ const Page = () => {
             </CardBody>
           </Card>
         </Flex>
+        {campaign.influencer == "Cjuree" && (
+          <Card
+            w="full"
+            maxW="1200px"
+            mx="auto"
+            bg="gray.800"
+            borderRadius="lg"
+            boxShadow="lg"
+            p={6}
+          >
+            <CardHeader textAlign="center">
+              <Heading size="lg" color="green.400" mb={2}>
+                Opis kampanje
+              </Heading>
+            </CardHeader>
+            <CardBody>
+              <VStack spacing={4} align="stretch">
+                <List spacing={3} mx="auto" >
+                  <ListItem display="flex" alignItems="center">
+                    <Text fontSize="xl" mr={3}>📋</Text>
+                    <Text>Zatražite pristup kampanji na discord serveru!</Text>
+                  </ListItem>
+                </List>
+
+                <Center pt={4}>
+                  <Button
+                    leftIcon={<FaDiscord />}
+                    colorScheme="red"
+                    bg="green.500"
+                    _hover={{ bg: 'green.600' }}
+                    size="lg"
+                    onClick={() => window.open('https://discord.gg/Fz4fxTp2u8', '_blank')}
+                  >
+                    Pridruži se Discord serveru
+                  </Button>
+                </Center>
+              </VStack>
+            </CardBody>
+          </Card>
+        )}
 
         <YourVideosSection userVideos={userVideos} videosLoading={videosLoading} />
         <AllVideosSection videos={videos} videosLoading={loading} />
+
+
       </VStack>
 
       <Modal isOpen={isOpen} onClose={onClose}>
