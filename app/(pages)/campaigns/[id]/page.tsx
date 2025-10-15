@@ -166,21 +166,21 @@ const Page = () => {
         videoLink: rawVideoUrl,
       });
 
-      const existsRes = await fetch(
-        `/api/user/account/video-exists?${params.toString()}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      // const existsRes = await fetch(
+      //   `/api/campaign/video/exists?${params.toString()}`,
+      //   {
+      //     method: "GET",
+      //     headers: { "Content-Type": "application/json" },
+      //   }
+      // );
 
-      if (!existsRes.ok) throw new Error("Failed to validate video");
-
-      const existsData = await existsRes.json();
-      if (existsData.exists) {
-        setMessage("Video je već dodat!");
-        return;
-      }
+      // if (!existsRes.ok) throw new Error("Failed to validate video");
+      //
+      // const existsData = await existsRes.json();
+      // if (existsData.exists) {
+      //   setMessage("Video je već dodat!");
+      //   return;
+      // }
 
       let accountName = "";
       let videoId = "";
@@ -290,7 +290,6 @@ const Page = () => {
         return;
       }
 
-      // Add video to campaign
       const addRes = await fetch("/api/campaign/video/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -301,12 +300,16 @@ const Page = () => {
           uid: discordUsername,
         }),
       });
+      const addResJson = await addRes.json();
+      if(!addRes.ok && addResJson["error"] == 'Video already exists') {
+        setMessage("Video je već dodat!");
+        return;
+      }
 
       if (addRes.ok) {
         setMessage("Video je uspešno dodat!");
         setVideoUrl("");
 
-        // Refresh videos
         const videosResponse = await fetch(
           `/api/campaign/get-user-videos?campaignId=${campaignId}&userId=${discordUsername}`,
           {

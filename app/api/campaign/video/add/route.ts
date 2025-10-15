@@ -6,7 +6,6 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const { video, campaignId, accId, uid } = body
 
-    // Better validation with specific error messages
     if (!video) {
       return NextResponse.json(
         { error: "Video data is required" },
@@ -32,18 +31,24 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Get collection references
     const videoColRef = adminDb.collection('campaigns').doc(campaignId).collection('videos');
     const userAccountRef = adminDb.collection('users').doc(uid).collection('accounts').doc(accId);
 
-    // Prepare video data
+
+    const existingVideo = await videoColRef.where("link", "==", video.link).get();
+    if (!existingVideo.empty) {
+      return NextResponse.json(
+        { error: 'Video already exists' },
+        { status: 400 }
+      );
+    }
     const videoData = {
       ...video,
       userAccountRef: userAccountRef,
       accountName: accId,
       uid: uid,
-      createdAt: new Date().toISOString(), // Add timestamp
-      approved: null // Set initial approval status
+      createdAt: new Date().toISOString(),
+      approved: null
     };
 
     const newVideoDocRef = await videoColRef.add(videoData);
