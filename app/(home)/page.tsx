@@ -52,6 +52,7 @@ import faq from '#data/faq';
 import pricing from '#data/pricing';
 import testimonials from '#data/testimonials';
 import Steps from '#components/home-page/steps/steps'
+import { CampaignCarousel } from './components/campaign-carousel'
 
 
 const Home: NextPage = () => {
@@ -96,17 +97,18 @@ const HeroSection: React.FC = () => {
         <Flex
           direction={{ base: 'column', md: 'row' }}
           align={{ base: "center", md: "center" }}
-          justify="space-between"
+          justify="center"
           gap={{ base: 0, md: 8, lg: 0 }}
           mt={{ base: 24, md: 0 }}
         >
           <Box
             flex={{ base: "none", md: "0 1 40%" }}
+            minH={{base:"80vh", md: "auto"}}
             pr={{ base: 0, lg: 4 }}
             mb={{ base: 6, lg: 0 }}
             w="full"
             display="flex"
-            alignItems="center"
+            flexDirection="column"
           >
             <Hero
               px="0"
@@ -168,29 +170,12 @@ const HeroSection: React.FC = () => {
                   width="full"
                 >
                   <ButtonLink
-                    href="/signup"
                     colorScheme="primary"
-                    size={{ base: "md", md: "lg" }}
-                    px={{ base: 8, md: 10 }}
-                    py={{ base: 6, md: 7 }}
-                    fontSize={{ base: "lg", sm: "xl", md: "2xl" }}
-                    width={{ base: "full", md: "auto" }}
-                    mb={{ base: 4, md: 0 }}
-                    borderRadius="xl"
-                    shadow="lg"
-                    _hover={{ transform: "translateY(-2px)", shadow: "xl" }}
-                    _active={{ transform: "translateY(0)" }}
-                    transition="all 0.2s ease"
-                  >
-                    Zaradi kao kliper
-                  </ButtonLink>
-
-                  <ButtonLink
                     href="/kontakt"
                     size={{ base: "md", md: "lg" }}
-                    variant="outline"
                     px={{ base: 8, md: 10 }}
                     py={{ base: 6, md: 7 }}
+                    mb={{ base: 4, md: 0 }}
                     fontSize={{ base: "lg", sm: "xl", md: "2xl" }}
                     width={{ base: "full", md: "auto" }}
                     borderRadius="xl"
@@ -202,24 +187,43 @@ const HeroSection: React.FC = () => {
                         _groupHover={{ transform: "translateX(4px)" }}
                       />
                     }
-                    _hover={{ bg: "gray.50", _dark: { bg: "gray.700" } }}
+                    _hover={{ bg: "gray.50", _dark: { bg: "gray.700" }, border: "2px", borderColor: "green.500" }}
                   >
-                    Napravi svoju kampanju
+                    Pokreni svoju kampanju
                   </ButtonLink>
+
+                  <ButtonLink
+                    href="/signup"
+                    size={{ base: "md", md: "lg" }}
+                    px={{ base: 8, md: 10 }}
+                    py={{ base: 6, md: 7 }}
+                    fontSize={{ base: "lg", sm: "xl", md: "2xl" }}
+                    width={{ base: "full", md: "auto" }}
+                    borderRadius="xl"
+                    shadow="lg"
+                    _hover={{ transform: "translateY(-2px)", shadow: "xl" }}
+                    _active={{ transform: "translateY(0)" }}
+                    transition="all 0.2s ease"
+                  >
+                    Zaradi kao kliper
+                  </ButtonLink>
+
+
                 </ButtonGroup>
               </FallInPlace>
             </Hero>
-          </Box>
+            <CampaignCarousel/>
 
+          </Box>
           <Box
             flex={{ base: "none", md: "0 1 50%" }}
             pl={{ base: 0, lg: 4 }}
             w="full"
-            display="flex"
             justifyContent="center"
             alignItems="center"
             overflow="hidden"
             mt={{ base: 4, md: 0 }}
+            display={{ base: 'none', md: 'flex' }}
           >
             <FallInPlace delay={0.6}>
               <Box
@@ -255,7 +259,7 @@ const HeroSection: React.FC = () => {
         maxW={{ base: "95%", md: "85%" }}
         mx="auto"
         px={{ base: 4, md: 6 }}
-        mt={{ base: 12, md: 16 }}
+        mt={{ base: 0, md: 16 }}
         id="benefits"
         columns={{ base: 1, sm: 2, md: 4 }}
         iconSize={4}

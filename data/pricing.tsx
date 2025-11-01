@@ -16,7 +16,7 @@ export default {
           title: 'Kreiranje i objava kampanja sa jasnim ciljevima',
         },
         {
-          title: 'Pristup velikom broju iskusnih klipera',
+          title: 'Pristup velikom broju iskusnih klipera i editora',
         },
         {
           title: 'Plaćaš samo za autentične preglede i engagement',

@@ -32,7 +32,7 @@ import Link from 'next/link';
 import { useForm, ValidationError } from '@formspree/react';
 
 const Contact: NextPage = () => {
-  const [role, setRole] = useState<'kliper' | 'klijent'>('kliper');
+  // const [role, setRole] = useState<'kliper' | 'klijent'>('kliper');
   const [state, handleSubmit] = useForm("mzzvzkvp");
 
   return (
@@ -97,28 +97,28 @@ const Contact: NextPage = () => {
                   />
 
                   {/* Checkbox Slider */}
-                  <Flex gap={4}>
-                    <Text
-                      fontSize="md"
-                      color={role === "kliper" ? "green.500" : "gray.500"}
-                    >
-                      Kliper
-                    </Text>
-                    <Switch
-                      isChecked={role === "klijent"}
-                      onChange={(e) =>
-                        setRole(e.target.checked ? "klijent" : "kliper")
-                      }
-                      size="lg"
-                      colorScheme="green"
-                    />
-                    <Text
-                      fontSize="md"
-                      color={role === "klijent" ? "green.500" : "gray.500"}
-                    >
-                      Klijent
-                    </Text>
-                  </Flex>
+                  {/*<Flex gap={4}>*/}
+                  {/*  <Text*/}
+                  {/*    fontSize="md"*/}
+                  {/*    color={role === "kliper" ? "green.500" : "gray.500"}*/}
+                  {/*  >*/}
+                  {/*    Kliper*/}
+                  {/*  </Text>*/}
+                  {/*  <Switch*/}
+                  {/*    isChecked={role === "klijent"}*/}
+                  {/*    onChange={(e) =>*/}
+                  {/*      setRole(e.target.checked ? "klijent" : "kliper")*/}
+                  {/*    }*/}
+                  {/*    size="lg"*/}
+                  {/*    colorScheme="green"*/}
+                  {/*  />*/}
+                  {/*  <Text*/}
+                  {/*    fontSize="md"*/}
+                  {/*    color={role === "klijent" ? "green.500" : "gray.500"}*/}
+                  {/*  >*/}
+                  {/*    Klijent*/}
+                  {/*  </Text>*/}
+                  {/*</Flex>*/}
 
                   <Button
                     type="submit"
@@ -146,7 +146,7 @@ const Contact: NextPage = () => {
           </Card>
 
           {/* Additional Contact Information */}
-          <Box textAlign="center" mt={8}>
+          <Box textAlign="center">
             <Heading size="md" mb={4}>
               Ili nas kontaktirajte direktno mejlom:
             </Heading>

@@ -1,0 +1,21 @@
+ {
+    id: '1',
+    name: 'ZavrtiKes',
+    image: 'https://i.ibb.co/z96PyxD/491456585-653474470745354-2382746249902615751-n.jpg',
+    views: "9000000",
+    daysLeft: "30 dana",
+  },
+  {
+    id: '2',
+    name: 'AleksicMoto',
+    image: 'https://i.ibb.co/vxJ9dpb2/Snap-Insta-to-360037824-551320730372188-7562058913064595415-n-1.jpg',
+    views: "3000000",
+    daysLeft: "14 dana",
+  },
+  {
+    id: '3',
+    name: 'Cjuree',
+    image: 'https://i.ibb.co/DfyBDXdY/IMG-6251-1.jpg',
+    views: "2000000",
+    daysLeft: "U toku",
+  },
