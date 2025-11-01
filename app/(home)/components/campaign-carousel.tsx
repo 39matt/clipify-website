@@ -88,7 +88,7 @@ const finishedCampaigns: FinishedCampaign[] = [
     id: 'f1',
     name: 'ZavrtiKes - Clipping i Logo',
     image: 'https://i.ibb.co/z96PyxD/491456585-653474470745354-2382746249902615751-n.jpg',
-    totalViews: "5000000",
+    totalViews: "9000000",
     totalClippers: 30,
     totalVideos: 127,
     duration: 30,
