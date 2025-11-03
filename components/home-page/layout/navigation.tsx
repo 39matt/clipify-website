@@ -24,23 +24,6 @@ const Navigation: React.FC = () => {
     <HStack spacing="4" flexShrink={0}>
       {/* Hide on mobile, show from md+ */}
       <HStack spacing="4" display={{ base: "none", md: "flex" }}>
-        <Button
-          as="a"
-          href="/login"
-          onClick={(e) => {
-            e.preventDefault()
-            router.push("/login")
-          }}
-          size="lg"
-          variant="outline"
-          colorScheme="primary"
-          borderRadius="lg"
-          px={8}
-          fontWeight="semibold"
-          boxShadow="sm"
-        >
-          Login
-        </Button>
 
         <Button
           as="a"
@@ -49,15 +32,34 @@ const Navigation: React.FC = () => {
             e.preventDefault()
             router.push("/signup")
           }}
-          size="lg"
+          size="md"
+          variant="outline"
           colorScheme="primary"
           borderRadius="lg"
-          px={8}
+          px={6}
           fontWeight="semibold"
           boxShadow="sm"
         >
-          Register
+          Zaradi kao kliper
         </Button>
+        <Button
+          as="a"
+          href="/kontakt"
+          onClick={(e) => {
+            e.preventDefault()
+            router.push("/kontakt")
+          }}
+          size="md"
+          colorScheme="primary"
+          borderRadius="lg"
+          px={6}
+          fontWeight="semibold"
+          boxShadow="sm"
+        >
+          Pokreni svoju kampanju
+        </Button>
+
+
       </HStack>
 
       <ThemeToggle />
