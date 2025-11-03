@@ -19,7 +19,7 @@ import {
   CardBody,
   Badge,
   Grid,
-  GridItem, Image, Link,
+  GridItem, Image, Link, Button,
 } from '@chakra-ui/react'
 import { Br } from '@saas-ui/react';
 import { Faq } from 'components/home-page/faq';
@@ -252,9 +252,15 @@ const HeroSection: React.FC = () => {
                   flexDirection={{ base: "column", sm: "column", md: "row" }}
                   width="full"
                 >
-                  <ButtonLink
+                  <Button
                     colorScheme="primary"
-                    href="/kontakt"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      document.querySelector('#kontakt')?.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                      });
+                    }}
                     size={{ base: "md", md: "lg" }}
                     px={{ base: 8, md: 10 }}
                     py={{ base: 6, md: 7 }}
@@ -273,7 +279,7 @@ const HeroSection: React.FC = () => {
                     _hover={{ bg: "gray.50", _dark: { bg: "gray.700" }, border: "2px", borderColor: "green.500" }}
                   >
                     Pokreni svoju kampanju
-                  </ButtonLink>
+                  </Button>
 
                   <ButtonLink
                     href="/signup"
