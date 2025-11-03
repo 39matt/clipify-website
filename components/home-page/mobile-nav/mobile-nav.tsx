@@ -95,16 +95,6 @@ export function MobileNavContent(props: MobileNavContentProps) {
     }
   }, [isOpen])
 
-  const handleScrollToSection = (id: string) => {
-    const section = document.getElementById(id)
-    if (section) {
-      section.scrollIntoView({
-        behavior: 'smooth', // Smooth scrolling
-        block: 'start', // Align to the top of the section
-      })
-    }
-  }
-
   return (
     <>
       {isOpen && (
@@ -134,15 +124,20 @@ export function MobileNavContent(props: MobileNavContentProps) {
                     return (
                       <NavLink
                         bgColor={id == "register" ? "green.500" : ""}
-                        href={href || `/`}
                         key={i}
                         onClick={(e) => {
                           e.preventDefault() // Prevent default navigation behavior
-                          document.querySelector('#kontakt2')?.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start',
-                          });
-                          onClose()
+                          if(id == "register") {
+                            document.querySelector('#kontakt2')?.scrollIntoView({
+                              behavior: 'smooth',
+                              block: 'start',
+                            });
+                            onClose();
+                          }
+                          else {
+                            router.push('/signup');
+                          }
+
                         }}
                         {...(props as any)}
                       >

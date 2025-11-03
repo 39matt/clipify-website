@@ -40,7 +40,6 @@ export const Faq: React.FC<FaqProps> = (props) => {
       position="relative"
       py={20}
       bg="transparent"
-      id="kontakt2"
     >
       <Container maxW="container.xl">
         <VStack spacing={12} align="stretch">
@@ -153,7 +152,7 @@ export const Faq: React.FC<FaqProps> = (props) => {
                         />
                       </Box>
 
-                      <Box w="full">
+                      <Box w="full" >
                         <Textarea
                           name="message"
                           placeholder="Ciljevi i detalji kampanje"
@@ -181,6 +180,7 @@ export const Faq: React.FC<FaqProps> = (props) => {
                       </Box>
 
                       <Button
+                        id="kontakt2"
                         type="submit"
                         isLoading={state.submitting}
                         w="full"

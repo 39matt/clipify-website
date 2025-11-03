@@ -256,11 +256,9 @@ const HeroSection: React.FC = () => {
                     colorScheme="primary"
                     onClick={(e) => {
                       e.preventDefault();
-                      const isMobile = window.innerWidth < 768;
-                      const targetId = isMobile ? '#kontakt2' : '#kontakt';
-                      document.querySelector(targetId)?.scrollIntoView({
+                      document.querySelector('#kontakt')?.scrollIntoView({
                         behavior: 'smooth',
-                        block: 'start',
+                        block: 'center',
                       });
                     }}
                     size={{ base: "md", md: "lg" }}
