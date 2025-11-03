@@ -258,7 +258,7 @@ const HeroSection: React.FC = () => {
                       e.preventDefault();
                       document.querySelector('#kontakt')?.scrollIntoView({
                         behavior: 'smooth',
-                        block: 'center',
+                        block: 'start',
                       });
                     }}
                     size={{ base: "md", md: "lg" }}

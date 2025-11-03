@@ -46,6 +46,7 @@ export const Faq: React.FC<FaqProps> = (props) => {
           {/* Header Section */}
           <VStack spacing={4} textAlign="center">
             <Heading
+              id="kontakt"
               as="h1"
               fontSize={['28px', '36px', '44px']}
               bgGradient="linear(to-r, #d1fae5, #10b981, #059669)"
@@ -100,7 +101,7 @@ export const Faq: React.FC<FaqProps> = (props) => {
                     <VStack spacing={5}>
                       <Box w="full">
                         <Input
-                          id="kontakt"
+
                           name="name"
                           placeholder="Ime i prezime"
                           isRequired

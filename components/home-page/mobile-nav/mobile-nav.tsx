@@ -128,7 +128,7 @@ export function MobileNavContent(props: MobileNavContentProps) {
                         onClick={(e) => {
                           e.preventDefault() // Prevent default navigation behavior
                           if(id == "register") {
-                            document.querySelector('#kontakt2')?.scrollIntoView({
+                            document.querySelector('#kontakt')?.scrollIntoView({
                               behavior: 'smooth',
                               block: 'start',
                             });

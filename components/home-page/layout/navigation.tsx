@@ -55,7 +55,7 @@ const Navigation: React.FC = () => {
             e.preventDefault();
             document.querySelector('#kontakt')?.scrollIntoView({
               behavior: 'smooth',
-              block: 'center',
+              block: 'start',
             });
           }}
         >
