@@ -40,6 +40,7 @@ export const Faq: React.FC<FaqProps> = (props) => {
       position="relative"
       py={20}
       bg="transparent"
+      id="kontakt2"
     >
       <Container maxW="container.xl">
         <VStack spacing={12} align="stretch">
@@ -67,7 +68,7 @@ export const Faq: React.FC<FaqProps> = (props) => {
             </Text>
           </VStack>
 
-          <Flex justify="center" w="full"               >
+          <Flex justify="center" w="full"      >
             <Box w="full" maxW="600px">
               <Card
                 bg="whiteAlpha.100"
@@ -88,6 +89,7 @@ export const Faq: React.FC<FaqProps> = (props) => {
                   borderColor="whiteAlpha.200"
                 >
                   <Logo
+
                     onClick={() => {}}
                     _hover={{ cursor: "pointer" }}
                     width={{ base: "150px", md: "180px" }}

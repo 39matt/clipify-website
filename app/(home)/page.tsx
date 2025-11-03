@@ -174,7 +174,7 @@ const HeroSection: React.FC = () => {
       <Container
         maxW={{ base: "95%", md: "85%" }}
         w="full"
-        pt={{ base: 16, md: 48 }}
+        pt={{ base: 10, md: 48 }}
         px={{ base: 4, md: 6 }}
       >
         <Flex
@@ -266,7 +266,6 @@ const HeroSection: React.FC = () => {
                     py={{ base: 6, md: 7 }}
                     mb={{ base: 4, md: 0 }}
                     fontSize={{ base: "lg", sm: "xl", md: "2xl" }}
-                    width={{ base: "full", md: "auto" }}
                     borderRadius="xl"
                     shadow="sm"
                     rightIcon={
@@ -287,7 +286,6 @@ const HeroSection: React.FC = () => {
                     px={{ base: 8, md: 10 }}
                     py={{ base: 6, md: 7 }}
                     fontSize={{ base: "lg", sm: "xl", md: "2xl" }}
-                    width={{ base: "full", md: "auto" }}
                     borderRadius="xl"
                     shadow="lg"
                     _hover={{ transform: "translateY(-2px)", shadow: "xl" }}

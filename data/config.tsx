@@ -31,13 +31,13 @@ const siteConfig = {
       // },
       {
         id: 'login',
-        label: 'Login',
-        href: '/login',
+        label: 'Zaradi kao kliper',
+        href: '/register',
       },
       {
         id: 'register',
-        label: 'Register',
-        href: '/signup',
+        label: 'Pokreni svoju kampanju',
+        href: '#kontakt2',
         variant: 'primary',
       },
     ],

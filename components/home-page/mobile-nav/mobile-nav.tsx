@@ -133,11 +133,13 @@ export function MobileNavContent(props: MobileNavContentProps) {
                   ({ href, id, label, ...props }, i) => {
                     return (
                       <NavLink
+                        bgColor={id == "register" ? "green.500" : ""}
                         href={href || `/`}
                         key={i}
                         onClick={(e) => {
                           e.preventDefault() // Prevent default navigation behavior
                             router.push(href) // Navigate to the href if no id is provided
+                          onClose()
                         }}
                         {...(props as any)}
                       >
