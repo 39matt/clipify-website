@@ -73,8 +73,8 @@ export const Feature: React.FC<FeatureProps> = (props) => {
     >
       <Box
         bg="rgba(255, 255, 255, 0.05)"
-        borderRadius="2xl"
-        p={[6, 8, 10]}
+        borderRadius="xl"
+        p={[5, 6, 8]}
         h="full"
         border="1px solid"
         borderColor="rgba(255, 255, 255, 0.1)"
@@ -87,14 +87,14 @@ export const Feature: React.FC<FeatureProps> = (props) => {
         {icon && (
           <Icon
             as={icon}
-            boxSize={12}
+            boxSize={10}
             color="white"
-            mb={6}
+            mb={5}
           />
         )}
-        <VStack align="stretch" spacing={4} w="100%">
+        <VStack align="stretch" spacing={3} w="100%">
           <Heading
-            fontSize={["lg", "xl", "2xl"]}
+            fontSize={["md", "lg", "xl"]}
             fontWeight="semibold"
             color="white"
             lineHeight="1.3"
@@ -103,7 +103,7 @@ export const Feature: React.FC<FeatureProps> = (props) => {
             {title}
           </Heading>
           <Text
-            fontSize={["sm", "md", "lg"]}
+            fontSize={["xs", "sm", "md"]}
             color="rgba(255, 255, 255, 0.7)"
             lineHeight="1.6"
             w="100%"
@@ -143,7 +143,8 @@ export const Features: React.FC<FeaturesProps> = (props) => {
             <SimpleGrid
               columns={columns}
               spacing={spacing}
-              w="full"
+              w="75%"
+              mx="auto"
             >
               {features.map((feature, i) => {
                 return (

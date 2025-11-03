@@ -642,7 +642,7 @@ const FeaturesSection = () => {
       title={
         <Heading
           as="h1"
-          fontSize={['32px', '44px', '56px']}
+          fontSize={['24px', '32px', '44px']}
           bgGradient="linear(to-r, white, #10b981)"
           bgClip="text"
           textAlign="center"

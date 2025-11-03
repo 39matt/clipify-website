@@ -29,7 +29,7 @@ export default {
         },
       ],
       action: {
-        href: '/kontakt',
+        href: '#kontakt2',
         label: 'Započni svoju prvu kampanju!'
       },
     },
@@ -59,7 +59,7 @@ export default {
         },
       ],
       action: {
-        href: '/login',
+        href: '/signup',
         label: 'Pridruži se kao kliper!'
       },
     },

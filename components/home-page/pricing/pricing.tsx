@@ -73,7 +73,7 @@ export const Pricing: React.FC<PricingProps> = (props) => {
           >
             <Heading
               as="h1"
-              fontSize={['32px', '44px', '56px']}
+              fontSize={['28px', '36px', '44px']}
               bgGradient="linear(to-r, white, #10b981)"
               bgClip="text"
               textAlign="center"
@@ -97,10 +97,9 @@ export const Pricing: React.FC<PricingProps> = (props) => {
             w="full"
             display="grid"
             gridTemplateColumns={["1fr", "1fr", "repeat(2, 1fr)"]}
-            gap={[6, 8]}
-            px={[2, 4, 0]} // Reduced mobile padding from 4 to 2
-            maxW="6xl" // Increased from 5xl to 6xl for wider overall container
+            maxW="6xl"
             mx="auto"
+            placeItems="center"
           >
             {plans?.map((plan, i) => (
               <MotionBox
@@ -117,8 +116,8 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                 h="100%"
                 w="100%"
                 display="flex"
-                maxW={["95%", "100%", "100%"]} // Add this to make mobile cards wider
-                mx="auto" // Center the cards on mobile
+                justifyContent="center"
+                maxW={["95%", "100%", "100%"]}
               >
                 <PricingBox
                   title={plan.title}
@@ -126,7 +125,7 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                   description2={plan.description2}
                   price={plan.price}
                   minH={["500px", "550px", "600px"]}
-                  w="100%"
+                  w="80%"
                   isRecommended={plan.isRecommended}
                   isPopular={plan.isPopular}
                 >
@@ -232,14 +231,14 @@ export interface PricingFeatureProps {
 const PricingFeature: React.FC<PricingFeatureProps> = (props) => {
   const { title, iconColor = '#10b981' } = props
   return (
-    <HStack spacing="4" align="center" w="full"> {/* Changed from "flex-start" to "center" */}
+    <HStack spacing="4" align="center" w="full">
       <Box
         bg="linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1))"
         borderRadius="full"
         p="2"
         border="1px solid"
         borderColor="rgba(16, 185, 129, 0.3)"
-        flexShrink={0} // Ensure the icon container doesn't shrink
+        flexShrink={0}
       >
         <Icon
           as={FiCheck}
@@ -251,11 +250,11 @@ const PricingFeature: React.FC<PricingFeatureProps> = (props) => {
       <Text
         flex="1"
         fontSize={["md", "lg"]}
-        lineHeight="1.4" // Reduced line height for better alignment
+        lineHeight="1.4"
         color="gray.200"
         fontWeight="medium"
-        display="flex" // Make text container flex
-        alignItems="center" // Center text vertically
+        display="flex"
+        alignItems="center"
       >
         {title}
       </Text>
