@@ -138,7 +138,10 @@ export function MobileNavContent(props: MobileNavContentProps) {
                         key={i}
                         onClick={(e) => {
                           e.preventDefault() // Prevent default navigation behavior
-                            router.push(href) // Navigate to the href if no id is provided
+                          document.querySelector('#kontakt2')?.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start',
+                          });
                           onClose()
                         }}
                         {...(props as any)}
