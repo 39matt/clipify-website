@@ -260,7 +260,7 @@ const HeroSection: React.FC = () => {
                       const targetId = isMobile ? '#kontakt2' : '#kontakt';
                       document.querySelector(targetId)?.scrollIntoView({
                         behavior: 'smooth',
-                        block: 'center',
+                        block: 'start',
                       });
                     }}
                     size={{ base: "md", md: "lg" }}
