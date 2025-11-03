@@ -1,7 +1,7 @@
 import { Button } from '@chakra-ui/react'
 import { Link } from '@saas-ui/react'
 import { NextSeoProps } from 'next-seo'
-import { FaGithub, FaTwitter } from 'react-icons/fa'
+import { FaDiscord, FaGithub, FaTwitter } from 'react-icons/fa'
 import { FiCheck } from 'react-icons/fi'
 import { Logo } from './logo'
 import { FaInstagram, FaTiktok } from 'react-icons/fa6'
@@ -60,6 +60,10 @@ const siteConfig = {
       {
         href: 'https://www.instagram.com/clipify.rs/',
         label: <FaInstagram size="24" />,
+      },
+      {
+        href: 'https://discord.com/invite/clipifyrs',
+        label: <FaDiscord size="24" />,
       },
     ],
   },

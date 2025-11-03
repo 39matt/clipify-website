@@ -57,7 +57,6 @@ import { FallInPlace } from '#components/home-page/motion/fall-in-place';
 import { Pricing } from '#components/home-page/pricing/pricing';
 import faq from '#data/faq';
 import pricing from '#data/pricing';
-import testimonials from '#data/testimonials';
 import Steps from '#components/home-page/steps/steps'
 import { CampaignCarousel } from './components/campaign-carousel'
 
@@ -760,7 +759,7 @@ const PricingSection = () => {
 }
 
 const FaqSection = () => {
-  return <Faq {...faq} />
+  return <Faq  {...faq} />
 }
 
 export default Home

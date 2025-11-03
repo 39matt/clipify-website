@@ -44,17 +44,20 @@ const Navigation: React.FC = () => {
         </Button>
         <Button
           as="a"
-          href="/kontakt"
-          onClick={(e) => {
-            e.preventDefault()
-            router.push("/kontakt")
-          }}
+          href="#kontakt"
           size="md"
           colorScheme="primary"
           borderRadius="lg"
           px={6}
           fontWeight="semibold"
           boxShadow="sm"
+          onClick={(e) => {
+            e.preventDefault();
+            document.querySelector('#kontakt')?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'center',
+            });
+          }}
         >
           Pokreni svoju kampanju
         </Button>

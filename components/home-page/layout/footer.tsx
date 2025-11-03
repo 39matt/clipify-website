@@ -30,14 +30,9 @@ export const Footer: React.FC<FooterProps> = (props) => {
       boxShadow="md"
       {...rest}
     >
-      <Container maxW={{base: "full", md:"85%"}} px="8" py="8">
+      <Container maxW={{base: "full", md:"85%"}} px="8" py="6">
         <SimpleGrid columns={columns}>
-          <Stack spacing="8">
-            <Stack alignItems="flex-start">
-              <Flex>
-                {/*<Box as={siteConfig.logo} flex="1" height="64px" />*/}
-              </Flex>
-            </Stack>
+          <Stack spacing="8" >
             <Copyright>{siteConfig.footer.copyright}</Copyright>
           </Stack>
           <HStack justify="flex-end" spacing="4" alignSelf="flex-end">
