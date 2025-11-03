@@ -32,7 +32,7 @@ const siteConfig = {
       {
         id: 'login',
         label: 'Zaradi kao kliper',
-        href: '/register',
+        href: '/signup',
       },
       {
         id: 'register',
