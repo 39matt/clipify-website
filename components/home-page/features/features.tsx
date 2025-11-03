@@ -134,16 +134,18 @@ export const Features: React.FC<FeaturesProps> = (props) => {
 
   return (
     <Box bg="gray.800" w="100vw" position="relative" left="50%" right="50%" marginLeft="-50vw" marginRight="-50vw" pb={24}>
-      <Container {...rest} maxW="85%" w="full">
+      <Container {...rest} w="full">
         <Stack direction="row" height="full" align="flex-start">
-          <VStack flex="1" spacing={[8, null, 12]} alignItems="stretch">
+          <VStack   flex="1" spacing={[8, null, 12]} alignItems="stretch">
+                {title}
 
-              {title}
+
+
 
             <SimpleGrid
               columns={columns}
               spacing={spacing}
-              w="75%"
+              w="80%"
               mx="auto"
             >
               {features.map((feature, i) => {

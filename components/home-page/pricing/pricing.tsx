@@ -63,7 +63,7 @@ export const Pricing: React.FC<PricingProps> = (props) => {
         zIndex="1"
       />
 
-      <Box zIndex="2" pos="relative" w="full" px={[4, 6, 8]}>
+      <Box zIndex="2" pos="relative" w="full">
         <Flex direction="column" w="full" maxW="full" mx="auto" alignContent="space-around">
           <VStack
             py={[16, 20]}
@@ -73,7 +73,7 @@ export const Pricing: React.FC<PricingProps> = (props) => {
           >
             <Heading
               as="h1"
-              fontSize={['28px', '36px', '44px']}
+              fontSize={['32px', '36px', '44px']}
               bgGradient="linear(to-r, white, #10b981)"
               bgClip="text"
               textAlign="center"
@@ -96,8 +96,9 @@ export const Pricing: React.FC<PricingProps> = (props) => {
           <Box
             w="full"
             display="grid"
+            gap={[16, 0]}
             gridTemplateColumns={["1fr", "1fr", "repeat(2, 1fr)"]}
-            maxW="6xl"
+            maxW={{base: "full", md: "6xl"}}
             mx="auto"
             placeItems="center"
           >
@@ -117,7 +118,6 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                 w="100%"
                 display="flex"
                 justifyContent="center"
-                maxW={["95%", "100%", "100%"]}
               >
                 <PricingBox
                   title={plan.title}
@@ -125,7 +125,7 @@ export const Pricing: React.FC<PricingProps> = (props) => {
                   description2={plan.description2}
                   price={plan.price}
                   minH={["500px", "550px", "600px"]}
-                  w="80%"
+                  w="90%"
                   isRecommended={plan.isRecommended}
                   isPopular={plan.isPopular}
                 >

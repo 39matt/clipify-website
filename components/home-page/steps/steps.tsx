@@ -34,7 +34,7 @@ const Steps: React.FC<StepsProps> = ({ title, description, steps }) => {
               {title && (
                 <Heading
                   as="h1"
-                  fontSize={['28px', '36px', '44px']}
+                  fontSize={['32px', '36px', '44px']}
                   bgGradient="linear(to-r, white, #10b981)"
                   bgClip="text"
                   textAlign="center"
@@ -77,7 +77,7 @@ const Steps: React.FC<StepsProps> = ({ title, description, steps }) => {
                     </Box>
 
                     <Heading
-                      fontSize={['20px', '28px', '36px']}
+                      fontSize={['22px', '28px', '36px']}
                       color="white"
                       lineHeight="short"
                     >
@@ -88,7 +88,6 @@ const Steps: React.FC<StepsProps> = ({ title, description, steps }) => {
                       fontSize={['14px', '16px', '18px']}
                       color="gray.300"
                       lineHeight="relaxed"
-                      maxW={"75%"}
                       w={"full"}
                     >
                       {step.description}
