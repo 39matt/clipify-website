@@ -639,20 +639,20 @@ const FeaturesSection = () => {
       id="funkcionalnosti"
       title={
         <Heading
-          as="h1"
-          w="85%"
-          mx="auto"
-          fontSize={['28px', '36px', '44px']}
-          bgGradient="linear(to-r, white, #10b981)"
-          bgClip="text"
-          textAlign="center"
-          fontWeight="extrabold"
-          mt={24}
-          mb={12}
-        >
-          Povezujemo Kreatore i
-          <Br /> Klipere za zajednički uspeh.
-        </Heading>
+        as="h1"
+        w="85%"
+        mx="auto"
+        fontSize={['28px', '36px', '44px']}
+      bgGradient="linear(to-r, white, #10b981)"
+      bgClip="text"
+      textAlign="center"
+      fontWeight="extrabold"
+      mt={24}
+      mb={12}
+    >
+      Povezujemo Kreatore i
+      Klipere za zajednički uspeh.
+    </Heading>
       }
       description={
         <>

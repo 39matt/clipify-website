@@ -29,7 +29,7 @@ export default {
         },
       ],
       action: {
-        href: '#kontakt2',
+        href: '#kontakt',
         label: 'Započni svoju prvu kampanju!'
       },
     },
