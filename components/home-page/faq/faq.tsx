@@ -40,13 +40,14 @@ export const Faq: React.FC<FaqProps> = (props) => {
       position="relative"
       py={20}
       bg="transparent"
+      id="kontakt"
     >
       <Container maxW="container.xl">
         <VStack spacing={12} align="stretch">
           {/* Header Section */}
           <VStack spacing={4} textAlign="center">
             <Heading
-              id="kontakt"
+
               as="h1"
               fontSize={['28px', '36px', '44px']}
               bgGradient="linear(to-r, #d1fae5, #10b981, #059669)"
