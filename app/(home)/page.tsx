@@ -256,7 +256,9 @@ const HeroSection: React.FC = () => {
                     colorScheme="primary"
                     onClick={(e) => {
                       e.preventDefault();
-                      document.querySelector('#kontakt')?.scrollIntoView({
+                      const isMobile = window.innerWidth < 768;
+                      const targetId = isMobile ? '#kontakt2' : '#kontakt';
+                      document.querySelector(targetId)?.scrollIntoView({
                         behavior: 'smooth',
                         block: 'center',
                       });
