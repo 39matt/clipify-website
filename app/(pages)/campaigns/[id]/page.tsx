@@ -78,6 +78,7 @@ const Page = () => {
         const vids = responseJson.videos as IVideo[]
         // setVideos(vids.sort((a, b) => b.views- a.views));
         setVideos(vids);
+
         setCampaign(camp.isActive ? camp : null);
         setLoading(false);
 
@@ -384,7 +385,7 @@ const Page = () => {
           h="full"
           bgImage={`url(${campaign.imageUrl})`}
           bgSize="cover"
-          bgPosition="top"
+          bgPosition="center"
           filter="blur(8px)"
           opacity={0.6}
         />
@@ -494,7 +495,7 @@ const Page = () => {
             </CardBody>
           </Card>
         </Flex>
-        {campaign.influencer == "Cjuree" && (
+        {campaign.discordInvite && (
           <Card
             w="full"
             maxW="1200px"
@@ -525,7 +526,7 @@ const Page = () => {
                     bg="green.500"
                     _hover={{ bg: 'green.600' }}
                     size="lg"
-                    onClick={() => window.open('https://discord.gg/Fz4fxTp2u8', '_blank')}
+                    onClick={() => window.open(campaign.discordInvite, '_blank')}
                   >
                     Pridruži se Discord serveru
                   </Button>

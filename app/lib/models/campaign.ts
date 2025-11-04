@@ -13,4 +13,5 @@ export interface ICampaign {
   minViewsPerPayout: number;
   moneySpent: number;
   isActive: boolean;
+  discordInvite: string;
 }
