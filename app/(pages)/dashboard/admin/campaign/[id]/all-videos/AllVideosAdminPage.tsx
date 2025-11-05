@@ -252,7 +252,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
               Ukupno pregleda
             </StatLabel>
             <StatNumber fontSize="3xl" color="white" fontWeight="bold">
-              {campaign.totalViews.toLocaleString()}
+              {campaign.totalViews?.toLocaleString()}
             </StatNumber>
           </Stat>
         </Box>
