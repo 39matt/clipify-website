@@ -41,7 +41,7 @@ import {
   Calendar,
   Video,
   Award,
-  TrendingUp, ExternalLink,
+  TrendingUp, ExternalLink, Rocket, ShieldCheck, Layers,
 } from 'lucide-react'
 import type { NextPage } from 'next';
 import { FiArrowRight } from 'react-icons/fi';
@@ -664,53 +664,53 @@ const FeaturesSection = () => {
       iconSize={4}
       features={[
         {
-          title: 'Jednostavno Kreiranje Kampanja',
-          icon: UploadCloud,
+          title: 'Kliperi koji razumeju viralnost',
+          icon: Users,
           description1:
-            'Kreatori lako kreiraju kampanje sa jasnim pravilima i budžetom za klipere.',
+            'Poveži se sa 600+ kreativnih Klipera koji tačno znaju šta funkcioniše na društvenim mrežama.',
           variant: 'inline',
           delay: 0
         },
         {
-          title: 'Učestvovanje u kampanjama',
-          icon: Search,
+          title: 'Tvoj brend ne čeka',
+          icon: Rocket,
           description1:
-            'Kliperi imaju pristup svim dostupnim kampanjama i mogu učestvovati u onima koje im najviše odgovaraju.',
+            'Naša platforma omogućava da tvoja kampanja krene istog dana, sa velikim brojem klipera spremnih da je ožive.',
           variant: 'inline',
           delay: 0.2
         },
         {
-          title: 'Sigurna i brza isplata',
-          icon: Shield,
+          title: 'Plati za rezultat',
+          icon: DollarSign,
           description1:
-            'Kliperi dobijaju sigurnu i brzu isplatu za svaki pregled koji ostvare - bez čekanja i komplikacija.',
+            'Plaćaš tek kada klip isporuči stvarne preglede i engagement - svaki dinar radi za tebe, ne protiv tebe.',
           variant: 'inline',
           delay: 0.4
         },
         {
-          title: 'Kompletna statistika',
-          icon: ChartLine,
+          title: 'Autentičnost pregleda',
+          icon: ShieldCheck,
           description1:
-            'Kliperi u svakom trenutku imaju jasan pregled svoje zarade i broja pregleda.',
+            'Clipify kombinuje AI analitiku i ljudsku proveru kako bi uklonio svaki lažni trag. Svaki pregled je stvaran - naši brojevi su čisti, provereni i pouzdani.',
           variant: 'inline',
           delay: 0.6
         },
         {
-          title: 'Mogucnost ostvarivanja bonusa',
-          icon: BanknoteArrowUp,
+          title: 'Real-Time Analitika',
+          icon: ChartLine,
           description1:
-            'Kliperi mogu ostvariti dodatne bonuse zasnovane na rezultatima i aktivnostima u kampanjamas',
+            'Prati performanse svakog klipa u našem preglednom dashboardu: vidi preglede, engagement i rast - dok se dešava.',
           variant: 'inline',
           delay: 0.8
         },
         {
-          title: 'Direktna i jasna komunikacija',
-          icon: Users,
+          title: 'Snaga više platformi',
+          icon: Layers,
           description1:
-            'Kliperi imaju direktnu i jasnu komunikaciju sa timom, što omogućava brzo rešavanje problema.',
+            'Clipify optimizuje tvoj sadržaj za TikTok, IG Reels i (uskoro) YT Shorts - automatski prilagođen svakom algoritmu i formatu.',
           variant: 'inline',
           delay: 1
-        },
+        }
       ]}
     />
   )

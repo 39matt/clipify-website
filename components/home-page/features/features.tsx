@@ -10,7 +10,7 @@ import {
   ResponsiveValue,
   useMultiStyleConfig,
   ThemingProps,
-  SystemProps, Container,
+  SystemProps, Container, Flex,
 } from '@chakra-ui/react'
 
 import { SectionTitleProps } from '#components/home-page/section'
@@ -79,22 +79,27 @@ export const Feature: React.FC<FeatureProps> = (props) => {
         border="1px solid"
         borderColor="rgba(255, 255, 255, 0.1)"
         _hover={{
-          transform: "translateY(-4px)",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+          transform: 'translateY(-4px)',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
         }}
         transition="all 0.3s ease"
       >
         {icon && (
-          <Icon
-            as={icon}
-            boxSize={10}
-            color="white"
+          <Flex
+            bg="#0FB98130"
+            w="50px"
+            h="50px"
+            borderRadius="xl"
+            align="center"
+            justify="center"
             mb={5}
-          />
+          >
+            <Icon as={icon} boxSize={6} color="#0FB981" />
+          </Flex>
         )}
         <VStack align="stretch" spacing={3} w="100%">
           <Heading
-            fontSize={["md", "lg", "xl"]}
+            fontSize={['md', 'lg', 'xl']}
             fontWeight="semibold"
             color="white"
             lineHeight="1.3"
@@ -103,7 +108,7 @@ export const Feature: React.FC<FeatureProps> = (props) => {
             {title}
           </Heading>
           <Text
-            fontSize={["xs", "sm", "md"]}
+            fontSize={['xs', 'sm', 'md']}
             color="rgba(255, 255, 255, 0.7)"
             lineHeight="1.6"
             w="100%"
