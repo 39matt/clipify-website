@@ -256,7 +256,7 @@ const HeroSection: React.FC = () => {
                       pravih kreatora {" "}
                     </chakra.em>
                     koji šire tvoj brend na
-                    TikToku, Instagramu i YouTube Shorts uz{" "}
+                    svim društvenim mrežama uz{" "}
                     <chakra.em
                       color="white"
                       fontStyle="normal"
