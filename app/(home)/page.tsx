@@ -198,7 +198,7 @@ const HeroSection: React.FC = () => {
               title={
                 <FallInPlace>
                   <Text fontSize={{ base: "32px", sm: "36px", md: "56px" }}>
-                    Sve-u-jednom alat za{" "}
+                    Platforma koja stvara{" "}
                     <chakra.span
                       color="green.400"
                       fontWeight="extrabold"
@@ -222,23 +222,57 @@ const HeroSection: React.FC = () => {
               description={
                 <FallInPlace delay={0.2} fontWeight="medium">
                   <Text fontSize={{ base: "16px", sm: "18px", md: "22px" }}>
-                    Clipify povezuje kreatore i klipere kroz video sadržaj koji donosi{" "}
+                    Clipify je vodeća   {" "}
                     <chakra.em
                       color="white"
                       fontStyle="normal"
                       fontWeight="semibold"
                     >
-                      rezultate
+                      performance-based platforma{" "}
                     </chakra.em>
-                    , sve je usmereno na{" "}
+                     koja pretvara tvoj
+                   {" "}
                     <chakra.em
                       color="white"
                       fontStyle="normal"
                       fontWeight="semibold"
                     >
-                      stvarne preglede
+                      sadržaj {" "}
                     </chakra.em>
-                    , pravu publiku i vidljive rezultate.
+                    u stotine viralnih kratkih klipova.
+                    Poveži se sa mrežom od {" "}
+                    <chakra.em
+                      color="white"
+                      fontStyle="normal"
+                      fontWeight="semibold"
+                    >
+                      <chakra.em
+                        color="white"
+                        fontStyle="normal"
+                        fontWeight="bold"
+                      >
+                        600+ {" "}
+                      </chakra.em>
+                      pravih kreatora {" "}
+                    </chakra.em>
+                    koji šire tvoj brend na
+                    TikToku, Instagramu i YouTube Shorts uz{" "}
+                    <chakra.em
+                      color="white"
+                      fontStyle="normal"
+                      fontWeight="semibold"
+                    >
+                      trošak{" "}
+                      <chakra.em
+                        color="white"
+                        fontStyle="normal"
+                        fontWeight="bold"
+                      >
+                        znatno manji {" "}
+                      </chakra.em>
+                        od klasičnih reklama.
+                    </chakra.em>
+
                   </Text>
                 </FallInPlace>
               }
