@@ -12,7 +12,6 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Campaign ID is mandatory!' }, { status: 400 });
     }
 
-    // Get campaign data
     const campaignDocRef = adminDb.collection('campaigns').doc(campaignId) // Fixed collection name
     const campaignSnap = await campaignDocRef.get()
 
@@ -22,29 +21,29 @@ export async function PUT(req: NextRequest) {
 
     const campaign = campaignSnap.data() as ICampaign
 
-    // Get videos collection
     const videoColRef = campaignDocRef.collection('videos')
     const videosSnap = await videoColRef.get()
 
-    // Calculate total views correctly
-    const totalViews = videosSnap.docs.filter((video) => video.data()["approved"] !== false).reduce((accumulator, doc) => {
+    const totalViewsProgress = videosSnap.docs.filter((video) => video.data()["approved"] !== false).reduce((accumulator, doc) => {
       const videoData = doc.data() as IVideo;
-      return accumulator + (videoData.views || 0); // Add null check
+      return accumulator + (Math.min(videoData.views, 1000000 * campaign.maxEarningsPerPost / campaign.perMillion) || 0);
     }, 0);
 
-    // Calculate progress correctly
-    // Progress should be: (money spent / total budget) * 100
-    const moneySpent = totalViews / 1000000 * campaign.perMillion; // Views in millions * rate per million
+    const moneySpent = totalViewsProgress / 1000000 * campaign.perMillion
     const progressPercentage = (moneySpent / campaign.budget) * 100;
 
-    // Ensure progress doesn't exceed 100%
     const finalProgress = Math.min(progressPercentage, 100);
 
-    // Update campaign progress
+
+    const totalViews = videosSnap.docs.filter((video) => video.data()["approved"] !== false).reduce((accumulator, doc) => {
+      const videoData = doc.data() as IVideo;
+      return accumulator + (videoData.views || 0);
+    }, 0);
+
     await campaignDocRef.update({
       progress: finalProgress,
-      // totalViews: totalViews, // Optional: store total views
-      moneySpent: moneySpent  // Optional: store money spent
+      totalViews: totalViews,
+      moneySpent: moneySpent
     });
 
     return NextResponse.json({
