@@ -93,7 +93,7 @@ const finishedCampaigns: FinishedCampaign[] = [
   {
     id: 'f2',
     name: 'AleksicMoto - Clipping',
-    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/aleksic.jpg?alt=media&token=6ece2b63-aabc-4d42-95f8-1b2eebc89af1',
+    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/aleksic.jpg?alt=media&token=d573b72a-2798-4892-a14b-7e684193d15d',
     totalViews: "3000000",
     totalClippers: 15,
     totalVideos: 89,
