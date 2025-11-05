@@ -63,21 +63,21 @@ const campaigns: Campaign[] = [
   {
     id: '1',
     name: 'ZavrtiKes',
-    image: 'https://i.ibb.co/z96PyxD/491456585-653474470745354-2382746249902615751-n.jpg',
+    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/zavrtikes.jpg?alt=media&token=76c26083-7358-44b3-9807-5f79caebf6b0',
     views: "9000000",
     daysLeft: "30 dana",
   },
   {
     id: '2',
     name: 'AleksicMoto',
-    image: 'https://i.ibb.co/vxJ9dpb2/Snap-Insta-to-360037824-551320730372188-7562058913064595415-n-1.jpg',
+    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/aleksic.jpg?alt=media&token=d573b72a-2798-4892-a14b-7e684193d15d',
     views: "3000000",
     daysLeft: "14 dana",
   },
   {
     id: '3',
     name: 'Cjuree',
-    image: 'https://i.ibb.co/DfyBDXdY/IMG-6251-1.jpg',
+    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/cjuree.jpeg?alt=media&token=0cc34f5b-8216-4e79-aca0-22fd6beadf20',
     views: "2000000",
     daysLeft: "U toku",
   },
@@ -101,7 +101,7 @@ const finishedCampaigns: FinishedCampaign[] = [
   {
     id: 'f2',
     name: 'AleksicMoto - Clipping',
-    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/aleksic.jpg?alt=media&token=6ece2b63-aabc-4d42-95f8-1b2eebc89af1',
+    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/aleksic.jpg?alt=media&token=d573b72a-2798-4892-a14b-7e684193d15d',
     totalViews: "3000000",
     totalClippers: 15,
     totalVideos: 89,
