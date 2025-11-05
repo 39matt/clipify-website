@@ -2,11 +2,12 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Button,
+import {
+  Box, Button,
   Center,
   Divider,
-  Heading, SimpleGrid,
-  Spinner,
+  Heading, HStack, SimpleGrid,
+  Spinner, Stat, StatLabel, StatNumber,
   Text, useToast,
   VStack,
 } from '@chakra-ui/react'
@@ -237,8 +238,30 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       <Heading textAlign="center" color="green.400">
         {campaign.influencer} - {campaign.activity}
       </Heading>
+      <HStack spacing={6} w="full" mx="auto" py={6}>
+        <Box
+          bg="gray.700"
+          p={6}
+          borderRadius="md"
+          borderWidth="1px"
+          borderColor="gray.900"
+          w="full"
+        >
+          <Stat textAlign="center">
+            <StatLabel fontSize="lg" color="gray.400">
+              Ukupno pregleda
+            </StatLabel>
+            <StatNumber fontSize="3xl" color="white" fontWeight="bold">
+              {campaign.totalViews.toLocaleString()}
+            </StatNumber>
+          </Stat>
+        </Box>
+        <Box w="fit-content">
+          <Button colorScheme={"green"} ml={"auto"} size={"lg"} onClick={handleUpdateViews}>Update views</Button>
 
-      <Button colorScheme={"green"} ml={"auto"} size={"lg"} onClick={handleUpdateViews}>Update views</Button>
+        </Box>
+
+      </HStack>
 
       <Divider />
 
