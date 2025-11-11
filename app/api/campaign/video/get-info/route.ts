@@ -60,6 +60,7 @@ export async function PUT(req: NextRequest) {
         shares: 0,
         views: instagramData.video_play_count || 0,
         coverUrl: instagramData.thumbnail_src || '',
+        lastUpdatedAt: new Date(Date.now()).toISOString(),
       };
     } else if (platform === 'TikTok') {
       if (parsedBody.statusCode === 0) {
@@ -77,6 +78,7 @@ export async function PUT(req: NextRequest) {
           shares: tiktokData.stats?.shareCount || 0,
           views: tiktokData.stats?.playCount || 0,
           coverUrl: tiktokData.video.cover || '',
+          lastUpdatedAt: new Date(Date.now()).toISOString(),
         };
       } else {
         return NextResponse.json(

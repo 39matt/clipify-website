@@ -16,6 +16,7 @@ export interface IVideo {
   approved?: boolean;
   isManual?: boolean;
   revenueStatus?: string;
+  lastUpdatedAt?: string;
 }
 
 // export type IVideoAPI = Omit<

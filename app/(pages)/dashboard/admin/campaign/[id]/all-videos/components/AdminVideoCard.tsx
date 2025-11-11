@@ -41,6 +41,18 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({
     onClose();
   };
 
+  const formatDateTime = (dateString?: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleString(undefined, {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
   return (
     <Box
       borderWidth="1px"
@@ -75,6 +87,17 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({
         <Text fontWeight="light" color="gray.500" fontSize="md" noOfLines={1}>
           {new Date(video.createdAt).toDateString() || ''}
         </Text>
+
+        {video.lastUpdatedAt && (
+          <Text
+            fontWeight="light"
+            color="yellow.300"
+            fontSize="sm"
+            noOfLines={1}
+          >
+            Last updated: {formatDateTime(video.lastUpdatedAt)}
+          </Text>
+        )}
 
         <Link
           href={video.link}
