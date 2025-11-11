@@ -23,9 +23,14 @@ import { IVideo } from '../../../../../../../lib/models/video';
 interface AdminVideoCardProps {
   video: IVideo;
   onDelete?: (id: string) => void;
+  onUpdate?: (video: IVideo) => void; // ✅ new prop
 }
 
-const AdminVideoCard: React.FC<AdminVideoCardProps> = ({ video, onDelete }) => {
+const AdminVideoCard: React.FC<AdminVideoCardProps> = ({
+                                                         video,
+                                                         onDelete,
+                                                         onUpdate,
+                                                       }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
 
@@ -48,7 +53,7 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({ video, onDelete }) => {
       color="white"
       display="flex"
       flexDirection="column"
-      h="100%" // ensures equal height in grid
+      h="100%"
     >
       {/* Thumbnail */}
       <Link href={video.link} target="_blank" rel="noopener noreferrer">
@@ -63,7 +68,6 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({ video, onDelete }) => {
 
       {/* Content */}
       <VStack align="start" spacing={3} p={4} flex="1">
-        {/* Title */}
         <Text fontWeight="bold" fontSize="md" noOfLines={1}>
           {video.name || 'Untitled Video'}
         </Text>
@@ -72,7 +76,6 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({ video, onDelete }) => {
           {new Date(video.createdAt).toDateString() || ''}
         </Text>
 
-        {/* View Link */}
         <Link
           href={video.link}
           target="_blank"
@@ -105,8 +108,18 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({ video, onDelete }) => {
           </VStack>
         </HStack>
 
-        {/* Push delete button to bottom */}
-        <Box mt="auto" w="full">
+        {/* Buttons */}
+        <HStack mt="auto" w="full" spacing={3}>
+          {onUpdate && (
+            <Button
+              colorScheme="green"
+              size="sm"
+              w="full"
+              onClick={() => onUpdate(video)}
+            >
+              Update Views
+            </Button>
+          )}
           {onDelete && (
             <>
               <Button colorScheme="red" size="sm" w="full" onClick={onOpen}>
@@ -147,7 +160,7 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({ video, onDelete }) => {
               </AlertDialog>
             </>
           )}
-        </Box>
+        </HStack>
       </VStack>
     </Box>
   );

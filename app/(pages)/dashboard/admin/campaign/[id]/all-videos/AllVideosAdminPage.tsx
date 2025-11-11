@@ -233,6 +233,71 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       });    }
   }
 
+  const handleUpdateSingleVideo = async (video: IVideo) => {
+    try {
+      const getVideoResponse = await fetch('/api/campaign/video/get-info', {
+        method: 'PUT',
+        body: JSON.stringify({
+          platform: video.link.includes('instagram') ? 'Instagram' : 'TikTok',
+          videoId: video.link.split('/')[5],
+          videoUrl: video.link,
+          api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+        }),
+      });
+
+      if (getVideoResponse.status !== 200) {
+        toast({
+          title: 'Error!',
+          description: `Error getting video info for \n${video.name}`,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+          position: 'top-right',
+        });
+        return;
+      }
+
+      const getVideoResponseJson = await getVideoResponse.json();
+      const newVideo = getVideoResponseJson['videoInfo'] as IVideo;
+
+      if (!newVideo || !newVideo.accountName) return;
+
+      await fetch('/api/campaign/video/update-info', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ video: newVideo, campaignId }),
+      });
+
+      setVideos((prev) =>
+        prev
+          ? prev.map((v) => (v.id === video.id ? { ...v, ...newVideo } : v))
+          : null
+      );
+
+      toast({
+        title: 'Updated!',
+        description: `Successfully updated ${video.name}`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Error updating views!',
+        description: `${video.name}`,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+  };
+
   return (
     <VStack spacing={6} width="90%" mx="auto" py={6}>
       <Heading textAlign="center" color="green.400">
@@ -272,6 +337,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
               key={video.id}
               video={video}
               onDelete={handleDeleteVideo}
+              onUpdate={handleUpdateSingleVideo}
             />
           ))}
         </SimpleGrid>
