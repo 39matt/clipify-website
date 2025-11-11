@@ -145,7 +145,7 @@ const Page = () => {
       const instagramReelRegex =
         /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[a-zA-Z0-9_-]+\/?$/;
       const tiktokDesktopRegex =
-        /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/video\/[0-9]+\/?$/;
+        /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/(?:video|photo)\/[0-9]+\/?$/
       const tiktokMobileRegex =
         /^https:\/\/vm\.tiktok\.com\/[A-Za-z0-9]+\/?$/;
 
@@ -190,7 +190,6 @@ const Page = () => {
       if (platform === "TikTok") {
         let finalUrl = rawVideoUrl;
 
-        // If mobile link, follow redirect
         if (tiktokMobileRegex.test(rawVideoUrl)) {
           const res = await fetch(
             `/api/resolve-tiktok?url=${encodeURIComponent(rawVideoUrl)}`
@@ -203,9 +202,8 @@ const Page = () => {
           finalUrl = data.finalUrl;
         }
 
-        // Extract account name + video ID
         const match = finalUrl.match(
-          /tiktok\.com\/@([^/]+)\/video\/(\d+)/
+          /tiktok\.com\/@([^/]+)\/(?:video|photo)\/(\d+)/
         );
         if (!match) {
           setMessage("Greška pri pribavljanju videa!");
@@ -215,7 +213,6 @@ const Page = () => {
         accountName = match[1];
         videoId = match[2];
 
-        // Check account ownership
         const accExists = await userAccountExists(
           discordUsername!,
           accountName,
@@ -226,7 +223,6 @@ const Page = () => {
           return;
         }
 
-        // Fetch video info
         const response = await fetch("/api/campaign/video/get-info", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
