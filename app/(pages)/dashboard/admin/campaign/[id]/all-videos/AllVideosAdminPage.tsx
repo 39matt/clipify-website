@@ -21,6 +21,7 @@ import {
 import AdminVideoCard from './components/AdminVideoCard';
 import { ICampaign } from '../../../../../../lib/models/campaign';
 import { IVideo } from '../../../../../../lib/models/video';
+import { Share, Share2 } from 'lucide-react'
 
 interface AdminCampaignPageProps {
   idToken: string;
@@ -37,6 +38,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
     'createdAt'
   );
   const toast = useToast();
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -291,27 +293,119 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
     return bDate - aDate;
   });
 
+  const totalViews = campaign.totalViews ?? 0;
+  const totalLikes =
+    videos?.reduce((acc, v) => acc + (v.likes || 0), 0) ?? 0;
+  const totalShares =
+    videos?.reduce((acc, v) => acc + (v.shares || 0), 0) ?? 0;
+  const totalComments =
+    videos?.reduce((acc, v) => acc + (v.comments || 0), 0) ?? 0;
+  const videoCount = videos?.length ?? 0;
+
   return (
     <VStack spacing={6} width="90%" mx="auto" py={6}>
       <Heading textAlign="center" color="green.400">
         {campaign.influencer} - {campaign.activity}
       </Heading>
 
-      <HStack spacing={6} w="full" mx="auto" py={6}>
+      <HStack spacing={6} w="full" mx="auto" py={6} flexWrap="wrap">
+        {/* Total Views */}
         <Box
           bg="gray.700"
           p={6}
           borderRadius="md"
           borderWidth="1px"
           borderColor="gray.900"
-          w="full"
+          flex="1"
+          minW="200px"
         >
           <Stat textAlign="center">
             <StatLabel fontSize="lg" color="gray.400">
               Ukupno pregleda
             </StatLabel>
+            👁
             <StatNumber fontSize="3xl" color="white" fontWeight="bold">
-              {campaign.totalViews?.toLocaleString()}
+              {totalViews.toLocaleString()}
+            </StatNumber>
+          </Stat>
+        </Box>
+
+        <Box
+          bg="gray.700"
+          p={6}
+          borderRadius="md"
+          borderWidth="1px"
+          borderColor="gray.900"
+          flex="1"
+          minW="200px"
+        >
+          <Stat textAlign="center">
+            <StatLabel fontSize="lg" color="gray.400">
+              Ukupno lajkova
+            </StatLabel>
+              ❤️
+            <StatNumber fontSize="3xl" color="white" fontWeight="bold">
+              {totalLikes.toLocaleString()}
+            </StatNumber>
+          </Stat>
+        </Box>
+
+        <Box
+          bg="gray.700"
+          p={6}
+          borderRadius="md"
+          borderWidth="1px"
+          borderColor="gray.900"
+          flex="1"
+          minW="200px"
+        >
+          <Stat textAlign="center">
+            <StatLabel fontSize="lg" color="gray.400">
+              Ukupno deljenja
+            </StatLabel>
+            🔄
+            <StatNumber fontSize="3xl" color="white" fontWeight="bold">
+              {totalShares.toLocaleString()}
+            </StatNumber>
+          </Stat>
+        </Box>
+
+        <Box
+          bg="gray.700"
+          p={6}
+          borderRadius="md"
+          borderWidth="1px"
+          borderColor="gray.900"
+          flex="1"
+          minW="200px"
+        >
+          <Stat textAlign="center">
+            <StatLabel fontSize="lg" color="gray.400">
+              Ukupno komentara
+            </StatLabel>
+            💬
+            <StatNumber fontSize="3xl" color="white" fontWeight="bold">
+              {totalComments.toLocaleString()}
+            </StatNumber>
+          </Stat>
+        </Box>
+
+        <Box
+          bg="gray.700"
+          p={6}
+          borderRadius="md"
+          borderWidth="1px"
+          borderColor="gray.900"
+          flex="1"
+          minW="200px"
+        >
+          <Stat textAlign="center">
+            <StatLabel fontSize="lg" color="gray.400">
+              Broj videa
+            </StatLabel>
+            #️⃣
+            <StatNumber fontSize="3xl" color="white" fontWeight="bold">
+              {videoCount}
             </StatNumber>
           </Stat>
         </Box>
