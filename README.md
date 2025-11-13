@@ -1,62 +1,116 @@
-# Saas UI - Next.js - landing page.
+# CLIPIFY-WEBSITE
 
-This is a free Next.js landing page template based on https://saas-ui.dev.
-Feel free to submit any feature requests. If you use this template please share what you've built [on Twitter](https://twitter.com/saas_js) 🚀.
+_Transform Ideas into Impactful Digital Experiences_
 
-**[View demo](https://saas-ui-nextjs-landing-page.netlify.app/)**
+![last commit](https://img.shields.io/github/last-commit/39matt/clipify-website)
+![typescript](https://img.shields.io/badge/typescript-99.5%25-blue)
+![languages](https://img.shields.io/badge/languages-3-blue)
 
-## Tech
+Built with the tools and technologies:
 
-- Next.js (App router)
-- Chakra UI
-- Saas UI
-- Typescript
+![JSON](https://img.shields.io/badge/-JSON-black?style=flat-square)
+![Markdown](https://img.shields.io/badge/-Markdown-lightgrey?style=flat-square)
+![npm](https://img.shields.io/badge/-npm-red?style=flat-square)
+![Firebase](https://img.shields.io/badge/-Firebase-orange?style=flat-square)
+![Prettier](https://img.shields.io/badge/-Prettier-ff69b4?style=flat-square)
+![JavaScript](https://img.shields.io/badge/-JavaScript-yellow?style=flat-square)
+![React](https://img.shields.io/badge/-React-blue?style=flat-square)
+![TypeScript](https://img.shields.io/badge/-TypeScript-007acc?style=flat-square)
+![MDX](https://img.shields.io/badge/-MDX-black?style=flat-square)
+![ESLint](https://img.shields.io/badge/-ESLint-purple?style=flat-square)
+![date-fns](https://img.shields.io/badge/-datefns-purple?style=flat-square)
+![YAML](https://img.shields.io/badge/-YAML-red?style=flat-square)
 
-## Features
+---
 
-- Feature blocks
-- Testimonials
-- Pricing tables
-- Log in and Sign up pages
-- FAQ
+## Table of Contents
+
+- [Overview](#overview)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Testing](#testing)
+
+---
+
+## Overview
+
+Clipify-website is a versatile Next.js–based landing page template tailored for SaaS products, enabling rapid customization and deployment. It combines a rich set of modular UI components built with Chakra UI, ensuring a cohesive and responsive user experience. The platform integrates Firebase for secure authentication, user management, and verification workflows, supporting role-based access control and content moderation. With features like campaign management, analytics, SEO optimization, and a developer-friendly architecture, clipify-website empowers developers to build scalable, engaging marketing sites efficiently.
+
+### Why clipify-website?
+
+This project streamlines the process of creating modern SaaS websites with a focus on flexibility and performance. The core features include:
+
+- 🎨 **Colorful UI Components**: Reusable, theme-aware elements for consistent design.  
+- 🚀 **Fast Deployment**: Next.js setup optimized for quick launches and easy customization.  
+- 🔐 **Secure Authentication**: Firebase-powered login, registration, and user verification.  
+- 📊 **Campaign & Content Management**: Tools for managing marketing campaigns and content.  
+- 🌐 **SEO & Responsiveness**: Built-in SEO metadata and mobile-friendly layouts.  
+- ⚙️ **Developer-Centric Architecture**: Modular codebase with clear configuration and hooks.
+
+---
 
 ## Getting Started
 
-First, clone this repo and run `pnpm i`
+### Prerequisites
 
-To start the app run:
+This project requires the following dependencies:
+
+- **Programming Language:** TypeScript  
+- **Package Manager:** npm
+
+---
+
+### Installation
+
+Build clipify-website from the source and install dependencies.
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/39matt/clipify-website
+   ```
+
+2. **Navigate to the project directory:**
+
+   ```bash
+   cd clipify-website
+   ```
+
+3. **Install the dependencies:**
+
+   Using **npm**:
+
+   ```bash
+   npm install
+   ```
+
+---
+
+### Usage
+
+Run the project with:
+
+Using **npm**:
 
 ```bash
-pnpm dev
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Testing
 
-## Configuration
+Clipify-website uses the **{test_framework}** test framework.  
+Run the test suite with:
 
-Configuration files to edit basic site information, add testimonials, faq and pricing table can be found in `/data`.
+Using **npm**:
 
-## Learn More
+```bash
+npm test
+```
 
-Find out more about Saas UI.
+---
 
-- [Saas UI Documentation](https://saas-ui.dev/docs).
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-## License
-
-MIT
+⬆️ [Return](#clipify-website)
