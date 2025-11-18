@@ -62,7 +62,7 @@ const HeroSection = () => {
 
       <Container maxW="7xl" py={20} pt={32}>
         <VStack spacing={8} textAlign="center" maxW="5xl" mx="auto">
-          <Box>
+          <Box whiteSpace="nowrap">
             <MotionText
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
