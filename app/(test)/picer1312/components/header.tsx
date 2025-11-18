@@ -1,4 +1,4 @@
-// header.tsx
+'use client'
 import {
   Box,
   BoxProps,
