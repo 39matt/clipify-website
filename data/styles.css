@@ -1,0 +1,18 @@
+:root {
+    --dot-color: rgba(0, 0, 0, 0.06);
+    --dot-size: 2px;
+    --dot-space: 22px;
+}
+
+html, body, #__next {
+    height: 100%;
+}
+
+body {
+    background-color: #ffffff;
+    background-image:
+            radial-gradient(var(--dot-color) var(--dot-size), transparent var(--dot-size));
+    background-size: var(--dot-space) var(--dot-space);
+    /* Optional: anchor the pattern so it doesn't jitter on scroll */
+    background-attachment: fixed;
+}

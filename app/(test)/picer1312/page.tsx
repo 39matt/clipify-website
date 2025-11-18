@@ -20,25 +20,63 @@ import { motion } from 'framer-motion';
 import {
   ChevronRight,
   Check,
-  ArrowRight, ExternalLink,
+  ArrowRight, ExternalLink, UsersIcon, RocketIcon, DollarSignIcon, ShieldCheckIcon, ChartLineIcon, LayersIcon,
 } from 'lucide-react'
 import type { NextPage } from 'next';
+import { Global } from '@emotion/react'
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
 
+function DottedBackgroundGlobal() {
+  return (
+    <Global
+      styles={`
+        :root {
+          --dot-color: rgba(0, 0, 0, 0.06);
+          --dot-size: 2px;
+          --dot-space: 22px;
+        }
+        html, body, #__next { height: 100%; }
+        body {
+          background-color: #ffffff;
+          background-image:
+            radial-gradient(var(--dot-color) var(--dot-size), transparent var(--dot-size));
+          background-size: var(--dot-space) var(--dot-space);
+          background-attachment: fixed;
+        }
+      `}
+    />
+  );
+}
+
 const Home: NextPage = () => {
   return (
-    <Box bg="white" color="gray.900" overflow="hidden">
-      <HeroSection />
-      <MarqueeSection />
-      <StatsSection />
-      <CaseStudiesSection />
-      <StepsSection/>
-      <PricingSection />
-      <FAQSection />
-      <CTASection />
-    </Box>
+    <>
+      <DottedBackgroundGlobal />
+      <Box minH="100dvh"
+        // Dotted pattern
+           bgColor="white"
+           sx={{
+             backgroundImage:
+               `radial-gradient(rgba(0,0,0,0.06) 2px, transparent 2px)`,
+             backgroundSize: '22px 22px',
+             backgroundAttachment: 'fixed',
+           }}
+           color="gray.900"
+           overflow="hidden">
+        <HeroSection />
+        <MarqueeSection />
+        <StatsSection />
+        <CaseStudiesSection />
+        <StepsSection/>
+        <FeaturesSection/>
+        <PricingSection />
+        <FAQSection />
+        <CTASection />
+      </Box>
+    </>
+
   );
 };
 
@@ -50,7 +88,6 @@ const HeroSection = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      bg="white"
     >
       <Image mt="12" w="36" src="/static/images/logo-header.png" alt="Clipify Logo" />
       <Box
@@ -67,7 +104,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              fontSize={{ base: '36px', md: '64px', lg: '84px' }}
+              fontSize={{ base: '24px', md: '64px', lg: '84px' }}
               fontWeight="900"
               lineHeight={1.1}
               color="black"
@@ -81,7 +118,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              fontSize={{ base: '48px', md: '72px', lg: '96px' }}
+              fontSize={{ base: '36px', md: '72px', lg: '96px' }}
               fontWeight="900"
               lineHeight={1.1}
               letterSpacing="-0.02em"
@@ -105,7 +142,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              fontSize={{ base: '36px', md: '64px', lg: '84px' }}
+              fontSize={{ base: '32px', md: '64px', lg: '84px' }}
               fontWeight="900"
               lineHeight={1.1}
               color="black"
@@ -864,6 +901,233 @@ const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, 
     <Heading size="md">{value}</Heading>
   </VStack>
 );
+
+const accentColor = '#111827'; // near-black accent for icons’ ring
+const accentPill = '#0EA5E9'; // sky-500 for tiny pill accents
+const FeatureCard = ({
+                       icon,
+                       title,
+                       description,
+                       href = '#',
+                     }: {
+  icon: any;
+  title: string;
+  description: string;
+  href?: string;
+}) => {
+  // Choose an accent color token for the pill
+  const accentPill = 'blue.600';
+
+  return (
+    <VStack
+      as="a"
+      href={href}
+      role="group"
+      align="start"
+      spacing={0}
+      bg="white"
+      borderRadius="24px"
+      border="1px solid"
+      borderColor="gray.200"
+      boxShadow="0 20px 60px rgba(0,0,0,0.10)"
+      overflow="hidden"
+      transition="transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease"
+      _hover={{
+        transform: 'translateY(-6px)',
+        boxShadow: '0 28px 80px rgba(0,0,0,0.14)',
+        borderColor: 'gray.300',
+        textDecoration: 'none',
+      }}
+      h="100%"
+    >
+      <HStack
+        w="100%"
+        px={{ base: 5, md: 6 }}
+        py={{ base: 4, md: 5 }}
+        spacing={3}
+        bgGradient="linear(to-r, #000000 0%, #111827 45%, #1F2937 100%)"
+        color="white"
+        position="relative"
+      >
+        <Box
+          position="absolute"
+          inset={0}
+          opacity={0.18}
+          bgGradient="radial(circle at 10% 0%, white 0%, transparent 40%)"
+          pointerEvents="none"
+        />
+        <Box
+          zIndex={1}
+          bg="whiteAlpha.10"
+          border="1px solid"
+          borderColor="whiteAlpha.200"
+          borderRadius="xl"
+          p={2.5}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Icon as={icon} boxSize={6} />
+        </Box>
+        <Heading
+          zIndex={1}
+          as="h3"
+          fontSize={{ base: 'lg', md: 'xl' }}
+          lineHeight="1.2"
+          fontWeight="900"
+          letterSpacing="-0.015em"
+        >
+          {title}
+        </Heading>
+      </HStack>
+
+      <VStack
+        align="start"
+        spacing={4}
+        px={{ base: 5, md: 6 }}
+        pt={{ base: 5, md: 6 }}
+        pb={{ base: 6, md: 7 }}
+        w="100%"
+        flex="1"
+        // Ensure consistent height for body so the badge lines up across cards
+        minH={{ base: '190px', md: '200px' }} // tweak to your content density
+      >
+        <Text color="gray.700" fontSize={{ base: 'md', md: 'lg' }} lineHeight="1.65">
+          {description}
+        </Text>
+
+        {/* Push badge to bottom */}
+        <HStack mt="auto">
+          <Badge
+            variant="subtle"
+            color="white"
+            bg={accentPill}
+            borderRadius="full"
+            px={2.5}
+            py={0.5}
+            fontWeight="700"
+            fontSize="xs"
+          >
+            VERIFIED
+          </Badge>
+        </HStack>
+      </VStack>
+    </VStack>
+  );
+};
+
+const FeaturesSection = () => {
+  const features = [
+    {
+      title: 'Kliperi koji razumeju viralnost',
+      icon: UsersIcon,
+      description:
+        'Poveži se sa 600+ kreativnih Klipera koji tačno znaju šta funkcioniše na društvenim mrežama.',
+    },
+    {
+      title: 'Tvoj brend ne čeka',
+      icon: RocketIcon,
+      description:
+        'Naša platforma omogućava da tvoja kampanja krene istog dana, sa velikim brojem klipera spremnih da je ožive.',
+    },
+    {
+      title: 'Plati za rezultat',
+      icon: DollarSignIcon,
+      description:
+        'Plaćaš tek kada klip isporuči stvarne preglede i engagement - svaki dinar radi za tebe, ne protiv tebe.',
+    },
+    {
+      title: 'Autentičnost pregleda',
+      icon: ShieldCheckIcon,
+      description:
+        'Clipify kombinuje AI analitiku i ljudsku proveru kako bi uklonio svaki lažni trag. Svaki pregled je stvaran - naši brojevi su čisti, provereni i pouzdani.',
+    },
+    {
+      title: 'Real-Time Analitika',
+      icon: ChartLineIcon,
+      description:
+        'Prati performanse svakog klipa u našem preglednom dashboardu: vidi preglede, engagement i rast - dok se dešava.',
+    },
+    {
+      title: 'Snaga više platformi',
+      icon: LayersIcon,
+      description:
+        'Clipify optimizuje tvoj sadržaj za TikTok, IG Reels i (uskoro) YT Shorts - automatski prilagođen svakom algoritmu i formatu.',
+    },
+  ];
+
+  return (
+    <Box as="section" bg="gray.100" color="black" py={{ base: 16, md: 24 }}>
+      <Container maxW="7xl">
+        {/* Title */}
+        <Container maxW="7xl" mb={{ base: 10, md: 16 }}>
+          <Grid
+            templateColumns={{ base: '1fr', lg: '2fr 1fr' }}
+            alignItems="end"
+            gap={{ base: 6, lg: 8 }}
+          >
+            {/* Left: Big split title */}
+            <Box>
+              <Heading
+                as="h2"
+                fontWeight="900"
+                letterSpacing="-0.03em"
+                lineHeight="0.95"
+                // Responsive giant type
+                fontSize={{ base: '48px', md: '56px', lg: '64px' }}
+                // Make only "Case" black
+                color="black"
+              >
+                Povezujemo kreatore
+              </Heading>
+
+              <Heading
+                as="h2"
+                fontWeight="900"
+                letterSpacing="-0.03em"
+                lineHeight="0.95"
+                fontSize={{ base: '56px', md: '64px', lg: '72px' }}
+                color="gray.500"
+                mt={{ base: 2, md: 3 }}
+              >
+                i klipere za uspeh
+              </Heading>
+            </Box>
+
+            {/* Right: Supporting copy (aligned right on large screens) */}
+            {/*<Box*/}
+            {/*  display="flex"*/}
+            {/*  alignItems="center"*/}
+            {/*  justifyContent={{ base: 'flex-start', lg: 'flex-end' }}*/}
+            {/*>*/}
+            {/*  <Text*/}
+            {/*    color="gray.800"*/}
+            {/*    fontSize={{ base: 'lg', md: 'xl' }}*/}
+            {/*    textAlign={{ base: 'left', lg: 'right' }}*/}
+            {/*    maxW={{ base: 'full', lg: 'sm' }}*/}
+            {/*  >*/}
+            {/*    Kreatori postavljaju ciljeve i kampanje, a kliperi prave sadržaj*/}
+            {/*    koji privlači pažnju i donosi rezultate.              </Text>*/}
+            {/*</Box>*/}
+          </Grid>
+        </Container>
+
+        {/* Features grid */}
+        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}   gridAutoRows="1fr">
+          {features.map((f, i) => (
+            <GridItem key={f.title} h="100%">
+              <FeatureCard
+                icon={f.icon}
+                title={f.title}
+                description={f.description}
+              />
+            </GridItem>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
+  );
+};
 
 const PricingSection = () => {
   const plans = [
