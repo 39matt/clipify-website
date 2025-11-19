@@ -1,123 +1,135 @@
 'use client'
 import {
   Box,
-  BoxProps,
   Container,
   Flex,
+  Grid,
+  GridItem,
   Heading,
   Link,
   Text,
-  VStack,
   HStack,
+  IconButton,
+  Divider,
 } from '@chakra-ui/react'
 import * as React from 'react'
 import { Logo } from '#data/logo'
+import { FaDiscord, FaTwitter, FaInstagram } from 'react-icons/fa'
 
-export interface FooterProps extends BoxProps {}
-
-export const Footer: React.FC<FooterProps> = (props) => {
-  const menuItems = [
-    { label: 'Servisi', href: '#services' },
-    { label: 'Radovi', href: '#case-studies' },
-    { label: 'Cene', href: '#pricing' },
-    { label: 'Kontaktiraj Nas', href: '#kontakt' },
-  ]
-
+export const Footer: React.FC = () => {
   return (
-    <Box bg="gray.900" color="white" {...props}>
-      <Container maxW="7xl" py={16}>
-        <Flex
-          direction={{ base: 'column', md: 'row' }}
-          justify="space-between"
-          align={{ base: 'start', md: 'start' }}
+    <Box bg="black" color="white" pt={20} pb={10}>
+      <Container maxW="7xl">
+        <Grid
+          templateColumns={{
+            base: '1fr',
+            md: 'repeat(4, 1fr)',
+          }}
           gap={12}
         >
-          {/* Left - Logo */}
-          <Box>
-            <Logo />
-          </Box>
-
-          {/* Right - Menu & Social */}
-          <Flex
-            direction="column"
-            align={{ base: 'start', md: 'end' }}
-            gap={8}
-          >
-            {/* Menu Label */}
-            <Text
-              fontSize="xs"
-              fontWeight="bold"
-              color="gray.500"
-              textTransform="uppercase"
-              letterSpacing="wider"
-            >
-              Menu
-            </Text>
-
-            {/* Menu Items */}
-            <VStack
-              align={{ base: 'start', md: 'end' }}
-              spacing={4}
-              fontSize={{ base: 'xl', md: '2xl' }}
-            >
-              {menuItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  fontWeight="500"
-                  color="white"
-                  _hover={{
-                    color: 'gray.400',
-                    textDecoration: 'none',
-                  }}
-                  transition="color 0.2s"
-                  onClick={(e) => {
-                    if (item.href.startsWith('#')) {
-                      e.preventDefault()
-                      document.querySelector(item.href)?.scrollIntoView({
-                        behavior: 'smooth',
-                      })
-                    }
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </VStack>
-
-            {/* Social */}
-            <VStack align={{ base: 'start', md: 'end' }} spacing={3} mt={4}>
-              <Text
-                fontSize="xs"
-                fontWeight="bold"
-                color="gray.500"
-                textTransform="uppercase"
-                letterSpacing="wider"
-              >
-                Prati Nas
+          {/* 1 — Logo and Description */}
+          <GridItem>
+            <Flex direction="column" gap={4}>
+              <Logo w="120px"/>
+              <Text color="gray.400" fontSize="sm" lineHeight="1.7" maxW="sm">
+                The performance-based clipping platform connecting brands with
+                over <strong>10K+</strong> creators.
               </Text>
-              <Link
-                href="https://instagram.com"
-                isExternal
-                fontSize="xl"
-                fontWeight="500"
-                color="white"
-                _hover={{ color: 'gray.400' }}
-                transition="color 0.2s"
-              >
-                Instagram
-              </Link>
-            </VStack>
-          </Flex>
-        </Flex>
+              <HStack spacing={4} mt={4}>
+                <IconButton
+                  as="a"
+                  href="https://discord.com"
+                  aria-label="Discord"
+                  icon={<FaDiscord />}
+                  variant="ghost"
+                  color="white"
+                  _hover={{ color: 'gray.400' }}
+                />
+                <IconButton
+                  as="a"
+                  href="https://twitter.com"
+                  aria-label="Twitter"
+                  icon={<FaTwitter />}
+                  variant="ghost"
+                  color="white"
+                  _hover={{ color: 'gray.400' }}
+                />
+                <IconButton
+                  as="a"
+                  href="https://instagram.com"
+                  aria-label="Instagram"
+                  icon={<FaInstagram />}
+                  variant="ghost"
+                  color="white"
+                  _hover={{ color: 'gray.400' }}
+                />
+              </HStack>
+            </Flex>
+          </GridItem>
 
-        {/* Copyright */}
-        <Box mt={16}>
-          <Text fontSize="sm" color="gray.500">
-            © {new Date().getFullYear()}, Sva prava zadržana
+          {/* 2 — Platform */}
+          <GridItem>
+            <Heading as="h4" fontSize="md" mb={4} color="whiteAlpha.700">
+              Platform
+            </Heading>
+            <Flex direction="column" gap={2}>
+              <FooterLink href="#how-it-works">How It Works</FooterLink>
+              <FooterLink href="#case-studies">Case Studies</FooterLink>
+              <FooterLink href="#join">Join Discord</FooterLink>
+            </Flex>
+          </GridItem>
+
+          {/* 3 — For Brands */}
+          <GridItem>
+            <Heading as="h4" fontSize="md" mb={4} color="whiteAlpha.700">
+              For Brands
+            </Heading>
+            <Flex direction="column" gap={2}>
+              <FooterLink href="#launch-campaign">Launch Campaign</FooterLink>
+              <FooterLink href="#pricing">Pricing</FooterLink>
+              <FooterLink href="#results">Results</FooterLink>
+            </Flex>
+          </GridItem>
+
+          {/* 4 — For Clippers */}
+          <GridItem>
+            <Heading as="h4" fontSize="md" mb={4} color="whiteAlpha.700">
+              For Clippers
+            </Heading>
+            <Flex direction="column" gap={2}>
+              <FooterLink href="#become">Become a Clipper</FooterLink>
+              <FooterLink href="#earn">How to Earn</FooterLink>
+              <FooterLink href="#community">Community</FooterLink>
+            </Flex>
+          </GridItem>
+        </Grid>
+
+        {/* Divider */}
+        <Divider
+          borderColor="whiteAlpha.200"
+          my={10}
+        />
+
+        {/* Bottom Row */}
+        <Flex justify="center">
+          <Text fontSize="sm" color="gray.500" textAlign="center">
+            © {new Date().getFullYear()} Clipify. All rights reserved.
           </Text>
-        </Box>
+        </Flex>
       </Container>
     </Box>
   )
 }
+
+/* Utility link component for cleaner code */
+const FooterLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <Link
+    href={href}
+    color="gray.300"
+    fontSize="sm"
+    _hover={{ color: 'white', textDecoration: 'none' }}
+    transition="color 0.2s"
+  >
+    {children}
+  </Link>
+)

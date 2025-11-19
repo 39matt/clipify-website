@@ -20,13 +20,15 @@ import { motion } from 'framer-motion';
 import {
   ChevronRight,
   Check,
-  ArrowRight, ExternalLink, UsersIcon, RocketIcon, DollarSignIcon, ShieldCheckIcon, ChartLineIcon, LayersIcon,
+  ArrowRight, ExternalLink, UsersIcon, RocketIcon, DollarSignIcon, ShieldCheckIcon, ChartLineIcon, LayersIcon, CalendarIcon, MessageSquareIcon, ClockIcon, MailIcon,
 } from 'lucide-react'
 import type { NextPage } from 'next';
 import { Global } from '@emotion/react'
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
+const MotionVStack = motion(VStack);
+const MotionGridItem = motion(GridItem);
 
 function DottedBackgroundGlobal() {
   return (
@@ -728,7 +730,6 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
     </Modal>
   );
 };
-// Alternating (left-right) image layout, monochrome
 const StepsSection = () => {
   const steps = [
     {
@@ -751,91 +752,120 @@ const StepsSection = () => {
     },
   ];
 
-  // malene varijacije na bedževima da deluju živo
-  const numTransforms = ['rotate(-0.6deg)', 'rotate(0.8deg)', 'rotate(-0.4deg)'];
+  const numTransforms = ['rotate(-0.4deg)', 'rotate(0.6deg)', 'rotate(-0.2deg)'];
 
   return (
     <Box
       as="section"
       bg="white"
       color="black"
-      py={{ base: 20, md: 28 }}
+      py={{ base: 16, md: 24 }}
       borderTop="1px solid"
       borderColor="gray.200"
     >
       <Container maxW="7xl">
-        {/* Veliki naslov sa kratkim podnaslovom */}
-        <VStack spacing={4} mb={{ base: 14, md: 20 }}>
-          <Heading
-            textAlign="center"
-            fontWeight="900"
-            letterSpacing="-0.02em"
-            lineHeight="1"
-            fontSize={{ base: '44px', md: '64px', lg: '76px' }}
+        {/* Split title matching CaseStudiesSection */}
+        <Container maxW="7xl" mb={{ base: 10, md: 16 }}>
+          <Grid
+            templateColumns={{ base: '1fr', lg: '2fr 1fr' }}
+            alignItems="end"
+            gap={{ base: 6, lg: 8 }}
           >
-            Kako funkcioniše
-          </Heading>
-          <Text
-            textAlign="center"
-            color="gray.600"
-            fontSize={{ base: 'lg', md: 'xl' }}
-            maxW="3xl"
-            lineHeight={1.7}
-          >
-            Tri jasna koraka od ciljeva do verifikovanih rezultata.
-          </Text>
-        </VStack>
+            <Box>
+              <Heading
+                as="h2"
+                fontWeight="900"
+                letterSpacing="-0.03em"
+                lineHeight="0.95"
+                fontSize={{ base: '48px', md: '56px', lg: '64px' }}
+                color="black"
+              >
+                Kako
+              </Heading>
+              <Heading
+                as="h2"
+                fontWeight="900"
+                letterSpacing="-0.03em"
+                lineHeight="0.95"
+                fontSize={{ base: '56px', md: '64px', lg: '72px' }}
+                color="gray.500"
+                mt={{ base: 2, md: 3 }}
+              >
+                funkcioniše
+              </Heading>
+            </Box>
+
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent={{ base: 'flex-start', lg: 'flex-end' }}
+            >
+              <Text
+                color="gray.800"
+                fontSize={{ base: 'lg', md: 'xl' }}
+                textAlign={{ base: 'left', lg: 'right' }}
+                maxW={{ base: 'full', lg: 'sm' }}
+              >
+                Tri jasna koraka od ciljeva do verifikovanih, organskih rezultata.
+              </Text>
+            </Box>
+          </Grid>
+        </Container>
 
         <VStack spacing={{ base: 12, md: 16 }} align="stretch">
           {steps.map((s, i) => (
-            <Box key={s.number}>
+            <MotionBox
+              key={s.number}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: i * 0.08, ease: 'easeOut' }}
+              viewport={{ once: true, amount: 0.25 }}
+            >
               <Grid
-                templateColumns={{ base: 'auto 1fr', lg: 'auto 1fr' }}
-                gap={{ base: 6, md: 8, lg: 10 }}
+                templateColumns={{ base: 'auto 1fr', md: 'auto 1fr' }}
+                gap={{ base: 6, md: 8 }}
                 alignItems="center"
               >
-                {/* Veliki numerički bedž */}
-                <Box
-                  w={{ base: 16, md: 20, lg: 24 }}
-                  h={{ base: 16, md: 20, lg: 24 }}
+                {/* Black number pill with white number */}
+                <Box /* Circle container for the number */
+                  w={{ base: '64px', md: '80px' }} /* Adjust size as per image */
+                  h={{ base: '64px', md: '80px' }}
                   borderRadius="full"
-                  bg="blackAlpha.50"
-                  border="1px solid"
-                  borderColor="blackAlpha.300"
+                  bg="white"
+                  color="black"
+                  border="10px solid"
+                  borderColor="gray.100" /* Lighter border color */
+                  boxShadow="0 2px 10px rgba(0,0,0,0.05)" /* Subtle shadow */
                   display="flex"
                   alignItems="center"
                   justifyContent="center"
-                  boxShadow="
-                    0 10px 24px rgba(0,0,0,0.06),
-                    inset 0 0 0 8px rgba(0,0,0,0.05)"
                   sx={{ transform: numTransforms[i] }}
                   flexShrink={0}
                 >
-                  <Text
-                    fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
-                    fontWeight="900"
+                  <Text /* The number itself */
+                    fontSize={{ base: '2xl', md: '3xl' }} /* Adjust font size */
+                    fontWeight="700" /* Slightly less bold */
                     letterSpacing="-0.02em"
                   >
                     {s.number}
                   </Text>
                 </Box>
 
-                {/* Tekst: masni naslov + duži opis */}
                 <VStack align="start" spacing={{ base: 3, md: 4 }}>
                   <Heading
                     as="h3"
-                    fontWeight="900"
-                    letterSpacing="-0.015em"
+                    color="black"
+                    letterSpacing="-0.01em"
                     lineHeight="1.1"
-                    fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
+                    fontWeight="900"
+                    fontSize={{ base: '2xl', md: '3xl' }} /* Heading font size */
                   >
                     {s.title}
                   </Heading>
-
                   <Text
                     color="gray.700"
-                    fontSize={{ base: 'lg', md: 'xl' }}
-                    lineHeight={1.8}
+                    fontSize={{ base: 'md', md: 'lg' }} /* Body text font size */
+                    lineHeight={1.6} /* Adjusted line height */
                     maxW="5xl"
                   >
                     {s.description}
@@ -843,33 +873,12 @@ const StepsSection = () => {
                 </VStack>
               </Grid>
 
-              {/* Deblji, prozračan razdelnik između koraka */}
               {i < steps.length - 1 && (
-                <Box
-                  mt={{ base: 10, md: 14 }}
-                  borderTop="1px solid"
-                  borderColor="gray.200"
-                />
+                <Box mt={{ base: 10, md: 14 }} borderTop="1px solid" borderColor="gray.200" />
               )}
-            </Box>
+            </MotionBox>
           ))}
         </VStack>
-
-        {/* Donji poziv na akciju (opciono) */}
-        {/* <HStack justify="center" mt={{ base: 14, md: 20 }}>
-          <Button
-            size="lg"
-            bg="black"
-            color="white"
-            borderRadius="full"
-            px={{ base: 8, md: 10 }}
-            py={{ base: 6, md: 7 }}
-            _hover={{ transform: 'translateY(-2px)', boxShadow: 'xl' }}
-            transition="all 0.2s"
-          >
-            Započni sada
-          </Button>
-        </HStack> */}
       </Container>
     </Box>
   );
@@ -1104,13 +1113,20 @@ const FeaturesSection = () => {
         {/* Features grid */}
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}   gridAutoRows="1fr">
           {features.map((f, i) => (
-            <GridItem key={f.title} h="100%">
+            <MotionGridItem
+              key={f.title}
+              h="100%"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: i * 0.08, ease: 'easeOut' }}
+              viewport={{ once: true, amount: 0.25 }}
+            >
               <FeatureCard
                 icon={f.icon}
                 title={f.title}
                 description={f.description}
               />
-            </GridItem>
+            </MotionGridItem>
           ))}
         </Grid>
       </Container>
@@ -1237,35 +1253,334 @@ const FAQSection = () => {
     </Box>
   );
 };
-
 const CTASection = () => {
   return (
-    <Box py={20} bg="gray.900">
-      <Container maxW="4xl">
-        <VStack spacing={8} textAlign="center">
-          <Heading fontSize={{ base: '4xl', md: '6xl' }} fontWeight="extrabold">
-            Postani Povezan
+    <Box
+      id="kontakt"
+      as="section"
+      py={{ base: 20, md: 28 }}
+      bg="white"
+      color="black"
+      position="relative"
+      overflow="hidden"
+    >
+      <Container maxW="6xl">
+        {/* Top Section */}
+        <VStack spacing={4} textAlign="center" mb={16}>
+          <HStack
+            bg="gray.100"
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="full"
+            px={4}
+            py={1}
+            fontSize="sm"
+            color="gray.700"
+          >
+            <Icon as={MessageSquareIcon} boxSize={4} />
+            <Text fontWeight="medium">Get In Touch</Text>
+          </HStack>
+
+          <Heading
+            fontSize={{ base: "3xl", md: "6xl", lg: "7xl" }}
+            fontWeight="900"
+            lineHeight="1.05"
+            letterSpacing="-0.03em"
+          >
+            START YOUR{" "}
+            <Box as="span" color="gray.500">
+              INFLUENCER
+            </Box>{" "}
+            MARKETING
           </Heading>
-          <Text fontSize="xl" color="gray.400" maxW="2xl">
-            Ovde smo da odgovorimo na tvoja pitanja i razgovaramo kako možemo pomoći da postigneš svoje ciljeve.
+
+          <Text
+            maxW="3xl"
+            color="gray.600"
+            fontSize={{ base: "lg", md: "xl" }}
+            lineHeight={1.7}
+          >
+            Ready to amplify your next music campaign with strategic influencer
+            marketing and professional content clipping services? Let’s discuss
+            how we can drive real results for your brand.
+          </Text>
+
+          <HStack
+            spacing={8}
+            pt={4}
+            flexWrap="wrap"
+            justify="center"
+            color="gray.600"
+            fontSize="md"
+            fontWeight="medium"
+          >
+            <HStack>
+              <Icon as={ClockIcon} boxSize={5} />
+              <Text>24hr Response</Text>
+            </HStack>
+            <HStack>
+              <Icon as={ArrowRight} boxSize={5} />
+              <Text>Free Consultation</Text>
+            </HStack>
+            <HStack>
+              <Icon as={Check} boxSize={5} />
+              <Text>Trusted by 100+ Artists</Text>
+            </HStack>
+          </HStack>
+        </VStack>
+
+        {/* --- Schedule a Meeting Card --- */}
+        <Box
+          bg="gray.900"
+          color="white"
+          border="1px solid"
+          borderColor="gray.800"
+          borderRadius="xl"
+          textAlign="center"
+          p={{ base: 10, md: 14 }}
+          mb={{ base: 12, md: 16 }}
+          boxShadow="0 0 40px rgba(0,0,0,0.08)"
+          position="relative"
+        >
+          <Box
+            position="absolute"
+            top="50%"
+            left="50%"
+            w="300px"
+            h="300px"
+            borderRadius="full"
+            bg="radial-gradient(circle, rgba(255,255,255,0.06), transparent 80%)"
+            filter="blur(60px)"
+            transform="translate(-50%, -50%)"
+            zIndex={0}
+          />
+          <VStack spacing={5} position="relative" zIndex={1}>
+            <Icon
+              as={CalendarIcon}
+              boxSize={14}
+              color="white"
+              border="1px solid"
+              borderColor="whiteAlpha.300"
+              borderRadius="full"
+              p={3}
+            />
+            <Heading size="lg">Schedule a Meeting</Heading>
+            <Text color="gray.300" maxW="2xl" mx="auto" fontSize="md">
+              Book a 30‑minute consultation to discuss your project and explore
+              how we can help.
+            </Text>
+            <Button
+              size="lg"
+              mt={4}
+              px={10}
+              py={7}
+              fontSize="md"
+              fontWeight="bold"
+              borderRadius="full"
+              bg="white"
+              color="black"
+              border="1px solid"
+              borderColor="gray.200"
+              _hover={{
+                bg: "gray.100",
+                transform: "translateY(-2px)",
+                boxShadow: "0 0 30px rgba(0,0,0,0.1)",
+              }}
+              transition="all 0.25s ease"
+            >
+              Book Consultation
+            </Button>
+          </VStack>
+        </Box>
+
+        {/* --- LOWER GRID --- */}
+        <Grid
+          templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+          gap={{ base: 8, md: 10 }}
+        >
+          {/* LEFT: Contact */}
+          <Box
+            bg="gray.900"
+            color="white"
+            border="1px solid"
+            borderColor="gray.700"
+            borderRadius="xl"
+            p={{ base: 8, md: 10 }}
+            boxShadow="0 8px 30px rgba(0,0,0,0.1)"
+          >
+            <Heading size="md" mb={8}>
+              Direct Contact
+            </Heading>
+
+            <VStack align="start" spacing={8}>
+              {[
+                {
+                  icon: MailIcon,
+                  label: "Email",
+                  value: "khrish@spadegroup.io",
+                  href: "mailto:khrish@spadegroup.io",
+                },
+                {
+                  icon: MessageSquareIcon,
+                  label: "Live Chat",
+                  value: "Start a conversation",
+                  href: "#",
+                },
+                {
+                  icon: ClockIcon,
+                  label: "Response Time",
+                  value: "Within 24 hours",
+                },
+              ].map((item) => (
+                <HStack key={item.label} spacing={4} align="flex-start">
+                  <Flex
+                    w={8}
+                    h={8}
+                    borderRadius="full"
+                    border="1px solid"
+                    borderColor="whiteAlpha.300"
+                    align="center"
+                    justify="center"
+                  >
+                    <Icon as={item.icon} boxSize={4} color="whiteAlpha.900" />
+                  </Flex>
+                  <Box>
+                    <Text color="gray.400" fontSize="sm">
+                      {item.label}
+                    </Text>
+                    {item.href ? (
+                      <Link
+                        href={item.href}
+                        fontWeight="bold"
+                        color="white"
+                        _hover={{
+                          color: "gray.300",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        {item.value}
+                      </Link>
+                    ) : (
+                      <Text fontWeight="bold" color="white">
+                        {item.value}
+                      </Text>
+                    )}
+                  </Box>
+                </HStack>
+              ))}
+            </VStack>
+          </Box>
+
+          {/* RIGHT: Steps */}
+          <Box
+            bg="gray.900"
+            color="white"
+            border="1px solid"
+            borderColor="gray.700"
+            borderRadius="xl"
+            p={{ base: 8, md: 10 }}
+            boxShadow="0 8px 30px rgba(0,0,0,0.1)"
+          >
+            <Heading size="md" mb={8}>
+              What Happens <Box as="span" color="gray.400">Next?</Box>
+            </Heading>
+
+            <VStack align="start" spacing={6}>
+              {[
+                {
+                  num: "1",
+                  title: "Initial Consultation",
+                  desc: "We understand your goals and audience.",
+                },
+                {
+                  num: "2",
+                  title: "Strategy Development",
+                  desc: "We design your tailored campaign plan.",
+                },
+                {
+                  num: "3",
+                  title: "Campaign Launch",
+                  desc: "Our network starts the execution.",
+                },
+                {
+                  num: "4",
+                  title: "Results Tracking",
+                  desc: "We measure and optimize performance.",
+                },
+              ].map((step) => (
+                <HStack key={step.num} align="flex-start" spacing={4}>
+                  <Flex
+                    bg="white"
+                    color="black"
+                    w={6}
+                    h={6}
+                    align="center"
+                    justify="center"
+                    borderRadius="full"
+                    fontWeight="bold"
+                    fontSize="sm"
+                  >
+                    {step.num}
+                  </Flex>
+                  <Box>
+                    <Text fontWeight="bold" color="white">
+                      {step.title}
+                    </Text>
+                    <Text color="gray.400" fontSize="sm">
+                      {step.desc}
+                    </Text>
+                  </Box>
+                </HStack>
+              ))}
+            </VStack>
+          </Box>
+        </Grid>
+        <Box
+          mt={{ base: 16, md: 24 }}
+          mx="auto"
+          w={{ base: "100%", md: "75%" }}
+          bg="gray.900"
+          color="white"
+          border="1px solid"
+          borderColor="gray.700"
+          borderRadius="2xl"
+          textAlign="center"
+          p={{ base: 10, md: 12 }}
+          boxShadow="0 0 25px rgba(0,0,0,0.1)"
+        >
+          <Heading
+            fontSize={{ base: "3xl", md: "4xl" }}
+            mb={3}
+            fontWeight="800"
+            lineHeight="short"
+          >
+            Ready to Join as a Clipper?
+          </Heading>
+          <Text color="gray.400" mb={8}>
+            Start earning by creating viral clips for top brands and creators.
           </Text>
           <Button
             size="lg"
-            bg="green.500"
+            bg="black"
             color="white"
-            px={12}
-            py={8}
-            fontSize="xl"
-            rightIcon={<ArrowRight />}
-            _hover={{ bg: 'green.600', transform: 'scale(1.05)' }}
-            transition="all 0.2s"
+            borderRadius="full"
+            px={8}
+            py={6}
+            fontWeight="700"
+            fontSize="md"
+            border="1px solid"
+            borderColor="whiteAlpha.200"
+            _hover={{
+              bg: "gray.800",
+              transform: "translateY(-2px)",
+              boxShadow: "0 0 20px rgba(0,0,0,0.15)",
+            }}
           >
-            Kontaktiraj Nas
+            Join Our Discord
           </Button>
-        </VStack>
+        </Box>
       </Container>
     </Box>
   );
 };
-
 export default Home;
