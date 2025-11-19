@@ -43,7 +43,6 @@ function DottedBackgroundGlobal() {
           background-image:
             radial-gradient(var(--dot-color) var(--dot-size), transparent var(--dot-size));
           background-size: var(--dot-space) var(--dot-space);
-          background-attachment: fixed;
         }
       `}
     />
@@ -69,8 +68,8 @@ const Home: NextPage = () => {
         <MarqueeSection />
         <StatsSection />
         <CaseStudiesSection />
-        <StepsSection/>
         <FeaturesSection/>
+        <StepsSection/>
         <PricingSection />
         <FAQSection />
         <CTASection />
@@ -353,7 +352,7 @@ const StatsSection = () => {
   });
 
   return (
-    <Box py={{ base: 12, md: 20 }} bg="transparent">
+    <Box py={{ base: 12, md: 20 }} bg="white">
       <Container maxW="7xl">
         <Grid templateColumns={{ base: '1fr 1fr', md: 'repeat(4, 1fr)' }} gap={{ base: 8, md: 10 }}>
           <GridItem>
@@ -733,158 +732,148 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
 const StepsSection = () => {
   const steps = [
     {
-      number: '01',
-      title: 'Brendovi pokreću kampanju za par minuta',
+      number: 1,
+      title: 'Pokreni svoju kampanju',
       description:
-        'Postavi ciljeve i budžet. Kampanja je odmah spremna – Klipping, Muzička, Logo ili UGC.',
-      image: '/static/images/111.png', // prilagodi putanje
-      alt: 'Pokretanje kampanje',
+        'Reci nam ciljeve — podcast, muzika, brend, livestream ili događaj. Postavi budžet i smernice, a mi preuzimamo sve dalje.',
     },
     {
-      number: '02',
-      title: 'Kliperi se uključuju i prave sadržaj',
+      number: 2,
+      title: 'Kliperi kreiraju i distribuiraju',
       description:
-        'Naša zajednica bira kampanje i objavljuje kvalitetan sadržaj na mrežama koje želiš.',
-      image: '/static/images/2222.png',
-      alt: 'Kreiranje sadržaja',
+        'Naša mreža proverenih kreatora bira najbolje momente i objavljuje autentičan sadržaj na TikTok, Instagram Reels i YouTube Shorts.',
     },
     {
-      number: '03',
-      title: 'Clipify proverava rezultate',
+      number: 3,
+      title: 'Prati, verifikuj i plati',
       description:
-        'AI i ljudska provera eliminišu lažne aktivnosti i daju jasne, ažurne metrike.',
-      image: '/static/images/33.png',
-      alt: 'Provera rezultata',
-    },
-    {
-      number: '04',
-      title: 'Plaćaš samo rezultat',
-      description:
-        'Brendovi plaćaju za stvarne rezultate, a kliperi dobijaju isplatu za engagement.',
-      image: '/static/images/4.png',
-      alt: 'Plaćanje po rezultatu',
+        'AI u realnom vremenu meri rezultate i uklanja bot aktivnost. Plaćaš samo proverene, organske rezultate.',
     },
   ];
+
+  // malene varijacije na bedževima da deluju živo
+  const numTransforms = ['rotate(-0.6deg)', 'rotate(0.8deg)', 'rotate(-0.4deg)'];
 
   return (
     <Box
       as="section"
       bg="white"
       color="black"
-      py={{ base: 16, md: 24 }}
+      py={{ base: 20, md: 28 }}
       borderTop="1px solid"
       borderColor="gray.200"
     >
       <Container maxW="7xl">
-        <Box mb={{ base: 10, md: 16 }}>
+        {/* Veliki naslov sa kratkim podnaslovom */}
+        <VStack spacing={4} mb={{ base: 14, md: 20 }}>
           <Heading
-            as="h2"
+            textAlign="center"
             fontWeight="900"
             letterSpacing="-0.02em"
             lineHeight="1"
-            fontSize={{ base: '40px', md: '56px', lg: '64px' }}
+            fontSize={{ base: '44px', md: '64px', lg: '76px' }}
           >
-            Kako Clipify
-            <br />
-            funkcioniše
+            Kako funkcioniše
           </Heading>
-        </Box>
-
-        <VStack spacing={{ base: 10, md: 14 }} align="stretch">
-          {steps.map((s, i) => {
-            const isEven = i % 2 === 1; // 0-based: 0 left, 1 right, 2 left, 3 right...
-            return (
-              <Box key={s.number}>
-                <Grid
-                  templateColumns={{ base: '1fr', md: '1fr 1fr' }}
-                  gap={{ base: 6, md: 10 }}
-                  alignItems="center"
-                >
-                  <Box
-                    order={{ base: 0, md: isEven ? 1 : 0 }}
-                    // Outer frame: same margin, border, and background for all
-                    bg="white"
-                    border="1px solid"
-                    borderColor="gray.200"
-                    borderRadius="xl"
-                    // Equal margin from content around the frame
-                    p={{ base: 4, md: 6 }}
-                  >
-                    {/* Fixed aspect container so all cards are same visual size */}
-                    <Box
-                      bg="gray.50"
-                      border="1px dashed"
-                      borderColor="gray.200"
-                      borderRadius="lg"
-                      // Controls the visible image area size (same for all)
-                      h={{ base: '220px', md: '320px' }}
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      overflow="hidden"
-                    >
-                      <Image
-                        src={s.image}
-                        alt={s.alt}
-                        // Never overflow; scale down to fit
-                        maxH="100%"
-                        maxW="100%"
-                        objectFit="contain"
-                        // Optional: inner padding so image doesn’t touch edges
-                        p={{ base: 2, md: 3 }}
-                      />
-                    </Box>
-                  </Box>
-
-                  <VStack
-                    order={{ base: 1, md: isEven ? 0 : 1 }} // swap text opposite to image on desktop
-                    align="start"
-                    spacing={3}
-                  >
-                    <Box
-                      borderRadius="full"
-                      bg="black"
-                      color="white"
-                      px="3"
-                      py="1"
-                      fontWeight="800"
-                      fontSize="sm"
-                      letterSpacing="0.06em"
-                    >
-                      {s.number}
-                    </Box>
-
-                    <Heading
-                      as="h3"
-                      fontSize={{ base: 'xl', md: '2xl' }}
-                      lineHeight="1.2"
-                      letterSpacing="-0.01em"
-                    >
-                      {s.title}
-                    </Heading>
-
-                    <Text color="gray.700" fontSize={{ base: 'md', md: 'lg' }}>
-                      {s.description}
-                    </Text>
-                  </VStack>
-                </Grid>
-
-                {i < steps.length - 1 && (
-                  <Box
-                    mt={{ base: 8, md: 12 }}
-                    borderTop="1px solid"
-                    borderColor="gray.200"
-                  />
-                )}
-              </Box>
-            );
-          })}
+          <Text
+            textAlign="center"
+            color="gray.600"
+            fontSize={{ base: 'lg', md: 'xl' }}
+            maxW="3xl"
+            lineHeight={1.7}
+          >
+            Tri jasna koraka od ciljeva do verifikovanih rezultata.
+          </Text>
         </VStack>
+
+        <VStack spacing={{ base: 12, md: 16 }} align="stretch">
+          {steps.map((s, i) => (
+            <Box key={s.number}>
+              <Grid
+                templateColumns={{ base: 'auto 1fr', lg: 'auto 1fr' }}
+                gap={{ base: 6, md: 8, lg: 10 }}
+                alignItems="center"
+              >
+                {/* Veliki numerički bedž */}
+                <Box
+                  w={{ base: 16, md: 20, lg: 24 }}
+                  h={{ base: 16, md: 20, lg: 24 }}
+                  borderRadius="full"
+                  bg="blackAlpha.50"
+                  border="1px solid"
+                  borderColor="blackAlpha.300"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  boxShadow="
+                    0 10px 24px rgba(0,0,0,0.06),
+                    inset 0 0 0 8px rgba(0,0,0,0.05)"
+                  sx={{ transform: numTransforms[i] }}
+                  flexShrink={0}
+                >
+                  <Text
+                    fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
+                    fontWeight="900"
+                    letterSpacing="-0.02em"
+                  >
+                    {s.number}
+                  </Text>
+                </Box>
+
+                {/* Tekst: masni naslov + duži opis */}
+                <VStack align="start" spacing={{ base: 3, md: 4 }}>
+                  <Heading
+                    as="h3"
+                    fontWeight="900"
+                    letterSpacing="-0.015em"
+                    lineHeight="1.1"
+                    fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
+                  >
+                    {s.title}
+                  </Heading>
+
+                  <Text
+                    color="gray.700"
+                    fontSize={{ base: 'lg', md: 'xl' }}
+                    lineHeight={1.8}
+                    maxW="5xl"
+                  >
+                    {s.description}
+                  </Text>
+                </VStack>
+              </Grid>
+
+              {/* Deblji, prozračan razdelnik između koraka */}
+              {i < steps.length - 1 && (
+                <Box
+                  mt={{ base: 10, md: 14 }}
+                  borderTop="1px solid"
+                  borderColor="gray.200"
+                />
+              )}
+            </Box>
+          ))}
+        </VStack>
+
+        {/* Donji poziv na akciju (opciono) */}
+        {/* <HStack justify="center" mt={{ base: 14, md: 20 }}>
+          <Button
+            size="lg"
+            bg="black"
+            color="white"
+            borderRadius="full"
+            px={{ base: 8, md: 10 }}
+            py={{ base: 6, md: 7 }}
+            _hover={{ transform: 'translateY(-2px)', boxShadow: 'xl' }}
+            transition="all 0.2s"
+          >
+            Započni sada
+          </Button>
+        </HStack> */}
       </Container>
     </Box>
   );
 };
-
 const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
   <VStack
     align="start"
@@ -1031,7 +1020,7 @@ const FeaturesSection = () => {
         'Naša platforma omogućava da tvoja kampanja krene istog dana, sa velikim brojem klipera spremnih da je ožive.',
     },
     {
-      title: 'Plati za rezultat',
+      title: 'Garancija',
       icon: DollarSignIcon,
       description:
         'Plaćaš tek kada klip isporuči stvarne preglede i engagement - svaki dinar radi za tebe, ne protiv tebe.',
@@ -1057,7 +1046,7 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <Box as="section" bg="gray.100" color="black" py={{ base: 16, md: 24 }}>
+    <Box as="section" bg="white" color="black" py={{ base: 16, md: 24 }}>
       <Container maxW="7xl">
         {/* Title */}
         <Container maxW="7xl" mb={{ base: 10, md: 16 }}>
@@ -1078,7 +1067,7 @@ const FeaturesSection = () => {
                 // Make only "Case" black
                 color="black"
               >
-                Povezujemo kreatore
+                Zašto
               </Heading>
 
               <Heading
@@ -1090,7 +1079,7 @@ const FeaturesSection = () => {
                 color="gray.500"
                 mt={{ base: 2, md: 3 }}
               >
-                i klipere za uspeh
+                Clipify
               </Heading>
             </Box>
 
