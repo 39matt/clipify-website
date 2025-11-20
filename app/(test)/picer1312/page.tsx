@@ -326,7 +326,6 @@ const formatCompact = (n: number) => {
   return v.toString();
 };
 
-/* ---------- Integrated StatsSection (new) ---------- */
 
 const StatsSection = () => {
   const targets = {
@@ -450,6 +449,7 @@ type CaseItem = {
     link: string;
   };
 };
+
 const CaseStudiesSection = () => {
   const cases: CaseItem[] = [
     {
@@ -730,159 +730,94 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
     </Modal>
   );
 };
+
 const StepsSection = () => {
   const steps = [
     {
-      number: 1,
-      title: 'Pokreni svoju kampanju',
+      number: '1',
+      title: 'Launch Your Campaign',
       description:
-        'Reci nam ciljeve — podcast, muzika, brend, livestream ili događaj. Postavi budžet i smernice, a mi preuzimamo sve dalje.',
+        'Tell us your goals — whether it’s promoting your podcast, music, brand, livestream, or event. Set your budget and guidelines. We handle the rest.'
     },
     {
-      number: 2,
-      title: 'Kliperi kreiraju i distribuiraju',
+      number: '2',
+      title: 'Clippers Create & Distribute',
       description:
-        'Naša mreža proverenih kreatora bira najbolje momente i objavljuje autentičan sadržaj na TikTok, Instagram Reels i YouTube Shorts.',
+        'Our network of 10K+ vetted creators discovers your campaign, clips the best moments, and posts authentic content to their engaged audiences across TikTok, Instagram Reels, YouTube Shorts, and X.'
     },
     {
-      number: 3,
-      title: 'Prati, verifikuj i plati',
+      number: '3',
+      title: 'Track, Verify & Pay',
       description:
-        'AI u realnom vremenu meri rezultate i uklanja bot aktivnost. Plaćaš samo proverene, organske rezultate.',
-    },
+        'Our AI-powered system tracks all views in real time and filters out bot activity. Pay only for verified, organic results while Clippers earn performance-based payouts instantly.'
+    }
   ];
 
-  const numTransforms = ['rotate(-0.4deg)', 'rotate(0.6deg)', 'rotate(-0.2deg)'];
-
   return (
-    <Box
-      as="section"
-      bg="white"
-      color="black"
-      py={{ base: 16, md: 24 }}
-      borderTop="1px solid"
-      borderColor="gray.200"
-    >
-      <Container maxW="7xl">
-        {/* Split title matching CaseStudiesSection */}
-        <Container maxW="7xl" mb={{ base: 10, md: 16 }}>
-          <Grid
-            templateColumns={{ base: '1fr', lg: '2fr 1fr' }}
-            alignItems="end"
-            gap={{ base: 6, lg: 8 }}
-          >
-            <Box>
-              <Heading
-                as="h2"
-                fontWeight="900"
-                letterSpacing="-0.03em"
-                lineHeight="0.95"
-                fontSize={{ base: '48px', md: '56px', lg: '64px' }}
-                color="black"
-              >
-                Kako
-              </Heading>
-              <Heading
-                as="h2"
-                fontWeight="900"
-                letterSpacing="-0.03em"
-                lineHeight="0.95"
-                fontSize={{ base: '56px', md: '64px', lg: '72px' }}
-                color="gray.500"
-                mt={{ base: 2, md: 3 }}
-              >
-                funkcioniše
-              </Heading>
-            </Box>
+    <Box as="section" bg="black" color="white" py={{ base: 20, md: 28 }}>
+      <Container maxW="6xl" textAlign="center">
+        <Text
+          fontSize="sm"
+          letterSpacing="0.15em"
+          textTransform="uppercase"
+          color="gray.400"
+          mb={3}
+        >
+          Kako funkcioniše
+        </Text>
 
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent={{ base: 'flex-start', lg: 'flex-end' }}
-            >
-              <Text
-                color="gray.800"
-                fontSize={{ base: 'lg', md: 'xl' }}
-                textAlign={{ base: 'left', lg: 'right' }}
-                maxW={{ base: 'full', lg: 'sm' }}
-              >
-                Tri jasna koraka od ciljeva do verifikovanih, organskih rezultata.
-              </Text>
-            </Box>
-          </Grid>
-        </Container>
 
-        <VStack spacing={{ base: 12, md: 16 }} align="stretch">
-          {steps.map((s, i) => (
-            <MotionBox
-              key={s.number}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: i * 0.08, ease: 'easeOut' }}
-              viewport={{ once: true, amount: 0.25 }}
+        <Heading
+          fontWeight="900"
+          letterSpacing="-0.03em"
+          fontSize={{ base: '28px', md: '36px', lg: '48px' }}
+          mb={{ base: 12, md: 16 }}
+        >
+          Postani viralan u 3 prosta koraka
+        </Heading>
+
+        <Box>
+          {steps.map((step, i) => (
+            <Flex
+              key={i}
+              align="flex-start"
+              gap={6}
+              mb={{ base: 12, md: 16 }}
             >
-              <Grid
-                templateColumns={{ base: 'auto 1fr', md: 'auto 1fr' }}
-                gap={{ base: 6, md: 8 }}
-                alignItems="center"
+              <Flex
+                w="60px"
+                h="60px"
+                borderRadius="full"
+                bg="gray.800"
+                align="center"
+                justify="center"
+                fontSize="24px"
+                fontWeight="700"
               >
-                {/* Black number pill with white number */}
-                <Box /* Circle container for the number */
-                  w={{ base: '64px', md: '80px' }} /* Adjust size as per image */
-                  h={{ base: '64px', md: '80px' }}
-                  borderRadius="full"
-                  bg="white"
-                  color="black"
-                  border="10px solid"
-                  borderColor="gray.100" /* Lighter border color */
-                  boxShadow="0 2px 10px rgba(0,0,0,0.05)" /* Subtle shadow */
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  sx={{ transform: numTransforms[i] }}
-                  flexShrink={0}
+                {step.number}
+              </Flex>
+
+              <Box textAlign="left" maxW="3xl">
+                <Heading
+                  fontSize={{ base: '18px', md: '22px' }}
+                  fontWeight="700"
+                  mb={2}
                 >
-                  <Text /* The number itself */
-                    fontSize={{ base: '2xl', md: '3xl' }} /* Adjust font size */
-                    fontWeight="700" /* Slightly less bold */
-                    letterSpacing="-0.02em"
-                  >
-                    {s.number}
-                  </Text>
-                </Box>
+                  {step.title}
+                </Heading>
 
-                <VStack align="start" spacing={{ base: 3, md: 4 }}>
-                  <Heading
-                    as="h3"
-                    color="black"
-                    letterSpacing="-0.01em"
-                    lineHeight="1.1"
-                    fontWeight="900"
-                    fontSize={{ base: '2xl', md: '3xl' }} /* Heading font size */
-                  >
-                    {s.title}
-                  </Heading>
-                  <Text
-                    color="gray.700"
-                    fontSize={{ base: 'md', md: 'lg' }} /* Body text font size */
-                    lineHeight={1.6} /* Adjusted line height */
-                    maxW="5xl"
-                  >
-                    {s.description}
-                  </Text>
-                </VStack>
-              </Grid>
-
-              {i < steps.length - 1 && (
-                <Box mt={{ base: 10, md: 14 }} borderTop="1px solid" borderColor="gray.200" />
-              )}
-            </MotionBox>
+                <Text color="gray.300" fontSize={{ base: 'md', md: 'lg' }}>
+                  {step.description}
+                </Text>
+              </Box>
+            </Flex>
           ))}
-        </VStack>
+        </Box>
       </Container>
     </Box>
   );
 };
+
 const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
   <VStack
     align="start"
@@ -1057,58 +992,27 @@ const FeaturesSection = () => {
   return (
     <Box as="section" bg="white" color="black" py={{ base: 16, md: 24 }}>
       <Container maxW="7xl">
-        {/* Title */}
-        <Container maxW="7xl" mb={{ base: 10, md: 16 }}>
-          <Grid
-            templateColumns={{ base: '1fr', lg: '2fr 1fr' }}
-            alignItems="end"
-            gap={{ base: 6, lg: 8 }}
+        <Box width="75%" textAlign="center" mx="auto">
+          <Text
+            fontSize="sm"
+            letterSpacing="0.15em"
+            textTransform="uppercase"
+            color="gray.400"
+            mb={3}
           >
-            {/* Left: Big split title */}
-            <Box>
-              <Heading
-                as="h2"
-                fontWeight="900"
-                letterSpacing="-0.03em"
-                lineHeight="0.95"
-                // Responsive giant type
-                fontSize={{ base: '48px', md: '56px', lg: '64px' }}
-                // Make only "Case" black
-                color="black"
-              >
-                Zašto
-              </Heading>
+            Zašto Clipify
+          </Text>
 
-              <Heading
-                as="h2"
-                fontWeight="900"
-                letterSpacing="-0.03em"
-                lineHeight="0.95"
-                fontSize={{ base: '56px', md: '64px', lg: '72px' }}
-                color="gray.500"
-                mt={{ base: 2, md: 3 }}
-              >
-                Clipify
-              </Heading>
-            </Box>
 
-            {/* Right: Supporting copy (aligned right on large screens) */}
-            {/*<Box*/}
-            {/*  display="flex"*/}
-            {/*  alignItems="center"*/}
-            {/*  justifyContent={{ base: 'flex-start', lg: 'flex-end' }}*/}
-            {/*>*/}
-            {/*  <Text*/}
-            {/*    color="gray.800"*/}
-            {/*    fontSize={{ base: 'lg', md: 'xl' }}*/}
-            {/*    textAlign={{ base: 'left', lg: 'right' }}*/}
-            {/*    maxW={{ base: 'full', lg: 'sm' }}*/}
-            {/*  >*/}
-            {/*    Kreatori postavljaju ciljeve i kampanje, a kliperi prave sadržaj*/}
-            {/*    koji privlači pažnju i donosi rezultate.              </Text>*/}
-            {/*</Box>*/}
-          </Grid>
-        </Container>
+          <Heading
+            fontWeight="900"
+            letterSpacing="-0.03em"
+            fontSize={{ base: '28px', md: '36px', lg: '48px' }}
+            mb={{ base: 12, md: 16 }}
+          >
+            Kreiramo mrežu gde kreatori i kliperi uspevaju zajedno.
+          </Heading>
+        </Box>
 
         {/* Features grid */}
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}   gridAutoRows="1fr">
