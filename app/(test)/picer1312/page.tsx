@@ -14,7 +14,17 @@ import {
   Image,
   Text,
   VStack,
-  Badge, Modal, ModalOverlay, ModalCloseButton, ModalBody, ModalContent, Link, useDisclosure,
+  Badge,
+  Modal,
+  ModalOverlay,
+  ModalCloseButton,
+  ModalBody,
+  ModalContent,
+  Link,
+  useDisclosure,
+  Accordion,
+  AccordionItem,
+  AccordionButton, AccordionPanel,
 } from '@chakra-ui/react'
 import { motion } from 'framer-motion';
 import {
@@ -1282,45 +1292,149 @@ const PricingSection = () => {
     </Flex>
   );
 };
+
 const FAQSection = () => {
-  const faqs = [
+  const clipperFaqs = [
     {
-      q: 'Šta je repurposing sadržaja?',
-      a: 'Repurposing sadržaja je proces uzimanja postojećeg sadržaja kao što su dugački videi i editovanje u klipove za društvene mreže kako bi se maksimizovao doseg i proširila publika.',
+      q: 'Kako mogu postati Kliper?',
+      a: 'Pridruži se našoj Discord zajednici gde prolaziš onboarding i dobijaš pristup novim kampanjama. Nakon odobrenja, možeš da klipuješ odmah.',
     },
     {
-      q: 'Kakav je ROI po klijentu?',
-      a: 'Clipify evaluira ROI za klijente procenom rezultata generisanih našim uslugama repurposing-a. Poredimo zaradu i svest o brendu sa troškom naših usluga.',
+      q: 'Da li moram imati iskustvo sa video editingom?',
+      a: 'Poželjno je, ali nije nužno. Dobijaš kratke edukacije i praktične vodiče kako bi brzo naučio sve što treba za kratke klipove.',
     },
     {
-      q: 'Gde su vaši zaposleni?',
-      a: 'Clipify-jev tim je lociran u Srbiji, svi članovi tima su veterani društvenih mreža i eksperti u svojim oblastima.',
+      q: 'Kako funkcioniše plaćanje?',
+      a: 'Zarađuješ po performansama — za stvarne preglede i engagement. Isplata ide svake nedelje putem lokalnih servisa ili PayPala.',
     },
   ];
 
-  return (
-    <Box py={20} bg="black">
-      <Container maxW="4xl">
-        <Heading fontSize={{ base: '4xl', md: '6xl' }} fontWeight="extrabold" textAlign="center" mb={16}>
-          Česta Pitanja
-        </Heading>
+  const creatorFaqs = [
+    {
+      q: 'Kako Clipify pomaže kreatorima i brendovima?',
+      a: 'Naša mreža klipera pomaže da tvoj sadržaj postane viralan na svim platformama, kroz autentične kratke formate koji dopiru do pravih publika.',
+    },
+    {
+      q: 'Da li mogu birati tip sadržaja i ton komunikacije?',
+      a: 'Naravno. Zajedno definišemo ton, ciljnu publiku i tip sadržaja kako bi kampanja bila potpuno u skladu sa tvojim brendom.',
+    },
+    {
+      q: 'Postoji li minimalni budžet?',
+      a: 'Ne. Možeš krenuti sa manjim pilot kampanjama — fokus je na pravim rezultatima i održivom rastu, ne na ulaznim troškovima.',
+    },
+  ];
 
-        <VStack spacing={6} align="stretch">
-          {faqs.map((faq, i) => (
-            <Box key={i} bg="gray.900" p={8} borderRadius="2xl">
-              <Heading size="md" mb={4}>
+  const FaqColumn = ({
+                       title,
+                       items,
+                     }: {
+    title: string;
+    items: { q: string; a: string }[];
+  }) => (
+    <Box>
+      <Heading
+        as="h3"
+        fontSize={{ base: '2xl', md: '3xl' }}
+        mb={8}
+        color="white"
+        fontWeight="900"
+        letterSpacing="-0.02em"
+      >
+        {title}
+      </Heading>
+      <Accordion
+        allowToggle
+        display="flex"
+        flexDirection="column"
+        gap={4}
+      >
+        {items.map((faq, i) => (
+          <AccordionItem
+            key={i}
+            border="1px solid"
+            borderColor="whiteAlpha.200"
+            borderRadius="xl"
+            overflow="hidden"
+            bg="whiteAlpha.50"
+            flex="1"
+          >
+            <AccordionButton
+              _expanded={{ bg: 'whiteAlpha.100' }}
+              p={6}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Heading
+                size="sm"
+                color="white"
+                fontWeight="700"
+                letterSpacing="-0.01em"
+                textAlign="left"
+              >
                 {faq.q}
               </Heading>
-              <Text color="gray.400" lineHeight={1.8}>
-                {faq.a}
-              </Text>
-            </Box>
-          ))}
+              <Box
+                as="span"
+                fontSize="2xl"
+                lineHeight="1"
+                color="gray.400"
+                ml={4}
+                transition="transform 0.2s"
+                _groupHover={{ color: 'white' }}
+              >
+                +
+              </Box>
+            </AccordionButton>
+            <AccordionPanel px={6} pb={5} color="gray.400" fontSize="sm" lineHeight="1.8">
+              {faq.a}
+            </AccordionPanel>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </Box>
+  );
+
+  return (
+    <Box as="section" bg="black" color="white" py={{ base: 20, md: 28 }}>
+      <Container maxW="7xl">
+        {/* Section heading */}
+        <VStack spacing={4} mb={{ base: 12, md: 20 }} textAlign="center">
+          <Text
+            fontSize="sm"
+            letterSpacing="0.15em"
+            textTransform="uppercase"
+            color="gray.500"
+          >
+            FAQ
+          </Text>
+          <Heading
+            fontWeight="900"
+            letterSpacing="-0.03em"
+            fontSize={{ base: '36px', md: '48px', lg: '60px' }}
+            color="white"
+            lineHeight="1.1"
+          >
+            Česta Pitanja
+          </Heading>
+          <Text color="gray.400" fontSize={{ base: 'lg', md: 'xl' }} maxW="2xl">
+            Sve što treba da znaš — bilo da kreiraš sadržaj ili klipuješ ga.
+          </Text>
         </VStack>
+
+        {/* Two-column layout */}
+        <Grid
+          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
+          gap={{ base: 10, md: 16 }}
+          alignItems="stretch"
+        >
+          <FaqColumn title="Za Klipere" items={clipperFaqs} />
+          <FaqColumn title="Za Kreatore" items={creatorFaqs} />
+        </Grid>
       </Container>
     </Box>
   );
 };
+
 const CTASection = () => {
   return (
     <Box
