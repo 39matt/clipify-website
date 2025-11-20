@@ -1112,7 +1112,7 @@ const PricingSection = () => {
 
   return (
     <Flex
-      minH="100vh"
+      minH="110vh"
       align="center"
       justify="center"
       py={{ base: 16, md: 32 }}
@@ -1121,17 +1121,34 @@ const PricingSection = () => {
     >
       <Container maxW="7xl">
         {/* Section Header */}
-        <Box textAlign="center" mb={{ base: 12, md: 20 }}>
+        <Box textAlign="center" mb={{ base: 12, md: 120 }}>
           <Heading
             fontWeight="900"
             fontSize={{ base: '36px', md: '48px', lg: '64px' }}
             letterSpacing="-0.04em"
             lineHeight="1.1"
+            color="gray.900"
           >
             Fleksibilni{' '}
             <Box
               as="span"
               display="inline-block"
+              position="relative"
+              pr="12px"
+              pl="10px"
+              pb="2px"
+              _before={{
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                bgGradient: 'linear(to-r, rgba(252,165,165,0.7), rgba(252,165,165,0.5), rgba(252,165,165,0))', // Original gradient
+                borderRadius: 'md',
+                opacity: 0.7,
+                zIndex: -1
+              }}
               px="2"
               bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
               borderLeft="8px"
@@ -1149,19 +1166,26 @@ const PricingSection = () => {
         {/* Pricing Cards Grid */}
         <Grid
           templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
-          gap={8}
+          gap={{ base: 8, md: 12 }}
         >
           {plans.map((plan, index) => {
             const isPro = plan.popular;
             const isCustom = plan.custom;
 
-            // Original Colors
+            // --- ORIGINAL Color Scheme Logic ---
             const bgColor = isPro ? 'black' : isCustom ? 'gray.600' : 'white';
             const textColor = isPro || isCustom ? 'white' : 'black';
             const bulletColor = isPro || isCustom ? 'white' : 'gray.400';
             const subtitleColor = isPro || isCustom ? 'gray.300' : 'gray.600';
             const buttonBg = isPro || isCustom ? 'white' : 'black';
             const buttonColor = isPro || isCustom ? 'black' : 'white';
+
+            // --- Overlay and Border Color Logic (Revised to keep colors consistent with original) ---
+            // These are the colors for the inner Box and its border,
+            // designed to work on both light and dark card backgrounds
+            const overlayBg = isPro || isCustom ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.06)';
+            const overlayTextColor = isPro || isCustom ? 'whiteAlpha.900' : 'gray.700';
+            const borderColor = isPro || isCustom ? 'whiteAlpha.300' : 'blackAlpha.200';
 
             return (
               <VStack
@@ -1170,22 +1194,34 @@ const PricingSection = () => {
                 bg={bgColor}
                 color={textColor}
                 borderRadius="3xl"
-                p={{ base: 6, md: 8 }} // Reduced padding slightly on larger screens
-                minH={{ base: 'auto', md: '480px' }} // Significantly reduced minimum height for cards
-                boxShadow="0px 12px 50px rgba(0,0,0,0.12)"
-                transition="all 0.3s ease"
+                p={{ base: 6, md: 4 }} // Consistent padding as per previous steps
+                minH={{ base: 'auto', md: '480px' }} // Reverted to the smaller minHeight
+                boxShadow="0px 12px 50px rgba(0,0,0,0.12)" // Reverted to original shadow
+                transition="all 0.3s ease" // Reverted to original transition
                 _hover={{
-                  transform: 'translateY(-12px)',
-                  boxShadow: '0px 20px 60px rgba(0,0,0,0.18)'
+                  transform: 'translateY(-12px)', // Reverted hover lift
+                  boxShadow: '0px 20px 60px rgba(0,0,0,0.18)' // Reverted hover shadow
                 }}
                 align="stretch"
-                justify="space-between" // Still using this for consistent alignment
-                spacing={5} // Reduced spacing between flex items
+                justify="space-between"
               >
-                {/* Top Content: Plan Name, Subtitle, Button */}
-                  <Box mb={7}> {/* Reduced margin-bottom slightly */}
+                {/* Top Content: Plan Name, Subtitle, Info */}
+                <Flex
+                  direction="column"
+                  gap={4}
+                  bg={overlayBg}
+                  color={overlayTextColor}
+                  borderRadius="xl"
+                  p={3} // Padding for the inner box
+                  border="1px solid"
+                  borderColor={borderColor}
+                  justifyContent="space-between"
+                >
+                  <Box
+
+                  >
                     <Heading
-                      fontSize="28px" // Slightly smaller heading
+                      fontSize="28px" // Consistent with previous steps
                       fontWeight="800"
                       mb={2}
                       whiteSpace="nowrap"
@@ -1194,46 +1230,50 @@ const PricingSection = () => {
                     >
                       {plan.name}
                     </Heading>
-                    <Text fontSize="sm" color={subtitleColor} opacity="0.9"> {/* Smaller subtitle font, slightly less dimmed */}
+                    <Text fontSize="sm" opacity="0.9" color={subtitleColor}> {/* Using subtitleColor */}
                       {plan.subtitle}
                     </Text>
                   </Box>
 
-                  <Button
-                    w="full"
-                    size="lg"
-                    bg={buttonBg}
-                    color={buttonColor}
-                    borderRadius="full"
-                    mb={8}
-                    py={6} // Slightly reduced button padding
-                    fontSize="md" // Slightly smaller button font
-                    fontWeight="700"
-                    _hover={{ opacity: 0.9 }}
+                  <Text
+                    fontSize="sm"
+                    color={overlayTextColor} // Using overlay text color for consistency
+                    mt={3}
+                    fontWeight="500"
+                    textAlign="left"
                   >
-                    Zakaži Poziv
-                  </Button>
+                    Kontaktiraj nas za više informacija
+                  </Text>
 
+
+                <Button
+                  w="full"
+                  size="lg"
+                  bg={buttonBg} // Use original buttonBg
+                  color={buttonColor} // Use original buttonColor
+                  borderRadius="full"
+                  py={6}
+                  fontSize="md"
+                  fontWeight="700"
+                  _hover={{ opacity: 0.9 }}
+                  // Reverted button subtle background effect to avoid color changes
+                >
+                  Zakaži Poziv
+                </Button>
+                </Flex>
                 {/* Features List */}
-                <VStack align="start" spacing={4}> {/* Reduced spacing between features */}
-                  {plan.features.map((f, j) => (
-                    <HStack key={j} spacing={3} align="center"> {/* Reduced spacing between bullet and text */}
-                      <Box
-                        w="8px" // Slightly smaller bullet
-                        h="8px"
-                        borderRadius="full"
-                        bg={bulletColor}
-                      />
-                      <Text
-                        fontSize="md"
-                        color={subtitleColor}
-                        lineHeight="1.6" // Adjusted line height for tighter feature list
-                      >
-                        {f}
-                      </Text>
-                    </HStack>
-                  ))}
-                </VStack>
+                <Flex flex="1" align="center" justify="flex-start" mx="2">
+                  <VStack align="start" spacing={4} justify="space-between">
+                    {plan.features.map((f, j) => (
+                      <HStack key={j} spacing={3} align="center">
+                        <Box w="8px" h="8px" borderRadius="full" bg={bulletColor} />
+                        <Text fontSize="md" color={subtitleColor} lineHeight="1.6">
+                          {f}
+                        </Text>
+                      </HStack>
+                    ))}
+                  </VStack>
+                </Flex>
               </VStack>
             );
           })}
