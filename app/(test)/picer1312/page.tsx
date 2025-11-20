@@ -20,10 +20,23 @@ import { motion } from 'framer-motion';
 import {
   ChevronRight,
   Check,
-  ArrowRight, ExternalLink, UsersIcon, RocketIcon, DollarSignIcon, ShieldCheckIcon, ChartLineIcon, LayersIcon, CalendarIcon, MessageSquareIcon, ClockIcon, MailIcon,
+  ArrowRight,
+  ExternalLink,
+  UsersIcon,
+  RocketIcon,
+  DollarSignIcon,
+  ShieldCheckIcon,
+  ChartLineIcon,
+  LayersIcon,
+  CalendarIcon,
+  MessageSquareIcon,
+  ClockIcon,
+  MailIcon,
+  PhoneIcon, Calendar,
 } from 'lucide-react'
 import type { NextPage } from 'next';
 import { Global } from '@emotion/react'
+import { GoPeople } from 'react-icons/go'
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -196,6 +209,7 @@ const HeroSection = () => {
                     behavior: 'smooth',
                   });
                 }}
+                leftIcon={<PhoneIcon size={16} />}
               >
                 Zakaži Poziv
               </Button>
@@ -221,8 +235,9 @@ const HeroSection = () => {
                     behavior: 'smooth',
                   });
                 }}
+                leftIcon={<GoPeople size={16} />}
               >
-                Studije Slučaja
+                Zaradi kao kliper
               </Button>
             </HStack>
           </MotionBox>
@@ -515,7 +530,7 @@ const CaseStudiesSection = () => {
   return (
     <Box py={{ base: 16, md: 24 }}
          position="relative"
-         bg="gray.50"
+         bg="gray.100"
          bgGradient="radial(circle at 50% 0%, rgba(0,0,0,0.06), rgba(0,0,0,0) 70%)"
     >
       <Container maxW="7xl">
@@ -730,7 +745,6 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
     </Modal>
   );
 };
-
 const StepsSection = () => {
   const steps = [
     {
@@ -766,7 +780,6 @@ const StepsSection = () => {
           Kako funkcioniše
         </Text>
 
-
         <Heading
           fontWeight="900"
           letterSpacing="-0.03em"
@@ -776,7 +789,7 @@ const StepsSection = () => {
           Postani viralan u 3 prosta koraka
         </Heading>
 
-        <Box>
+        <Box mb={{ base: 16, md: 20 }}>
           {steps.map((step, i) => (
             <Flex
               key={i}
@@ -797,7 +810,7 @@ const StepsSection = () => {
                 {step.number}
               </Flex>
 
-              <Box textAlign="left" maxW="3xl">
+              <Box textAlign="left" maxW="5xl">
                 <Heading
                   fontSize={{ base: '18px', md: '22px' }}
                   fontWeight="700"
@@ -813,6 +826,27 @@ const StepsSection = () => {
             </Flex>
           ))}
         </Box>
+
+        <Button
+          size="lg"
+          bg="white"
+          color="black"
+          borderRadius="xl"
+          px={12}
+          py={8}
+          fontSize="xl"
+          fontWeight="700"
+          boxShadow="0px 8px 24px rgba(255,255,255,0.15)"
+          _hover={{
+            opacity: 0.95,
+            transform: 'translateY(-4px)',
+            boxShadow: '0px 12px 32px rgba(255,255,255,0.2)'
+          }}
+          transition="all 0.2s ease"
+          leftIcon={<Calendar/>}
+        >
+          Rezerviši Poziv
+        </Button>
       </Container>
     </Box>
   );
@@ -1037,87 +1071,150 @@ const FeaturesSection = () => {
     </Box>
   );
 };
-
 const PricingSection = () => {
   const plans = [
     {
-      name: 'Basic',
+      name: '15 day viral maraton',
       subtitle: 'Idealno za Nove Kreatore',
-      features: ['1 kratki video dnevno', '30 postova mesečno', '24/7 Podrška', 'Mesečni Izveštaji', 'Nedeljni Strateški Pozivi'],
+      features: [
+        '1 kratki video dnevno',
+        '30 postova mesečno',
+        '24/7 Podrška',
+        'Mesečni Izveštaji',
+        'Nedeljni Strateški Pozivi'
+      ]
     },
     {
-      name: 'Pro',
+      name: '30 day viral maraton',
       subtitle: 'Odlično za Skaliranje Sadržaja',
-      features: ['2 kratka videa dnevno', '60 postova mesečno', '24/7 Podrška', 'Mesečni Izveštaji', 'Nedeljni Strateški Pozivi'],
       popular: true,
+      features: [
+        '2 kratka videa dnevno',
+        '60 postova mesečno',
+        '24/7 Podrška',
+        'Mesečni Izveštaji',
+        'Nedeljni Strateški Pozivi'
+      ]
     },
     {
-      name: 'Enterprise',
-      subtitle: 'Odlično za Skaliranje Biznisa',
-      features: ['4 kratka videa dnevno + 1 dugi video nedeljno', '124 posta mesečno', '24/7 Podrška', 'Mesečni Izveštaji', 'Nedeljni Strateški Pozivi'],
-    },
+      name: 'Paket po želji',
+      subtitle: 'Skrojeno Za Tvoje Potrebe',
+      custom: true,
+      features: [
+        'Potpuno prilagođena strategija',
+        'Ekskluzivna produkcija',
+        'Napredna analitika',
+        'Prioritetna podrška',
+        'Tim posvećen tvom brendu'
+      ]
+    }
   ];
 
   return (
-    <Box py={20} bg="gray.900">
+    <Box py={24}>
       <Container maxW="7xl">
-        <Heading fontSize={{ base: '4xl', md: '6xl' }} fontWeight="extrabold" textAlign="center" mb={4}>
-          Fleksibilne Cene
-        </Heading>
-        <Text textAlign="center" color="gray.400" fontSize="xl" mb={16}>
-          Plan za svaku potrebu
-        </Text>
-
-        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={8}>
-          {plans.map((plan, i) => (
+        <Box textAlign="center" mb={16}>
+          <Heading
+            fontWeight="900"
+            fontSize={{ base: '28px', md: '36px', lg: '52px' }}
+            letterSpacing="-0.03em"
+          >
+            Fleksibilni{' '}
             <Box
-              key={i}
-              bg="black"
-              p={8}
-              borderRadius="2xl"
-              border="2px"
-              borderColor={plan.popular ? 'green.500' : 'gray.800'}
-              position="relative"
+              as="span"
+              pl="2"
+              pr="10"
+              bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
+              borderLeft="8px"
+              borderColor="red.500"
             >
-              {plan.popular && (
-                <Badge position="absolute" top={4} right={4} colorScheme="green" fontSize="sm" px={3} py={1}>
-                  POPULARNO
-                </Badge>
-              )}
-              <VStack align="start" spacing={6}>
-                <Box>
-                  <Text color="gray.400" mb={2}>
+              Planovi
+            </Box>
+          </Heading>
+
+          <Text mt={3} color="gray.600" fontSize={{ base: 'lg', lg: 'xl' }}>
+            Za svaku vrstu kontenta
+          </Text>
+        </Box>
+
+        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={10}>
+          {plans.map((plan, index) => {
+            const isPro = plan.popular;
+            const isCustom = plan.custom;
+
+            const bgColor = isPro
+              ? 'black'
+              : isCustom
+                ? 'gray.600'
+                : 'white';
+
+            const textColor = isPro || isCustom ? 'white' : 'black';
+
+            const bulletColor = isPro || isCustom ? 'white' : 'gray.400';
+
+            const subtitleColor = isPro || isCustom ? 'gray.300' : 'gray.600';
+
+            const buttonBg = isPro || isCustom ? 'white' : 'black';
+            const buttonColor = isPro || isCustom ? 'black' : 'white';
+
+            return (
+              <Box
+                key={index}
+                bg={bgColor}
+                color={textColor}
+                borderRadius="2xl"
+                p={10}
+                boxShadow="0px 10px 40px rgba(0,0,0,0.08)"
+                transition="all 0.3s ease"
+                _hover={{
+                  transform: 'translateY(-10px)',
+                  boxShadow: '0px 20px 50px rgba(0,0,0,0.15)'
+                }}
+              >
+                <Box mb={10}>
+                  <Heading fontSize="24px" fontWeight="700" mb={1}>
                     {plan.name}
-                  </Text>
-                  <Heading size="lg" mb={2}>
+                  </Heading>
+                  <Text fontSize="sm" color={subtitleColor}>
                     {plan.subtitle}
-                  </Heading>
-                  <Heading size="2xl" color="green.500">
-                    Kontaktiraj nas za cenu
-                  </Heading>
+                  </Text>
                 </Box>
 
-                <Button w="full" size="lg" bg={plan.popular ? 'green.500' : 'gray.800'} color="white" _hover={{ bg: plan.popular ? 'green.600' : 'gray.700' }}>
+                <Button
+                  w="full"
+                  size="lg"
+                  bg={buttonBg}
+                  color={buttonColor}
+                  borderRadius="full"
+                  mb={10}
+                  _hover={{ opacity: 0.9 }}
+                >
                   Zakaži Poziv
                 </Button>
 
-                <VStack align="start" spacing={3} w="full">
-                  {plan.features.map((feature, j) => (
-                    <HStack key={j} spacing={3}>
-                      <Icon as={Check} color="green.500" />
-                      <Text>{feature}</Text>
+                <VStack align="start" spacing={4}>
+                  {plan.features.map((f, j) => (
+                    <HStack key={j} spacing={3} align="center">
+                      <Box
+                        w="8px"
+                        h="8px"
+                        borderRadius="full"
+                        bg={bulletColor}
+                      />
+                      <Text fontSize="sm" color={subtitleColor}>
+                        {f}
+                      </Text>
                     </HStack>
                   ))}
                 </VStack>
-              </VStack>
-            </Box>
-          ))}
+              </Box>
+            );
+          })}
         </Grid>
       </Container>
     </Box>
   );
 };
-
 const FAQSection = () => {
   const faqs = [
     {
