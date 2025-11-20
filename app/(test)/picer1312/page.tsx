@@ -1111,19 +1111,28 @@ const PricingSection = () => {
   ];
 
   return (
-    <Box py={24}>
+    <Flex
+      minH="100vh"
+      align="center"
+      justify="center"
+      py={{ base: 16, md: 32 }}
+      px={4}
+      bg="transparent"
+    >
       <Container maxW="7xl">
-        <Box textAlign="center" mb={16}>
+        {/* Section Header */}
+        <Box textAlign="center" mb={{ base: 12, md: 20 }}>
           <Heading
             fontWeight="900"
-            fontSize={{ base: '28px', md: '36px', lg: '52px' }}
-            letterSpacing="-0.03em"
+            fontSize={{ base: '36px', md: '48px', lg: '64px' }}
+            letterSpacing="-0.04em"
+            lineHeight="1.1"
           >
             Fleksibilni{' '}
             <Box
               as="span"
-              pl="2"
-              pr="10"
+              display="inline-block"
+              px="2"
               bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
               borderLeft="8px"
               borderColor="red.500"
@@ -1132,87 +1141,105 @@ const PricingSection = () => {
             </Box>
           </Heading>
 
-          <Text mt={3} color="gray.600" fontSize={{ base: 'lg', lg: 'xl' }}>
+          <Text mt={4} color="gray.600" fontSize={{ base: 'lg', lg: 'xl' }}>
             Za svaku vrstu kontenta
           </Text>
         </Box>
 
-        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={10}>
+        {/* Pricing Cards Grid */}
+        <Grid
+          templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
+          gap={8}
+        >
           {plans.map((plan, index) => {
             const isPro = plan.popular;
             const isCustom = plan.custom;
 
-            const bgColor = isPro
-              ? 'black'
-              : isCustom
-                ? 'gray.600'
-                : 'white';
-
+            // Original Colors
+            const bgColor = isPro ? 'black' : isCustom ? 'gray.600' : 'white';
             const textColor = isPro || isCustom ? 'white' : 'black';
-
             const bulletColor = isPro || isCustom ? 'white' : 'gray.400';
-
             const subtitleColor = isPro || isCustom ? 'gray.300' : 'gray.600';
-
             const buttonBg = isPro || isCustom ? 'white' : 'black';
             const buttonColor = isPro || isCustom ? 'black' : 'white';
 
             return (
-              <Box
+              <VStack
                 key={index}
+                as="section"
                 bg={bgColor}
                 color={textColor}
-                borderRadius="2xl"
-                p={10}
-                boxShadow="0px 10px 40px rgba(0,0,0,0.08)"
+                borderRadius="3xl"
+                p={{ base: 6, md: 8 }} // Reduced padding slightly on larger screens
+                minH={{ base: 'auto', md: '480px' }} // Significantly reduced minimum height for cards
+                boxShadow="0px 12px 50px rgba(0,0,0,0.12)"
                 transition="all 0.3s ease"
                 _hover={{
-                  transform: 'translateY(-10px)',
-                  boxShadow: '0px 20px 50px rgba(0,0,0,0.15)'
+                  transform: 'translateY(-12px)',
+                  boxShadow: '0px 20px 60px rgba(0,0,0,0.18)'
                 }}
+                align="stretch"
+                justify="space-between" // Still using this for consistent alignment
+                spacing={5} // Reduced spacing between flex items
               >
-                <Box mb={10}>
-                  <Heading fontSize="24px" fontWeight="700" mb={1}>
-                    {plan.name}
-                  </Heading>
-                  <Text fontSize="sm" color={subtitleColor}>
-                    {plan.subtitle}
-                  </Text>
-                </Box>
+                {/* Top Content: Plan Name, Subtitle, Button */}
+                  <Box mb={7}> {/* Reduced margin-bottom slightly */}
+                    <Heading
+                      fontSize="28px" // Slightly smaller heading
+                      fontWeight="800"
+                      mb={2}
+                      whiteSpace="nowrap"
+                      overflowX="auto"
+                      css={{ '&::-webkit-scrollbar': { display: 'none' } }}
+                    >
+                      {plan.name}
+                    </Heading>
+                    <Text fontSize="sm" color={subtitleColor} opacity="0.9"> {/* Smaller subtitle font, slightly less dimmed */}
+                      {plan.subtitle}
+                    </Text>
+                  </Box>
 
-                <Button
-                  w="full"
-                  size="lg"
-                  bg={buttonBg}
-                  color={buttonColor}
-                  borderRadius="full"
-                  mb={10}
-                  _hover={{ opacity: 0.9 }}
-                >
-                  Zakaži Poziv
-                </Button>
+                  <Button
+                    w="full"
+                    size="lg"
+                    bg={buttonBg}
+                    color={buttonColor}
+                    borderRadius="full"
+                    mb={8}
+                    py={6} // Slightly reduced button padding
+                    fontSize="md" // Slightly smaller button font
+                    fontWeight="700"
+                    _hover={{ opacity: 0.9 }}
+                  >
+                    Zakaži Poziv
+                  </Button>
 
-                <VStack align="start" spacing={4}>
+                {/* Features List */}
+                <VStack align="start" spacing={4}> {/* Reduced spacing between features */}
                   {plan.features.map((f, j) => (
-                    <HStack key={j} spacing={3} align="center">
+                    <HStack key={j} spacing={3} align="center"> {/* Reduced spacing between bullet and text */}
                       <Box
-                        w="8px"
+                        w="8px" // Slightly smaller bullet
                         h="8px"
                         borderRadius="full"
                         bg={bulletColor}
                       />
-                      <Text fontSize="sm" color={subtitleColor}>
+                      <Text
+                        fontSize="md"
+                        color={subtitleColor}
+                        lineHeight="1.6" // Adjusted line height for tighter feature list
+                      >
                         {f}
                       </Text>
                     </HStack>
                   ))}
                 </VStack>
-              </Box>
+              </VStack>
             );
           })}
         </Grid>
       </Container>
-    </Box>
+    </Flex>
   );
 };
 const FAQSection = () => {
