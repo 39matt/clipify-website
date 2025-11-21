@@ -118,7 +118,7 @@ export default function AdminPanelClient() {
                     fontSize={{ base: 'sm', md: 'md' }}
                     fontWeight="medium"
                   >
-                    {campaign.influencer} - {campaign.activity}
+                    {campaign.influencer} {campaign.influencer == 'Cjuree' && campaign.budget == 2000 ? "2" : ""} - {campaign.activity}
                   </Text>
                 </Card>
               ))}
