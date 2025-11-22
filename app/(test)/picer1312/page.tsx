@@ -50,6 +50,8 @@ import { Global } from '@emotion/react';
 import { GoPeople } from 'react-icons/go';
 import { FaDiscord } from 'react-icons/fa'
 import { FiAward, FiCheckCircle, FiStar, FiUsers, FiZap } from 'react-icons/fi'
+import { FcCheckmark } from 'react-icons/fc'
+import { GrCheckmark } from 'react-icons/gr'
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -497,6 +499,60 @@ type CaseItem = {
   };
 };
 
+const cases: CaseItem[] = [
+  {
+    id: 'nosestrips',
+    name: 'Nosestrips',
+    views: '8M',
+    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/nosestrips.jpeg?alt=media&token=beb586e1-3856-40ac-bbbd-14f4682311e8',
+    totalClippers: 20,
+    totalVideos: 120,
+    durationDays: 8,
+    topVideo: {
+      views: '600K',
+      clipper: 'biohack.balkan',
+      link: 'https://www.tiktok.com/@biohack.balkan/video/7570306263716760843',
+    },
+    text:
+      'Tokom kampanje za Nosestrips fokusirali smo se na organsku distribuciju kroz našu mrežu klipera. Aktivirali smo kreatore koji klipuju najgledanije strimere, kako bi se brend prirodno pojavljivao u sadržaju sa visokim engagementom.\n' +
+      '\n' +
+      'Uz streamer sadržaj uključili smo i health & wellbeing stranice, čime smo pogodili najrelevantniju publiku za proizvod. Ovaj kombinovani pristup doneo je snažan organski reach i vrhunski engagement u kratkom roku.',
+  },
+  {
+    id: 'cjuree',
+    name: 'Cjuree',
+    views: '5M',
+    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/cjuree.jpeg?alt=media&token=0cc34f5b-8216-4e79-aca0-22fd6beadf20',
+    totalClippers: 15,
+    totalVideos: 320,
+    durationDays: 30,
+    topVideo: {
+      views: '370K',
+      clipper: 'cjuree.clipping',
+      link: 'https://www.tiktok.com/@cjuree.clipping/video/7568402808077045004',
+    },
+    text:
+      'Tokom kampanje za Cjureta fokusirali smo se na organski rast kroz našu mrežu klipera. Otvarali su nove profile i svakodnevno pravili sadržaj koji najbolje prolazi u biznis niši - lifestyle edits, ragebait formate i isečke iz podcasta.\n' +
+      '\n' +
+      'Svi klipovi su optimizovani za publiku koja prati biznis, prodaju, mindset i motivacione kreatore. Na ovaj način je Cjureov brend prirodno plasiran tačno onoj publici koja najviše konvertuje, uz stabilan organski rast i visok engagement tokom cele kampanje.',
+  },
+  {
+    id: 'aleksic',
+    name: 'AleksicMoto',
+    views: '3M',
+    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/aleksic.jpg?alt=media&token=d573b72a-2798-4892-a14b-7e684193d15d',
+    totalClippers: 15,
+    totalVideos: 95,
+    durationDays: 14,
+    topVideo: {
+      views: '300K',
+      clipper: 'kliper1311',
+      link: 'https://www.tiktok.com/@kliper1311/video/7538504023171665208',
+    },
+    text: '',
+  },
+];
+
 const CaseStudiesSection = () => {
   const cases: CaseItem[] = [
     {
@@ -554,6 +610,7 @@ const CaseStudiesSection = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [active, setActive] = React.useState<CaseItem | null>(null);
+  const [hoveredId, setHoveredId] = React.useState<string | null>(null);
 
   const openCase = (c: CaseItem) => {
     setActive(c);
@@ -564,11 +621,11 @@ const CaseStudiesSection = () => {
     <Box
       py={{ base: 16, md: 24 }}
       position="relative"
-      bg="gray.100"
-      bgGradient="radial(circle at 50% 0%, rgba(0,0,0,0.06), rgba(0,0,0,0) 70%)"
+      bg="gray.200"
+      bgGradient="radial(circle at 50% 0%, rgba(0,0,0,0.04), transparent 70%)"
     >
       <Container maxW="7xl">
-        <Container maxW="7xl" mb={{ base: 10, md: 16 }}>
+        <Container maxW="7xl" mb={{ base: 12, md: 20 }}>
           <Grid
             templateColumns={{ base: '1fr', lg: '2fr 1fr' }}
             alignItems="end"
@@ -592,7 +649,8 @@ const CaseStudiesSection = () => {
                 letterSpacing="-0.03em"
                 lineHeight="0.95"
                 fontSize={{ base: '48px', md: '56px', lg: '64px' }}
-                color="gray.500"
+                bgGradient="linear(to-r, gray.400, gray.600)"
+                bgClip="text"
                 mt={{ base: 2, md: 3 }}
               >
                 Otišao viralno
@@ -605,88 +663,161 @@ const CaseStudiesSection = () => {
               justifyContent={{ base: 'flex-start', lg: 'flex-end' }}
             >
               <Text
-                color="gray.800"
+                color="gray.700"
                 fontSize={{ base: 'lg', md: 'xl' }}
                 textAlign={{ base: 'left', lg: 'right' }}
                 maxW={{ base: 'full', lg: 'sm' }}
+                lineHeight="1.6"
               >
                 Istraži rezultate koje smo <br /> ostvarili za klijente.
               </Text>
             </Box>
           </Grid>
         </Container>
+
         <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={{ base: 6, md: 8 }}>
           {cases.map((item, i) => (
             <MotionBox
               key={item.id}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: i * 0.06 }}
               viewport={{ once: true }}
               bg="white"
-              borderRadius="2xl"
+              borderRadius="3xl"
               overflow="hidden"
-              border="1px solid"
-              borderColor="gray.200"
-              boxShadow="0 10px 30px rgba(0,0,0,0.06)"
+              border="3px solid"
+              borderColor={hoveredId === item.id ? 'red.500' : 'gray.200'}
+              boxShadow={
+                hoveredId === item.id
+                  ? '0 32px 64px rgba(239, 68, 68, 0.25), 0 0 80px rgba(239, 68, 68, 0.15)'
+                  : '0 20px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)'
+              }
+              cursor="pointer"
+              onClick={() => openCase(item)}
+              onMouseEnter={() => setHoveredId(item.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              position="relative"
               _hover={{
-                transform: 'translateY(-6px)',
-                boxShadow: '0 16px 40px rgba(0,0,0,0.10)',
+                transform: 'translateY(-12px) scale(1.02)',
               }}
+              role="group"
             >
-              <Box position="relative" h={{ base: '220px', md: '260px' }} bg="gray.100">
-                <Image src={item.image} alt={item.name} objectFit="cover" w="100%" h="100%" />
+
+              {/* Image Section */}
+              <Box position="relative" h={{ base: '320px', md: '380px' }} bg="gray.900" overflow="hidden">
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  objectFit="cover"
+                  w="100%"
+                  h="100%"
+                  filter="brightness(0.9)"
+                  transition="transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s"
+                  _groupHover={{
+                    transform: 'scale(1.1)',
+                    filter: 'brightness(1)',
+                  }}
+                />
                 <Box
                   position="absolute"
                   inset={0}
-                  bgGradient="linear(to-b, rgba(0,0,0,0), rgba(0,0,0,0.35))"
+                  bgGradient="linear(to-b, transparent 50%, rgba(0,0,0,0.7))"
                 />
-                <HStack
+
+                {/* Floating badge that appears on hover */}
+                <Badge
                   position="absolute"
-                  bottom="4"
-                  left="4"
-                  bgGradient="linear(to-r, black, #111827)"
+                  top={6}
+                  right={6}
+                  bg="red.500"
                   color="white"
+                  px={3}
+                  py={1}
                   borderRadius="full"
-                  px={{ base: 4, md: 5 }}
-                  py={{ base: 2, md: 2.5 }}
-                  spacing="2"
-                  border="1px solid"
-                  borderColor="whiteAlpha.200"
-                  boxShadow="0 12px 28px rgba(0,0,0,0.4)"
+                  fontSize="xs"
+                  fontWeight="900"
+                  textTransform="uppercase"
+                  letterSpacing="wider"
+                  opacity={hoveredId === item.id ? 1 : 0}
+                  transform={hoveredId === item.id ? 'translateY(0)' : 'translateY(-10px)'}
+                  transition="all 0.3s"
                 >
-                  <Text
-                    fontSize={{ base: '2rem', md: '2.5rem' }}
-                    fontWeight="900"
-                    lineHeight="1"
+                  POGLEDAJ
+                </Badge>
+
+                {/* Content Overlay */}
+                <VStack
+                  position="absolute"
+                  bottom="0"
+                  left="0"
+                  right="0"
+                  p={{ base: 6, md: 7 }}
+                  spacing={3}
+                  align="start"
+                >
+                  <Heading
+                    size="xl"
+                    color="white"
                     letterSpacing="-0.02em"
-                    sx={{ textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
+                    fontWeight="900"
+                    textShadow="0 4px 16px rgba(0,0,0,0.4)"
+                    transition="transform 0.3s"
+                    transform={hoveredId === item.id ? 'translateX(8px)' : 'translateX(0)'}
                   >
-                    {item.views}
-                  </Text>
-                  <Text fontSize={{ base: 'lg', md: 'xl' }} fontWeight="800" opacity={0.98}>
-                    pregleda
-                  </Text>
-                </HStack>
+                    {item.name}
+                  </Heading>
+
+                  <HStack
+                    bg={hoveredId === item.id ? 'red.500' : 'whiteAlpha.200'}
+                    backdropFilter="blur(12px)"
+                    color="white"
+                    borderRadius="full"
+                    px={{ base: 5, md: 6 }}
+                    py={{ base: 3, md: 3.5 }}
+                    spacing="2"
+                    border="1px solid"
+                    borderColor={hoveredId === item.id ? 'red.600' : 'whiteAlpha.300'}
+                    transition="all 0.3s"
+                  >
+                    <Text
+                      fontSize={{ base: '2xl', md: '3xl' }}
+                      fontWeight="900"
+                      lineHeight="1"
+                      letterSpacing="-0.02em"
+                    >
+                      {item.views}
+                    </Text>
+                    <Text fontSize="lg" fontWeight="700" opacity={0.95}>
+                      pregleda
+                    </Text>
+                  </HStack>
+                </VStack>
               </Box>
 
-              <VStack align="start" spacing={4} p={{ base: 5, md: 6 }}>
-                <Heading size="lg" color="black" letterSpacing="-0.01em">
-                  {item.name}
-                </Heading>
-
+              {/* CTA Section */}
+              <Box p={{ base: 5, md: 6 }}>
                 <Button
-                  color="black"
-                  rightIcon={<ChevronRight />}
+                  w="100%"
+                  size="lg"
+                  bg={hoveredId === item.id ? 'red.500' : 'black'}
+                  color="white"
                   fontWeight="700"
-                  px={0}
-                  onClick={() => openCase(item)}
-                  _hover={{ bg: 'transparent', color: 'gray.700', transform: 'translateX(2px)' }}
-                  transition="all 0.15s ease"
+                  borderRadius="xl"
+                  rightIcon={
+                    <Box
+                      as={ChevronRight}
+                      transition="transform 0.3s"
+                      transform={hoveredId === item.id ? 'translateX(4px)' : 'translateX(0)'}
+                    />
+                  }
+                  _hover={{
+                    bg: hoveredId === item.id ? 'red.600' : 'gray.800',
+                  }}
+                  transition="all 0.3s"
                 >
                   Pogledaj Projekat
                 </Button>
-              </VStack>
+              </Box>
             </MotionBox>
           ))}
         </Grid>
@@ -696,7 +827,6 @@ const CaseStudiesSection = () => {
     </Box>
   );
 };
-
 type CaseStudyModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -839,218 +969,576 @@ const StepsSection = () => {
   const steps = [
     {
       number: '1',
-      title: 'Launch Your Campaign',
+      title: 'Pokreni Kampanju',
       description:
-        'Tell us your goals — whether it’s promoting your podcast, music, brand, livestream, or event. Set your budget and guidelines. We handle the rest.',
+        'Reci nam svoje ciljeve — bilo da promovišeš podcast, muziku, brend ili događaj. Postavi budžet i smernice. Mi vodimo računa o ostalom.',
+      icon: RocketIcon,
     },
     {
       number: '2',
-      title: 'Clippers Create & Distribute',
+      title: 'Kliperi Kreiraju',
       description:
-        'Our network of 10K+ vetted creators discovers your campaign, clips the best moments, and posts authentic content to their engaged audiences across TikTok, Instagram Reels, YouTube Shorts, and X.',
+        'Naša mreža od 600+ provenjenih kreatora otkriva tvoju kampanju, seče najbolje momente i postavlja autentičan sadržaj na TikTok, Instagram Reels i YouTube Shorts.',
+      icon: UsersIcon,
     },
     {
       number: '3',
-      title: 'Track, Verify & Pay',
+      title: 'Prati & Plaćaj',
       description:
-        'Our AI-powered system tracks all views in real time and filters out bot activity. Pay only for verified, organic results while Clippers earn performance-based payouts instantly.',
+        'Naš AI sistem prati preglede u realnom vremenu i filtrira bot aktivnost. Plaćaš samo za verifikovane, organske rezultate dok kliperi zarađuju trenutno.',
+      icon: ChartLineIcon,
     },
   ];
 
   return (
-    <Flex
-      minH="110vh"
+    <Box
       as="section"
-      bg="black"
-      color="white"
+      bg="white"
+      color="black"
       py={{ base: 20, md: 28 }}
-      align="center"
-      justify="center"
+      position="relative"
     >
-      <Container maxW="6xl" textAlign="center">
-        <Text
-          fontSize="sm"
-          letterSpacing="0.15em"
-          textTransform="uppercase"
-          color="gray.400"
-          mb={3}
-        >
-          Kako funkcioniše
-        </Text>
+      <Container maxW="7xl">
+        {/* Header */}
+        <VStack spacing={3} mb={{ base: 16, md: 20 }} textAlign="center">
+          <Text
+            fontSize="sm"
+            letterSpacing="0.15em"
+            textTransform="uppercase"
+            color="gray.500"
+            fontWeight="600"
+          >
+            Kako funkcioniše
+          </Text>
 
-        <Heading
-          fontWeight="900"
-          letterSpacing="-0.03em"
-          fontSize={{ base: '28px', md: '36px', lg: '48px' }}
-          mb={{ base: 12, md: 16 }}
-        >
-          Postani viralan u 3 prosta koraka
-        </Heading>
+          <Heading
+            fontWeight="900"
+            letterSpacing="-0.03em"
+            fontSize={{ base: '36px', md: '48px', lg: '56px' }}
+            lineHeight="1"
+          >
+            Postani viralan u{' '}
+            <Box
+              as="span"
+              position="relative"
+              zIndex={1}
+              bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
+              borderLeft="8px"
+              borderColor="red.500"
+              pl="2"
+              ml="1"
+            >
+              3 Koraka
+            </Box>
+          </Heading>
 
-        <Box mb={{ base: 16, md: 20 }}>
+          <Text
+            color="gray.600"
+            fontSize={{ base: 'lg', md: 'xl' }}
+            maxW="2xl"
+            lineHeight="1.6"
+          >
+            Od ideje do viralnog sadržaja - brzo, jednostavno i efikasno
+          </Text>
+        </VStack>
+
+        {/* Steps Grid */}
+        <Grid
+          templateColumns={{ base: '1fr', lg: 'repeat(3, 1fr)' }}
+          gap={{ base: 8, md: 6 }}
+          position="relative"
+          mb={{ base: 16, md: 20 }}
+        >
+          {/* Connection Lines - Desktop Only */}
+          <Box
+            display={{ base: 'none', lg: 'block' }}
+            position="absolute"
+            top="80px"
+            left="16.66%"
+            right="16.66%"
+            h="3px"
+            bgGradient="linear(to-r, red.500, red.300, red.500)"
+            zIndex={0}
+            _after={{
+              content: '""',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '100%',
+              height: '100%',
+              bgGradient: 'linear(to-r, red.500, red.300, red.500)',
+              filter: 'blur(8px)',
+              opacity: 0.4,
+            }}
+          />
+
           {steps.map((step, i) => (
-            <Flex key={i} align="flex-start" gap={6} mb={{ base: 12, md: 16 }}>
-              <Flex
-                w="60px"
-                h="60px"
-                borderRadius="full"
-                bg="gray.800"
-                align="center"
-                justify="center"
-                fontSize="24px"
-                fontWeight="700"
+            <MotionBox
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.15 }}
+              position="relative"
+              zIndex={1}
+            >
+              <VStack
+                bg="white"
+                border="3px solid"
+                borderColor="gray.200"
+                borderRadius="2xl"
+                p={{ base: 8, md: 10 }}
+                spacing={5}
+                h="100%"
+                transition="all 0.3s ease"
+                position="relative"
+                overflow="hidden"
+                role="group"
+                _hover={{
+                  borderColor: 'red.500',
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 20px 40px rgba(239, 68, 68, 0.15)',
+                }}
               >
-                {step.number}
-              </Flex>
+                {/* Background Gradient Effect */}
+                <Box
+                  position="absolute"
+                  top={0}
+                  left={0}
+                  right={0}
+                  bottom={0}
+                  bgGradient="radial(circle at top right, rgba(239, 68, 68, 0.03), transparent 70%)"
+                  opacity={0}
+                  transition="opacity 0.3s"
+                  _groupHover={{ opacity: 1 }}
+                  pointerEvents="none"
+                />
 
-              <Box textAlign="left" maxW="5xl">
-                <Heading
-                  fontSize={{ base: '18px', md: '22px' }}
-                  fontWeight="700"
-                  mb={2}
+                {/* Step Number Badge */}
+                <Flex
+                  w="80px"
+                  h="80px"
+                  borderRadius="full"
+                  bg="black"
+                  color="white"
+                  align="center"
+                  justify="center"
+                  fontSize="36px"
+                  fontWeight="900"
+                  position="relative"
+                  border="4px solid"
+                  borderColor="white"
+                  boxShadow="0 8px 24px rgba(0,0,0,0.12)"
+                  transition="all 0.3s ease"
+                  _groupHover={{
+                    bg: 'red.500',
+                    transform: 'scale(1.1) rotate(5deg)',
+                    boxShadow: '0 12px 32px rgba(239, 68, 68, 0.3)',
+                  }}
                 >
-                  {step.title}
-                </Heading>
+                  {step.number}
 
-                <Text color="gray.300" fontSize={{ base: 'md', md: 'lg' }}>
-                  {step.description}
-                </Text>
-              </Box>
-            </Flex>
+                  {/* Pulse effect on hover */}
+                  <Box
+                    position="absolute"
+                    inset={-2}
+                    borderRadius="full"
+                    border="2px solid"
+                    borderColor="red.500"
+                    opacity={0}
+                    transition="all 0.3s"
+                    _groupHover={{
+                      opacity: 1,
+                      transform: 'scale(1.2)',
+                    }}
+                  />
+                </Flex>
+
+                {/* Icon */}
+                <Flex
+                  w="56px"
+                  h="56px"
+                  borderRadius="xl"
+                  bg="gray.100"
+                  align="center"
+                  justify="center"
+                  transition="all 0.3s"
+                  _groupHover={{
+                    bg: 'red.50',
+                  }}
+                >
+                  <Icon
+                    as={step.icon}
+                    boxSize={7}
+                    color="gray.700"
+                    transition="color 0.3s"
+                    _groupHover={{ color: 'red.500' }}
+                  />
+                </Flex>
+
+                {/* Content */}
+                <VStack spacing={3} flex="1">
+                  <Heading
+                    fontSize={{ base: 'xl', md: '2xl' }}
+                    fontWeight="800"
+                    textAlign="center"
+                    letterSpacing="-0.02em"
+                  >
+                    {step.title}
+                  </Heading>
+
+                  <Text
+                    color="gray.600"
+                    fontSize={{ base: 'md', md: 'lg' }}
+                    textAlign="center"
+                    lineHeight="1.7"
+                  >
+                    {step.description}
+                  </Text>
+                </VStack>
+
+                {/* Step indicator bar */}
+                <Box
+                  position="absolute"
+                  bottom={0}
+                  left={0}
+                  right={0}
+                  h="4px"
+                  bg="gray.200"
+                  overflow="hidden"
+                >
+                  <Box
+                    h="100%"
+                    bg="red.500"
+                    w="0%"
+                    transition="width 0.6s ease"
+                    _groupHover={{ w: '100%' }}
+                  />
+                </Box>
+              </VStack>
+            </MotionBox>
           ))}
-        </Box>
+        </Grid>
 
-        <Button
-          size="lg"
-          bg="white"
-          color="black"
-          borderRadius="xl"
-          px={12}
-          py={8}
-          fontSize="xl"
-          fontWeight="700"
-          boxShadow="0px 8px 24px rgba(255,255,255,0.15)"
-          _hover={{
-            opacity: 0.95,
-            transform: 'translateY(-4px)',
-            boxShadow: '0px 12px 32px rgba(255,255,255,0.2)',
-          }}
-          transition="all 0.2s ease"
-          leftIcon={<Calendar />}
+        {/* CTA Section */}
+        <MotionBox
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
         >
-          Rezerviši Poziv
-        </Button>
+          <VStack
+            bg="black"
+            color="white"
+            borderRadius="3xl"
+            p={{ base: 10, md: 14 }}
+            spacing={6}
+            position="relative"
+            overflow="hidden"
+          >
+            {/* Background accent */}
+            <Box
+              position="absolute"
+              top="50%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              w="400px"
+              h="400px"
+              bgGradient="radial(circle, rgba(239, 68, 68, 0.15), transparent 70%)"
+              pointerEvents="none"
+            />
+
+            <Badge
+              bg="red.500"
+              color="white"
+              px={4}
+              py={2}
+              borderRadius="full"
+              fontSize="sm"
+              fontWeight="700"
+              textTransform="uppercase"
+              letterSpacing="wider"
+            >
+              Spreman za početak?
+            </Badge>
+
+            <Heading
+              fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
+              fontWeight="900"
+              textAlign="center"
+              letterSpacing="-0.02em"
+              maxW="3xl"
+            >
+              Započni svoju kampanju danas i postani viralan sutra
+            </Heading>
+
+            <Text
+              color="gray.400"
+              fontSize={{ base: 'md', md: 'lg' }}
+              textAlign="center"
+              maxW="2xl"
+            >
+              Pridruži se brendovima koji već koriste našu platformu za organski rast
+            </Text>
+
+            <HStack spacing={4} flexWrap="wrap" justify="center" pt={2}>
+              <Button
+                size="lg"
+                bg="white"
+                color="black"
+                px={10}
+                py={8}
+                fontSize="lg"
+                fontWeight="700"
+                borderRadius="full"
+                leftIcon={<Calendar size={20} />}
+                _hover={{
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 12px 32px rgba(255,255,255,0.3)',
+                }}
+                transition="all 0.2s"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector('#kontakt')?.scrollIntoView({
+                    behavior: 'smooth',
+                  });
+                }}
+              >
+                Rezerviši Poziv
+              </Button>
+
+              <Button
+                size="lg"
+                variant="outline"
+                borderColor="whiteAlpha.300"
+                color="white"
+                px={10}
+                py={8}
+                fontSize="lg"
+                fontWeight="700"
+                borderRadius="full"
+                borderWidth="2px"
+                leftIcon={<ArrowRight size={20} />}
+                _hover={{
+                  bg: 'whiteAlpha.100',
+                  borderColor: 'white',
+                  transform: 'translateY(-2px)',
+                }}
+                transition="all 0.2s"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector('#case-studies')?.scrollIntoView({
+                    behavior: 'smooth',
+                  });
+                }}
+              >
+                Pogledaj Rezultate
+              </Button>
+            </HStack>
+
+            {/* Trust indicators */}
+            <HStack
+              spacing={8}
+              pt={6}
+              color="gray.400"
+              fontSize="sm"
+              flexWrap="wrap"
+              justify="center"
+            >
+              <HStack>
+                <Icon as={Check} boxSize={4} color="green.400" />
+                <Text>Bez ugovorne obaveze</Text>
+              </HStack>
+              <HStack>
+                <Icon as={Check} boxSize={4} color="green.400" />
+                <Text>Setup za 24h</Text>
+              </HStack>
+              <HStack>
+                <Icon as={Check} boxSize={4} color="green.400" />
+                <Text>ROI garancija</Text>
+              </HStack>
+            </HStack>
+          </VStack>
+        </MotionBox>
       </Container>
-    </Flex>
+    </Box>
   );
 };
-
-const FeatureCard = ({                      icon,
+const FeatureCard = ({
+                       icon,
                        title,
                        description,
-                       href = '#',
+                       index,
                      }: {
   icon: any;
   title: string;
   description: string;
-  href?: string;
-}) =>
-{
-  const accentPill = 'blue.600';
-
+  index: number;
+}) => {
   return (
-    <VStack
-      as="a"
-      href={href}
-      role="group"
-      align="start"
-      spacing={0}
-      bg="white"
-      borderRadius="24px"
-      border="1px solid"
-      borderColor="gray.200"
-      boxShadow="0 20px 60px rgba(0,0,0,0.10)"
-      overflow="hidden"
-      transition="transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease"
-      _hover={{
-        transform: 'translateY(-6px)',
-        boxShadow: '0 28px 80px rgba(0,0,0,0.14)',
-        borderColor: 'gray.300',
-        textDecoration: 'none',
-      }}
+    <MotionBox
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
       h="100%"
     >
-      <HStack
-        w="100%"
-        px={{ base: 5, md: 6 }}
-        py={{ base: 4, md: 5 }}
-        spacing={3}
-        bgGradient="linear(to-r, #000000 0%, #111827 45%, #1F2937 100%)"
-        color="white"
+      <VStack
+        role="group"
+        align="start"
+        spacing={0}
+        bg="white"
+        borderRadius="2xl"
+        border="3px solid"
+        borderColor="gray.200"
+        overflow="hidden"
+        transition="all 0.3s ease"
+        h="100%"
         position="relative"
+        _hover={{
+          transform: 'translateY(-8px)',
+          borderColor: 'red.500',
+          boxShadow: '0 20px 40px rgba(239, 68, 68, 0.15)',
+        }}
       >
+        {/* Background gradient effect on hover */}
         <Box
           position="absolute"
-          inset={0}
-          opacity={0.18}
-          bgGradient="radial(circle at 10% 0%, white 0%, transparent 40%)"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bgGradient="radial(circle at top right, rgba(239, 68, 68, 0.05), transparent 60%)"
+          opacity={0}
+          transition="opacity 0.3s"
+          _groupHover={{ opacity: 1 }}
           pointerEvents="none"
+          zIndex={0}
         />
+
+        {/* Icon Section */}
         <Box
+          w="100%"
+          px={{ base: 6, md: 7 }}
+          pt={{ base: 6, md: 7 }}
+          pb={{ base: 4, md: 5 }}
+          position="relative"
           zIndex={1}
-          bg="whiteAlpha.10"
-          border="1px solid"
-          borderColor="whiteAlpha.200"
-          borderRadius="xl"
-          p={2.5}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
         >
-          <Icon as={icon} boxSize={6} />
-        </Box>
-        <Heading
-          zIndex={1}
-          as="h3"
-          fontSize={{ base: 'lg', md: 'xl' }}
-          lineHeight="1.2"
-          fontWeight="900"
-          letterSpacing="-0.015em"
-        >
-          {title}
-        </Heading>
-      </HStack>
-
-      <VStack
-        align="start"
-        spacing={4}
-        px={{ base: 5, md: 6 }}
-        pt={{ base: 5, md: 6 }}
-        pb={{ base: 6, md: 7 }}
-        w="100%"
-        flex="1"
-        minH={{ base: '190px', md: '200px' }}
-      >
-        <Text color="gray.700" fontSize={{ base: 'md', md: 'lg' }} lineHeight="1.65">
-          {description}
-        </Text>
-
-        <HStack mt="auto">
-          <Badge
-            variant="subtle"
-            color="white"
-            bg={accentPill}
-            borderRadius="full"
-            px={2.5}
-            py={0.5}
-            fontWeight="700"
-            fontSize="xs"
+          <Flex
+            w="72px"
+            h="72px"
+            borderRadius="xl"
+            bg="black"
+            align="center"
+            justify="center"
+            position="relative"
+            transition="all 0.3s ease"
+            _groupHover={{
+              bg: 'red.500',
+              transform: 'rotate(-5deg) scale(1.05)',
+            }}
           >
-            VERIFIED
-          </Badge>
-        </HStack>
+            <Icon as={icon} boxSize={8} color="white" />
+
+            {/* Glow effect */}
+            <Box
+              position="absolute"
+              inset={-2}
+              borderRadius="xl"
+              bg="red.500"
+              opacity={0}
+              filter="blur(20px)"
+              transition="opacity 0.3s"
+              _groupHover={{ opacity: 0.4 }}
+            />
+          </Flex>
+
+          {/*/!* Index number - subtle *!/*/}
+          {/*<Text*/}
+          {/*  position="absolute"*/}
+          {/*  top={4}*/}
+          {/*  right={6}*/}
+          {/*  fontSize="6xl"*/}
+          {/*  fontWeight="900"*/}
+          {/*  color="gray.100"*/}
+          {/*  lineHeight="1"*/}
+          {/*  transition="color 0.3s"*/}
+          {/*  _groupHover={{ color: 'red.50' }}*/}
+          {/*>*/}
+          {/*  {(index + 1).toString().padStart(2, '0')}*/}
+          {/*</Text>*/}
+        </Box>
+
+        {/* Content Section */}
+        <VStack
+          align="start"
+          spacing={4}
+          px={{ base: 6, md: 7 }}
+          pb={{ base: 6, md: 7 }}
+          w="100%"
+          flex="1"
+          position="relative"
+          zIndex={1}
+        >
+          <Heading
+            as="h3"
+            fontSize={{ base: 'xl', md: '2xl' }}
+            lineHeight="1.2"
+            fontWeight="800"
+            letterSpacing="-0.02em"
+            color="black"
+          >
+            {title}
+          </Heading>
+
+          <Text
+            color="gray.600"
+            fontSize={{ base: 'md', md: 'lg' }}
+            lineHeight="1.7"
+            flex="1"
+          >
+            {description}
+          </Text>
+
+          {/* Animated arrow indicator */}
+          <HStack
+            spacing={2}
+            color="gray.400"
+            transition="all 0.3s"
+            _groupHover={{
+              color: 'red.500',
+              transform: 'translateX(4px)',
+            }}
+          >
+            <Text fontSize="sm" fontWeight="700" textTransform="uppercase" letterSpacing="wider">
+              Verifikovano
+            </Text>
+            <Icon as={GrCheckmark} boxSize={4} />
+          </HStack>
+        </VStack>
+
+        {/* Bottom accent bar */}
+        <Box
+          position="absolute"
+          bottom={0}
+          left={0}
+          right={0}
+          h="4px"
+          bg="gray.100"
+          overflow="hidden"
+        >
+          <Box
+            h="100%"
+            bg="red.500"
+            w="0%"
+            transition="width 0.5s ease"
+            _groupHover={{ w: '100%' }}
+          />
+        </Box>
       </VStack>
-    </VStack>
+    </MotionBox>
   );
 };
 
@@ -1128,7 +1616,7 @@ const FeaturesSection = () => {
               transition={{ duration: 0.45, delay: i * 0.08, ease: 'easeOut' }}
               viewport={{ once: true, amount: 0.25 }}
             >
-              <FeatureCard icon={f.icon} title={f.title} description={f.description} />
+              <FeatureCard icon={f.icon} title={f.title} description={f.description} index={i} key={i} />
             </MotionGridItem>
           ))}
         </Grid>
@@ -1172,7 +1660,7 @@ const PricingSection = () => {
       overflow="hidden"
     >
       <Container maxW="7xl" h="full">
-        <VStack spacing={32} h="full" justify="center">
+        <VStack spacing={24} h="full" justify="center">
           {/* Header matching the image style */}
           <VStack spacing={3}>
             <Heading
@@ -1587,7 +2075,7 @@ const PricingSection = () => {
             w="full"
             transition="all 0.3s"
             _hover={{
-              transform: 'translateY(8px)',
+              transform: 'translateY(-8px)',
             }}
           >
             <Box flex="1">
@@ -1620,6 +2108,7 @@ const PricingSection = () => {
     </Flex>
   );
 };
+
 const FAQSection = () => {
   const clipperFaqs = [
     {
@@ -1656,11 +2145,13 @@ const FAQSection = () => {
                        items,
                        ctaButtonText,
                        ctaButtonLink,
+                       accentColor,
                      }: {
     title: string;
     items: { q: string; a: string }[];
     ctaButtonText: string;
     ctaButtonLink: string;
+    accentColor: string;
   }) => (
     <Box>
       <Heading
@@ -1670,6 +2161,19 @@ const FAQSection = () => {
         color="white"
         fontWeight="900"
         letterSpacing="-0.02em"
+        position="relative"
+        pl={4}
+        _before={{
+          content: '""',
+          position: 'absolute',
+          left: 0,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '4px',
+          height: '70%',
+          bg: accentColor,
+          borderRadius: 'full',
+        }}
       >
         {title}
       </Heading>
@@ -1677,69 +2181,120 @@ const FAQSection = () => {
         {items.map((faq, i) => (
           <AccordionItem
             key={i}
-            border="1px solid"
+            border="2px solid"
             borderColor="whiteAlpha.200"
             borderRadius="xl"
             overflow="hidden"
             bg="whiteAlpha.50"
             flex="1"
+            transition="all 0.3s ease"
+            _hover={{
+              borderColor: accentColor,
+              bg: 'whiteAlpha.100',
+              transform: 'translateX(4px)',
+            }}
           >
-            <AccordionButton
-              _expanded={{ bg: 'whiteAlpha.100' }}
-              p={6}
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Heading
-                size="sm"
-                color="white"
-                fontWeight="700"
-                letterSpacing="-0.01em"
-                textAlign="left"
-              >
-                {faq.q}
-              </Heading>
-              <Box
-                as="span"
-                fontSize="2xl"
-                lineHeight="1"
-                color="gray.400"
-                ml={4}
-                transition="transform 0.2s"
-                _groupHover={{ color: 'white' }}
-              >
-                +
-              </Box>
-            </AccordionButton>
-            <AccordionPanel px={6} pb={5} color="gray.400" fontSize="sm" lineHeight="1.8">
-              {faq.a}
-            </AccordionPanel>
+            {({ isExpanded }) => (
+              <>
+                <h2>
+                  <AccordionButton
+                    _expanded={{ bg: 'whiteAlpha.100' }}
+                    p={6}
+                    justifyContent="space-between"
+                    alignItems="center"
+                    _hover={{ bg: 'whiteAlpha.100' }}
+                  >
+                    <Heading
+                      size="sm"
+                      color="white"
+                      fontWeight="700"
+                      letterSpacing="-0.01em"
+                      textAlign="left"
+                      pr={4}
+                    >
+                      {faq.q}
+                    </Heading>
+                    <Flex
+                      w="32px"
+                      h="32px"
+                      borderRadius="md"
+                      bg={isExpanded ? accentColor : 'whiteAlpha.200'}
+                      align="center"
+                      justify="center"
+                      flexShrink={0}
+                      transition="all 0.3s ease"
+                    >
+                      <Box
+                        as="span"
+                        fontSize="xl"
+                        lineHeight="1"
+                        color="white"
+                        fontWeight="bold"
+                        transform={isExpanded ? 'rotate(45deg)' : 'rotate(0deg)'}
+                        transition="transform 0.3s ease"
+                      >
+                        +
+                      </Box>
+                    </Flex>
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel
+                  px={6}
+                  pb={6}
+                  pt={2}
+                  color="gray.300"
+                  fontSize="md"
+                  lineHeight="1.8"
+                >
+                  {faq.a}
+                </AccordionPanel>
+              </>
+            )}
           </AccordionItem>
         ))}
       </Accordion>
-      <Flex justify="center" mt={10}> {/* Added Flex to center the button */}
+      <Flex justify="center" mt={10}>
         <Button
           as="a"
           href={ctaButtonLink}
-          target="_blank"
-          rel="noopener noreferrer"
+          target={ctaButtonText.includes('Discord') ? '_blank' : undefined}
+          rel={ctaButtonText.includes('Discord') ? 'noopener noreferrer' : undefined}
           size="lg"
-          w={{ base: "full", md: "55%" }}
+          w={{ base: 'full', md: '85%' }}
           bg="white"
           color="black"
-          borderRadius="xl"
-          px={12}
+          borderRadius="full"
+          px={10}
           py={8}
-          fontSize="xl"
+          fontSize="lg"
           fontWeight="700"
           boxShadow="0px 8px 24px rgba(255,255,255,0.15)"
+          leftIcon={
+            ctaButtonText.includes('Discord') ? (
+              <FaDiscord size={22} />
+            ) : (
+              <Calendar size={20} />
+            )
+          }
           _hover={{
-            opacity: 0.95,
+            bg: accentColor,
+            color: 'white',
             transform: 'translateY(-4px)',
-            boxShadow: '0px 12px 32px rgba(255,255,255,0.2)',
+            boxShadow: `0px 12px 32px ${
+              accentColor === 'red.500'
+                ? 'rgba(239, 68, 68, 0.4)'
+                : 'rgba(114, 137, 218, 0.4)'
+            }`,
           }}
-          transition="all 0.2s ease"
-          leftIcon={ctaButtonText.includes("Discord") ? <FaDiscord/> : <Calendar />}
+          transition="all 0.3s ease"
+          onClick={(e) => {
+            if (ctaButtonLink.startsWith('#')) {
+              e.preventDefault();
+              document.querySelector(ctaButtonLink)?.scrollIntoView({
+                behavior: 'smooth',
+              });
+            }
+          }}
         >
           {ctaButtonText}
         </Button>
@@ -1752,57 +2307,114 @@ const FAQSection = () => {
       align="center"
       minH="80vh"
       as="section"
-      bg="gray.700"
+      bg="gray.900"
       color="white"
       py={{ base: 20, md: 28 }}
+      position="relative"
+      overflow="hidden"
     >
-      <Container maxW="7xl">
-        <VStack spacing={4} mb={{ base: 12, md: 20 }} textAlign="center">
+      {/* Background accents */}
+      <Box
+        position="absolute"
+        top="20%"
+        left="-10%"
+        w="500px"
+        h="500px"
+        borderRadius="full"
+        bgGradient="radial(circle, rgba(114, 137, 218, 0.06), transparent 70%)"
+        pointerEvents="none"
+      />
+      <Box
+        position="absolute"
+        bottom="20%"
+        right="-10%"
+        w="500px"
+        h="500px"
+        borderRadius="full"
+        bgGradient="radial(circle, rgba(239, 68, 68, 0.08), transparent 70%)"
+
+        pointerEvents="none"
+      />
+
+      <Container maxW="7xl" position="relative" zIndex={1}>
+        <MotionVStack
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          spacing={4}
+          mb={{ base: 12, md: 20 }}
+          textAlign="center"
+        >
           <Text
             fontSize="sm"
             letterSpacing="0.15em"
             textTransform="uppercase"
             color="gray.500"
+            fontWeight="600"
           >
             FAQ
           </Text>
           <Heading
             fontWeight="900"
             letterSpacing="-0.03em"
-            fontSize={{ base: '36px', md: '48px', lg: '60px' }}
+            fontSize={{ base: '36px', md: '48px', lg: '56px' }}
             color="white"
             lineHeight="1.1"
           >
-            Česta Pitanja
+            Česta{' '}
+            <Box
+              as="span"
+              position="relative"
+              zIndex={1}
+            >
+              Pitanja
+            </Box>
           </Heading>
-          <Text color="gray.400" fontSize={{ base: 'lg', md: 'xl' }} maxW="2xl">
+          <Text color="gray.400" fontSize={{ base: 'lg', md: 'xl' }} maxW="2xl" lineHeight="1.6">
             Sve što treba da znaš — bilo da kreiraš sadržaj ili klipuješ ga.
           </Text>
-        </VStack>
+        </MotionVStack>
 
         <Grid
           templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
-          gap={{ base: 10, md: 16 }}
-          alignItems="stretch"
+          gap={{ base: 10, md: 12 }}
+          alignItems="start"
         >
-          <FaqColumn
-            title="Za Klipere"
-            items={clipperFaqs}
-            ctaButtonText="Pridruži se našem Discordu"
-            ctaButtonLink="https://discord.com/" // Replace with actual Discord link
-          />
-          <FaqColumn
-            title="Za Kreatore"
-            items={creatorFaqs}
-            ctaButtonText="Zakažite poziv"
-            ctaButtonLink="#kontakt" // Link to the contact section
-          />
+          <MotionBox
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <FaqColumn
+              title="Za Klipere"
+              items={clipperFaqs}
+              ctaButtonText="Pridruži se našem Discordu"
+              ctaButtonLink="https://discord.com/"
+              accentColor="#7289da" // Discord purple
+            />
+          </MotionBox>
+
+          <MotionBox
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <FaqColumn
+              title="Za Kreatore"
+              items={creatorFaqs}
+              ctaButtonText="Zakažite poziv"
+              ctaButtonLink="#kontakt"
+              accentColor="red.500" // Brand red
+            />
+          </MotionBox>
         </Grid>
       </Container>
     </Flex>
   );
 };
-
 const CTASection = () => {
   return (
     <Box
