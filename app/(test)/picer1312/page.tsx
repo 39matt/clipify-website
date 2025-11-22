@@ -113,11 +113,9 @@ const HeroSection = () => {
     <Box
       position="relative"
       minH="100vh"
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
     >
-      <VStack spacing={3} mt="12">
+      {/* Logo and Badge - Fixed at top */}
+      <VStack spacing={3} mt="12" position="relative" zIndex={2}>
         <MotionBox
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -126,7 +124,6 @@ const HeroSection = () => {
           <Image w="36" src="/static/images/logo-header.png" alt="Clipify Logo" />
         </MotionBox>
 
-        {/* Small badge under logo */}
         <MotionBox
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -157,6 +154,7 @@ const HeroSection = () => {
         </MotionBox>
       </VStack>
 
+      {/* Background gradient */}
       <Box
         position="absolute"
         inset={0}
@@ -164,137 +162,147 @@ const HeroSection = () => {
         pointerEvents="none"
       />
 
-      <Container maxW="7xl" py={20} pt={32}>
-        <VStack spacing={8} textAlign="center" maxW="5xl" mx="auto">
-          <Box whiteSpace="nowrap">
-            <MotionText
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              fontSize={{ base: '24px', md: '64px', lg: '84px' }}
-              fontWeight="900"
-              lineHeight={1.1}
-              color="black"
-              letterSpacing="-0.02em"
-              mb={2}
-            >
-              Otključaj <br />
-            </MotionText>
+      {/* Main Content - Absolutely centered on screen */}
+      <Box
+        position="absolute"
+        top="50%"
+        left="50%"
+        transform="translate(-50%, -50%)"
+        w="full"
+        zIndex={1}
+      >
+        <Container maxW="7xl">
+          <VStack spacing={8} textAlign="center" maxW="5xl" mx="auto">
+            <Box whiteSpace="nowrap">
+              <MotionText
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                fontSize={{ base: '24px', md: '64px', lg: '84px' }}
+                fontWeight="900"
+                lineHeight={1.1}
+                color="black"
+                letterSpacing="-0.02em"
+                mb={2}
+              >
+                Otključaj <br />
+              </MotionText>
 
-            <MotionText
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              fontSize={{ base: '36px', md: '72px', lg: '96px' }}
-              fontWeight="900"
-              lineHeight={1.1}
-              letterSpacing="-0.02em"
-              display="inline-block"
-              position="relative"
-            >
-              <Box
-                as="span"
+              <MotionText
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                fontSize={{ base: '36px', md: '72px', lg: '96px' }}
+                fontWeight="900"
+                lineHeight={1.1}
+                letterSpacing="-0.02em"
+                display="inline-block"
                 position="relative"
-                zIndex={1}
-                color="black"
-                px="4"
-                bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
-                borderLeft="8px"
-                borderColor="red.500"
               >
-                Pun Potencijal<br />
-              </Box>
-            </MotionText>
+                <Box
+                  as="span"
+                  position="relative"
+                  zIndex={1}
+                  color="black"
+                  px="4"
+                  bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
+                  borderLeft="8px"
+                  borderColor="red.500"
+                >
+                  Pun Potencijal<br />
+                </Box>
+              </MotionText>
+              <MotionText
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+                fontSize={{ base: '32px', md: '64px', lg: '84px' }}
+                fontWeight="900"
+                lineHeight={1.1}
+                color="black"
+                letterSpacing="-0.02em"
+                mb={2}
+              >
+                Tvog Sadržaja
+              </MotionText>
+            </Box>
+
             <MotionText
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              fontSize={{ base: '32px', md: '64px', lg: '84px' }}
-              fontWeight="900"
-              lineHeight={1.1}
-              color="black"
-              letterSpacing="-0.02em"
-              mb={2}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              fontSize={{ base: 'lg', md: 'xl' }}
+              color="gray.600"
+              maxW="3xl"
+              lineHeight={1.7}
             >
-              Tvog Sadržaja
+              Clipify je vodeća performance-based platforma koja pretvara tvoj sadržaj u
+              stotine viralnih kratkih klipova. Poveži se sa mrežom od 600+ pravih kreatora
+              koji šire tvoj brend na svim društvenim mrežama uz trošak znatno manji od
+              klasičnih reklama.
             </MotionText>
-          </Box>
 
-          <MotionText
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            fontSize={{ base: 'lg', md: 'xl' }}
-            color="gray.600"
-            maxW="3xl"
-            lineHeight={1.7}
-          >
-            Clipify je vodeća performance-based platforma koja pretvara tvoj sadržaj u
-            stotine viralnih kratkih klipova. Poveži se sa mrežom od 600+ pravih kreatora
-            koji šire tvoj brend na svim društvenim mrežama uz trošak znatno manji od
-            klasičnih reklama.
-          </MotionText>
-
-          <MotionBox
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.7 }}
-          >
-            <HStack spacing={4} flexWrap="wrap" justify="center">
-              <Button
-                size="lg"
-                bg="black"
-                color="white"
-                px={10}
-                py={8}
-                fontSize="lg"
-                fontWeight="600"
-                borderRadius="full"
-                _hover={{
-                  transform: 'translateY(-2px)',
-                  boxShadow: 'xl',
-                }}
-                transition="all 0.2s"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.querySelector('#kontakt')?.scrollIntoView({
-                    behavior: 'smooth',
-                  });
-                }}
-                leftIcon={<PhoneIcon size={16} />}
-              >
-                Zakaži Poziv
-              </Button>
-              <Button
-                size="lg"
-                borderColor="black"
-                color="black"
-                px={10}
-                py={8}
-                fontSize="lg"
-                fontWeight="600"
-                borderRadius="full"
-                borderWidth="2px"
-                _hover={{
-                  bg: 'black',
-                  color: 'white',
-                  transform: 'translateY(-2px)',
-                }}
-                transition="all 0.2s"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.querySelector('#case-studies')?.scrollIntoView({
-                    behavior: 'smooth',
-                  });
-                }}
-                leftIcon={<GoPeople size={16} />}
-              >
-                Zaradi kao kliper
-              </Button>
-            </HStack>
-          </MotionBox>
-        </VStack>
-      </Container>
+            <MotionBox
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.7 }}
+            >
+              <HStack spacing={4} flexWrap="wrap" justify="center">
+                <Button
+                  size="lg"
+                  bg="black"
+                  color="white"
+                  px={10}
+                  py={8}
+                  fontSize="lg"
+                  fontWeight="600"
+                  borderRadius="full"
+                  _hover={{
+                    transform: 'translateY(-2px)',
+                    boxShadow: 'xl',
+                  }}
+                  transition="all 0.2s"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.querySelector('#kontakt')?.scrollIntoView({
+                      behavior: 'smooth',
+                    });
+                  }}
+                  leftIcon={<PhoneIcon size={16} />}
+                >
+                  Zakaži Poziv
+                </Button>
+                <Button
+                  size="lg"
+                  borderColor="black"
+                  color="black"
+                  px={10}
+                  py={8}
+                  fontSize="lg"
+                  fontWeight="600"
+                  borderRadius="full"
+                  borderWidth="2px"
+                  _hover={{
+                    bg: 'black',
+                    color: 'white',
+                    transform: 'translateY(-2px)',
+                  }}
+                  transition="all 0.2s"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.querySelector('#case-studies')?.scrollIntoView({
+                      behavior: 'smooth',
+                    });
+                  }}
+                  leftIcon={<GoPeople size={16} />}
+                >
+                  Zaradi kao kliper
+                </Button>
+              </HStack>
+            </MotionBox>
+          </VStack>
+        </Container>
+      </Box>
 
       {/* Pulse animation for the red dot */}
       <style jsx>{`
@@ -310,6 +318,7 @@ const HeroSection = () => {
     </Box>
   );
 };
+
 const MarqueeSection = () => {
   const words = [
     'Strimerima',
@@ -987,6 +996,7 @@ const CaseStudiesSection = () => {
     </Box>
   );
 };
+
 type CaseStudyModalProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -1525,17 +1535,8 @@ const StepsSection = () => {
     </Box>
   );
 };
-const FeatureCard = ({
-                       icon,
-                       title,
-                       description,
-                       index,
-                     }: {
-  icon: any;
-  title: string;
-  description: string;
-  index: number;
-}) => {
+
+const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;description: string;index: number;}) => {
   return (
     <MotionBox
       initial={{ opacity: 0, y: 30 }}
@@ -2575,13 +2576,14 @@ const FAQSection = () => {
     </Flex>
   );
 };
+
 const CTASection = () => {
   return (
     <Box
       id="kontakt"
       as="section"
       py={{ base: 20, md: 28 }}
-      bg="black"
+      bg="blackAlpha.900"
       color="white"
       position="relative"
       overflow="hidden"
