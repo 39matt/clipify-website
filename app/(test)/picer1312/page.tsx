@@ -1185,11 +1185,14 @@ const PricingSection = () => {
               Fleksibilni
               <Box
                 as="span"
-                display="inline-block"
-                bg="red.500"
-                color="white"
-                px={6}
-                ml={2}
+                position="relative"
+                zIndex={1}
+                color="black"
+                pl="2"
+                ml="2"
+                bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
+                borderLeft="8px"
+                borderColor="red.500"
               >
                 Planovi
               </Box>
