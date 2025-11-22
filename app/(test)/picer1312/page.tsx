@@ -24,8 +24,8 @@ import {
   useDisclosure,
   Accordion,
   AccordionItem,
-  AccordionButton, AccordionPanel,
-} from '@chakra-ui/react'
+  AccordionButton,
+  AccordionPanel} from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import {
   ChevronRight,
@@ -42,11 +42,14 @@ import {
   MessageSquareIcon,
   ClockIcon,
   MailIcon,
-  PhoneIcon, Calendar,
-} from 'lucide-react'
+  PhoneIcon,
+  Calendar,
+} from 'lucide-react';
 import type { NextPage } from 'next';
-import { Global } from '@emotion/react'
-import { GoPeople } from 'react-icons/go'
+import { Global } from '@emotion/react';
+import { GoPeople } from 'react-icons/go';
+import { FaDiscord } from 'react-icons/fa'
+import { FiAward, FiCheckCircle, FiStar, FiUsers, FiZap } from 'react-icons/fi'
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -78,29 +81,28 @@ const Home: NextPage = () => {
   return (
     <>
       <DottedBackgroundGlobal />
-      <Box minH="100dvh"
-        // Dotted pattern
-           bgColor="white"
-           sx={{
-             backgroundImage:
-               `radial-gradient(rgba(0,0,0,0.06) 2px, transparent 2px)`,
-             backgroundSize: '22px 22px',
-             backgroundAttachment: 'fixed',
-           }}
-           color="gray.900"
-           overflow="hidden">
+      <Box
+        minH="100dvh"
+        bgColor="white"
+        sx={{
+          backgroundImage: `radial-gradient(rgba(0,0,0,0.06) 2px, transparent 2px)`,
+          backgroundSize: '22px 22px',
+          backgroundAttachment: 'fixed',
+        }}
+        color="gray.900"
+        overflow="hidden"
+      >
         <HeroSection />
         <MarqueeSection />
         <StatsSection />
         <CaseStudiesSection />
-        <StepsSection/>
-        <FeaturesSection/>
+        <StepsSection />
+        <FeaturesSection />
         <PricingSection />
         <FAQSection />
         <CTASection />
       </Box>
     </>
-
   );
 };
 
@@ -174,7 +176,6 @@ const HeroSection = () => {
               mb={2}
             >
               Tvog Sadržaja
-
             </MotionText>
           </Box>
 
@@ -271,17 +272,14 @@ const MarqueeSection = () => {
 
   return (
     <Box
-      // Removed the maskImage/WebkitMaskImage properties from here
       bg="gray.900"
       color="white"
       py={{ base: 6, md: 10 }}
       position="relative"
       overflow="hidden"
     >
-
-      {/* Scrolling strip */}
       <Flex
-        gap={12} // Increased gap slightly for better separation at smaller sizes
+        gap={12}
         animation="scroll 35s linear infinite"
         w="max-content"
         align="center"
@@ -289,10 +287,10 @@ const MarqueeSection = () => {
         {[...words, ...words].map((word, i) => (
           <Text
             key={i}
-            fontSize={{ base: 'xl', md: '3xl' }} // Reverted to smaller font size
-            fontWeight="semibold" // Retained original semi-bold for these words
-            color="red.500" // Solid red color for the words
-            textShadow="0 0 8px rgba(255, 0, 0, 0.5), 0 0 16px rgba(255, 0, 0, 0.4)" // Original red glow
+            fontSize={{ base: 'xl', md: '3xl' }}
+            fontWeight="semibold"
+            color="red.500"
+            textShadow="0 0 8px rgba(255, 0, 0, 0.5), 0 0 16px rgba(255, 0, 0, 0.4)"
             whiteSpace="nowrap"
             transition="all 0.3s ease"
             _hover={{
@@ -306,7 +304,6 @@ const MarqueeSection = () => {
         ))}
       </Flex>
 
-      {/* Keyframe animation */}
       <style jsx>{`
         @keyframes scroll {
           0% {
@@ -321,7 +318,11 @@ const MarqueeSection = () => {
   );
 };
 
-function useCountUp(params: {end: number;duration?: number;format?: (n: number) => string;}) {
+function useCountUp(params: {
+  end: number;
+  duration?: number;
+  format?: (n: number) => string;
+}) {
   const { end, duration = 5000, format = (n: number) => Math.floor(n).toString() } =
     params;
 
@@ -354,7 +355,7 @@ function useCountUp(params: {end: number;duration?: number;format?: (n: number) 
     const tick = (now: number) => {
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      const eased = 1 - Math.pow(1 - progress, 3);
       setValue(end * eased);
       if (progress < 1) requestAnimationFrame(tick);
     };
@@ -511,9 +512,10 @@ const CaseStudiesSection = () => {
         clipper: 'biohack.balkan',
         link: 'https://www.tiktok.com/@biohack.balkan/video/7570306263716760843',
       },
-      text:"Tokom kampanje za Nosestrips fokusirali smo se na organsku distribuciju kroz našu mrežu klipera. Aktivirali smo kreatore koji klipuju najgledanije strimere, kako bi se brend prirodno pojavljivao u sadržaju sa visokim engagementom.\n" +
-        "\n" +
-        "Uz streamer sadržaj uključili smo i health & wellbeing stranice, čime smo pogodili najrelevantniju publiku za proizvod. Ovaj kombinovani pristup doneo je snažan organski reach i vrhunski engagement u kratkom roku."
+      text:
+        'Tokom kampanje za Nosestrips fokusirali smo se na organsku distribuciju kroz našu mrežu klipera. Aktivirali smo kreatore koji klipuju najgledanije strimere, kako bi se brend prirodno pojavljivao u sadržaju sa visokim engagementom.\n' +
+        '\n' +
+        'Uz streamer sadržaj uključili smo i health & wellbeing stranice, čime smo pogodili najrelevantniju publiku za proizvod. Ovaj kombinovani pristup doneo je snažan organski reach i vrhunski engagement u kratkom roku.',
     },
     {
       id: 'cjuree',
@@ -528,9 +530,10 @@ const CaseStudiesSection = () => {
         clipper: 'cjuree.clipping',
         link: 'https://www.tiktok.com/@cjuree.clipping/video/7568402808077045004',
       },
-      text:"Tokom kampanje za Cjureta fokusirali smo se na organski rast kroz našu mrežu klipera. Otvarali su nove profile i svakodnevno pravili sadržaj koji najbolje prolazi u biznis niši - lifestyle edits, ragebait formate i isečke iz podcasta.\n" +
-        "\n" +
-        "Svi klipovi su optimizovani za publiku koja prati biznis, prodaju, mindset i motivacione kreatore. Na ovaj način je Cjureov brend prirodno plasiran tačno onoj publici koja najviše konvertuje, uz stabilan organski rast i visok engagement tokom cele kampanje."
+      text:
+        'Tokom kampanje za Cjureta fokusirali smo se na organski rast kroz našu mrežu klipera. Otvarali su nove profile i svakodnevno pravili sadržaj koji najbolje prolazi u biznis niši - lifestyle edits, ragebait formate i isečke iz podcasta.\n' +
+        '\n' +
+        'Svi klipovi su optimizovani za publiku koja prati biznis, prodaju, mindset i motivacione kreatore. Na ovaj način je Cjureov brend prirodno plasiran tačno onoj publici koja najviše konvertuje, uz stabilan organski rast i visok engagement tokom cele kampanje.',
     },
     {
       id: 'aleksic',
@@ -545,9 +548,8 @@ const CaseStudiesSection = () => {
         clipper: 'kliper1311',
         link: 'https://www.tiktok.com/@kliper1311/video/7538504023171665208',
       },
-      text:""
+      text: '',
     },
-
   ];
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -559,10 +561,11 @@ const CaseStudiesSection = () => {
   };
 
   return (
-    <Box py={{ base: 16, md: 24 }}
-         position="relative"
-         bg="gray.100"
-         bgGradient="radial(circle at 50% 0%, rgba(0,0,0,0.06), rgba(0,0,0,0) 70%)"
+    <Box
+      py={{ base: 16, md: 24 }}
+      position="relative"
+      bg="gray.100"
+      bgGradient="radial(circle at 50% 0%, rgba(0,0,0,0.06), rgba(0,0,0,0) 70%)"
     >
       <Container maxW="7xl">
         <Container maxW="7xl" mb={{ base: 10, md: 16 }}>
@@ -571,16 +574,13 @@ const CaseStudiesSection = () => {
             alignItems="end"
             gap={{ base: 6, lg: 8 }}
           >
-            {/* Left: Big split title */}
             <Box>
               <Heading
                 as="h2"
                 fontWeight="900"
                 letterSpacing="-0.03em"
                 lineHeight="0.95"
-                // Responsive giant type
                 fontSize={{ base: '36px', md: '48px', lg: '56px' }}
-                // Make only "Case" black
                 color="black"
               >
                 Ko je sa nama
@@ -599,7 +599,6 @@ const CaseStudiesSection = () => {
               </Heading>
             </Box>
 
-            {/* Right: Supporting copy (aligned right on large screens) */}
             <Box
               display="flex"
               alignItems="center"
@@ -611,7 +610,7 @@ const CaseStudiesSection = () => {
                 textAlign={{ base: 'left', lg: 'right' }}
                 maxW={{ base: 'full', lg: 'sm' }}
               >
-                Istraži rezultate koje smo <br/> ostvarili za klijente.
+                Istraži rezultate koje smo <br /> ostvarili za klijente.
               </Text>
             </Box>
           </Grid>
@@ -635,7 +634,6 @@ const CaseStudiesSection = () => {
                 boxShadow: '0 16px 40px rgba(0,0,0,0.10)',
               }}
             >
-              {/* Image */}
               <Box position="relative" h={{ base: '220px', md: '260px' }} bg="gray.100">
                 <Image src={item.image} alt={item.name} objectFit="cover" w="100%" h="100%" />
                 <Box
@@ -643,7 +641,6 @@ const CaseStudiesSection = () => {
                   inset={0}
                   bgGradient="linear(to-b, rgba(0,0,0,0), rgba(0,0,0,0.35))"
                 />
-                {/* Strong views pill */}
                 <HStack
                   position="absolute"
                   bottom="4"
@@ -673,7 +670,6 @@ const CaseStudiesSection = () => {
                 </HStack>
               </Box>
 
-              {/* Content */}
               <VStack align="start" spacing={4} p={{ base: 5, md: 6 }}>
                 <Heading size="lg" color="black" letterSpacing="-0.01em">
                   {item.name}
@@ -706,15 +702,13 @@ type CaseStudyModalProps = {
   onClose: () => void;
   data: CaseItem | null;
 };
+
 const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
   <Box
     borderRadius="xl"
-    overflow="hidden" // Important for containing the pseudo-element glow
-    position="relative" // Required for absolute positioning of pseudo-element
-    // Removed framer-motion props as we want continuous, not hover-based
-    // Removed specific hover effects as the glow is now continuous
+    overflow="hidden"
+    position="relative"
     sx={{
-      // The continuous glow pseudo-element
       _before: {
         content: '""',
         position: 'absolute',
@@ -722,10 +716,10 @@ const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, 
         left: 0,
         right: 0,
         bottom: 0,
-        bgGradient: 'linear(to-r, transparent, rgba(255,255,255,0.1), transparent)', // White glow
-        animation: 'shine 2.5s infinite linear', // Apply the shine animation
+        bgGradient: 'linear(to-r, transparent, rgba(255,255,255,0.1), transparent)',
+        animation: 'shine 2.5s infinite linear',
         pointerEvents: 'none',
-        zIndex: 1, // Ensure it's above the background but below content
+        zIndex: 1,
       },
     }}
   >
@@ -738,8 +732,8 @@ const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, 
       p={4}
       spacing={1}
       boxShadow="0 4px 10px rgba(0,0,0,0.3)"
-      position="relative" // Ensure content stays above the pseudo-element
-      zIndex={2} // Content should be above the glow
+      position="relative"
+      zIndex={2}
     >
       <Text fontSize="sm" color="gray.400">
         {label}
@@ -758,7 +752,7 @@ const GlowAnimation = () => (
         transform: translateX(-100%) skewX(-30deg);
       }
       100% {
-        transform: translateX(200%) skewX(-30deg); /* Move past the right edge */
+        transform: translateX(200%) skewX(-30deg);
       }
     }
   `}</style>
@@ -773,7 +767,6 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
         <ModalBody p={0}>
           {data && (
             <Box>
-              {/* Header image */}
               <Box h={{ base: '220px', md: '320px' }} bg="gray.800" position="relative">
                 <Image
                   src={data.image}
@@ -793,7 +786,6 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
                 </VStack>
               </Box>
 
-              {/* Stats */}
               <Grid
                 templateColumns={{ base: '1fr 1fr', md: 'repeat(4, 1fr)' }}
                 gap={4}
@@ -803,7 +795,6 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
                 borderColor="whiteAlpha.200"
                 boxShadow="inset 0 -2px 8px rgba(0,0,0,0.2)"
               >
-                {/* Ensure GlowAnimation is rendered once */}
                 <GlowAnimation />
                 <StatCard label="Ukupno Klipera" value={data.totalClippers ?? 0} />
                 <StatCard label="Ukupno Video klipova" value={data.totalVideos ?? 0} />
@@ -813,11 +804,11 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
 
               <Box maxW="95%" mx="auto" my="8">
                 <Heading my={2}>Detaljna analiza</Heading>
-                <Text  color="gray.400" textAlign="left">{data.text}</Text>
-
+                <Text color="gray.400" textAlign="left">
+                  {data.text}
+                </Text>
               </Box>
 
-              {/* Top video link */}
               {data.topVideo?.link && (
                 <Box px={{ base: 4, md: 6 }} pb={{ base: 6, md: 8 }}>
                   <Button
@@ -843,116 +834,128 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
     </Modal>
   );
 };
+
 const StepsSection = () => {
   const steps = [
     {
       number: '1',
       title: 'Launch Your Campaign',
       description:
-        'Tell us your goals — whether it’s promoting your podcast, music, brand, livestream, or event. Set your budget and guidelines. We handle the rest.'
+        'Tell us your goals — whether it’s promoting your podcast, music, brand, livestream, or event. Set your budget and guidelines. We handle the rest.',
     },
     {
       number: '2',
       title: 'Clippers Create & Distribute',
       description:
-        'Our network of 10K+ vetted creators discovers your campaign, clips the best moments, and posts authentic content to their engaged audiences across TikTok, Instagram Reels, YouTube Shorts, and X.'
+        'Our network of 10K+ vetted creators discovers your campaign, clips the best moments, and posts authentic content to their engaged audiences across TikTok, Instagram Reels, YouTube Shorts, and X.',
     },
     {
       number: '3',
       title: 'Track, Verify & Pay',
       description:
-        'Our AI-powered system tracks all views in real time and filters out bot activity. Pay only for verified, organic results while Clippers earn performance-based payouts instantly.'
-    }
+        'Our AI-powered system tracks all views in real time and filters out bot activity. Pay only for verified, organic results while Clippers earn performance-based payouts instantly.',
+    },
   ];
 
   return (
-    <Flex minH="110vh" as="section" bg="black" color="white" py={{ base: 20, md: 28 }} align="center" // Vertically center the content
-         justify="center">
-        <Container maxW="6xl" textAlign="center">
-          <Text
-            fontSize="sm"
-            letterSpacing="0.15em"
-            textTransform="uppercase"
-            color="gray.400"
-            mb={3}
-          >
-            Kako funkcioniše
-          </Text>
+    <Flex
+      minH="110vh"
+      as="section"
+      bg="black"
+      color="white"
+      py={{ base: 20, md: 28 }}
+      align="center"
+      justify="center"
+    >
+      <Container maxW="6xl" textAlign="center">
+        <Text
+          fontSize="sm"
+          letterSpacing="0.15em"
+          textTransform="uppercase"
+          color="gray.400"
+          mb={3}
+        >
+          Kako funkcioniše
+        </Text>
 
-          <Heading
-            fontWeight="900"
-            letterSpacing="-0.03em"
-            fontSize={{ base: '28px', md: '36px', lg: '48px' }}
-            mb={{ base: 12, md: 16 }}
-          >
-            Postani viralan u 3 prosta koraka
-          </Heading>
+        <Heading
+          fontWeight="900"
+          letterSpacing="-0.03em"
+          fontSize={{ base: '28px', md: '36px', lg: '48px' }}
+          mb={{ base: 12, md: 16 }}
+        >
+          Postani viralan u 3 prosta koraka
+        </Heading>
 
-          <Box mb={{ base: 16, md: 20 }}>
-            {steps.map((step, i) => (
+        <Box mb={{ base: 16, md: 20 }}>
+          {steps.map((step, i) => (
+            <Flex key={i} align="flex-start" gap={6} mb={{ base: 12, md: 16 }}>
               <Flex
-                key={i}
-                align="flex-start"
-                gap={6}
-                mb={{ base: 12, md: 16 }}
+                w="60px"
+                h="60px"
+                borderRadius="full"
+                bg="gray.800"
+                align="center"
+                justify="center"
+                fontSize="24px"
+                fontWeight="700"
               >
-                <Flex
-                  w="60px"
-                  h="60px"
-                  borderRadius="full"
-                  bg="gray.800"
-                  align="center"
-                  justify="center"
-                  fontSize="24px"
-                  fontWeight="700"
-                >
-                  {step.number}
-                </Flex>
-
-                <Box textAlign="left" maxW="5xl">
-                  <Heading
-                    fontSize={{ base: '18px', md: '22px' }}
-                    fontWeight="700"
-                    mb={2}
-                  >
-                    {step.title}
-                  </Heading>
-
-                  <Text color="gray.300" fontSize={{ base: 'md', md: 'lg' }}>
-                    {step.description}
-                  </Text>
-                </Box>
+                {step.number}
               </Flex>
-            ))}
-          </Box>
 
-          <Button
-            size="lg"
-            bg="white"
-            color="black"
-            borderRadius="xl"
-            px={12}
-            py={8}
-            fontSize="xl"
-            fontWeight="700"
-            boxShadow="0px 8px 24px rgba(255,255,255,0.15)"
-            _hover={{
-              opacity: 0.95,
-              transform: 'translateY(-4px)',
-              boxShadow: '0px 12px 32px rgba(255,255,255,0.2)'
-            }}
-            transition="all 0.2s ease"
-            leftIcon={<Calendar/>}
-          >
-            Rezerviši Poziv
-          </Button>
-        </Container>
+              <Box textAlign="left" maxW="5xl">
+                <Heading
+                  fontSize={{ base: '18px', md: '22px' }}
+                  fontWeight="700"
+                  mb={2}
+                >
+                  {step.title}
+                </Heading>
+
+                <Text color="gray.300" fontSize={{ base: 'md', md: 'lg' }}>
+                  {step.description}
+                </Text>
+              </Box>
+            </Flex>
+          ))}
+        </Box>
+
+        <Button
+          size="lg"
+          bg="white"
+          color="black"
+          borderRadius="xl"
+          px={12}
+          py={8}
+          fontSize="xl"
+          fontWeight="700"
+          boxShadow="0px 8px 24px rgba(255,255,255,0.15)"
+          _hover={{
+            opacity: 0.95,
+            transform: 'translateY(-4px)',
+            boxShadow: '0px 12px 32px rgba(255,255,255,0.2)',
+          }}
+          transition="all 0.2s ease"
+          leftIcon={<Calendar />}
+        >
+          Rezerviši Poziv
+        </Button>
+      </Container>
     </Flex>
   );
 };
 
-const FeatureCard = ({icon,title,description,href = '#',}: {icon: any;title: string;description: string;href?: string;}) => {
-  // Choose an accent color token for the pill
+const FeatureCard = ({                      icon,
+                       title,
+                       description,
+                       href = '#',
+                     }: {
+  icon: any;
+  title: string;
+  description: string;
+  href?: string;
+}) =>
+{
   const accentPill = 'blue.600';
 
   return (
@@ -1026,14 +1029,12 @@ const FeatureCard = ({icon,title,description,href = '#',}: {icon: any;title: str
         pb={{ base: 6, md: 7 }}
         w="100%"
         flex="1"
-        // Ensure consistent height for body so the badge lines up across cards
-        minH={{ base: '190px', md: '200px' }} // tweak to your content density
+        minH={{ base: '190px', md: '200px' }}
       >
         <Text color="gray.700" fontSize={{ base: 'md', md: 'lg' }} lineHeight="1.65">
           {description}
         </Text>
 
-        {/* Push badge to bottom */}
         <HStack mt="auto">
           <Badge
             variant="subtle"
@@ -1094,19 +1095,18 @@ const FeaturesSection = () => {
   ];
 
   return (
-    <Box as="section" bg="white" color="black" py={{ base: 16, md: 24 }}>
+    <Box as="section" bg="gray.200" color="black" py={{ base: 16, md: 24 }}>
       <Container maxW="7xl">
         <Box width="75%" textAlign="center" mx="auto">
           <Text
             fontSize="sm"
             letterSpacing="0.15em"
             textTransform="uppercase"
-            color="gray.400"
+            color="gray.500"
             mb={3}
           >
             Zašto Clipify
           </Text>
-
 
           <Heading
             fontWeight="900"
@@ -1118,8 +1118,7 @@ const FeaturesSection = () => {
           </Heading>
         </Box>
 
-        {/* Features grid */}
-        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}   gridAutoRows="1fr">
+        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6} gridAutoRows="1fr">
           {features.map((f, i) => (
             <MotionGridItem
               key={f.title}
@@ -1129,11 +1128,7 @@ const FeaturesSection = () => {
               transition={{ duration: 0.45, delay: i * 0.08, ease: 'easeOut' }}
               viewport={{ once: true, amount: 0.25 }}
             >
-              <FeatureCard
-                icon={f.icon}
-                title={f.title}
-                description={f.description}
-              />
+              <FeatureCard icon={f.icon} title={f.title} description={f.description} />
             </MotionGridItem>
           ))}
         </Grid>
@@ -1145,215 +1140,483 @@ const FeaturesSection = () => {
 const PricingSection = () => {
   const plans = [
     {
-      name: '15 day viral maraton',
-      subtitle: 'Idealno za Nove Kreatore',
-      features: [
-        '1 kratki video dnevno',
-        '30 postova mesečno',
-        '24/7 Podrška',
-        'Mesečni Izveštaji',
-        'Nedeljni Strateški Pozivi'
-      ]
+      name: '15-Day Sprint',
+      tag: 'START',
+      features: ['1 video/dan', '30 postova', '24/7 support', 'Mesečni reporti'],
     },
     {
-      name: '30 day viral maraton',
-      subtitle: 'Odlično za Skaliranje Sadržaja',
-      popular: true,
-      features: [
-        '2 kratka videa dnevno',
-        '60 postova mesečno',
-        '24/7 Podrška',
-        'Mesečni Izveštaji',
-        'Nedeljni Strateški Pozivi'
-      ]
+      name: '30-Day Domination',
+      tag: 'PRO',
+      features: ['2 videa/dan', '60+ postova', 'Priority support', 'Weekly analytics', 'Radionice'],
+      highlight: true,
     },
     {
-      name: 'Paket po želji',
-      subtitle: 'Skrojeno Za Tvoje Potrebe',
-      custom: true,
-      features: [
-        'Potpuno prilagođena strategija',
-        'Ekskluzivna produkcija',
-        'Napredna analitika',
-        'Prioritetna podrška',
-        'Tim posvećen tvom brendu'
-      ]
-    }
+      name: 'Custom Solution',
+      tag: 'ENTERPRISE',
+      features: ['Custom strategija', 'Dedicated tim', 'A/B testing', 'Full produkcija'],
+      enterprise: true,
+    },
   ];
 
   return (
     <Flex
+      as="section"
       minH="110vh"
+      bg="transparent"
+      color="black"
       align="center"
       justify="center"
-      py={{ base: 16, md: 32 }}
+      py={12}
       px={4}
-      bg="transparent"
+      position="relative"
+      overflow="hidden"
     >
-      <Container maxW="7xl">
-        {/* Section Header */}
-        <Box textAlign="center" mb={{ base: 12, md: 120 }}>
-          <Heading
-            fontWeight="900"
-            fontSize={{ base: '36px', md: '48px', lg: '64px' }}
-            letterSpacing="-0.04em"
-            lineHeight="1.1"
-            color="gray.900"
-          >
-            Fleksibilni{' '}
-            <Box
-              as="span"
-              display="inline-block"
-              position="relative"
-              pr="12px"
-              pl="10px"
-              pb="2px"
-              _before={{
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                bgGradient: 'linear(to-r, rgba(252,165,165,0.7), rgba(252,165,165,0.5), rgba(252,165,165,0))', // Original gradient
-                borderRadius: 'md',
-                opacity: 0.7,
-                zIndex: -1
-              }}
-              px="2"
-              bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
-              borderLeft="8px"
-              borderColor="red.500"
+      <Container maxW="7xl" h="full">
+        <VStack spacing={32} h="full" justify="center">
+          {/* Header matching the image style */}
+          <VStack spacing={3}>
+            <Heading
+              fontSize={{ base: '4xl', md: '5xl', lg: '6xl' }}
+              fontWeight="900"
+              letterSpacing="-0.04em"
+              lineHeight="1"
+              textAlign="center"
             >
-              Planovi
-            </Box>
-          </Heading>
-
-          <Text mt={4} color="gray.600" fontSize={{ base: 'lg', lg: 'xl' }}>
-            Za svaku vrstu kontenta
-          </Text>
-        </Box>
-
-        {/* Pricing Cards Grid */}
-        <Grid
-          templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
-          gap={{ base: 8, md: 12 }}
-        >
-          {plans.map((plan, index) => {
-            const isPro = plan.popular;
-            const isCustom = plan.custom;
-
-            // --- ORIGINAL Color Scheme Logic ---
-            const bgColor = isPro ? 'black' : isCustom ? 'gray.600' : 'white';
-            const textColor = isPro || isCustom ? 'white' : 'black';
-            const bulletColor = isPro || isCustom ? 'white' : 'gray.400';
-            const subtitleColor = isPro || isCustom ? 'gray.300' : 'gray.600';
-            const buttonBg = isPro || isCustom ? 'white' : 'black';
-            const buttonColor = isPro || isCustom ? 'black' : 'white';
-
-            // --- Overlay and Border Color Logic (Revised to keep colors consistent with original) ---
-            // These are the colors for the inner Box and its border,
-            // designed to work on both light and dark card backgrounds
-            const overlayBg = isPro || isCustom ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.06)';
-            const overlayTextColor = isPro || isCustom ? 'whiteAlpha.900' : 'gray.700';
-            const borderColor = isPro || isCustom ? 'whiteAlpha.300' : 'blackAlpha.200';
-
-            return (
-              <VStack
-                key={index}
-                as="section"
-                bg={bgColor}
-                color={textColor}
-                borderRadius="3xl"
-                p={{ base: 6, md: 4 }} // Consistent padding as per previous steps
-                minH={{ base: 'auto', md: '480px' }} // Reverted to the smaller minHeight
-                boxShadow="0px 12px 50px rgba(0,0,0,0.12)" // Reverted to original shadow
-                transition="all 0.3s ease" // Reverted to original transition
-                _hover={{
-                  transform: 'translateY(-12px)', // Reverted hover lift
-                  boxShadow: '0px 20px 60px rgba(0,0,0,0.18)' // Reverted hover shadow
-                }}
-                align="stretch"
-                justify="space-between"
+              Fleksibilni
+              <Box
+                as="span"
+                display="inline-block"
+                bg="red.500"
+                color="white"
+                px={6}
+                ml={2}
               >
-                {/* Top Content: Plan Name, Subtitle, Info */}
-                <Flex
-                  direction="column"
-                  gap={4}
-                  bg={overlayBg}
-                  color={overlayTextColor}
-                  borderRadius="xl"
-                  p={3} // Padding for the inner box
-                  border="1px solid"
-                  borderColor={borderColor}
-                  justifyContent="space-between"
-                >
-                  <Box
+                Planovi
+              </Box>
+            </Heading>
+            <Text
+              fontSize={{ base: 'lg', md: 'xl' }}
+              color="gray.600"
+              fontWeight="500"
+            >
+              Za svaku vrstu kontenta
+            </Text>
+          </VStack>
 
+          {/* Pricing Cards - Horizontal */}
+          <Grid
+            templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
+            gap={6}
+            w="full"
+            maxW="6xl"
+          >
+            {plans.map((plan, idx) => {
+              // Basic Plan Style - Similar to enterprise but less appealing
+              if (idx === 0) {
+                return (
+                  <MotionBox
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: idx * 0.1 }}
                   >
+                    <VStack
+                      bg="linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%)"
+                      border="2px solid"
+                      borderColor="gray.200"
+                      borderRadius="2xl"
+                      p={6}
+                      spacing={4}
+                      h="full"
+                      position="relative"
+                      transition="all 0.3s"
+                      color="gray.700"
+                      overflow="hidden"
+                      _hover={{
+                        transform: 'translateY(-4px)',
+                        borderColor: 'gray.300',
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+                      }}
+                      _before={{
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        bg: 'radial-gradient(circle at top right, rgba(0,0,0,0.02), transparent 60%)',
+                        pointerEvents: 'none',
+                      }}
+                    >
+                      <Badge
+                        bgGradient="linear(to-r, gray.100, gray.200)"
+                        color="gray.600"
+                        px={4}
+                        py={1}
+                        borderRadius="full"
+                        fontSize="xs"
+                        fontWeight="900"
+                        letterSpacing="widest"
+                        border="1px solid"
+                        borderColor="gray.200"
+                      >
+                        {plan.tag}
+                      </Badge>
+
+                      <Heading
+                        fontSize="2xl"
+                        fontWeight="900"
+                        textAlign="center"
+                        lineHeight="1.1"
+                        letterSpacing="-0.02em"
+                        bgGradient="linear(to-r, gray.700, gray.500)"
+                        bgClip="text"
+                      >
+                        {plan.name}
+                      </Heading>
+
+                      <VStack spacing={2} flex="1" w="full">
+                        {plan.features.map((feature, i) => (
+                          <HStack
+                            key={i}
+                            spacing={2}
+                            w="full"
+                            p={2}
+                            borderRadius="lg"
+                            bg="white"
+                            border="1px solid"
+                            borderColor="gray.100"
+                          >
+                            <Box
+                              w={4}
+                              h={4}
+                              borderRadius="full"
+                              bgGradient="linear(to-r, gray.300, gray.400)"
+                              flexShrink={0}
+                            />
+                            <Text fontSize="sm" fontWeight="700" noOfLines={1}>
+                              {feature}
+                            </Text>
+                          </HStack>
+                        ))}
+                      </VStack>
+
+                      <VStack spacing={3} w="full">
+                        <Heading fontSize="3xl" fontWeight="900" letterSpacing="-0.02em" color="gray.700">
+                          Kontakt
+                        </Heading>
+                        <Button
+                          w="full"
+                          size="lg"
+                          bgGradient="linear(to-r, gray.200, gray.300)"
+                          color="gray.700"
+                          borderRadius="xl"
+                          fontWeight="800"
+                          border="1px solid"
+                          borderColor="gray.200"
+                          _hover={{
+                            transform: 'scale(1.05)',
+                            bgGradient: 'linear(to-r, gray.300, gray.400)',
+                          }}
+                          transition="all 0.2s"
+                        >
+                          Zakaži Call
+                        </Button>
+                      </VStack>
+                    </VStack>
+                  </MotionBox>
+                );
+              }
+
+              // Pro Plan Style (Highlighted)
+              if (plan.highlight) {
+                return (
+                  <MotionBox
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: idx * 0.1 }}
+                  >
+                    <Box position="relative">
+                      <VStack
+                        bgGradient="linear(to-br, #000000, #1a1a1a, #0a0a0a)"
+                        border="3px solid"
+                        borderColor="red.500"
+                        borderRadius="2xl"
+                        p={6}
+                        spacing={4}
+                        h="full"
+                        position="relative"
+                        transition="all 0.3s"
+                        color="white"
+                        overflow="hidden"
+                        _hover={{
+                          transform: 'translateY(-8px)',
+                          boxShadow: '0 20px 40px rgba(239, 68, 68, 0.4)',
+                        }}
+                        _before={{
+                          content: '""',
+                          position: 'absolute',
+                          top: 0,
+                          right: 0,
+                          w: '200px',
+                          h: '200px',
+                          bgGradient: 'radial(circle, rgba(239, 68, 68, 0.15), transparent 70%)',
+                          pointerEvents: 'none',
+                        }}
+                      >
+                        <Badge
+                          bg="red.500"
+                          color="white"
+                          px={3}
+                          py={1}
+                          borderRadius="full"
+                          fontSize="xs"
+                          fontWeight="900"
+                          letterSpacing="wider"
+                        >
+                          {plan.tag}
+                        </Badge>
+
+                        <Heading
+                          fontSize="2xl"
+                          fontWeight="900"
+                          textAlign="center"
+                          lineHeight="1.1"
+                          letterSpacing="-0.02em"
+                        >
+                          {plan.name}
+                        </Heading>
+
+                        <VStack spacing={2} flex="1" w="full">
+                          {plan.features.map((feature, i) => (
+                            <HStack
+                              key={i}
+                              spacing={2}
+                              w="full"
+                              p={2}
+                              borderRadius="lg"
+                              bg="whiteAlpha.100"
+                            >
+                              <Box
+                                w={4}
+                                h={4}
+                                borderRadius="full"
+                                bg="red.500"
+                                flexShrink={0}
+                              />
+                              <Text fontSize="sm" fontWeight="600" noOfLines={1}>
+                                {feature}
+                              </Text>
+                            </HStack>
+                          ))}
+                        </VStack>
+
+                        <VStack spacing={3} w="full">
+                          <Heading fontSize="3xl" fontWeight="900" letterSpacing="-0.02em">
+                            Kontakt
+                          </Heading>
+                          <Button
+                            w="full"
+                            size="lg"
+                            bg="red.500"
+                            color="white"
+                            borderRadius="xl"
+                            fontWeight="800"
+                            _hover={{
+                              transform: 'scale(1.05)',
+                              bg: 'red.600',
+                            }}
+                            transition="all 0.2s"
+                          >
+                            Zakaži Call
+                          </Button>
+                        </VStack>
+                      </VStack>
+
+                      <Box
+                        position="absolute"
+                        top="-3"
+                        right="-3"
+                        bg="red.500"
+                        color="white"
+                        px={4}
+                        py={1}
+                        borderRadius="full"
+                        fontSize="xs"
+                        fontWeight="900"
+                        transform="rotate(12deg)"
+                        zIndex={10}
+                      >
+                        TOP
+                      </Box>
+                    </Box>
+                  </MotionBox>
+                );
+              }
+
+              // Enterprise Plan Style
+              return (
+                <MotionBox
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: idx * 0.1 }}
+                >
+                  <VStack
+                    bg="linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)"
+                    border="2px solid"
+                    borderColor="gray.700"
+                    borderRadius="2xl"
+                    p={6}
+                    spacing={4}
+                    h="full"
+                    position="relative"
+                    transition="all 0.3s"
+                    color="white"
+                    overflow="hidden"
+                    _hover={{
+                      transform: 'translateY(-4px)',
+                      borderColor: 'gray.500',
+                      boxShadow: '0 15px 40px rgba(0,0,0,0.25)',
+                    }}
+                    _before={{
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      bg: 'radial-gradient(circle at top right, rgba(255,255,255,0.05), transparent 60%)',
+                      pointerEvents: 'none',
+                    }}
+                  >
+                    <Badge
+                      bgGradient="linear(to-r, gray.600, gray.700)"
+                      color="white"
+                      px={4}
+                      py={1}
+                      borderRadius="full"
+                      fontSize="xs"
+                      fontWeight="900"
+                      letterSpacing="widest"
+                      border="1px solid"
+                      borderColor="whiteAlpha.300"
+                    >
+                      {plan.tag}
+                    </Badge>
+
                     <Heading
-                      fontSize="28px" // Consistent with previous steps
-                      fontWeight="800"
-                      mb={2}
-                      whiteSpace="nowrap"
-                      overflowX="auto"
-                      css={{ '&::-webkit-scrollbar': { display: 'none' } }}
+                      fontSize="2xl"
+                      fontWeight="900"
+                      textAlign="center"
+                      lineHeight="1.1"
+                      letterSpacing="-0.02em"
+                      bgGradient="linear(to-r, white, gray.300)"
+                      bgClip="text"
                     >
                       {plan.name}
                     </Heading>
-                    <Text fontSize="sm" opacity="0.9" color={subtitleColor}> {/* Using subtitleColor */}
-                      {plan.subtitle}
-                    </Text>
-                  </Box>
 
-                  <Text
-                    fontSize="sm"
-                    color={overlayTextColor} // Using overlay text color for consistency
-                    mt={3}
-                    fontWeight="500"
-                    textAlign="left"
-                  >
-                    Kontaktiraj nas za više informacija
-                  </Text>
+                    <VStack spacing={2} flex="1" w="full">
+                      {plan.features.map((feature, i) => (
+                        <HStack
+                          key={i}
+                          spacing={2}
+                          w="full"
+                          p={2}
+                          borderRadius="lg"
+                          bg="whiteAlpha.100"
+                          border="1px solid"
+                          borderColor="whiteAlpha.100"
+                        >
+                          <Box
+                            w={4}
+                            h={4}
+                            borderRadius="full"
+                            bgGradient="linear(to-r, gray.400, gray.600)"
+                            flexShrink={0}
+                          />
+                          <Text fontSize="sm" fontWeight="700" noOfLines={1}>
+                            {feature}
+                          </Text>
+                        </HStack>
+                      ))}
+                    </VStack>
 
-
-                <Button
-                  w="full"
-                  size="lg"
-                  bg={buttonBg} // Use original buttonBg
-                  color={buttonColor} // Use original buttonColor
-                  borderRadius="full"
-                  py={6}
-                  fontSize="md"
-                  fontWeight="700"
-                  _hover={{ opacity: 0.9 }}
-                  // Reverted button subtle background effect to avoid color changes
-                >
-                  Zakaži Poziv
-                </Button>
-                </Flex>
-                {/* Features List */}
-                <Flex flex="1" align="center" justify="flex-start" mx="2">
-                  <VStack align="start" spacing={4} justify="space-between">
-                    {plan.features.map((f, j) => (
-                      <HStack key={j} spacing={3} align="center">
-                        <Box w="8px" h="8px" borderRadius="full" bg={bulletColor} />
-                        <Text fontSize="md" color={subtitleColor} lineHeight="1.6">
-                          {f}
-                        </Text>
-                      </HStack>
-                    ))}
+                    <VStack spacing={3} w="full">
+                      <Heading fontSize="3xl" fontWeight="900" letterSpacing="-0.02em">
+                        Custom
+                      </Heading>
+                      <Button
+                        w="full"
+                        size="lg"
+                        bgGradient="linear(to-r, gray.700, gray.900)"
+                        color="white"
+                        borderRadius="xl"
+                        fontWeight="800"
+                        border="1px solid"
+                        borderColor="whiteAlpha.300"
+                        _hover={{
+                          transform: 'scale(1.05)',
+                          bgGradient: 'linear(to-r, gray.600, gray.800)',
+                        }}
+                        transition="all 0.2s"
+                      >
+                        Kontaktiraj
+                      </Button>
+                    </VStack>
                   </VStack>
-                </Flex>
-              </VStack>
-            );
-          })}
-        </Grid>
+                </MotionBox>
+              );
+            })}
+          </Grid>
+
+          {/* Bottom CTA */}
+          <HStack
+            spacing={4}
+            bg="gray.50"
+            border="1px solid"
+            borderColor="gray.200"
+            borderRadius="xl"
+            p={8}
+            maxW="4xl"
+            w="full"
+            transition="all 0.3s"
+            _hover={{
+              transform: 'translateY(8px)',
+            }}
+          >
+            <Box flex="1">
+              <Text fontSize="lg" fontWeight="800" mb={1} color="black">
+                Nisi siguran šta ti treba?
+              </Text>
+              <Text fontSize="sm" color="gray.600">
+                Besplatna konsultacija - Odgovor za 2h
+              </Text>
+            </Box>
+            <Button
+              size="lg"
+              bg="red.500"
+              color="white"
+              borderRadius="xl"
+              fontWeight="800"
+              px={8}
+              rightIcon={<ArrowRight size={18} />}
+              _hover={{
+                transform: 'scale(1.05)',
+                bg: 'red.600',
+              }}
+              flexShrink={0}
+            >
+              Kontakt
+            </Button>
+          </HStack>
+        </VStack>
       </Container>
     </Flex>
   );
 };
-
 const FAQSection = () => {
   const clipperFaqs = [
     {
@@ -1388,9 +1651,13 @@ const FAQSection = () => {
   const FaqColumn = ({
                        title,
                        items,
+                       ctaButtonText,
+                       ctaButtonLink,
                      }: {
     title: string;
     items: { q: string; a: string }[];
+    ctaButtonText: string;
+    ctaButtonLink: string;
   }) => (
     <Box>
       <Heading
@@ -1403,12 +1670,7 @@ const FAQSection = () => {
       >
         {title}
       </Heading>
-      <Accordion
-        allowToggle
-        display="flex"
-        flexDirection="column"
-        gap={4}
-      >
+      <Accordion allowToggle display="flex" flexDirection="column" gap={4}>
         {items.map((faq, i) => (
           <AccordionItem
             key={i}
@@ -1452,13 +1714,46 @@ const FAQSection = () => {
           </AccordionItem>
         ))}
       </Accordion>
+      <Flex justify="center" mt={10}> {/* Added Flex to center the button */}
+        <Button
+          as="a"
+          href={ctaButtonLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          size="lg"
+          w={{ base: "full", md: "55%" }}
+          bg="white"
+          color="black"
+          borderRadius="xl"
+          px={12}
+          py={8}
+          fontSize="xl"
+          fontWeight="700"
+          boxShadow="0px 8px 24px rgba(255,255,255,0.15)"
+          _hover={{
+            opacity: 0.95,
+            transform: 'translateY(-4px)',
+            boxShadow: '0px 12px 32px rgba(255,255,255,0.2)',
+          }}
+          transition="all 0.2s ease"
+          leftIcon={ctaButtonText.includes("Discord") ? <FaDiscord/> : <Calendar />}
+        >
+          {ctaButtonText}
+        </Button>
+      </Flex>
     </Box>
   );
 
   return (
-    <Box as="section" bg="black" color="white" py={{ base: 20, md: 28 }}>
+    <Flex
+      align="center"
+      minH="80vh"
+      as="section"
+      bg="gray.700"
+      color="white"
+      py={{ base: 20, md: 28 }}
+    >
       <Container maxW="7xl">
-        {/* Section heading */}
         <VStack spacing={4} mb={{ base: 12, md: 20 }} textAlign="center">
           <Text
             fontSize="sm"
@@ -1482,17 +1777,26 @@ const FAQSection = () => {
           </Text>
         </VStack>
 
-        {/* Two-column layout */}
         <Grid
           templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
           gap={{ base: 10, md: 16 }}
           alignItems="stretch"
         >
-          <FaqColumn title="Za Klipere" items={clipperFaqs} />
-          <FaqColumn title="Za Kreatore" items={creatorFaqs} />
+          <FaqColumn
+            title="Za Klipere"
+            items={clipperFaqs}
+            ctaButtonText="Pridruži se našem Discordu"
+            ctaButtonLink="https://discord.com/" // Replace with actual Discord link
+          />
+          <FaqColumn
+            title="Za Kreatore"
+            items={creatorFaqs}
+            ctaButtonText="Zakažite poziv"
+            ctaButtonLink="#kontakt" // Link to the contact section
+          />
         </Grid>
       </Container>
-    </Box>
+    </Flex>
   );
 };
 
@@ -1502,13 +1806,12 @@ const CTASection = () => {
       id="kontakt"
       as="section"
       py={{ base: 20, md: 28 }}
-      bg="white"
+      bg="blackAlpha.900"
       color="black"
       position="relative"
       overflow="hidden"
     >
       <Container maxW="6xl">
-        {/* Top Section */}
         <VStack spacing={4} textAlign="center" mb={16}>
           <HStack
             bg="gray.100"
@@ -1521,31 +1824,41 @@ const CTASection = () => {
             color="gray.700"
           >
             <Icon as={MessageSquareIcon} boxSize={4} />
-            <Text fontWeight="medium">Get In Touch</Text>
+            <Text fontWeight="medium">Stupite u kontakt</Text>
           </HStack>
 
           <Heading
-            fontSize={{ base: "3xl", md: "6xl", lg: "7xl" }}
+            fontSize={{ base: '3xl', md: '6xl', lg: '7xl' }}
             fontWeight="900"
             lineHeight="1.05"
             letterSpacing="-0.03em"
+            color="white"
           >
-            START YOUR{" "}
-            <Box as="span" color="gray.500">
-              INFLUENCER
-            </Box>{" "}
-            MARKETING
+            ZAPOČNI SVOJ PUT KA
+            <Box
+              as="span"
+              position="relative"
+              zIndex={1}
+              color="white"
+              pl="2"
+              ml="2"
+              bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
+              borderLeft="8px"
+              borderColor="red.500"
+            >
+              VIRALNOSTI
+            </Box>
           </Heading>
 
           <Text
             maxW="3xl"
-            color="gray.600"
-            fontSize={{ base: "lg", md: "xl" }}
+            color="gray.400"
+            fontSize={{ base: 'lg', md: 'xl' }}
             lineHeight={1.7}
           >
-            Ready to amplify your next music campaign with strategic influencer
-            marketing and professional content clipping services? Let’s discuss
-            how we can drive real results for your brand.
+            Spremni da pojačate angažman i prodaju na društvenim mrežama
+            strateškim marketingom i profesionalnim uslugama klipovanja sadržaja?
+            Hajde da razgovaramo kako možemo ostvariti prave rezultate za vaš brend.
           </Text>
 
           <HStack
@@ -1553,21 +1866,21 @@ const CTASection = () => {
             pt={4}
             flexWrap="wrap"
             justify="center"
-            color="gray.600"
+            color="gray.300"
             fontSize="md"
             fontWeight="medium"
           >
             <HStack>
               <Icon as={ClockIcon} boxSize={5} />
-              <Text>24hr Response</Text>
+              <Text>Odgovor u roku od 24h</Text>
             </HStack>
             <HStack>
               <Icon as={ArrowRight} boxSize={5} />
-              <Text>Free Consultation</Text>
+              <Text>Besplatne konsultacije</Text>
             </HStack>
             <HStack>
               <Icon as={Check} boxSize={5} />
-              <Text>Trusted by 100+ Artists</Text>
+              <Text>Veruju nam 100+ brendova</Text>
             </HStack>
           </HStack>
         </VStack>
@@ -1582,18 +1895,25 @@ const CTASection = () => {
           textAlign="center"
           p={{ base: 10, md: 14 }}
           mb={{ base: 12, md: 16 }}
-          boxShadow="0 0 40px rgba(0,0,0,0.08)"
+          boxShadow="0 0 80px rgba(255,255,255,0.05)" // Persistent white glow
+          transition="all 0.3s ease" // Add transition for hover effect
+          _hover={{
+            transform: 'translateY(-8px)', // Lift on hover
+            boxShadow: '0 8px 60px rgba(255,255,255,0.12)', // White glow on hover
+          }}
           position="relative"
+          // Removed transition and _hover as glow is now persistent
         >
+          {/* Inner glowing effect - slightly more pronounced for persistent glow */}
           <Box
             position="absolute"
             top="50%"
             left="50%"
-            w="300px"
-            h="300px"
+            w="350px" // Slightly larger for more impact
+            h="350px"
             borderRadius="full"
-            bg="radial-gradient(circle, rgba(255,255,255,0.06), transparent 80%)"
-            filter="blur(60px)"
+            bg="radial-gradient(circle, rgba(255,255,255,0.1), transparent 80%)" // More visible glow
+            filter="blur(80px)" // Increased blur for a softer spread
             transform="translate(-50%, -50%)"
             zIndex={0}
           />
@@ -1607,10 +1927,10 @@ const CTASection = () => {
               borderRadius="full"
               p={3}
             />
-            <Heading size="lg">Schedule a Meeting</Heading>
+            <Heading size="lg">Zakažite sastanak</Heading>
             <Text color="gray.300" maxW="2xl" mx="auto" fontSize="md">
-              Book a 30‑minute consultation to discuss your project and explore
-              how we can help.
+              Rezervišite 30-minutne konsultacije kako bismo razgovarali o vašem
+              projektu i istražili kako vam možemo pomoći.
             </Text>
             <Button
               size="lg"
@@ -1625,20 +1945,20 @@ const CTASection = () => {
               border="1px solid"
               borderColor="gray.200"
               _hover={{
-                bg: "gray.100",
-                transform: "translateY(-2px)",
-                boxShadow: "0 0 30px rgba(0,0,0,0.1)",
+                bg: 'gray.100',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 0 30px rgba(0,0,0,0.1)',
               }}
               transition="all 0.25s ease"
             >
-              Book Consultation
+              Zakaži konsultacije
             </Button>
           </VStack>
         </Box>
 
         {/* --- LOWER GRID --- */}
         <Grid
-          templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}
+          templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
           gap={{ base: 8, md: 10 }}
         >
           {/* LEFT: Contact */}
@@ -1649,30 +1969,36 @@ const CTASection = () => {
             borderColor="gray.700"
             borderRadius="xl"
             p={{ base: 8, md: 10 }}
-            boxShadow="0 8px 30px rgba(0,0,0,0.1)"
+            boxShadow="0 8px 60px rgba(255,255,255,0.05)" // Persistent white glow
+            transition="all 0.3s ease" // Add transition for hover effect
+            _hover={{
+              transform: 'translateY(-8px)', // Lift on hover
+              boxShadow: '0 8px 60px rgba(255,255,255,0.12)', // White glow on hover
+            }}
+            // Removed transition and _hover as glow is now persistent
           >
             <Heading size="md" mb={8}>
-              Direct Contact
+              Direktan kontakt
             </Heading>
 
             <VStack align="start" spacing={8}>
               {[
                 {
                   icon: MailIcon,
-                  label: "Email",
-                  value: "khrish@spadegroup.io",
-                  href: "mailto:khrish@spadegroup.io",
+                  label: 'Email',
+                  value: 'khrish@spadegroup.io',
+                  href: 'mailto:khrish@spadegroup.io',
                 },
                 {
                   icon: MessageSquareIcon,
-                  label: "Live Chat",
-                  value: "Start a conversation",
-                  href: "#",
+                  label: 'Live Chat',
+                  value: 'Započni razgovor',
+                  href: '#',
                 },
                 {
                   icon: ClockIcon,
-                  label: "Response Time",
-                  value: "Within 24 hours",
+                  label: 'Vreme odgovora',
+                  value: 'U roku od 24 sata',
                 },
               ].map((item) => (
                 <HStack key={item.label} spacing={4} align="flex-start">
@@ -1684,8 +2010,9 @@ const CTASection = () => {
                     borderColor="whiteAlpha.300"
                     align="center"
                     justify="center"
+                    bg="white"
                   >
-                    <Icon as={item.icon} boxSize={4} color="whiteAlpha.900" />
+                    <Icon as={item.icon} boxSize={4} color="black" />
                   </Flex>
                   <Box>
                     <Text color="gray.400" fontSize="sm">
@@ -1697,8 +2024,8 @@ const CTASection = () => {
                         fontWeight="bold"
                         color="white"
                         _hover={{
-                          color: "gray.300",
-                          textDecoration: "underline",
+                          color: 'gray.300',
+                          textDecoration: 'underline',
                         }}
                       >
                         {item.value}
@@ -1722,33 +2049,42 @@ const CTASection = () => {
             borderColor="gray.700"
             borderRadius="xl"
             p={{ base: 8, md: 10 }}
-            boxShadow="0 8px 30px rgba(0,0,0,0.1)"
+            boxShadow="0 8px 60px rgba(255,255,255,0.05)" // Persistent white glow
+            transition="all 0.3s ease" // Add transition for hover effect
+            _hover={{
+              transform: 'translateY(-8px)', // Lift on hover
+              boxShadow: '0 8px 60px rgba(255,255,255,0.12)', // White glow on hover
+            }}
+            // Removed transition and _hover as glow is now persistent
           >
             <Heading size="md" mb={8}>
-              What Happens <Box as="span" color="gray.400">Next?</Box>
+              Šta se dešava{' '}
+              <Box as="span" color="white">
+                Dalje?
+              </Box>
             </Heading>
 
             <VStack align="start" spacing={6}>
               {[
                 {
-                  num: "1",
-                  title: "Initial Consultation",
-                  desc: "We understand your goals and audience.",
+                  num: '1',
+                  title: 'Inicijalne konsultacije',
+                  desc: 'Razumemo vaše ciljeve i publiku.',
                 },
                 {
-                  num: "2",
-                  title: "Strategy Development",
-                  desc: "We design your tailored campaign plan.",
+                  num: '2',
+                  title: 'Razvoj strategije',
+                  desc: 'Kreiramo vaš prilagođeni plan kampanje.',
                 },
                 {
-                  num: "3",
-                  title: "Campaign Launch",
-                  desc: "Our network starts the execution.",
+                  num: '3',
+                  title: 'Pokretanje kampanje',
+                  desc: 'Naša mreža započinje izvršenje.',
                 },
                 {
-                  num: "4",
-                  title: "Results Tracking",
-                  desc: "We measure and optimize performance.",
+                  num: '4',
+                  title: 'Praćenje rezultata',
+                  desc: 'Merimo i optimizujemo performanse.',
                 },
               ].map((step) => (
                 <HStack key={step.num} align="flex-start" spacing={4}>
@@ -1781,49 +2117,55 @@ const CTASection = () => {
         <Box
           mt={{ base: 16, md: 24 }}
           mx="auto"
-          w={{ base: "100%", md: "75%" }}
-          bg="gray.900"
+          w={{ base: '100%', md: '75%' }}
+          bg="gray.900" // Background remains dark
           color="white"
           border="1px solid"
-          borderColor="gray.700"
+          borderColor="#7289da" // Discord purple border accent
           borderRadius="2xl"
           textAlign="center"
           p={{ base: 10, md: 12 }}
-          boxShadow="0 0 25px rgba(0,0,0,0.1)"
+          boxShadow="0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(88, 101, 242, 0.4)" // Sharp shadow with purple tinge (Discord brand color)
+          transition="all 0.3s ease"
+          _hover={{
+            boxShadow: '0 15px 50px rgba(0,0,0,0.5), 0 0 30px rgba(88, 101, 242, 0.6)', // More pronounced shadow/purple glow on hover
+          }}
         >
           <Heading
-            fontSize={{ base: "3xl", md: "4xl" }}
+            fontSize={{ base: '3xl', md: '4xl' }}
             mb={3}
             fontWeight="800"
             lineHeight="short"
           >
-            Ready to Join as a Clipper?
+            Spremni da se pridružite kao kreator klipova?
           </Heading>
           <Text color="gray.400" mb={8}>
-            Start earning by creating viral clips for top brands and creators.
+            Počnite da zarađujete kreirajući viralne klipove za vrhunske brendove
+            i kreatore.
           </Text>
           <Button
             size="lg"
-            bg="black"
-            color="white"
+            bg="#7289da" // Discord purple button background
+            color="white" // White text for contrast
             borderRadius="full"
             px={8}
             py={6}
             fontWeight="700"
             fontSize="md"
             border="1px solid"
-            borderColor="whiteAlpha.200"
+            borderColor="#7289da" // Slightly darker purple border
             _hover={{
-              bg: "gray.800",
-              transform: "translateY(-2px)",
-              boxShadow: "0 0 20px rgba(0,0,0,0.15)",
+              bg: '#7289da', // Darker purple on hover
+              transform: 'translateY(-2px)',
+              boxShadow: '0 0 20px rgba(88, 101, 242, 0.4)', // Purple glow on button hover
             }}
           >
-            Join Our Discord
+            Pridružite se našem Discordu
           </Button>
         </Box>
       </Container>
     </Box>
   );
 };
+
 export default Home;
