@@ -158,7 +158,6 @@ const HeroSection = () => {
       <Box
         position="absolute"
         inset={0}
-        bgGradient="radial(circle at 50% 0%, rgba(0, 0, 0, 0.03), transparent 50%)"
         pointerEvents="none"
       />
 
