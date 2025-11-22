@@ -117,7 +117,46 @@ const HeroSection = () => {
       flexDirection="column"
       alignItems="center"
     >
-      <Image mt="12" w="36" src="/static/images/logo-header.png" alt="Clipify Logo" />
+      <VStack spacing={3} mt="12">
+        <MotionBox
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Image w="36" src="/static/images/logo-header.png" alt="Clipify Logo" />
+        </MotionBox>
+
+        {/* Small badge under logo */}
+        <MotionBox
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <HStack
+            bg="black"
+            color="white"
+            px={4}
+            py={1.5}
+            borderRadius="full"
+            spacing={2}
+            border="1px solid"
+            borderColor="gray.800"
+            boxShadow="0 4px 12px rgba(0,0,0,0.1)"
+          >
+            <Box
+              w={2}
+              h={2}
+              borderRadius="full"
+              bg="red.500"
+              animation="pulse 2s ease-in-out infinite"
+            />
+            <Text fontSize="xs" fontWeight="700" letterSpacing="wide" textTransform="uppercase">
+              Performance-Based Marketing
+            </Text>
+          </HStack>
+        </MotionBox>
+      </VStack>
+
       <Box
         position="absolute"
         inset={0}
@@ -131,7 +170,7 @@ const HeroSection = () => {
             <MotionText
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
               fontSize={{ base: '24px', md: '64px', lg: '84px' }}
               fontWeight="900"
               lineHeight={1.1}
@@ -145,7 +184,7 @@ const HeroSection = () => {
             <MotionText
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
               fontSize={{ base: '36px', md: '72px', lg: '96px' }}
               fontWeight="900"
               lineHeight={1.1}
@@ -169,7 +208,7 @@ const HeroSection = () => {
             <MotionText
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
               fontSize={{ base: '32px', md: '64px', lg: '84px' }}
               fontWeight="900"
               lineHeight={1.1}
@@ -184,7 +223,7 @@ const HeroSection = () => {
           <MotionText
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
             fontSize={{ base: 'lg', md: 'xl' }}
             color="gray.600"
             maxW="3xl"
@@ -199,7 +238,7 @@ const HeroSection = () => {
           <MotionBox
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
           >
             <HStack spacing={4} flexWrap="wrap" justify="center">
               <Button
@@ -256,10 +295,21 @@ const HeroSection = () => {
           </MotionBox>
         </VStack>
       </Container>
+
+      {/* Pulse animation for the red dot */}
+      <style jsx>{`
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.5;
+          }
+        }
+      `}</style>
     </Box>
   );
 };
-
 const MarqueeSection = () => {
   const words = [
     'Strimerima',
@@ -2531,29 +2581,62 @@ const CTASection = () => {
       id="kontakt"
       as="section"
       py={{ base: 20, md: 28 }}
-      bg="blackAlpha.900"
-      color="black"
+      bg="black"
+      color="white"
       position="relative"
       overflow="hidden"
     >
-      <Container maxW="6xl">
-        <VStack spacing={4} textAlign="center" mb={16}>
+      {/* Subtle background accents */}
+      <Box
+        position="absolute"
+        top="20%"
+        left="-10%"
+        w="600px"
+        h="600px"
+        borderRadius="full"
+        bgGradient="radial(circle, rgba(255, 255, 255, 0.02), transparent 70%)"
+        pointerEvents="none"
+      />
+      <Box
+        position="absolute"
+        bottom="10%"
+        right="-10%"
+        w="500px"
+        h="500px"
+        borderRadius="full"
+        bgGradient="radial(circle, rgba(255, 255, 255, 0.02), transparent 70%)"
+        pointerEvents="none"
+      />
+
+      <Container maxW="7xl" position="relative" zIndex={1}>
+        <MotionVStack
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          spacing={6}
+          textAlign="center"
+          mb={16}
+        >
           <HStack
-            bg="gray.100"
+            bg="whiteAlpha.50"
             border="1px solid"
-            borderColor="gray.200"
+            borderColor="whiteAlpha.200"
             borderRadius="full"
-            px={4}
-            py={1}
+            px={5}
+            py={2}
             fontSize="sm"
-            color="gray.700"
+            color="white"
+            spacing={2}
           >
             <Icon as={MessageSquareIcon} boxSize={4} />
-            <Text fontWeight="medium">Stupite u kontakt</Text>
+            <Text fontWeight="600">
+              Stupite u kontakt
+            </Text>
           </HStack>
 
           <Heading
-            fontSize={{ base: '3xl', md: '6xl', lg: '7xl' }}
+            fontSize={{ base: '28px', md: '36px', lg: '48px' }}
             fontWeight="900"
             lineHeight="1.05"
             letterSpacing="-0.03em"
@@ -2591,7 +2674,7 @@ const CTASection = () => {
             pt={4}
             flexWrap="wrap"
             justify="center"
-            color="gray.300"
+            color="gray.400"
             fontSize="md"
             fontWeight="medium"
           >
@@ -2608,289 +2691,348 @@ const CTASection = () => {
               <Text>Veruju nam 100+ brendova</Text>
             </HStack>
           </HStack>
-        </VStack>
+        </MotionVStack>
 
         {/* --- Schedule a Meeting Card --- */}
-        <Box
-          bg="gray.900"
-          color="white"
-          border="1px solid"
-          borderColor="gray.800"
-          borderRadius="xl"
-          textAlign="center"
-          p={{ base: 10, md: 14 }}
+        <MotionBox
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
           mb={{ base: 12, md: 16 }}
-          boxShadow="0 0 80px rgba(255,255,255,0.05)" // Persistent white glow
-          transition="all 0.3s ease" // Add transition for hover effect
-          _hover={{
-            transform: 'translateY(-8px)', // Lift on hover
-            boxShadow: '0 8px 60px rgba(255,255,255,0.12)', // White glow on hover
-          }}
-          position="relative"
-          // Removed transition and _hover as glow is now persistent
         >
-          {/* Inner glowing effect - slightly more pronounced for persistent glow */}
           <Box
-            position="absolute"
-            top="50%"
-            left="50%"
-            w="350px" // Slightly larger for more impact
-            h="350px"
-            borderRadius="full"
-            bg="radial-gradient(circle, rgba(255,255,255,0.1), transparent 80%)" // More visible glow
-            filter="blur(80px)" // Increased blur for a softer spread
-            transform="translate(-50%, -50%)"
-            zIndex={0}
-          />
-          <VStack spacing={5} position="relative" zIndex={1}>
-            <Icon
-              as={CalendarIcon}
-              boxSize={14}
-              color="white"
-              border="1px solid"
-              borderColor="whiteAlpha.300"
-              borderRadius="full"
-              p={3}
+            bg="gray.900"
+            color="white"
+            border="3px solid"
+            borderColor="white"
+            borderRadius="2xl"
+            textAlign="center"
+            p={{ base: 10, md: 14 }}
+            boxShadow="0 20px 60px rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)"
+            transition="all 0.3s ease"
+            _hover={{
+              transform: 'translateY(-8px)',
+              boxShadow: '0 30px 80px rgba(255, 255, 255, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.2)',
+              borderColor: 'gray.100',
+            }}
+            position="relative"
+            overflow="hidden"
+          >
+            {/* Subtle glow effect */}
+            <Box
+              position="absolute"
+              top="0"
+              left="0"
+              right="0"
+              bottom="0"
+              bgGradient="radial(circle at top, rgba(255, 255, 255, 0.08), transparent 60%)"
+              pointerEvents="none"
             />
-            <Heading size="lg">Zakažite sastanak</Heading>
-            <Text color="gray.300" maxW="2xl" mx="auto" fontSize="md">
-              Rezervišite 30-minutne konsultacije kako bismo razgovarali o vašem
-              projektu i istražili kako vam možemo pomoći.
-            </Text>
-            <Button
-              size="lg"
-              mt={4}
-              px={10}
-              py={7}
-              fontSize="md"
-              fontWeight="bold"
-              borderRadius="full"
-              bg="white"
-              color="black"
-              border="1px solid"
-              borderColor="gray.200"
-              _hover={{
-                bg: 'gray.100',
-                transform: 'translateY(-2px)',
-                boxShadow: '0 0 30px rgba(0,0,0,0.1)',
-              }}
-              transition="all 0.25s ease"
-            >
-              Zakaži konsultacije
-            </Button>
-          </VStack>
-        </Box>
+
+            <VStack spacing={5} position="relative" zIndex={1}>
+              <Flex
+                w="72px"
+                h="72px"
+                borderRadius="xl"
+                bg="white"
+                align="center"
+                justify="center"
+                boxShadow="0 8px 24px rgba(255, 255, 255, 0.3)"
+              >
+                <Icon as={CalendarIcon} boxSize={10} color="black" />
+              </Flex>
+              <Heading size="lg" fontWeight="900" color="white">
+                Zakažite sastanak
+              </Heading>
+              <Text color="gray.400" maxW="2xl" mx="auto" fontSize="md" lineHeight="1.7">
+                Rezervišite 30-minutne konsultacije kako bismo razgovarali o vašem
+                projektu i istražili kako vam možemo pomoći.
+              </Text>
+              <Button
+                size="lg"
+                mt={4}
+                px={10}
+                py={7}
+                fontSize="lg"
+                fontWeight="700"
+                borderRadius="full"
+                bg="white"
+                color="black"
+                leftIcon={<Calendar size={20} />}
+                _hover={{
+                  bg: 'gray.100',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 24px rgba(255, 255, 255, 0.4)',
+                }}
+                transition="all 0.25s ease"
+              >
+                Zakaži konsultacije
+              </Button>
+            </VStack>
+          </Box>
+        </MotionBox>
 
         {/* --- LOWER GRID --- */}
         <Grid
           templateColumns={{ base: '1fr', md: 'repeat(2, 1fr)' }}
           gap={{ base: 8, md: 10 }}
+          mb={{ base: 16, md: 20 }}
         >
           {/* LEFT: Contact */}
-          <Box
-            bg="gray.900"
-            color="white"
-            border="1px solid"
-            borderColor="gray.700"
-            borderRadius="xl"
-            p={{ base: 8, md: 10 }}
-            boxShadow="0 8px 60px rgba(255,255,255,0.05)" // Persistent white glow
-            transition="all 0.3s ease" // Add transition for hover effect
-            _hover={{
-              transform: 'translateY(-8px)', // Lift on hover
-              boxShadow: '0 8px 60px rgba(255,255,255,0.12)', // White glow on hover
-            }}
-            // Removed transition and _hover as glow is now persistent
+          <MotionBox
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Heading size="md" mb={8}>
-              Direktan kontakt
-            </Heading>
+            <Box
+              bg="gray.900"
+              color="white"
+              border="2px solid"
+              borderColor="whiteAlpha.200"
+              borderRadius="2xl"
+              p={{ base: 8, md: 10 }}
+              boxShadow="0 20px 60px rgba(0,0,0,0.3)"
+              transition="all 0.3s ease"
+              _hover={{
+                transform: 'translateY(-8px)',
+                borderColor: 'whiteAlpha.300',
+                boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
+              }}
+              h="100%"
+            >
+              <Heading size="md" mb={8} fontWeight="900">
+                Direktan kontakt
+              </Heading>
 
-            <VStack align="start" spacing={8}>
-              {[
-                {
-                  icon: MailIcon,
-                  label: 'Email',
-                  value: 'khrish@spadegroup.io',
-                  href: 'mailto:khrish@spadegroup.io',
-                },
-                {
-                  icon: MessageSquareIcon,
-                  label: 'Live Chat',
-                  value: 'Započni razgovor',
-                  href: '#',
-                },
-                {
-                  icon: ClockIcon,
-                  label: 'Vreme odgovora',
-                  value: 'U roku od 24 sata',
-                },
-              ].map((item) => (
-                <HStack key={item.label} spacing={4} align="flex-start">
-                  <Flex
-                    w={8}
-                    h={8}
-                    borderRadius="full"
-                    border="1px solid"
-                    borderColor="whiteAlpha.300"
-                    align="center"
-                    justify="center"
-                    bg="white"
-                  >
-                    <Icon as={item.icon} boxSize={4} color="black" />
-                  </Flex>
-                  <Box>
-                    <Text color="gray.400" fontSize="sm">
-                      {item.label}
-                    </Text>
-                    {item.href ? (
-                      <Link
-                        href={item.href}
-                        fontWeight="bold"
-                        color="white"
-                        _hover={{
-                          color: 'gray.300',
-                          textDecoration: 'underline',
-                        }}
-                      >
-                        {item.value}
-                      </Link>
-                    ) : (
-                      <Text fontWeight="bold" color="white">
-                        {item.value}
+              <VStack align="start" spacing={8}>
+                {[
+                  {
+                    icon: MailIcon,
+                    label: 'Email',
+                    value: 'khrish@spadegroup.io',
+                    href: 'mailto:khrish@spadegroup.io',
+                  },
+                  {
+                    icon: MessageSquareIcon,
+                    label: 'Live Chat',
+                    value: 'Započni razgovor',
+                    href: '#',
+                  },
+                  {
+                    icon: ClockIcon,
+                    label: 'Vreme odgovora',
+                    value: 'U roku od 24 sata',
+                  },
+                ].map((item) => (
+                  <HStack key={item.label} spacing={4} align="flex-start">
+                    <Flex
+                      w={12}
+                      h={12}
+                      borderRadius="lg"
+                      bg="whiteAlpha.100"
+                      border="1px solid"
+                      borderColor="whiteAlpha.200"
+                      align="center"
+                      justify="center"
+                      flexShrink={0}
+                    >
+                      <Icon as={item.icon} boxSize={5} color="white" />
+                    </Flex>
+                    <Box>
+                      <Text color="gray.500" fontSize="sm" fontWeight="600" textTransform="uppercase" letterSpacing="wide">
+                        {item.label}
                       </Text>
-                    )}
-                  </Box>
-                </HStack>
-              ))}
-            </VStack>
-          </Box>
+                      {item.href ? (
+                        <Link
+                          href={item.href}
+                          fontWeight="700"
+                          fontSize="lg"
+                          color="white"
+                          _hover={{
+                            color: 'gray.300',
+                            textDecoration: 'underline',
+                          }}
+                          transition="color 0.2s"
+                        >
+                          {item.value}
+                        </Link>
+                      ) : (
+                        <Text fontWeight="700" fontSize="lg" color="white">
+                          {item.value}
+                        </Text>
+                      )}
+                    </Box>
+                  </HStack>
+                ))}
+              </VStack>
+            </Box>
+          </MotionBox>
 
           {/* RIGHT: Steps */}
+          <MotionBox
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <Box
+              bg="gray.900"
+              color="white"
+              border="2px solid"
+              borderColor="whiteAlpha.200"
+              borderRadius="2xl"
+              p={{ base: 8, md: 10 }}
+              boxShadow="0 20px 60px rgba(0,0,0,0.3)"
+              transition="all 0.3s ease"
+              _hover={{
+                transform: 'translateY(-8px)',
+                borderColor: 'whiteAlpha.300',
+                boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
+              }}
+              h="100%"
+            >
+              <Heading size="md" mb={8} fontWeight="900">
+                Šta se dešava{' '}
+                <Box as="span" color="white">
+                  Dalje?
+                </Box>
+              </Heading>
+
+              <VStack align="start" spacing={6}>
+                {[
+                  {
+                    num: '1',
+                    title: 'Inicijalne konsultacije',
+                    desc: 'Razumemo vaše ciljeve i publiku.',
+                  },
+                  {
+                    num: '2',
+                    title: 'Razvoj strategije',
+                    desc: 'Kreiramo vaš prilagođeni plan kampanje.',
+                  },
+                  {
+                    num: '3',
+                    title: 'Pokretanje kampanje',
+                    desc: 'Naša mreža započinje izvršenje.',
+                  },
+                  {
+                    num: '4',
+                    title: 'Praćenje rezultata',
+                    desc: 'Merimo i optimizujemo performanse.',
+                  },
+                ].map((step) => (
+                  <HStack key={step.num} align="flex-start" spacing={4}>
+                    <Flex
+                      bg="white"
+                      color="black"
+                      w={10}
+                      h={10}
+                      align="center"
+                      justify="center"
+                      borderRadius="lg"
+                      fontWeight="900"
+                      fontSize="lg"
+                      flexShrink={0}
+                    >
+                      {step.num}
+                    </Flex>
+                    <Box>
+                      <Text fontWeight="700" color="white" fontSize="lg" mb={1}>
+                        {step.title}
+                      </Text>
+                      <Text color="gray.400" fontSize="md" lineHeight="1.6">
+                        {step.desc}
+                      </Text>
+                    </Box>
+                  </HStack>
+                ))}
+              </VStack>
+            </Box>
+          </MotionBox>
+        </Grid>
+
+        {/* Discord CTA */}
+        <MotionBox
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           <Box
+            mx="auto"
+            w={{ base: '100%', md: '85%' }}
             bg="gray.900"
             color="white"
-            border="1px solid"
-            borderColor="gray.700"
-            borderRadius="xl"
-            p={{ base: 8, md: 10 }}
-            boxShadow="0 8px 60px rgba(255,255,255,0.05)" // Persistent white glow
-            transition="all 0.3s ease" // Add transition for hover effect
+            border="2px solid"
+            borderColor="whiteAlpha.200"
+            borderRadius="2xl"
+            textAlign="center"
+            p={{ base: 10, md: 12 }}
+            boxShadow="0 20px 60px rgba(0,0,0,0.3)"
+            transition="all 0.3s ease"
             _hover={{
-              transform: 'translateY(-8px)', // Lift on hover
-              boxShadow: '0 8px 60px rgba(255,255,255,0.12)', // White glow on hover
+              transform: 'translateY(-8px)',
+              borderColor: '#7289da',
+              boxShadow: '0 30px 80px rgba(114, 137, 218, 0.2)',
             }}
-            // Removed transition and _hover as glow is now persistent
+            position="relative"
+            overflow="hidden"
           >
-            <Heading size="md" mb={8}>
-              Šta se dešava{' '}
-              <Box as="span" color="white">
-                Dalje?
-              </Box>
-            </Heading>
+            <VStack spacing={6} position="relative" zIndex={1}>
+              <Flex
+                w="72px"
+                h="72px"
+                borderRadius="xl"
+                bg="#7289da"
+                align="center"
+                justify="center"
+              >
+                <Icon as={FaDiscord} boxSize={12} color="white" />
+              </Flex>
 
-            <VStack align="start" spacing={6}>
-              {[
-                {
-                  num: '1',
-                  title: 'Inicijalne konsultacije',
-                  desc: 'Razumemo vaše ciljeve i publiku.',
-                },
-                {
-                  num: '2',
-                  title: 'Razvoj strategije',
-                  desc: 'Kreiramo vaš prilagođeni plan kampanje.',
-                },
-                {
-                  num: '3',
-                  title: 'Pokretanje kampanje',
-                  desc: 'Naša mreža započinje izvršenje.',
-                },
-                {
-                  num: '4',
-                  title: 'Praćenje rezultata',
-                  desc: 'Merimo i optimizujemo performanse.',
-                },
-              ].map((step) => (
-                <HStack key={step.num} align="flex-start" spacing={4}>
-                  <Flex
-                    bg="white"
-                    color="black"
-                    w={6}
-                    h={6}
-                    align="center"
-                    justify="center"
-                    borderRadius="full"
-                    fontWeight="bold"
-                    fontSize="sm"
-                  >
-                    {step.num}
-                  </Flex>
-                  <Box>
-                    <Text fontWeight="bold" color="white">
-                      {step.title}
-                    </Text>
-                    <Text color="gray.400" fontSize="sm">
-                      {step.desc}
-                    </Text>
-                  </Box>
-                </HStack>
-              ))}
+              <Heading
+                fontSize={{ base: '2xl', md: '3xl' }}
+                fontWeight="900"
+                lineHeight="short"
+              >
+                Spremni da se pridružite kao kreator klipova?
+              </Heading>
+
+              <Text color="gray.400" fontSize="lg" maxW="2xl">
+                Počnite da zarađujete kreirajući viralne klipove za vrhunske brendove
+                i kreatore.
+              </Text>
+
+              <Button
+                size="lg"
+                bg="#7289da"
+                color="white"
+                borderRadius="full"
+                px={10}
+                py={7}
+                fontWeight="700"
+                fontSize="lg"
+                leftIcon={<FaDiscord size={22} />}
+                _hover={{
+                  bg: '#5b6eae',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 24px rgba(114, 137, 218, 0.3)',
+                }}
+                transition="all 0.25s ease"
+                as="a"
+                href="https://discord.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Pridružite se našem Discordu
+              </Button>
             </VStack>
           </Box>
-        </Grid>
-        <Box
-          mt={{ base: 16, md: 24 }}
-          mx="auto"
-          w={{ base: '100%', md: '75%' }}
-          bg="gray.900" // Background remains dark
-          color="white"
-          border="1px solid"
-          borderColor="#7289da" // Discord purple border accent
-          borderRadius="2xl"
-          textAlign="center"
-          p={{ base: 10, md: 12 }}
-          boxShadow="0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(88, 101, 242, 0.4)" // Sharp shadow with purple tinge (Discord brand color)
-          transition="all 0.3s ease"
-          _hover={{
-            boxShadow: '0 15px 50px rgba(0,0,0,0.5), 0 0 30px rgba(88, 101, 242, 0.6)', // More pronounced shadow/purple glow on hover
-          }}
-        >
-          <Heading
-            fontSize={{ base: '3xl', md: '4xl' }}
-            mb={3}
-            fontWeight="800"
-            lineHeight="short"
-          >
-            Spremni da se pridružite kao kreator klipova?
-          </Heading>
-          <Text color="gray.400" mb={8}>
-            Počnite da zarađujete kreirajući viralne klipove za vrhunske brendove
-            i kreatore.
-          </Text>
-          <Button
-            size="lg"
-            bg="#7289da" // Discord purple button background
-            color="white" // White text for contrast
-            borderRadius="full"
-            px={8}
-            py={6}
-            fontWeight="700"
-            fontSize="md"
-            border="1px solid"
-            borderColor="#7289da" // Slightly darker purple border
-            _hover={{
-              bg: '#7289da', // Darker purple on hover
-              transform: 'translateY(-2px)',
-              boxShadow: '0 0 20px rgba(88, 101, 242, 0.4)', // Purple glow on button hover
-            }}
-          >
-            Pridružite se našem Discordu
-          </Button>
-        </Box>
+        </MotionBox>
       </Container>
     </Box>
   );
 };
-
 export default Home;
