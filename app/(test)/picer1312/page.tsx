@@ -93,8 +93,8 @@ const Home: NextPage = () => {
         <MarqueeSection />
         <StatsSection />
         <CaseStudiesSection />
-        <FeaturesSection/>
         <StepsSection/>
+        <FeaturesSection/>
         <PricingSection />
         <FAQSection />
         <CTASection />
@@ -259,27 +259,54 @@ const HeroSection = () => {
 
 const MarqueeSection = () => {
   const words = [
-    'Inovativno',
-    'Kreativno',
-    'Dinamično',
-    'Prilagođeno',
-    'Efikasno',
-    'Sveobuhvatno',
-    'Ekspertno',
-    'Moderno',
-    'Brzo',
-    'Strateško',
+    'Strimerima',
+    'Kontent Kreatorima',
+    'Brendovima',
+    'Aplikacijama',
+    'Podcastima',
+    'Umetnicima',
+    'Coachevima',
+    'Youtuberima',
   ];
 
   return (
-    <Box py={8} bg="gray.900" overflow="hidden">
-      <Flex gap={8} animation="scroll 30s linear infinite">
+    <Box
+      // Removed the maskImage/WebkitMaskImage properties from here
+      bg="gray.900"
+      color="white"
+      py={{ base: 6, md: 10 }}
+      position="relative"
+      overflow="hidden"
+    >
+
+      {/* Scrolling strip */}
+      <Flex
+        gap={12} // Increased gap slightly for better separation at smaller sizes
+        animation="scroll 35s linear infinite"
+        w="max-content"
+        align="center"
+      >
         {[...words, ...words].map((word, i) => (
-          <Text key={i} fontSize="4xl" fontWeight="bold" color="gray.700" whiteSpace="nowrap">
+          <Text
+            key={i}
+            fontSize={{ base: 'xl', md: '3xl' }} // Reverted to smaller font size
+            fontWeight="semibold" // Retained original semi-bold for these words
+            color="red.500" // Solid red color for the words
+            textShadow="0 0 8px rgba(255, 0, 0, 0.5), 0 0 16px rgba(255, 0, 0, 0.4)" // Original red glow
+            whiteSpace="nowrap"
+            transition="all 0.3s ease"
+            _hover={{
+              textShadow:
+                '0 0 12px rgba(255, 0, 0, 0.8), 0 0 24px rgba(255, 70, 70, 0.6)',
+              transform: 'scale(1.05)',
+            }}
+          >
             {word}
           </Text>
         ))}
       </Flex>
+
+      {/* Keyframe animation */}
       <style jsx>{`
         @keyframes scroll {
           0% {
@@ -294,11 +321,7 @@ const MarqueeSection = () => {
   );
 };
 
-function useCountUp(params: {
-  end: number;
-  duration?: number;
-  format?: (n: number) => string;
-}) {
+function useCountUp(params: {end: number;duration?: number;format?: (n: number) => string;}) {
   const { end, duration = 5000, format = (n: number) => Math.floor(n).toString() } =
     params;
 
@@ -350,7 +373,6 @@ const formatCompact = (n: number) => {
   if (v >= 1_000) return (v / 1_000).toFixed(0) + 'K';
   return v.toString();
 };
-
 
 const StatsSection = () => {
   const targets = {
@@ -458,7 +480,6 @@ const StatsSection = () => {
   );
 };
 
-
 type CaseItem = {
   id: string;
   name: string;
@@ -558,11 +579,11 @@ const CaseStudiesSection = () => {
                 letterSpacing="-0.03em"
                 lineHeight="0.95"
                 // Responsive giant type
-                fontSize={{ base: '48px', md: '56px', lg: '64px' }}
+                fontSize={{ base: '36px', md: '48px', lg: '56px' }}
                 // Make only "Case" black
                 color="black"
               >
-                Case
+                Ko je sa nama
               </Heading>
 
               <Heading
@@ -570,11 +591,11 @@ const CaseStudiesSection = () => {
                 fontWeight="900"
                 letterSpacing="-0.03em"
                 lineHeight="0.95"
-                fontSize={{ base: '56px', md: '64px', lg: '72px' }}
+                fontSize={{ base: '48px', md: '56px', lg: '64px' }}
                 color="gray.500"
                 mt={{ base: 2, md: 3 }}
               >
-                Studies
+                Otišao viralno
               </Heading>
             </Box>
 
@@ -590,7 +611,7 @@ const CaseStudiesSection = () => {
                 textAlign={{ base: 'left', lg: 'right' }}
                 maxW={{ base: 'full', lg: 'sm' }}
               >
-                Explore our clients' growth after working with us
+                Istraži rezultate koje smo <br/> ostvarili za klijente.
               </Text>
             </Box>
           </Grid>
@@ -685,6 +706,63 @@ type CaseStudyModalProps = {
   onClose: () => void;
   data: CaseItem | null;
 };
+const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
+  <Box
+    borderRadius="xl"
+    overflow="hidden" // Important for containing the pseudo-element glow
+    position="relative" // Required for absolute positioning of pseudo-element
+    // Removed framer-motion props as we want continuous, not hover-based
+    // Removed specific hover effects as the glow is now continuous
+    sx={{
+      // The continuous glow pseudo-element
+      _before: {
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        bgGradient: 'linear(to-r, transparent, rgba(255,255,255,0.1), transparent)', // White glow
+        animation: 'shine 2.5s infinite linear', // Apply the shine animation
+        pointerEvents: 'none',
+        zIndex: 1, // Ensure it's above the background but below content
+      },
+    }}
+  >
+    <VStack
+      align="start"
+      bg="whiteAlpha.100"
+      border="1px solid"
+      borderColor="whiteAlpha.300"
+      borderRadius="xl"
+      p={4}
+      spacing={1}
+      boxShadow="0 4px 10px rgba(0,0,0,0.3)"
+      position="relative" // Ensure content stays above the pseudo-element
+      zIndex={2} // Content should be above the glow
+    >
+      <Text fontSize="sm" color="gray.400">
+        {label}
+      </Text>
+      <Heading size="lg" color="white" fontWeight="bold">
+        {value}
+      </Heading>
+    </VStack>
+  </Box>
+);
+
+const GlowAnimation = () => (
+  <style jsx global>{`
+    @keyframes shine {
+      0% {
+        transform: translateX(-100%) skewX(-30deg);
+      }
+      100% {
+        transform: translateX(200%) skewX(-30deg); /* Move past the right edge */
+      }
+    }
+  `}</style>
+);
 
 const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }) => {
   return (
@@ -716,11 +794,21 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
               </Box>
 
               {/* Stats */}
-              <Grid templateColumns={{ base: '1fr 1fr', md: 'repeat(4, 1fr)' }} gap={4} p={{ base: 4, md: 6 }}>
-                <StatCard label="Klipera" value={data.totalClippers ?? 0} />
-                <StatCard label="Video klipova" value={data.totalVideos ?? 0} />
-                <StatCard label="Trajanje" value={`${data.durationDays ?? 0} dana`} />
-                <StatCard label="Top Klip" value={data.topVideo?.views ?? '-'} />
+              <Grid
+                templateColumns={{ base: '1fr 1fr', md: 'repeat(4, 1fr)' }}
+                gap={4}
+                p={{ base: 4, md: 6 }}
+                bg="gray.800"
+                borderBottom="1px solid"
+                borderColor="whiteAlpha.200"
+                boxShadow="inset 0 -2px 8px rgba(0,0,0,0.2)"
+              >
+                {/* Ensure GlowAnimation is rendered once */}
+                <GlowAnimation />
+                <StatCard label="Ukupno Klipera" value={data.totalClippers ?? 0} />
+                <StatCard label="Ukupno Video klipova" value={data.totalVideos ?? 0} />
+                <StatCard label="Trajanje Kampanje" value={`${data.durationDays ?? 0} dana`} />
+                <StatCard label="Ukupno Pregleda" value={data.views} />
               </Grid>
 
               <Box maxW="95%" mx="auto" my="8">
@@ -737,7 +825,7 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
                     href={data.topVideo.link}
                     isExternal
                     rightIcon={<ExternalLink size={18} />}
-                    colorScheme="pink"
+                    colorScheme="green"
                     variant="solid"
                     borderRadius="full"
                   >
@@ -778,120 +866,92 @@ const StepsSection = () => {
   ];
 
   return (
-    <Box as="section" bg="black" color="white" py={{ base: 20, md: 28 }}>
-      <Container maxW="6xl" textAlign="center">
-        <Text
-          fontSize="sm"
-          letterSpacing="0.15em"
-          textTransform="uppercase"
-          color="gray.400"
-          mb={3}
-        >
-          Kako funkcioniše
-        </Text>
+    <Flex minH="110vh" as="section" bg="black" color="white" py={{ base: 20, md: 28 }} align="center" // Vertically center the content
+         justify="center">
+        <Container maxW="6xl" textAlign="center">
+          <Text
+            fontSize="sm"
+            letterSpacing="0.15em"
+            textTransform="uppercase"
+            color="gray.400"
+            mb={3}
+          >
+            Kako funkcioniše
+          </Text>
 
-        <Heading
-          fontWeight="900"
-          letterSpacing="-0.03em"
-          fontSize={{ base: '28px', md: '36px', lg: '48px' }}
-          mb={{ base: 12, md: 16 }}
-        >
-          Postani viralan u 3 prosta koraka
-        </Heading>
+          <Heading
+            fontWeight="900"
+            letterSpacing="-0.03em"
+            fontSize={{ base: '28px', md: '36px', lg: '48px' }}
+            mb={{ base: 12, md: 16 }}
+          >
+            Postani viralan u 3 prosta koraka
+          </Heading>
 
-        <Box mb={{ base: 16, md: 20 }}>
-          {steps.map((step, i) => (
-            <Flex
-              key={i}
-              align="flex-start"
-              gap={6}
-              mb={{ base: 12, md: 16 }}
-            >
+          <Box mb={{ base: 16, md: 20 }}>
+            {steps.map((step, i) => (
               <Flex
-                w="60px"
-                h="60px"
-                borderRadius="full"
-                bg="gray.800"
-                align="center"
-                justify="center"
-                fontSize="24px"
-                fontWeight="700"
+                key={i}
+                align="flex-start"
+                gap={6}
+                mb={{ base: 12, md: 16 }}
               >
-                {step.number}
-              </Flex>
-
-              <Box textAlign="left" maxW="5xl">
-                <Heading
-                  fontSize={{ base: '18px', md: '22px' }}
+                <Flex
+                  w="60px"
+                  h="60px"
+                  borderRadius="full"
+                  bg="gray.800"
+                  align="center"
+                  justify="center"
+                  fontSize="24px"
                   fontWeight="700"
-                  mb={2}
                 >
-                  {step.title}
-                </Heading>
+                  {step.number}
+                </Flex>
 
-                <Text color="gray.300" fontSize={{ base: 'md', md: 'lg' }}>
-                  {step.description}
-                </Text>
-              </Box>
-            </Flex>
-          ))}
-        </Box>
+                <Box textAlign="left" maxW="5xl">
+                  <Heading
+                    fontSize={{ base: '18px', md: '22px' }}
+                    fontWeight="700"
+                    mb={2}
+                  >
+                    {step.title}
+                  </Heading>
 
-        <Button
-          size="lg"
-          bg="white"
-          color="black"
-          borderRadius="xl"
-          px={12}
-          py={8}
-          fontSize="xl"
-          fontWeight="700"
-          boxShadow="0px 8px 24px rgba(255,255,255,0.15)"
-          _hover={{
-            opacity: 0.95,
-            transform: 'translateY(-4px)',
-            boxShadow: '0px 12px 32px rgba(255,255,255,0.2)'
-          }}
-          transition="all 0.2s ease"
-          leftIcon={<Calendar/>}
-        >
-          Rezerviši Poziv
-        </Button>
-      </Container>
-    </Box>
+                  <Text color="gray.300" fontSize={{ base: 'md', md: 'lg' }}>
+                    {step.description}
+                  </Text>
+                </Box>
+              </Flex>
+            ))}
+          </Box>
+
+          <Button
+            size="lg"
+            bg="white"
+            color="black"
+            borderRadius="xl"
+            px={12}
+            py={8}
+            fontSize="xl"
+            fontWeight="700"
+            boxShadow="0px 8px 24px rgba(255,255,255,0.15)"
+            _hover={{
+              opacity: 0.95,
+              transform: 'translateY(-4px)',
+              boxShadow: '0px 12px 32px rgba(255,255,255,0.2)'
+            }}
+            transition="all 0.2s ease"
+            leftIcon={<Calendar/>}
+          >
+            Rezerviši Poziv
+          </Button>
+        </Container>
+    </Flex>
   );
 };
 
-const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
-  <VStack
-    align="start"
-    bg="whiteAlpha.50"
-    border="1px solid"
-    borderColor="whiteAlpha.200"
-    borderRadius="xl"
-    p={4}
-    spacing={1}
-  >
-    <Text fontSize="sm" color="gray.400">
-      {label}
-    </Text>
-    <Heading size="md">{value}</Heading>
-  </VStack>
-);
-
-const accentColor = '#111827'; // near-black accent for icons’ ring
-const accentPill = '#0EA5E9'; // sky-500 for tiny pill accents
-const FeatureCard = ({
-                       icon,
-                       title,
-                       description,
-                       href = '#',
-                     }: {
-  icon: any;
-  title: string;
-  description: string;
-  href?: string;
-}) => {
+const FeatureCard = ({icon,title,description,href = '#',}: {icon: any;title: string;description: string;href?: string;}) => {
   // Choose an accent color token for the pill
   const accentPill = 'blue.600';
 
@@ -1081,6 +1141,7 @@ const FeaturesSection = () => {
     </Box>
   );
 };
+
 const PricingSection = () => {
   const plans = [
     {
