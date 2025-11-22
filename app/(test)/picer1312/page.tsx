@@ -274,37 +274,148 @@ const MarqueeSection = () => {
 
   return (
     <Box
-      bg="gray.900"
+      bg="black"
       color="white"
-      py={{ base: 6, md: 10 }}
+      py={{ base: 8, md: 10 }}
       position="relative"
       overflow="hidden"
     >
-      <Flex
-        gap={12}
-        animation="scroll 35s linear infinite"
-        w="max-content"
-        align="center"
-      >
-        {[...words, ...words].map((word, i) => (
-          <Text
-            key={i}
-            fontSize={{ base: 'xl', md: '3xl' }}
-            fontWeight="semibold"
-            color="red.500"
-            textShadow="0 0 8px rgba(255, 0, 0, 0.5), 0 0 16px rgba(255, 0, 0, 0.4)"
-            whiteSpace="nowrap"
-            transition="all 0.3s ease"
-            _hover={{
-              textShadow:
-                '0 0 12px rgba(255, 0, 0, 0.8), 0 0 24px rgba(255, 70, 70, 0.6)',
-              transform: 'scale(1.05)',
-            }}
+      {/* Background accent */}
+      <Box
+        position="absolute"
+        top="50%"
+        left="50%"
+        transform="translate(-50%, -50%)"
+        w="600px"
+        h="300px"
+        bgGradient="radial(circle, rgba(239, 68, 68, 0.1), transparent 70%)"
+        pointerEvents="none"
+      />
+
+      <Container maxW="7xl" position="relative" zIndex={1}>
+        {/* Heading with decorative border */}
+        <Flex justify="center" mb={{ base: 6, md: 8 }}>
+          <Box position="relative">
+            {/* Decorative corner elements */}
+            <Box
+              position="absolute"
+              top="-3px"
+              left="-3px"
+              w="30px"
+              h="30px"
+              borderTop="3px solid"
+              borderLeft="3px solid"
+              borderColor="red.500"
+            />
+            <Box
+              position="absolute"
+              top="-3px"
+              right="-3px"
+              w="30px"
+              h="30px"
+              borderTop="3px solid"
+              borderRight="3px solid"
+              borderColor="red.500"
+            />
+            <Box
+              position="absolute"
+              bottom="-3px"
+              left="-3px"
+              w="30px"
+              h="30px"
+              borderBottom="3px solid"
+              borderLeft="3px solid"
+              borderColor="red.500"
+            />
+            <Box
+              position="absolute"
+              bottom="-3px"
+              right="-3px"
+              w="30px"
+              h="30px"
+              borderBottom="3px solid"
+              borderRight="3px solid"
+              borderColor="red.500"
+            />
+
+            {/* Dashed border */}
+            <Box
+              position="absolute"
+              inset={0}
+              border="2px dashed"
+              borderColor="whiteAlpha.300"
+              pointerEvents="none"
+            />
+
+            {/* Main heading box */}
+            <Box
+              bg="black"
+              px={{ base: 8, md: 12 }}
+              py={{ base: 3, md: 3.5 }}
+              position="relative"
+            >
+              <Heading
+                fontSize={{ base: 'xl', md: '3xl', lg: '4xl' }}
+                fontWeight="900"
+                letterSpacing="-0.02em"
+                textAlign="center"
+                color="white"
+              >
+                Saradjujemo sa
+              </Heading>
+            </Box>
+          </Box>
+        </Flex>
+
+        {/* Scrolling marquee */}
+        <Box position="relative" overflow="hidden">
+          <Flex
+            gap={12}
+            animation="scroll 35s linear infinite"
+            w="max-content"
+            align="center"
           >
-            {word}
-          </Text>
-        ))}
-      </Flex>
+            {[...words, ...words, ...words].map((word, i) => (
+              <Text
+                key={i}
+                fontSize={{ base: 'xl', md: '2xl' }}
+                fontWeight="700"
+                color="red.500"
+                textShadow="0 0 8px rgba(239, 68, 68, 0.5), 0 0 16px rgba(239, 68, 68, 0.4)"
+                whiteSpace="nowrap"
+                transition="all 0.3s ease"
+                _hover={{
+                  textShadow:
+                    '0 0 12px rgba(239, 68, 68, 0.8), 0 0 24px rgba(239, 68, 68, 0.6)',
+                  transform: 'scale(1.05)',
+                }}
+              >
+                {word}
+              </Text>
+            ))}
+          </Flex>
+
+          {/* Fade edges */}
+          <Box
+            position="absolute"
+            left={0}
+            top={0}
+            bottom={0}
+            w="100px"
+            bgGradient="linear(to-r, black, transparent)"
+            pointerEvents="none"
+          />
+          <Box
+            position="absolute"
+            right={0}
+            top={0}
+            bottom={0}
+            w="100px"
+            bgGradient="linear(to-l, black, transparent)"
+            pointerEvents="none"
+          />
+        </Box>
+      </Container>
 
       <style jsx>{`
         @keyframes scroll {
@@ -312,14 +423,13 @@ const MarqueeSection = () => {
             transform: translateX(0);
           }
           100% {
-            transform: translateX(-50%);
+            transform: translateX(-33.333%);
           }
         }
       `}</style>
     </Box>
   );
 };
-
 function useCountUp(params: {
   end: number;
   duration?: number;
