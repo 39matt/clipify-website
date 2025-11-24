@@ -115,43 +115,39 @@ const HeroSection = () => {
       minH="100vh"
     >
       {/* Logo and Badge - Fixed at top */}
-      <VStack spacing={3} mt="12" position="relative" zIndex={2}>
+      <VStack spacing={12} mt="12" position="relative" zIndex={2}>
         <MotionBox
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <Image w="36" src="/static/images/logo-header.png" alt="Clipify Logo" />
+          <Image w="24" src="/static/images/logo-header2.png" alt="Clipify Logo" />
         </MotionBox>
 
-        <MotionBox
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <HStack
-            bg="black"
-            color="white"
-            px={4}
-            py={1.5}
-            borderRadius="full"
-            spacing={2}
-            border="1px solid"
-            borderColor="gray.800"
-            boxShadow="0 4px 12px rgba(0,0,0,0.1)"
-          >
-            <Box
-              w={2}
-              h={2}
-              borderRadius="full"
-              bg="red.500"
-              animation="pulse 2s ease-in-out infinite"
-            />
-            <Text fontSize="xs" fontWeight="700" letterSpacing="wide" textTransform="uppercase">
-              Performance-Based Marketing
-            </Text>
-          </HStack>
-        </MotionBox>
+        {/*<MotionBox*/}
+        {/*  initial={{ opacity: 0, y: -10 }}*/}
+        {/*  animate={{ opacity: 1, y: 0 }}*/}
+        {/*  transition={{ duration: 0.5, delay: 0.2 }}*/}
+        {/*>*/}
+        {/*  <HStack*/}
+        {/*    color="black"*/}
+        {/*    px={4}*/}
+        {/*    py={1.5}*/}
+        {/*    borderRadius="full"*/}
+        {/*    spacing={2}*/}
+        {/*  >*/}
+        {/*    <Box*/}
+        {/*      w={2}*/}
+        {/*      h={2}*/}
+        {/*      borderRadius="full"*/}
+        {/*      bg="red.500"*/}
+        {/*      animation="pulse 2s ease-in-out infinite"*/}
+        {/*    />*/}
+        {/*    <Text fontSize="xs" fontWeight="700" letterSpacing="wide" textTransform="uppercase">*/}
+        {/*      Performance-Based Marketing*/}
+        {/*    </Text>*/}
+        {/*  </HStack>*/}
+        {/*</MotionBox>*/}
       </VStack>
 
       {/* Background gradient */}
@@ -164,9 +160,9 @@ const HeroSection = () => {
       {/* Main Content - Absolutely centered on screen */}
       <Box
         position="absolute"
-        top="50%"
+        top="30%"
         left="50%"
-        transform="translate(-50%, -50%)"
+        transform="translate(-50%, -30%)"
         w="full"
         zIndex={1}
       >
@@ -488,11 +484,7 @@ const MarqueeSection = () => {
     </Box>
   );
 };
-function useCountUp(params: {
-  end: number;
-  duration?: number;
-  format?: (n: number) => string;
-}) {
+function useCountUp(params: {end: number;duration?: number;format?: (n: number) => string;}) {
   const { end, duration = 5000, format = (n: number) => Math.floor(n).toString() } =
     params;
 
@@ -667,60 +659,6 @@ type CaseItem = {
   };
 };
 
-const cases: CaseItem[] = [
-  {
-    id: 'nosestrips',
-    name: 'Nosestrips',
-    views: '8M',
-    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/nosestrips.jpeg?alt=media&token=beb586e1-3856-40ac-bbbd-14f4682311e8',
-    totalClippers: 20,
-    totalVideos: 120,
-    durationDays: 8,
-    topVideo: {
-      views: '600K',
-      clipper: 'biohack.balkan',
-      link: 'https://www.tiktok.com/@biohack.balkan/video/7570306263716760843',
-    },
-    text:
-      'Tokom kampanje za Nosestrips fokusirali smo se na organsku distribuciju kroz našu mrežu klipera. Aktivirali smo kreatore koji klipuju najgledanije strimere, kako bi se brend prirodno pojavljivao u sadržaju sa visokim engagementom.\n' +
-      '\n' +
-      'Uz streamer sadržaj uključili smo i health & wellbeing stranice, čime smo pogodili najrelevantniju publiku za proizvod. Ovaj kombinovani pristup doneo je snažan organski reach i vrhunski engagement u kratkom roku.',
-  },
-  {
-    id: 'cjuree',
-    name: 'Cjuree',
-    views: '5M',
-    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/cjuree.jpeg?alt=media&token=0cc34f5b-8216-4e79-aca0-22fd6beadf20',
-    totalClippers: 15,
-    totalVideos: 320,
-    durationDays: 30,
-    topVideo: {
-      views: '370K',
-      clipper: 'cjuree.clipping',
-      link: 'https://www.tiktok.com/@cjuree.clipping/video/7568402808077045004',
-    },
-    text:
-      'Tokom kampanje za Cjureta fokusirali smo se na organski rast kroz našu mrežu klipera. Otvarali su nove profile i svakodnevno pravili sadržaj koji najbolje prolazi u biznis niši - lifestyle edits, ragebait formate i isečke iz podcasta.\n' +
-      '\n' +
-      'Svi klipovi su optimizovani za publiku koja prati biznis, prodaju, mindset i motivacione kreatore. Na ovaj način je Cjureov brend prirodno plasiran tačno onoj publici koja najviše konvertuje, uz stabilan organski rast i visok engagement tokom cele kampanje.',
-  },
-  {
-    id: 'aleksic',
-    name: 'AleksicMoto',
-    views: '3M',
-    image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/aleksic.jpg?alt=media&token=d573b72a-2798-4892-a14b-7e684193d15d',
-    totalClippers: 15,
-    totalVideos: 95,
-    durationDays: 14,
-    topVideo: {
-      views: '300K',
-      clipper: 'kliper1311',
-      link: 'https://www.tiktok.com/@kliper1311/video/7538504023171665208',
-    },
-    text: '',
-  },
-];
-
 const CaseStudiesSection = () => {
   const cases: CaseItem[] = [
     {
@@ -787,6 +725,7 @@ const CaseStudiesSection = () => {
 
   return (
     <Box
+      id="case-studies"
       py={{ base: 16, md: 24 }}
       position="relative"
       bg="gray.200"
@@ -1140,27 +1079,28 @@ const StepsSection = () => {
       number: '1',
       title: 'Pokreni Kampanju',
       description:
-        'Reci nam svoje ciljeve — bilo da promovišeš podcast, muziku, brend ili događaj. Postavi budžet i smernice. Mi vodimo računa o ostalom.',
+        'Reci nam svoje ciljeve - bilo da promovišeš klip, podcast, pesmu, brend ili događaj. Odredi budžet i smernice, a mi se brinemo o svemu ostalom.',
       icon: RocketIcon,
     },
     {
       number: '2',
       title: 'Kliperi Kreiraju',
       description:
-        'Naša mreža od 600+ provenjenih kreatora otkriva tvoju kampanju, seče najbolje momente i postavlja autentičan sadržaj na TikTok, Instagram Reels i YouTube Shorts.',
+        'Kliperi (video editori) prate naš dokazani sistem kreiranja sadržaja, usklađen sa vizijom tvog brenda - dok im naš tim kroz stalni coaching pomaže da maksimalno povećaju rezultate.',
       icon: UsersIcon,
     },
     {
       number: '3',
       title: 'Prati & Plaćaj',
       description:
-        'Naš AI sistem prati preglede u realnom vremenu i filtrira bot aktivnost. Plaćaš samo za verifikovane, organske rezultate dok kliperi zarađuju trenutno.',
+        'Naš AI sistem u realnom vremenu prati preglede i filtrira lažnu aktivnost. Plaćaš samo za prave, organske rezultate, dok kliperi zarađuju fer i transparentno.',
       icon: ChartLineIcon,
     },
   ];
 
   return (
     <Box
+      id="how-it-works"
       as="section"
       bg="white"
       color="black"
@@ -1439,7 +1379,7 @@ const StepsSection = () => {
               letterSpacing="-0.02em"
               maxW="3xl"
             >
-              Započni svoju kampanju danas i postani viralan sutra
+              Započni svoj rast na drustvenim mrezama vec danas
             </Heading>
 
             <Text
@@ -1497,16 +1437,15 @@ const StepsSection = () => {
                 transition="all 0.2s"
                 onClick={(e) => {
                   e.preventDefault();
-                  document.querySelector('#case-studies')?.scrollIntoView({
+                  document.querySelector('#plans')?.scrollIntoView({
                     behavior: 'smooth',
                   });
                 }}
               >
-                Pogledaj Rezultate
+                Planovi
               </Button>
             </HStack>
 
-            {/* Trust indicators */}
             <HStack
               spacing={8}
               pt={6}
@@ -1517,7 +1456,7 @@ const StepsSection = () => {
             >
               <HStack>
                 <Icon as={Check} boxSize={4} color="green.400" />
-                <Text>Bez ugovorne obaveze</Text>
+                <Text>30x Jeftinije od Reklama</Text>
               </HStack>
               <HStack>
                 <Icon as={Check} boxSize={4} color="green.400" />
@@ -1525,7 +1464,7 @@ const StepsSection = () => {
               </HStack>
               <HStack>
                 <Icon as={Check} boxSize={4} color="green.400" />
-                <Text>ROI garancija</Text>
+                <Text>Garancija</Text>
               </HStack>
             </HStack>
           </VStack>
@@ -1720,7 +1659,7 @@ const FeaturesSection = () => {
       title: 'Garancija',
       icon: DollarSignIcon,
       description:
-        'Plaćaš tek kada klip isporuči stvarne preglede i engagement - svaki dinar radi za tebe, ne protiv tebe.',
+        'Plaćaš tek kada klip isporuči stvarne preglede i engagement - ti si u Kontroli svojih reklama a ne neki nevidljivi algoritmi.',
     },
     {
       title: 'Autentičnost pregleda',
@@ -1735,7 +1674,7 @@ const FeaturesSection = () => {
         'Prati performanse svakog klipa u našem preglednom dashboardu: vidi preglede, engagement i rast - dok se dešava.',
     },
     {
-      title: 'Snaga više platformi',
+      title: 'Masivna Distribucija',
       icon: LayersIcon,
       description:
         'Clipify optimizuje tvoj sadržaj za TikTok, IG Reels i (uskoro) YT Shorts - automatski prilagođen svakom algoritmu i formatu.',
@@ -1788,26 +1727,45 @@ const FeaturesSection = () => {
 const PricingSection = () => {
   const plans = [
     {
-      name: '15-Day Sprint',
-      tag: 'START',
-      features: ['1 video/dan', '30 postova', '24/7 support', 'Mesečni reporti'],
+      name: 'Povećaj Prodaju',
+      tag: 'PRODAJA',
+      features: [
+        'Kampanja fokusirana na rast prodaje',
+        'Pristup našem Dashboard-u',
+        'Redovni izveštaji + 24/7 support',
+        'Organski rast engagementa',
+        'Garancija'
+      ],
     },
     {
-      name: '30-Day Domination',
-      tag: 'PRO',
-      features: ['2 videa/dan', '60+ postova', 'Priority support', 'Weekly analytics', 'Radionice'],
+      name: 'Povećaj Vidljivost',
+      tag: 'VIRALNOST',
+      features: [
+        'Kampanja fokusirana na rast pregleda',
+        'Pristup našem Dashboard-u',
+        'Redovni izveštaji + 24/7 support',
+        'Organski rast engagementa',
+        'Garancija',
+      ],
       highlight: true,
     },
     {
-      name: 'Custom Solution',
-      tag: 'ENTERPRISE',
-      features: ['Custom strategija', 'Dedicated tim', 'A/B testing', 'Full produkcija'],
+      name: 'Paket po želji',
+      tag: 'CUSTOM',
+      features: [
+        'Custom strategija i ciljevi',
+        'Dedicated tim za tvoj brend',
+        'A/B testing i optimizacija',
+        'Full produkcija sadržaja',
+        'aaaa'
+      ],
       enterprise: true,
     },
   ];
 
   return (
     <Flex
+      id="plans"
       as="section"
       minH="110vh"
       bg="transparent"
@@ -1819,7 +1777,7 @@ const PricingSection = () => {
       position="relative"
       overflow="hidden"
     >
-      <Container maxW="7xl" h="full">
+      <Container maxW="7xl" h="full" >
         <VStack spacing={24} h="full" justify="center">
           {/* Header matching the image style */}
           <VStack spacing={3}>
@@ -1829,6 +1787,7 @@ const PricingSection = () => {
               letterSpacing="-0.04em"
               lineHeight="1"
               textAlign="center"
+
             >
               Fleksibilni
               <Box
@@ -1915,7 +1874,7 @@ const PricingSection = () => {
                       </Badge>
 
                       <Heading
-                        fontSize="2xl"
+                        fontSize="3xl"
                         fontWeight="900"
                         textAlign="center"
                         lineHeight="1.1"
@@ -1953,8 +1912,8 @@ const PricingSection = () => {
                       </VStack>
 
                       <VStack spacing={3} w="full">
-                        <Heading fontSize="3xl" fontWeight="900" letterSpacing="-0.02em" color="gray.700">
-                          Kontakt
+                        <Heading fontSize="lg" fontWeight="900" letterSpacing="-0.02em" color="gray.700">
+                          Kontaktiraj nas za cenu
                         </Heading>
                         <Button
                           w="full"
@@ -1971,7 +1930,7 @@ const PricingSection = () => {
                           }}
                           transition="all 0.2s"
                         >
-                          Zakaži Call
+                          Zakaži Poziv
                         </Button>
                       </VStack>
                     </VStack>
@@ -2030,7 +1989,7 @@ const PricingSection = () => {
                         </Badge>
 
                         <Heading
-                          fontSize="2xl"
+                          fontSize="3xl"
                           fontWeight="900"
                           textAlign="center"
                           lineHeight="1.1"
@@ -2064,8 +2023,8 @@ const PricingSection = () => {
                         </VStack>
 
                         <VStack spacing={3} w="full">
-                          <Heading fontSize="3xl" fontWeight="900" letterSpacing="-0.02em">
-                            Kontakt
+                          <Heading fontSize="lg" fontWeight="900" letterSpacing="-0.02em">
+                            Kontaktiraj nas za cenu
                           </Heading>
                           <Button
                             w="full"
@@ -2080,7 +2039,7 @@ const PricingSection = () => {
                             }}
                             transition="all 0.2s"
                           >
-                            Zakaži Call
+                            Zakaži Poziv
                           </Button>
                         </VStack>
                       </VStack>
@@ -2158,7 +2117,7 @@ const PricingSection = () => {
                     </Badge>
 
                     <Heading
-                      fontSize="2xl"
+                      fontSize="3xl"
                       fontWeight="900"
                       textAlign="center"
                       lineHeight="1.1"
@@ -2196,8 +2155,8 @@ const PricingSection = () => {
                     </VStack>
 
                     <VStack spacing={3} w="full">
-                      <Heading fontSize="3xl" fontWeight="900" letterSpacing="-0.02em">
-                        Custom
+                      <Heading fontSize="lg" fontWeight="900" letterSpacing="-0.02em">
+                        Kontaktiraj nas za cenu
                       </Heading>
                       <Button
                         w="full"
@@ -2214,7 +2173,7 @@ const PricingSection = () => {
                         }}
                         transition="all 0.2s"
                       >
-                        Kontaktiraj
+                        Zakaži poziv
                       </Button>
                     </VStack>
                   </VStack>
@@ -2243,7 +2202,7 @@ const PricingSection = () => {
                 Nisi siguran šta ti treba?
               </Text>
               <Text fontSize="sm" color="gray.600">
-                Besplatna konsultacija - Odgovor za 2h
+                Besplatna konsultacija - Odgovor za 24h
               </Text>
             </Box>
             <Button
@@ -2273,30 +2232,30 @@ const FAQSection = () => {
   const clipperFaqs = [
     {
       q: 'Kako mogu postati Kliper?',
-      a: 'Pridruži se našoj Discord zajednici gde prolaziš onboarding i dobijaš pristup novim kampanjama. Nakon odobrenja, možeš da klipuješ odmah.',
-    },
-    {
-      q: 'Da li moram imati iskustvo sa video editingom?',
-      a: 'Poželjno je, ali nije nužno. Dobijaš kratke edukacije i praktične vodiče kako bi brzo naučio sve što treba za kratke klipove.',
+      a: 'Pridruži se našoj Discord zajednici gde možeš dobiti pristup novim kampanjama. Nakon povezivanja Discord naloga sa sajtom i povezivanja društvenih mreža, možeš da klipuješ odmah.',
     },
     {
       q: 'Kako funkcioniše plaćanje?',
-      a: 'Zarađuješ po performansama — za stvarne preglede i engagement. Isplata ide svake nedelje putem lokalnih servisa ili PayPala.',
+      a: 'Zarađuješ po svojim performansama - za stvarne preglede i engagement. Isplate se vrše na kraju kampanje putem crypta.',
+    },
+    {
+      q: 'Da li mogu učestvovati u više kampanja odjednom?',
+      a: 'Da, moguće je pridružiti se svim dostupnim kampanjama i raditi paralelno na više njih.',
     },
   ];
 
   const creatorFaqs = [
     {
-      q: 'Kako Clipify pomaže kreatorima i brendovima?',
-      a: 'Naša mreža klipera pomaže da tvoj sadržaj postane viralan na svim platformama, kroz autentične kratke formate koji dopiru do pravih publika.',
+      q: 'Šta mi je potrebno da bih započeo?',
+      a: 'Sve što nam je potrebno je vaš sadržaj i jasna vizija vašeg brenda. Nakon toga, naš tim se bavi kompletnim procesom podešavanja kampanje.',
     },
     {
-      q: 'Da li mogu birati tip sadržaja i ton komunikacije?',
-      a: 'Naravno. Zajedno definišemo ton, ciljnu publiku i tip sadržaja kako bi kampanja bila potpuno u skladu sa tvojim brendom.',
+      q: 'Šta treba da radim tokom kampanje?',
+      a: 'Nije potreban nikakav dodatni posao sa vaše strane. Mi upravljamo svime - od izgradnje kampanje do kompletnog upravljanja kliperima (video-editorima).',
     },
     {
-      q: 'Postoji li minimalni budžet?',
-      a: 'Ne. Možeš krenuti sa manjim pilot kampanjama — fokus je na pravim rezultatima i održivom rastu, ne na ulaznim troškovima.',
+      q: 'Šta mogu da očekujem?',
+      a: 'Brendirane stranice prilagođene vašim ciljevima, milione organskih pregleda, vaš Dashboard sa svim analitičkim podacima, 24/7 podršku našeg tima i rast društvenih mreža sa novim potencijalnim klijentima.',
     },
   ];
 
@@ -2464,6 +2423,7 @@ const FAQSection = () => {
 
   return (
     <Flex
+      id="faq"
       align="center"
       minH="80vh"
       as="section"
@@ -2660,14 +2620,11 @@ const CTASection = () => {
           </Heading>
 
           <Text
-            maxW="3xl"
             color="gray.400"
             fontSize={{ base: 'lg', md: 'xl' }}
             lineHeight={1.7}
           >
-            Spremni da pojačate angažman i prodaju na društvenim mrežama
-            strateškim marketingom i profesionalnim uslugama klipovanja sadržaja?
-            Hajde da razgovaramo kako možemo ostvariti prave rezultate za vaš brend.
+            Spremni da pojačate engagement i prodaju na društvenim mrežama kroz strateški organski <br/> marketing i profesionalne usluge klipovanja kontenta? Zakažite besplatan poziv<br/> kako bi videli  da li možemo ostvariti prave rezultate za vaš brend.
           </Text>
 
           <HStack
@@ -2675,7 +2632,7 @@ const CTASection = () => {
             pt={4}
             flexWrap="wrap"
             justify="center"
-            color="gray.400"
+            color="gray.300"
             fontSize="md"
             fontWeight="medium"
           >
@@ -2998,12 +2955,11 @@ const CTASection = () => {
                 fontWeight="900"
                 lineHeight="short"
               >
-                Spremni da se pridružite kao kreator klipova?
+                Želiš da postaneš kliper?
               </Heading>
 
               <Text color="gray.400" fontSize="lg" maxW="2xl">
-                Počnite da zarađujete kreirajući viralne klipove za vrhunske brendove
-                i kreatore.
+                Počni da zarađuješ kreirajući viralne klipove za top brendove i kreatore.
               </Text>
 
               <Button
@@ -3036,4 +2992,5 @@ const CTASection = () => {
     </Box>
   );
 };
+
 export default Home;

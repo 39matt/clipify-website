@@ -7,26 +7,21 @@ import {
   Button,
   HStack,
   IconButton,
-  Drawer,
-  DrawerBody,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
   VStack,
-  useDisclosure, Text,
+  useDisclosure,
+  Collapse,
 } from '@chakra-ui/react'
 import { useScroll } from 'framer-motion'
-import { Menu } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import { Logo } from '#data/logo'
 
 export interface HeaderProps extends Omit<BoxProps, 'children'> {}
 
 export const Header = (props: HeaderProps) => {
   const ref = React.useRef<HTMLHeadingElement>(null)
   const [y, setY] = React.useState(0)
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose, onToggle } = useDisclosure()
   const router = useRouter()
 
   const { scrollY } = useScroll()
@@ -35,19 +30,18 @@ export const Header = (props: HeaderProps) => {
   }, [scrollY])
 
   const menuItems = [
-    { label: 'Studije Slučaja', href: '#case-studies' },
-    { label: 'Cene', href: '#pricing' },
-    { label: 'Zaposli se', href: '/signup' },
+    { label: 'Case studies', href: '#case-studies' },
+    { label: 'Planovi', href: '#plans' },
+    { label: 'Zaradi kao kliper', href: '/signup' },
   ]
 
   return (
     <>
-      {/* Desktop Header - Top */}
-      {/* Desktop Header - Bottom Sticky Pill (visible on white, larger) */}
+      {/* Desktop Header - Bottom Sticky */}
       <Box
         as="header"
         position="fixed"
-        bottom="24px"           // a bit higher from the edge
+        bottom="24px"
         left="0"
         right="0"
         zIndex="sticky"
@@ -85,9 +79,11 @@ export const Header = (props: HeaderProps) => {
                     onClick={(e) => {
                       e.preventDefault()
                       if (item.href.startsWith('#')) {
-                        document.querySelector(item.href)?.scrollIntoView({
-                          behavior: 'smooth',
-                        })
+                        document
+                          .querySelector(item.href)
+                          ?.scrollIntoView({
+                            behavior: 'smooth',
+                          })
                       } else {
                         router.push(item.href)
                       }
@@ -127,92 +123,40 @@ export const Header = (props: HeaderProps) => {
         </Container>
       </Box>
 
-      {/* Mobile Header - Bottom Sticky */}
+      {/* Mobile Header - Centered Floating Circle */}
       <Box
-        as="header"
-        bottom="0"
-        w="full"
         position="fixed"
+        bottom="24px"
+        left="50%"
+        transform="translateX(-50%)"
         zIndex="sticky"
-        bg="rgba(26, 26, 26, 0.95)"
-        backdropFilter="blur(10px)"
-        borderTopWidth="1px"
-        borderColor="whiteAlpha.200"
         display={{ base: 'block', md: 'none' }}
         {...props}
       >
-        <Container maxW="full" py={3} px={4}>
-          <Flex width="full" align="center" justify="space-between">
-            <Logo
-              onClick={(e) => {
-                if (window.location.pathname === '/') {
-                  e.preventDefault()
-                  window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth',
-                  })
-                }
-              }}
-            />
-
-            <HStack spacing={3}>
-              <Button
-                size="md"
-                bg="white"
-                color="black"
-                fontWeight="600"
-                px={6}
-                borderRadius="full"
-                fontSize="sm"
-                onClick={(e) => {
-                  e.preventDefault()
-                  document.querySelector('#kontakt')?.scrollIntoView({
-                    behavior: 'smooth',
-                  })
-                }}
-              >
-                Zakaži Poziv
-              </Button>
-
-              <IconButton
-                aria-label="Open menu"
-                icon={<Menu />}
-                variant="ghost"
-                color="white"
-                size="lg"
-                onClick={onOpen}
-                _hover={{ bg: 'whiteAlpha.200' }}
-              />
-            </HStack>
-          </Flex>
-        </Container>
-      </Box>
-
-      {/* Mobile Menu Drawer */}
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent bg="gray.900">
-          <DrawerCloseButton color="white" size="lg" />
-          <DrawerBody pt={20}>
-            <VStack spacing={6} align="stretch">
-              <Text
-                fontSize="xs"
-                fontWeight="bold"
-                color="gray.500"
-                textTransform="uppercase"
-                letterSpacing="wider"
-              >
-                Menu
-              </Text>
+        <Flex direction="column" align="center">
+          {/* Expandable Menu */}
+          <Collapse in={isOpen} animateOpacity>
+            <VStack
+              spacing={2}
+              mb={2}
+              align="stretch"
+              bg="rgba(26, 26, 26, 0.95)"
+              backdropFilter="blur(10px)"
+              borderRadius="2xl"
+              p={3}
+              border="1px solid"
+              borderColor="whiteAlpha.200"
+              boxShadow="0 12px 40px rgba(0,0,0,0.3)"
+              minW="200px"
+            >
               {menuItems.map((item) => (
                 <Button
                   key={item.href}
+                  size="sm"
                   variant="ghost"
-                  size="lg"
-                  fontWeight="600"
                   color="white"
+                  fontWeight="600"
                   justifyContent="flex-start"
-                  fontSize="xl"
                   _hover={{ bg: 'whiteAlpha.200' }}
                   onClick={(e) => {
                     e.preventDefault()
@@ -229,10 +173,47 @@ export const Header = (props: HeaderProps) => {
                   {item.label}
                 </Button>
               ))}
+
+              <Button
+                size="sm"
+                bg="white"
+                color="black"
+                fontWeight="700"
+                _hover={{ bg: 'gray.100' }}
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.querySelector('#kontakt')?.scrollIntoView({
+                    behavior: 'smooth',
+                  })
+                  onClose()
+                }}
+              >
+                Zakaži Poziv
+              </Button>
             </VStack>
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+          </Collapse>
+
+          {/* Circular Toggle Button */}
+          <IconButton
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            icon={isOpen ? <X size={24} /> : <Menu size={24} />}
+            size="lg"
+            isRound
+            bg="black"
+            color="white"
+            w="64px"
+            h="64px"
+            boxShadow="0 8px 32px rgba(0,0,0,0.3)"
+            _hover={{
+              transform: 'scale(1.05)',
+              boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
+            }}
+            _active={{ transform: 'scale(0.95)' }}
+            transition="all 0.2s"
+            onClick={onToggle}
+          />
+        </Flex>
+      </Box>
     </>
   )
 }

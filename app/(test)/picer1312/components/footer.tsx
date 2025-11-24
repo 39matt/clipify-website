@@ -9,120 +9,167 @@ import {
   Link,
   Text,
   HStack,
-  IconButton,
-  Image, // Import Image for your logo
+  Icon,
+  VStack,
+  Divider,
 } from '@chakra-ui/react';
 import * as React from 'react';
 import { FaDiscord, FaInstagram } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
+import { ArrowRight } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
-    <Box bg="black" color="white" pt={20} pb={10}>
-      <Container maxW="60%">
+    <Box bg="black" color="white" pt={20} pb={8} borderTop="1px solid" borderColor="whiteAlpha.200">
+      <Container maxW="6xl">
         <Grid
           templateColumns={{
             base: '1fr',
             md: 'repeat(5, 1fr)',
           }}
           gap={12}
+          mb={12}
         >
-          {/* 1 — Logo and Description */}
-          <GridItem colSpan={2} maxW="50%" mx="auto">
-            <Flex direction="column" gap={4}>
-              {/* Using Image for the logo with grayscale styles */}
-              <Text fontSize="3xl" fontWeight="bold" color="white">
-                Clipify
-              </Text>
-              <Text color="gray.400" fontSize="sm" lineHeight="1.7" maxW="sm">
-                The performance-based clipping platform connecting brands with
-                over <strong>10K+</strong> creators.
-              </Text>
-              <HStack spacing={2} mt={2}>
-                <IconButton
-                  as="a"
-                  href="https://discord.com" // Replace with actual Discord link
-                  aria-label="Discord"
-                  icon={<FaDiscord />}
-                  bg="white" // White background
-                  color="black" // Black icon color
-                  borderRadius="full"
-                  _hover={{ bg: 'gray.200' }} // Light gray on hover
-                  size="sm"
-                  minW="32px"
-                  h="32px"
-                />
-                <IconButton
-                  as="a"
-                  href="https://twitter.com" // Replace with actual X link
-                  aria-label="X (Twitter)"
-                  icon={<FaXTwitter />}
-                  bg="white" // White background
-                  color="black" // Black icon color
-                  borderRadius="full"
-                  _hover={{ bg: 'gray.200' }} // Light gray on hover
-                  size="sm"
-                  minW="32px"
-                  h="32px"
-                />
-                <IconButton
-                  as="a"
-                  href="https://instagram.com" // Replace with actual Instagram link
-                  aria-label="Instagram"
-                  icon={<FaInstagram />}
-                  bg="white" // White background
-                  color="black" // Black icon color
-                  borderRadius="full"
-                  _hover={{ bg: 'gray.200' }} // Light gray on hover
-                  size="sm"
-                  minW="32px"
-                  h="32px"
-                />
+          {/* Logo and Description */}
+          <GridItem colSpan={{ base: 1, md: 2 }}>
+            <VStack align="start" spacing={6}>
+              <Box>
+                <Heading size="lg" fontWeight="900" mb={3}>
+                  Clipify
+                </Heading>
+                <Text color="gray.400" fontSize="sm" lineHeight="1.8" maxW="sm">
+                  Performance-based platforma koja spaja brendove sa mrežom od{' '}
+                  <Text as="span" color="white" fontWeight="600">
+                    600+ kreatora
+                  </Text>
+                  . Pretvori svoj sadržaj u viralne klipove.
+                </Text>
+              </Box>
+
+              <HStack spacing={3}>
+                <Link
+                  href="https://discord.com"
+                  isExternal
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  w={10}
+                  h={10}
+                  borderRadius="lg"
+                  bg="whiteAlpha.100"
+                  border="1px solid"
+                  borderColor="whiteAlpha.200"
+                  transition="all 0.2s"
+                  _hover={{
+                    bg: 'whiteAlpha.200',
+                    borderColor: '#7289da',
+                    transform: 'translateY(-2px)',
+                  }}
+                >
+                  <Icon as={FaDiscord} boxSize={5} color="white" />
+                </Link>
+                <Link
+                  href="https://twitter.com"
+                  isExternal
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  w={10}
+                  h={10}
+                  borderRadius="lg"
+                  bg="whiteAlpha.100"
+                  border="1px solid"
+                  borderColor="whiteAlpha.200"
+                  transition="all 0.2s"
+                  _hover={{
+                    bg: 'whiteAlpha.200',
+                    borderColor: 'white',
+                    transform: 'translateY(-2px)',
+                  }}
+                >
+                  <Icon as={FaXTwitter} boxSize={5} color="white" />
+                </Link>
+                <Link
+                  href="https://instagram.com"
+                  isExternal
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  w={10}
+                  h={10}
+                  borderRadius="lg"
+                  bg="whiteAlpha.100"
+                  border="1px solid"
+                  borderColor="whiteAlpha.200"
+                  transition="all 0.2s"
+                  _hover={{
+                    bg: 'whiteAlpha.200',
+                    borderColor: '#E4405F',
+                    transform: 'translateY(-2px)',
+                  }}
+                >
+                  <Icon as={FaInstagram} boxSize={5} color="white" />
+                </Link>
               </HStack>
-            </Flex>
+            </VStack>
           </GridItem>
 
-          {/* 2 — Platform */}
+          {/* Platform */}
           <GridItem>
-            <Heading as="h4" fontSize="md" mb={4} color="white" fontWeight="bold">
-              Platform
-            </Heading>
-            <Flex direction="column" gap={2}>
-              <FooterLink href="#how-it-works">How It Works</FooterLink>
-              <FooterLink href="#case-studies">Case Studies</FooterLink>
-              <FooterLink href="#join">Join Discord</FooterLink>
-            </Flex>
+            <VStack align="start" spacing={4}>
+              <Heading as="h4" fontSize="sm" fontWeight="900" color="gray.300" textTransform="uppercase" letterSpacing="wider">
+                Platforma
+              </Heading>
+              <VStack align="start" spacing={3}>
+                <FooterLink href="#how-it-works">Kako funkcioniše</FooterLink>
+                <FooterLink href="#case-studies">Case studies</FooterLink>
+                <FooterLink href="#faq">FAQ</FooterLink>
+              </VStack>
+            </VStack>
           </GridItem>
 
-          {/* 3 — For Brands */}
+          {/* For Brands */}
           <GridItem>
-            <Heading as="h4" fontSize="md" mb={4} color="white" fontWeight="bold">
-              For Brands
-            </Heading>
-            <Flex direction="column" gap={2}>
-              <FooterLink href="#launch-campaign">Launch Campaign</FooterLink>
-              <FooterLink href="#pricing">Pricing</FooterLink>
-              <FooterLink href="#results">Results</FooterLink>
-            </Flex>
+            <VStack align="start" spacing={4}>
+              <Heading as="h4" fontSize="sm" fontWeight="900" color="gray.300" textTransform="uppercase" letterSpacing="wider">
+                Za Brendove
+              </Heading>
+              <VStack align="start" spacing={3}>
+                <FooterLink href="#kontakt">Pokreni kampanju</FooterLink>
+                <FooterLink href="#plans">Planovi</FooterLink>
+                <FooterLink href="#case-studies">Rezultati</FooterLink>
+              </VStack>
+            </VStack>
           </GridItem>
 
-          {/* 4 — For Clippers */}
+          {/* For Clippers */}
           <GridItem>
-            <Heading as="h4" fontSize="md" mb={4} color="white" fontWeight="bold">
-              For Clippers
-            </Heading>
-            <Flex direction="column" gap={2}>
-              <FooterLink href="#become">Become a Clipper</FooterLink>
-              <FooterLink href="#earn">How to Earn</FooterLink>
-              <FooterLink href="#community">Community</FooterLink>
-            </Flex>
+            <VStack align="start" spacing={4}>
+              <Heading as="h4" fontSize="sm" fontWeight="900" color="gray.300" textTransform="uppercase" letterSpacing="wider">
+                Za Klipere
+              </Heading>
+              <VStack align="start" spacing={3}>
+                <FooterLink href="/signup">Postani kliper</FooterLink>
+                <FooterLink href="#faq">Kako zaraditi</FooterLink>
+                <FooterLink href="https://discord.com" isExternal>Discord zajednica</FooterLink>
+              </VStack>
+            </VStack>
           </GridItem>
         </Grid>
 
+        {/* Divider */}
+        <Divider borderColor="whiteAlpha.200" />
+
         {/* Bottom Row */}
-        <Flex justify="center" pt={16}>
-          <Text fontSize="sm" color="gray.500" textAlign="center">
-            © {new Date().getFullYear()} Clipify. All rights reserved.
+        <Flex
+          mt={8}
+          direction={{ base: 'column', md: 'row' }}
+          justify="space-between"
+          align="center"
+          gap={4}
+        >
+          <Text fontSize="sm" color="gray.500">
+            © {new Date().getFullYear()} Clipify. Sva prava zadržana.
           </Text>
         </Flex>
       </Container>
@@ -130,19 +177,40 @@ export const Footer: React.FC = () => {
   );
 };
 
-/* Utility link component for cleaner code */
+/* Utility link component */
 const FooterLink = ({
                       href,
                       children,
+                      isExternal = false,
                     }: {
   href: string;
   children: React.ReactNode;
+  isExternal?: boolean;
 }) => (
   <Link
     href={href}
-    color="gray.300"
+    isExternal={isExternal}
+    color="gray.400"
     fontSize="sm"
-    _hover={{ color: 'white', textDecoration: 'none' }}
+    fontWeight="500"
+    position="relative"
+    _hover={{
+      color: 'white',
+      textDecoration: 'none',
+      _after: {
+        width: '100%',
+      }
+    }}
+    _after={{
+      content: '""',
+      position: 'absolute',
+      bottom: '-2px',
+      left: 0,
+      width: 0,
+      height: '1px',
+      bg: 'red.500',
+      transition: 'width 0.2s ease',
+    }}
     transition="color 0.2s"
   >
     {children}
