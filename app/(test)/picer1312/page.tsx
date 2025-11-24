@@ -43,8 +43,8 @@ import {
   ClockIcon,
   MailIcon,
   PhoneIcon,
-  Calendar,
-} from 'lucide-react';
+  Calendar, InstagramIcon, Instagram,
+} from 'lucide-react'
 import type { NextPage } from 'next';
 import { Global } from '@emotion/react';
 import { GoPeople } from 'react-icons/go';
@@ -233,8 +233,12 @@ const HeroSection = () => {
             >
               Clipify je vodeća performance-based platforma koja pretvara tvoj sadržaj u
               stotine viralnih kratkih klipova. Poveži se sa mrežom od 600+ pravih kreatora
-              koji šire tvoj brend na svim društvenim mrežama uz trošak znatno manji od
-              klasičnih reklama.
+              koji šire tvoj brend na svim društvenim mrežama uz
+              <Text as="span" fontWeight="700"  >
+                {' '}trošak znatno manji od klasičnih reklama.
+              </Text>
+
+
             </MotionText>
 
             <MotionBox
@@ -285,9 +289,7 @@ const HeroSection = () => {
                   transition="all 0.2s"
                   onClick={(e) => {
                     e.preventDefault();
-                    document.querySelector('#case-studies')?.scrollIntoView({
-                      behavior: 'smooth',
-                    });
+
                   }}
                   leftIcon={<GoPeople size={16} />}
                 >
@@ -542,7 +544,7 @@ const StatsSection = () => {
     dinara: 250_000,
     klipera: 700,
     pregleda: 25_000_000,
-    kampanja: 6,
+    kampanja: 7,
   };
 
   const dinara = useCountUp({
@@ -1091,9 +1093,9 @@ const StepsSection = () => {
     },
     {
       number: '3',
-      title: 'Prati & Plaćaj',
+      title: 'Prati rezultate',
       description:
-        'Naš AI sistem u realnom vremenu prati preglede i filtrira lažnu aktivnost. Plaćaš samo za prave, organske rezultate, dok kliperi zarađuju fer i transparentno.',
+        'Statistiku možeš pratiti uživo na svojem personalizovanom Dashboardu dok naš AI sistem u realnom vremenu prati preglede i filtrira lažnu aktivnost. Plaćaš samo za prave, organske rezultate.',
       icon: ChartLineIcon,
     },
   ];
@@ -1147,7 +1149,7 @@ const StepsSection = () => {
             maxW="2xl"
             lineHeight="1.6"
           >
-            Od ideje do viralnog sadržaja - brzo, jednostavno i efikasno
+            Od ideje do viralnog sadržaja bez puno razmišljanja
           </Text>
         </VStack>
 
@@ -1782,7 +1784,7 @@ const PricingSection = () => {
           {/* Header matching the image style */}
           <VStack spacing={3}>
             <Heading
-              fontSize={{ base: '4xl', md: '5xl', lg: '6xl' }}
+              fontSize={{ base: '36px', md: '48px', lg: '72px' }}
               fontWeight="900"
               letterSpacing="-0.04em"
               lineHeight="1"
@@ -1805,7 +1807,7 @@ const PricingSection = () => {
               </Box>
             </Heading>
             <Text
-              fontSize={{ base: 'lg', md: 'xl' }}
+              fontSize={{ base: '16px', md: '20px' }}
               color="gray.600"
               fontWeight="500"
             >
@@ -2198,7 +2200,7 @@ const PricingSection = () => {
             }}
           >
             <Box flex="1">
-              <Text fontSize="lg" fontWeight="800" mb={1} color="black">
+              <Text fontSize="xl" fontWeight="800" mb={1} color="black">
                 Nisi siguran šta ti treba?
               </Text>
               <Text fontSize="sm" color="gray.600">
@@ -2511,7 +2513,7 @@ const FAQSection = () => {
               title="Za Klipere"
               items={clipperFaqs}
               ctaButtonText="Pridruži se našem Discordu"
-              ctaButtonLink="https://discord.com/"
+              ctaButtonLink="https://discord.com/invite/clipifyrs"
               accentColor="#7289da" // Discord purple
             />
           </MotionBox>
@@ -2696,16 +2698,14 @@ const CTASection = () => {
                 bg="white"
                 align="center"
                 justify="center"
-                boxShadow="0 8px 24px rgba(255, 255, 255, 0.3)"
               >
                 <Icon as={CalendarIcon} boxSize={10} color="black" />
               </Flex>
               <Heading size="lg" fontWeight="900" color="white">
-                Zakažite sastanak
+                Zakažite Besplatan Poziv
               </Heading>
               <Text color="gray.400" maxW="2xl" mx="auto" fontSize="md" lineHeight="1.7">
-                Rezervišite 30-minutne konsultacije kako bismo razgovarali o vašem
-                projektu i istražili kako vam možemo pomoći.
+                Rezervišite 30-minutni besplatan poziv za više informacija<br/> kako bismo videli da li možemo da vam pomognemo
               </Text>
               <Button
                 size="lg"
@@ -2760,23 +2760,28 @@ const CTASection = () => {
               }}
               h="100%"
             >
-              <Heading size="md" mb={8} fontWeight="900">
-                Direktan kontakt
-              </Heading>
+              <HStack spacing={2} mb="8">
+                <Icon as={MailIcon} boxSize={6} my="auto" color="white" />
+                <Heading size="lg" my="auto" fontWeight="900">
+
+                  Direktan kontakt
+                </Heading>
+              </HStack>
+
 
               <VStack align="start" spacing={8}>
                 {[
                   {
                     icon: MailIcon,
                     label: 'Email',
-                    value: 'khrish@spadegroup.io',
-                    href: 'mailto:khrish@spadegroup.io',
+                    value: 'kontakt@clipify.rs',
+                    href: 'mailto:kontakt@clipify.rs',
                   },
                   {
-                    icon: MessageSquareIcon,
-                    label: 'Live Chat',
-                    value: 'Započni razgovor',
-                    href: '#',
+                    icon: Instagram,
+                    label: 'Instagram',
+                    value: 'Pošalji nam poruku u DM',
+                    href: 'https://www.instagram.com/clipify.rs/',
                   },
                   {
                     icon: ClockIcon,
@@ -2789,14 +2794,14 @@ const CTASection = () => {
                       w={12}
                       h={12}
                       borderRadius="lg"
-                      bg="whiteAlpha.100"
+                      bg="white"
                       border="1px solid"
                       borderColor="whiteAlpha.200"
                       align="center"
                       justify="center"
                       flexShrink={0}
                     >
-                      <Icon as={item.icon} boxSize={5} color="white" />
+                      <Icon as={item.icon} boxSize={5} color="black" />
                     </Flex>
                     <Box>
                       <Text color="gray.500" fontSize="sm" fontWeight="600" textTransform="uppercase" letterSpacing="wide">
@@ -2851,9 +2856,9 @@ const CTASection = () => {
               }}
               h="100%"
             >
-              <Heading size="md" mb={8} fontWeight="900">
-                Šta se dešava{' '}
-                <Box as="span" color="white">
+              <Heading size="lg" mb={8} fontWeight="900">
+                Šta{' '}
+                <Box as="span" fontWeight="900" color="white">
                   Dalje?
                 </Box>
               </Heading>
@@ -2862,8 +2867,8 @@ const CTASection = () => {
                 {[
                   {
                     num: '1',
-                    title: 'Inicijalne konsultacije',
-                    desc: 'Razumemo vaše ciljeve i publiku.',
+                    title: 'Besplatna konsultacija',
+                    desc: 'Analiziramo vaše ciljeve i publiku.',
                   },
                   {
                     num: '2',
@@ -2873,12 +2878,12 @@ const CTASection = () => {
                   {
                     num: '3',
                     title: 'Pokretanje kampanje',
-                    desc: 'Naša mreža započinje izvršenje.',
+                    desc: 'Naša mreža klipera počinje sa radom.',
                   },
                   {
                     num: '4',
                     title: 'Praćenje rezultata',
-                    desc: 'Merimo i optimizujemo performanse.',
+                    desc: 'Merimo i pratimo performanse.',
                   },
                 ].map((step) => (
                   <HStack key={step.num} align="flex-start" spacing={4}>
@@ -2920,7 +2925,7 @@ const CTASection = () => {
         >
           <Box
             mx="auto"
-            w={{ base: '100%', md: '85%' }}
+            w={{ base: '100%', md: '55%' }}
             bg="gray.900"
             color="white"
             border="2px solid"
@@ -2979,7 +2984,7 @@ const CTASection = () => {
                 }}
                 transition="all 0.25s ease"
                 as="a"
-                href="https://discord.com/"
+                href="https://discord.com/invite/clipifyrs"
                 target="_blank"
                 rel="noopener noreferrer"
               >

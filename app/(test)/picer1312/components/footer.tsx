@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import * as React from 'react';
 import { FaDiscord, FaInstagram } from 'react-icons/fa';
-import { FaXTwitter } from 'react-icons/fa6';
+import { FaTiktok, FaXTwitter } from 'react-icons/fa6'
 import { ArrowRight } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -30,7 +30,6 @@ export const Footer: React.FC = () => {
           gap={12}
           mb={12}
         >
-          {/* Logo and Description */}
           <GridItem colSpan={{ base: 1, md: 2 }}>
             <VStack align="start" spacing={6}>
               <Box>
@@ -48,7 +47,7 @@ export const Footer: React.FC = () => {
 
               <HStack spacing={3}>
                 <Link
-                  href="https://discord.com"
+                  href="https://discord.com/invite/clipifyrs"
                   isExternal
                   display="flex"
                   alignItems="center"
@@ -69,7 +68,7 @@ export const Footer: React.FC = () => {
                   <Icon as={FaDiscord} boxSize={5} color="white" />
                 </Link>
                 <Link
-                  href="https://twitter.com"
+                  href="https://www.tiktok.com/@clipify.rs"
                   isExternal
                   display="flex"
                   alignItems="center"
@@ -87,10 +86,10 @@ export const Footer: React.FC = () => {
                     transform: 'translateY(-2px)',
                   }}
                 >
-                  <Icon as={FaXTwitter} boxSize={5} color="white" />
+                  <Icon as={FaTiktok} boxSize={5} color="white" />
                 </Link>
                 <Link
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/clipify.rs/"
                   isExternal
                   display="flex"
                   alignItems="center"
