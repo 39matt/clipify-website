@@ -25,7 +25,8 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel} from '@chakra-ui/react';
+  AccordionPanel,
+} from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import {
   ChevronRight,
@@ -43,15 +44,17 @@ import {
   ClockIcon,
   MailIcon,
   PhoneIcon,
-  Calendar, InstagramIcon, Instagram,
-} from 'lucide-react'
+  Calendar,
+  InstagramIcon,
+  Instagram,
+} from 'lucide-react';
 import type { NextPage } from 'next';
 import { Global } from '@emotion/react';
 import { GoPeople } from 'react-icons/go';
-import { FaDiscord } from 'react-icons/fa'
-import { FiAward, FiCheckCircle, FiStar, FiUsers, FiZap } from 'react-icons/fi'
-import { FcCheckmark } from 'react-icons/fc'
-import { GrCheckmark } from 'react-icons/gr'
+import { FaDiscord } from 'react-icons/fa';
+import { FiAward, FiCheckCircle, FiStar, FiUsers, FiZap } from 'react-icons/fi';
+import { FcCheckmark } from 'react-icons/fc';
+import { GrCheckmark } from 'react-icons/gr';
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -110,76 +113,83 @@ const Home: NextPage = () => {
 
 const HeroSection = () => {
   return (
-    <Box
-      position="relative"
-      minH="100vh"
-    >
+    <Box position="relative" minH={{base: "130vh", md: "100vh"}}>
       {/* Logo and Badge - Fixed at top */}
-      <VStack spacing={12} mt="12" position="relative" zIndex={2}>
+      <VStack
+        spacing={{ base: 6, md: 12 }}
+        mt={{ base: 6, md: 12 }}
+        position="relative"
+        zIndex={2}
+      >
         <MotionBox
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <Image w="24" src="/static/images/logo-header2.png" alt="Clipify Logo" />
+          <Image
+            w={{ base: 16, md: 24 }}
+            src="/static/images/logo-header2.png"
+            alt="Clipify Logo"
+          />
         </MotionBox>
-
-        {/*<MotionBox*/}
-        {/*  initial={{ opacity: 0, y: -10 }}*/}
-        {/*  animate={{ opacity: 1, y: 0 }}*/}
-        {/*  transition={{ duration: 0.5, delay: 0.2 }}*/}
-        {/*>*/}
-        {/*  <HStack*/}
-        {/*    color="black"*/}
-        {/*    px={4}*/}
-        {/*    py={1.5}*/}
-        {/*    borderRadius="full"*/}
-        {/*    spacing={2}*/}
-        {/*  >*/}
-        {/*    <Box*/}
-        {/*      w={2}*/}
-        {/*      h={2}*/}
-        {/*      borderRadius="full"*/}
-        {/*      bg="red.500"*/}
-        {/*      animation="pulse 2s ease-in-out infinite"*/}
-        {/*    />*/}
-        {/*    <Text fontSize="xs" fontWeight="700" letterSpacing="wide" textTransform="uppercase">*/}
-        {/*      Performance-Based Marketing*/}
-        {/*    </Text>*/}
-        {/*  </HStack>*/}
-        {/*</MotionBox>*/}
       </VStack>
 
+      
       {/* Background gradient */}
-      <Box
-        position="absolute"
-        inset={0}
-        pointerEvents="none"
-      />
+      <Box position="absolute" inset={0} pointerEvents="none" />
 
+      <HStack
+      mx="auto"
+      w="fit-content"
+      mt={12}
+        display={{base: "flex", md: "none"}}
+        color="black"
+        px={4}
+        py={1.5}
+        borderRadius="full"
+        spacing={2}
+      >
+        <Box
+          w={1.5}
+          h={1.5}
+          borderRadius="full"
+          bg="red.500"
+          animation="pulse 2s ease-in-out infinite"
+        />
+
+        <Text
+          fontSize="2xs"
+          fontWeight="700"
+          letterSpacing="wide"
+          textTransform="uppercase"
+        >
+          Performance-Based Marketing
+        </Text>
+      </HStack>
       {/* Main Content - Absolutely centered on screen */}
       <Box
         position="absolute"
-        top="30%"
+        top={{ base: "38%", md: "45%" }}
         left="50%"
-        transform="translate(-50%, -30%)"
+        transform="translate(-50%, -50%)"
         w="full"
         zIndex={1}
       >
-        <Container maxW="7xl">
-          <VStack spacing={8} textAlign="center" maxW="5xl" mx="auto">
-            <Box whiteSpace="nowrap">
+        <Container maxW="7xl" px={{ base: 4, md: 6 }}>
+          <VStack spacing={{ base: 10, md: 8 }} textAlign="center" maxW="5xl" mx="auto">
+            <Box whiteSpace='nowrap'>
               <MotionText
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.3 }}
-                fontSize={{ base: '24px', md: '64px', lg: '84px' }}
-                fontWeight="900"
+                fontSize={{ base: '36px', sm: '48px', md: '64px', lg: '84px' }}
+                fontWeight="500"
+                fontFamily={"Montserrat Variable"}
                 lineHeight={1.1}
                 color="black"
                 letterSpacing="-0.02em"
-                mb={2}
-              >
+                mb={1}
+                >
                 Otključaj <br />
               </MotionText>
 
@@ -187,8 +197,9 @@ const HeroSection = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                fontSize={{ base: '36px', md: '72px', lg: '96px' }}
-                fontWeight="900"
+                fontSize={{ base: '42px', sm: '56px', md: '72px', lg: '96px' }}
+                fontWeight="600"
+                fontFamily={"Montserrat Variable"}
                 lineHeight={1.1}
                 letterSpacing="-0.02em"
                 display="inline-block"
@@ -199,46 +210,52 @@ const HeroSection = () => {
                   position="relative"
                   zIndex={1}
                   color="black"
-                  px="4"
-                  bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
+                  px={{ base: 2, md: 4 }}
+                  bgGradient='linear(to-r, rgba(252, 165, 165, 0.9), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.2), rgba(252, 165, 165, 0.0))'
                   borderLeft="8px"
                   borderColor="red.500"
+                  
                 >
-                  Pun Potencijal<br />
+                  Pun Potencijal
+                
                 </Box>
               </MotionText>
               <MotionText
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 }}
-                fontSize={{ base: '32px', md: '64px', lg: '84px' }}
-                fontWeight="900"
+                fontSize={{ base: '36px', sm: '44px', md: '64px', lg: '84px' }}
+                fontWeight="500"
+                fontFamily={"Montserrat Variable"}
                 lineHeight={1.1}
                 color="black"
                 letterSpacing="-0.02em"
-                mb={2}
+                mb={{ base: 16, md: 2 }}
+                mt={1}
               >
                 Tvog Sadržaja
               </MotionText>
             </Box>
 
             <MotionText
+              display={{ base: 'none', md: 'block' }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              fontSize={{ base: 'lg', md: 'xl' }}
+              fontSize={{ base: 'md', sm: 'lg', md: 'xl' }}
               color="gray.600"
               maxW="3xl"
               lineHeight={1.7}
+              px={{ base: 2, md: 0 }}
             >
-              Clipify je vodeća performance-based platforma koja pretvara tvoj sadržaj u
-              stotine viralnih kratkih klipova. Poveži se sa mrežom od 600+ pravih kreatora
-              koji šire tvoj brend na svim društvenim mrežama uz
-              <Text as="span" fontWeight="700"  >
-                {' '}trošak znatno manji od klasičnih reklama.
+              Clipify je vodeća performance-based platforma koja pretvara tvoj
+              sadržaj u stotine viralnih kratkih klipova. Poveži se sa mrežom
+              od 600+ pravih kreatora koji šire tvoj brend na svim društvenim
+              mrežama uz
+              <Text as="span" fontWeight="700">
+                {' '}
+                znatno manji trošak od klasičnih reklama.
               </Text>
-
-
             </MotionText>
 
             <MotionBox
@@ -248,12 +265,12 @@ const HeroSection = () => {
             >
               <HStack spacing={4} flexWrap="wrap" justify="center">
                 <Button
-                  size="lg"
+                  width={{base: "full", md: "auto"}}
                   bg="black"
                   color="white"
-                  px={10}
-                  py={8}
-                  fontSize="lg"
+                  px={{ base: 6, md: 10 }}
+                  py={{ base: 6, md: 8 }}
+                  fontSize={{ base: 'md', md: 'lg' }}
                   fontWeight="600"
                   borderRadius="full"
                   _hover={{
@@ -272,15 +289,15 @@ const HeroSection = () => {
                   Zakaži Poziv
                 </Button>
                 <Button
-                  size="lg"
+                  width={{base: "full", md: "auto"}}
                   borderColor="black"
                   color="black"
-                  px={10}
-                  py={8}
-                  fontSize="lg"
+                  px={{ base: 6, md: 10 }}
+                  py={{ base: 6, md: 8 }}
+                  fontSize={{ base: 'md', md: 'lg' }}
                   fontWeight="600"
                   borderRadius="full"
-                  borderWidth="2px"
+                  borderWidth={{ base: '1px', md: '2px' }}
                   _hover={{
                     bg: 'black',
                     color: 'white',
@@ -289,7 +306,6 @@ const HeroSection = () => {
                   transition="all 0.2s"
                   onClick={(e) => {
                     e.preventDefault();
-
                   }}
                   leftIcon={<GoPeople size={16} />}
                 >
@@ -297,14 +313,92 @@ const HeroSection = () => {
                 </Button>
               </HStack>
             </MotionBox>
+
+            {/* Scroll Indicator */}
+            <MotionBox
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, y: [0, 10, 0] }}
+              transition={{ 
+                opacity: { duration: 0.6, delay: 0.9 },
+                y: { duration: 1.5, repeat: Infinity, ease: "easeInOut" }
+              }}
+              mt={{ base: 0, md: 6 }}
+            >
+              <VStack spacing={2}>
+                <Text 
+                  fontSize={{ base: 'xs', md: 'sm' }}
+                  color="gray.500"
+                  fontWeight="500"
+                  textTransform="uppercase"
+                  letterSpacing="wider"
+                >
+                  Skroluj
+                </Text>
+                <Box
+                  w="1px"
+                  h={{ base: "40px", md: "50px" }}
+                  bg="gray.300"
+                  position="relative"
+                  overflow="hidden"
+                >
+                  <MotionBox
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    right={0}
+                    h="20px"
+                    bgGradient="linear(to-b, gray.600, transparent)"
+                    animate={{ y: [0, 30, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </Box>
+              </VStack>
+            </MotionBox>
           </VStack>
+        </Container>
+      </Box>
+
+      {/* Long text - positioned at bottom of hero section */}
+      <Box
+        display={{ base: 'block', md: 'none' }}
+        position="absolute"
+        bottom={{ base: '10vh', md: '15vh' }}
+        left="50%"
+        transform="translateX(-50%)"
+        w="full"
+        zIndex={1}
+      >
+        <Container maxW="7xl" px={{ base: 4, md: 6 }}>
+          <MotionText
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6 }}
+            fontSize={{ base: 'md', sm: 'lg', md: 'xl' }}
+            color="gray.600"
+            maxW="3xl"
+            mx="auto"
+            textAlign="center"
+            lineHeight={1.7}
+            px={{ base: 2, md: 0 }}
+          >
+            Clipify je vodeća performance-based platforma koja pretvara tvoj
+            sadržaj u stotine viralnih kratkih klipova. Poveži se sa mrežom
+            od 600+ pravih kreatora koji šire tvoj brend na svim društvenim
+            mrežama uz
+            <Text as="span" fontWeight="700">
+              {' '}
+              znatno manji trošak od klasičnih reklama.
+            </Text>
+          </MotionText>
         </Container>
       </Box>
 
       {/* Pulse animation for the red dot */}
       <style jsx>{`
         @keyframes pulse {
-          0%, 100% {
+          0%,
+          100% {
             opacity: 1;
           }
           50% {
@@ -406,7 +500,7 @@ const MarqueeSection = () => {
             {/* Main heading box */}
             <Box
               bg="black"
-              px={{ base: 8, md: 12 }}
+              px={{ base: 4, sm: 8, md: 12 }}
               py={{ base: 3, md: 3.5 }}
               position="relative"
             >
@@ -486,9 +580,16 @@ const MarqueeSection = () => {
     </Box>
   );
 };
-function useCountUp(params: {end: number;duration?: number;format?: (n: number) => string;}) {
-  const { end, duration = 5000, format = (n: number) => Math.floor(n).toString() } =
-    params;
+function useCountUp(params: {
+  end: number;
+  duration?: number;
+  format?: (n: number) => string;
+}) {
+  const {
+    end,
+    duration = 5000,
+    format = (n: number) => Math.floor(n).toString(),
+  } = params;
 
   const [value, setValue] = useState(0);
   const [started, setStarted] = useState(false);
@@ -534,7 +635,8 @@ const formatInt = (n: number) => Math.floor(n).toLocaleString('sr-RS');
 
 const formatCompact = (n: number) => {
   const v = Math.floor(n);
-  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1).replace('.0', '') + 'M';
+  if (v >= 1_000_000)
+    return (v / 1_000_000).toFixed(1).replace('.0', '') + 'M';
   if (v >= 1_000) return (v / 1_000).toFixed(0) + 'K';
   return v.toString();
 };
@@ -567,20 +669,30 @@ const StatsSection = () => {
   return (
     <Box py={{ base: 12, md: 20 }} bg="white">
       <Container maxW="7xl">
-        <Grid templateColumns={{ base: '1fr 1fr', md: 'repeat(4, 1fr)' }} gap={{ base: 8, md: 10 }}>
+        <Grid
+          templateColumns={{ base: '1fr 1fr', md: 'repeat(4, 1fr)' }}
+          gap={{ base: 6, md: 10 }}
+        >
           <GridItem>
             <VStack
               ref={dinara.ref as any}
               spacing={1}
               align="start"
               borderLeft="3px solid"
-              borderColor="black"
+              borderColor={{ base: 'red.500', md: 'black' }}
               pl={4}
             >
-              <Heading fontSize={{ base: '3xl', md: '4xl' }} lineHeight="1" color="black">
+              <Heading
+                fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+                lineHeight="1"
+                color="black"
+              >
                 {dinara.display}
               </Heading>
-              <Text color="gray.600" fontSize={{ base: 'md', md: 'lg' }}>
+              <Text
+                color="gray.600"
+                fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}
+              >
                 Dinara isplaćeno kliperima
               </Text>
             </VStack>
@@ -592,13 +704,20 @@ const StatsSection = () => {
               spacing={1}
               align="start"
               borderLeft="3px solid"
-              borderColor="black"
+              borderColor={{ base: 'red.500', md: 'black' }}
               pl={4}
             >
-              <Heading fontSize={{ base: '3xl', md: '4xl' }} lineHeight="1" color="black">
+              <Heading
+                fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+                lineHeight="1"
+                color="black"
+              >
                 {klipera.display}
               </Heading>
-              <Text color="gray.600" fontSize={{ base: 'md', md: 'lg' }}>
+              <Text
+                color="gray.600"
+                fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}
+              >
                 Aktivnih klipera
               </Text>
             </VStack>
@@ -610,13 +729,20 @@ const StatsSection = () => {
               spacing={1}
               align="start"
               borderLeft="3px solid"
-              borderColor="black"
+              borderColor={{ base: 'red.500', md: 'black' }}
               pl={4}
             >
-              <Heading fontSize={{ base: '3xl', md: '4xl' }} lineHeight="1" color="black">
+              <Heading
+                fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+                lineHeight="1"
+                color="black"
+              >
                 {pregleda.display}
               </Heading>
-              <Text color="gray.600" fontSize={{ base: 'md', md: 'lg' }}>
+              <Text
+                color="gray.600"
+                fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}
+              >
                 Organskih pregleda
               </Text>
             </VStack>
@@ -628,13 +754,20 @@ const StatsSection = () => {
               spacing={1}
               align="start"
               borderLeft="3px solid"
-              borderColor="black"
+              borderColor={{ base: 'red.500', md: 'black' }}
               pl={4}
             >
-              <Heading fontSize={{ base: '3xl', md: '4xl' }} lineHeight="1" color="black">
+              <Heading
+                fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}
+                lineHeight="1"
+                color="black"
+              >
                 {kampanja.display}
               </Heading>
-              <Text color="gray.600" fontSize={{ base: 'md', md: 'lg' }}>
+              <Text
+                color="gray.600"
+                fontSize={{ base: 'sm', sm: 'md', md: 'lg' }}
+              >
                 Pokrenutih kampanja
               </Text>
             </VStack>
@@ -667,7 +800,8 @@ const CaseStudiesSection = () => {
       id: 'nosestrips',
       name: 'Nosestrips',
       views: '8M',
-      image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/nosestrips.jpeg?alt=media&token=beb586e1-3856-40ac-bbbd-14f4682311e8',
+      image:
+        'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/nosestrips.jpeg?alt=media&token=beb586e1-3856-40ac-bbbd-14f4682311e8',
       totalClippers: 20,
       totalVideos: 120,
       durationDays: 8,
@@ -685,7 +819,8 @@ const CaseStudiesSection = () => {
       id: 'cjuree',
       name: 'Cjuree',
       views: '5M',
-      image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/cjuree.jpeg?alt=media&token=0cc34f5b-8216-4e79-aca0-22fd6beadf20',
+      image:
+        'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/cjuree.jpeg?alt=media&token=0cc34f5b-8216-4e79-aca0-22fd6beadf20',
       totalClippers: 15,
       totalVideos: 320,
       durationDays: 30,
@@ -703,7 +838,8 @@ const CaseStudiesSection = () => {
       id: 'aleksic',
       name: 'AleksicMoto',
       views: '3M',
-      image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/aleksic.jpg?alt=media&token=d573b72a-2798-4892-a14b-7e684193d15d',
+      image:
+        'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/aleksic.jpg?alt=media&token=d573b72a-2798-4892-a14b-7e684193d15d',
       totalClippers: 15,
       totalVideos: 95,
       durationDays: 14,
@@ -746,7 +882,7 @@ const CaseStudiesSection = () => {
                 fontWeight="900"
                 letterSpacing="-0.03em"
                 lineHeight="0.95"
-                fontSize={{ base: '36px', md: '48px', lg: '56px' }}
+                fontSize={{ base: '32px', md: '48px', lg: '56px' }}
                 color="black"
               >
                 Ko je sa nama
@@ -757,7 +893,7 @@ const CaseStudiesSection = () => {
                 fontWeight="900"
                 letterSpacing="-0.03em"
                 lineHeight="0.95"
-                fontSize={{ base: '48px', md: '56px', lg: '64px' }}
+                fontSize={{ base: '40px', md: '56px', lg: '64px' }}
                 bgGradient="linear(to-r, gray.400, gray.600)"
                 bgClip="text"
                 mt={{ base: 2, md: 3 }}
@@ -773,7 +909,7 @@ const CaseStudiesSection = () => {
             >
               <Text
                 color="gray.700"
-                fontSize={{ base: 'lg', md: 'xl' }}
+                fontSize={{ base: 'md', md: 'xl' }}
                 textAlign={{ base: 'left', lg: 'right' }}
                 maxW={{ base: 'full', lg: 'sm' }}
                 lineHeight="1.6"
@@ -784,7 +920,10 @@ const CaseStudiesSection = () => {
           </Grid>
         </Container>
 
-        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={{ base: 6, md: 8 }}>
+        <Grid
+          templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
+          gap={{ base: 6, md: 8 }}
+        >
           {cases.map((item, i) => (
             <MotionBox
               key={item.id}
@@ -807,13 +946,17 @@ const CaseStudiesSection = () => {
               onMouseLeave={() => setHoveredId(null)}
               position="relative"
               _hover={{
-                transform: 'translateY(-12px) scale(1.02)',
+                transform: { base: 'none', md: 'translateY(-12px) scale(1.02)' },
               }}
               role="group"
             >
-
               {/* Image Section */}
-              <Box position="relative" h={{ base: '320px', md: '380px' }} bg="gray.900" overflow="hidden">
+              <Box
+                position="relative"
+                h={{ base: '280px', sm: '320px', md: '380px' }}
+                bg="gray.900"
+                overflow="hidden"
+              >
                 <Image
                   src={item.image}
                   alt={item.name}
@@ -848,7 +991,11 @@ const CaseStudiesSection = () => {
                   textTransform="uppercase"
                   letterSpacing="wider"
                   opacity={hoveredId === item.id ? 1 : 0}
-                  transform={hoveredId === item.id ? 'translateY(0)' : 'translateY(-10px)'}
+                  transform={
+                    hoveredId === item.id
+                      ? 'translateY(0)'
+                      : 'translateY(-10px)'
+                  }
                   transition="all 0.3s"
                 >
                   POGLEDAJ
@@ -860,18 +1007,22 @@ const CaseStudiesSection = () => {
                   bottom="0"
                   left="0"
                   right="0"
-                  p={{ base: 6, md: 7 }}
+                  p={{ base: 4, sm: 6, md: 7 }}
                   spacing={3}
                   align="start"
                 >
                   <Heading
-                    size="xl"
+                    size={{ base: 'lg', md: 'xl' }}
                     color="white"
                     letterSpacing="-0.02em"
                     fontWeight="900"
                     textShadow="0 4px 16px rgba(0,0,0,0.4)"
                     transition="transform 0.3s"
-                    transform={hoveredId === item.id ? 'translateX(8px)' : 'translateX(0)'}
+                    transform={
+                      hoveredId === item.id
+                        ? 'translateX(8px)'
+                        : 'translateX(0)'
+                    }
                   >
                     {item.name}
                   </Heading>
@@ -881,22 +1032,28 @@ const CaseStudiesSection = () => {
                     backdropFilter="blur(12px)"
                     color="white"
                     borderRadius="full"
-                    px={{ base: 5, md: 6 }}
-                    py={{ base: 3, md: 3.5 }}
+                    px={{ base: 4, md: 6 }}
+                    py={{ base: 2, md: 3.5 }}
                     spacing="2"
                     border="1px solid"
-                    borderColor={hoveredId === item.id ? 'red.600' : 'whiteAlpha.300'}
+                    borderColor={
+                      hoveredId === item.id ? 'red.600' : 'whiteAlpha.300'
+                    }
                     transition="all 0.3s"
                   >
                     <Text
-                      fontSize={{ base: '2xl', md: '3xl' }}
+                      fontSize={{ base: 'xl', md: '3xl' }}
                       fontWeight="900"
                       lineHeight="1"
                       letterSpacing="-0.02em"
                     >
                       {item.views}
                     </Text>
-                    <Text fontSize="lg" fontWeight="700" opacity={0.95}>
+                    <Text
+                      fontSize={{ base: 'md', md: 'lg' }}
+                      fontWeight="700"
+                      opacity={0.95}
+                    >
                       pregleda
                     </Text>
                   </HStack>
@@ -904,10 +1061,10 @@ const CaseStudiesSection = () => {
               </Box>
 
               {/* CTA Section */}
-              <Box p={{ base: 5, md: 6 }}>
+              <Box p={{ base: 4, sm: 5, md: 6 }}>
                 <Button
                   w="100%"
-                  size="lg"
+                  size={{ base: 'md', md: 'lg' }}
                   bg={hoveredId === item.id ? 'red.500' : 'black'}
                   color="white"
                   fontWeight="700"
@@ -916,7 +1073,11 @@ const CaseStudiesSection = () => {
                     <Box
                       as={ChevronRight}
                       transition="transform 0.3s"
-                      transform={hoveredId === item.id ? 'translateX(4px)' : 'translateX(0)'}
+                      transform={
+                        hoveredId === item.id
+                          ? 'translateX(4px)'
+                          : 'translateX(0)'
+                      }
                     />
                   }
                   _hover={{
@@ -943,7 +1104,10 @@ type CaseStudyModalProps = {
   data: CaseItem | null;
 };
 
-const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, value }) => (
+const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({
+  label,
+  value,
+}) => (
   <Box
     borderRadius="xl"
     overflow="hidden"
@@ -956,7 +1120,8 @@ const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({ label, 
         left: 0,
         right: 0,
         bottom: 0,
-        bgGradient: 'linear(to-r, transparent, rgba(255,255,255,0.1), transparent)',
+        bgGradient:
+          'linear(to-r, transparent, rgba(255,255,255,0.1), transparent)',
         animation: 'shine 2.5s infinite linear',
         pointerEvents: 'none',
         zIndex: 1,
@@ -998,16 +1163,29 @@ const GlowAnimation = () => (
   `}</style>
 );
 
-const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }) => {
+const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
+  isOpen,
+  onClose,
+  data,
+}) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="4xl" motionPreset="slideInBottom">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="4xl"
+      motionPreset="slideInBottom"
+    >
       <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(8px)" />
       <ModalContent bg="gray.900" color="white" borderRadius="2xl" overflow="hidden">
         <ModalCloseButton top={3} right={3} size="lg" />
         <ModalBody p={0}>
           {data && (
             <Box>
-              <Box h={{ base: '220px', md: '320px' }} bg="gray.800" position="relative">
+              <Box
+                h={{ base: '220px', md: '320px' }}
+                bg="gray.800"
+                position="relative"
+              >
                 <Image
                   src={data.image}
                   alt={data.name}
@@ -1015,8 +1193,18 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
                   w="100%"
                   h="100%"
                 />
-                <Box position="absolute" inset={0} bg="linear-gradient(to top, rgba(0,0,0,0.5), transparent)" />
-                <VStack position="absolute" bottom={4} left={4} align="start" spacing={1}>
+                <Box
+                  position="absolute"
+                  inset={0}
+                  bg="linear-gradient(to top, rgba(0,0,0,0.5), transparent)"
+                />
+                <VStack
+                  position="absolute"
+                  bottom={4}
+                  left={4}
+                  align="start"
+                  spacing={1}
+                >
                   <Heading size="lg">{data.name}</Heading>
                   <HStack>
                     <Badge colorScheme="green" px={2} py={1} borderRadius="md">
@@ -1037,8 +1225,14 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({ isOpen, onClose, data }
               >
                 <GlowAnimation />
                 <StatCard label="Ukupno Klipera" value={data.totalClippers ?? 0} />
-                <StatCard label="Ukupno Video klipova" value={data.totalVideos ?? 0} />
-                <StatCard label="Trajanje Kampanje" value={`${data.durationDays ?? 0} dana`} />
+                <StatCard
+                  label="Ukupno Video klipova"
+                  value={data.totalVideos ?? 0}
+                />
+                <StatCard
+                  label="Trajanje Kampanje"
+                  value={`${data.durationDays ?? 0} dana`}
+                />
                 <StatCard label="Ukupno Pregleda" value={data.views} />
               </Grid>
 
@@ -1125,15 +1319,16 @@ const StepsSection = () => {
           <Heading
             fontWeight="900"
             letterSpacing="-0.03em"
-            fontSize={{ base: '36px', md: '48px', lg: '56px' }}
+            fontSize={{ base: '32px', md: '48px', lg: '56px' }}
             lineHeight="1"
+            px={{ base: 4, md: 0 }}
           >
-            Postani viralan u{' '}
+            Postani viralan u<br/>
             <Box
               as="span"
               position="relative"
               zIndex={1}
-              bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
+              bgGradient='linear(to-r, rgba(252, 165, 165, 0.9), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.2), rgba(252, 165, 165, 0.0))'
               borderLeft="8px"
               borderColor="red.500"
               pl="2"
@@ -1145,9 +1340,10 @@ const StepsSection = () => {
 
           <Text
             color="gray.600"
-            fontSize={{ base: 'lg', md: 'xl' }}
+            fontSize={{ base: 'md', md: 'xl' }}
             maxW="2xl"
             lineHeight="1.6"
+            px={{ base: 4, md: 0 }}
           >
             Od ideje do viralnog sadržaja bez puno razmišljanja
           </Text>
@@ -1199,7 +1395,7 @@ const StepsSection = () => {
                 border="3px solid"
                 borderColor="gray.200"
                 borderRadius="2xl"
-                p={{ base: 8, md: 10 }}
+                p={{ base: 6, sm: 8, md: 10 }}
                 spacing={5}
                 h="100%"
                 transition="all 0.3s ease"
@@ -1208,8 +1404,11 @@ const StepsSection = () => {
                 role="group"
                 _hover={{
                   borderColor: 'red.500',
-                  transform: 'translateY(-8px)',
-                  boxShadow: '0 20px 40px rgba(239, 68, 68, 0.15)',
+                  transform: { base: 'none', md: 'translateY(-8px)' },
+                  boxShadow: {
+                    base: 'none',
+                    md: '0 20px 40px rgba(239, 68, 68, 0.15)',
+                  },
                 }}
               >
                 {/* Background Gradient Effect */}
@@ -1228,14 +1427,14 @@ const StepsSection = () => {
 
                 {/* Step Number Badge */}
                 <Flex
-                  w="80px"
-                  h="80px"
+                  w={{ base: '64px', md: '80px' }}
+                  h={{ base: '64px', md: '80px' }}
                   borderRadius="full"
                   bg="black"
                   color="white"
                   align="center"
                   justify="center"
-                  fontSize="36px"
+                  fontSize={{ base: '28px', md: '36px' }}
                   fontWeight="900"
                   position="relative"
                   border="4px solid"
@@ -1244,8 +1443,11 @@ const StepsSection = () => {
                   transition="all 0.3s ease"
                   _groupHover={{
                     bg: 'red.500',
-                    transform: 'scale(1.1) rotate(5deg)',
-                    boxShadow: '0 12px 32px rgba(239, 68, 68, 0.3)',
+                    transform: { base: 'none', md: 'scale(1.1) rotate(5deg)' },
+                    boxShadow: {
+                      base: '0 8px 24px rgba(0,0,0,0.12)',
+                      md: '0 12px 32px rgba(239, 68, 68, 0.3)',
+                    },
                   }}
                 >
                   {step.number}
@@ -1268,8 +1470,8 @@ const StepsSection = () => {
 
                 {/* Icon */}
                 <Flex
-                  w="56px"
-                  h="56px"
+                  w={{ base: '48px', md: '56px' }}
+                  h={{ base: '48px', md: '56px' }}
                   borderRadius="xl"
                   bg="gray.100"
                   align="center"
@@ -1281,7 +1483,7 @@ const StepsSection = () => {
                 >
                   <Icon
                     as={step.icon}
-                    boxSize={7}
+                    boxSize={{ base: 6, md: 7 }}
                     color="gray.700"
                     transition="color 0.3s"
                     _groupHover={{ color: 'red.500' }}
@@ -1291,7 +1493,7 @@ const StepsSection = () => {
                 {/* Content */}
                 <VStack spacing={3} flex="1">
                   <Heading
-                    fontSize={{ base: 'xl', md: '2xl' }}
+                    fontSize={{ base: 'lg', md: '2xl' }}
                     fontWeight="800"
                     textAlign="center"
                     letterSpacing="-0.02em"
@@ -1301,7 +1503,7 @@ const StepsSection = () => {
 
                   <Text
                     color="gray.600"
-                    fontSize={{ base: 'md', md: 'lg' }}
+                    fontSize={{ base: 'sm', md: 'lg' }}
                     textAlign="center"
                     lineHeight="1.7"
                   >
@@ -1343,7 +1545,7 @@ const StepsSection = () => {
             bg="black"
             color="white"
             borderRadius="3xl"
-            p={{ base: 10, md: 14 }}
+            p={{ base: 8, md: 14 }}
             spacing={6}
             position="relative"
             overflow="hidden"
@@ -1375,7 +1577,7 @@ const StepsSection = () => {
             </Badge>
 
             <Heading
-              fontSize={{ base: '2xl', md: '3xl', lg: '4xl' }}
+              fontSize={{ base: 'xl', sm: '2xl', md: '4xl' }}
               fontWeight="900"
               textAlign="center"
               letterSpacing="-0.02em"
@@ -1386,21 +1588,28 @@ const StepsSection = () => {
 
             <Text
               color="gray.400"
-              fontSize={{ base: 'md', md: 'lg' }}
+              fontSize={{ base: 'sm', md: 'lg' }}
               textAlign="center"
               maxW="2xl"
             >
-              Pridruži se brendovima koji već koriste našu platformu za organski rast
+              Pridruži se brendovima koji već koriste našu platformu za organski
+              rast
             </Text>
 
-            <HStack spacing={4} flexWrap="wrap" justify="center" pt={2}>
+            <HStack
+              spacing={4}
+              flexWrap="wrap"
+              justify="center"
+              pt={2}
+              w="full"
+            >
               <Button
-                size="lg"
+                size={{ base: 'md', md: 'lg' }}
                 bg="white"
                 color="black"
-                px={10}
-                py={8}
-                fontSize="lg"
+                px={{ base: 6, md: 10 }}
+                py={{ base: 6, md: 8 }}
+                fontSize={{ base: 'md', md: 'lg' }}
                 fontWeight="700"
                 borderRadius="full"
                 leftIcon={<Calendar size={20} />}
@@ -1420,13 +1629,13 @@ const StepsSection = () => {
               </Button>
 
               <Button
-                size="lg"
+                size={{ base: 'md', md: 'lg' }}
                 variant="outline"
                 borderColor="whiteAlpha.300"
                 color="white"
-                px={10}
-                py={8}
-                fontSize="lg"
+                px={{ base: 6, md: 10 }}
+                py={{ base: 6, md: 8 }}
+                fontSize={{ base: 'md', md: 'lg' }}
                 fontWeight="700"
                 borderRadius="full"
                 borderWidth="2px"
@@ -1449,10 +1658,10 @@ const StepsSection = () => {
             </HStack>
 
             <HStack
-              spacing={8}
+              spacing={{ base: 4, md: 8 }}
               pt={6}
               color="gray.400"
-              fontSize="sm"
+              fontSize={{ base: 'xs', md: 'sm' }}
               flexWrap="wrap"
               justify="center"
             >
@@ -1476,7 +1685,17 @@ const StepsSection = () => {
   );
 };
 
-const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;description: string;index: number;}) => {
+const FeatureCard = ({
+  icon,
+  title,
+  description,
+  index,
+}: {
+  icon: any;
+  title: string;
+  description: string;
+  index: number;
+}) => {
   return (
     <MotionBox
       initial={{ opacity: 0, y: 30 }}
@@ -1498,9 +1717,12 @@ const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;d
         h="100%"
         position="relative"
         _hover={{
-          transform: 'translateY(-8px)',
+          transform: { base: 'none', md: 'translateY(-8px)' },
           borderColor: 'red.500',
-          boxShadow: '0 20px 40px rgba(239, 68, 68, 0.15)',
+          boxShadow: {
+            base: 'none',
+            md: '0 20px 40px rgba(239, 68, 68, 0.15)',
+          },
         }}
       >
         {/* Background gradient effect on hover */}
@@ -1521,15 +1743,15 @@ const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;d
         {/* Icon Section */}
         <Box
           w="100%"
-          px={{ base: 6, md: 7 }}
+          px={{ base: 5, sm: 6, md: 7 }}
           pt={{ base: 6, md: 7 }}
           pb={{ base: 4, md: 5 }}
           position="relative"
           zIndex={1}
         >
           <Flex
-            w="72px"
-            h="72px"
+            w={{ base: '64px', md: '72px' }}
+            h={{ base: '64px', md: '72px' }}
             borderRadius="xl"
             bg="black"
             align="center"
@@ -1538,10 +1760,10 @@ const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;d
             transition="all 0.3s ease"
             _groupHover={{
               bg: 'red.500',
-              transform: 'rotate(-5deg) scale(1.05)',
+              transform: { base: 'none', md: 'rotate(-5deg) scale(1.05)' },
             }}
           >
-            <Icon as={icon} boxSize={8} color="white" />
+            <Icon as={icon} boxSize={{ base: 7, md: 8 }} color="white" />
 
             {/* Glow effect */}
             <Box
@@ -1555,28 +1777,13 @@ const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;d
               _groupHover={{ opacity: 0.4 }}
             />
           </Flex>
-
-          {/*/!* Index number - subtle *!/*/}
-          {/*<Text*/}
-          {/*  position="absolute"*/}
-          {/*  top={4}*/}
-          {/*  right={6}*/}
-          {/*  fontSize="6xl"*/}
-          {/*  fontWeight="900"*/}
-          {/*  color="gray.100"*/}
-          {/*  lineHeight="1"*/}
-          {/*  transition="color 0.3s"*/}
-          {/*  _groupHover={{ color: 'red.50' }}*/}
-          {/*>*/}
-          {/*  {(index + 1).toString().padStart(2, '0')}*/}
-          {/*</Text>*/}
         </Box>
 
         {/* Content Section */}
         <VStack
           align="start"
           spacing={4}
-          px={{ base: 6, md: 7 }}
+          px={{ base: 5, sm: 6, md: 7 }}
           pb={{ base: 6, md: 7 }}
           w="100%"
           flex="1"
@@ -1585,7 +1792,7 @@ const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;d
         >
           <Heading
             as="h3"
-            fontSize={{ base: 'xl', md: '2xl' }}
+            fontSize={{ base: 'lg', md: '2xl' }}
             lineHeight="1.2"
             fontWeight="800"
             letterSpacing="-0.02em"
@@ -1596,7 +1803,7 @@ const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;d
 
           <Text
             color="gray.600"
-            fontSize={{ base: 'md', md: 'lg' }}
+            fontSize={{ base: 'sm', md: 'lg' }}
             lineHeight="1.7"
             flex="1"
           >
@@ -1613,7 +1820,12 @@ const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;d
               transform: 'translateX(4px)',
             }}
           >
-            <Text fontSize="sm" fontWeight="700" textTransform="uppercase" letterSpacing="wider">
+            <Text
+              fontSize="sm"
+              fontWeight="700"
+              textTransform="uppercase"
+              letterSpacing="wider"
+            >
               Verifikovano
             </Text>
             <Icon as={GrCheckmark} boxSize={4} />
@@ -1686,7 +1898,11 @@ const FeaturesSection = () => {
   return (
     <Box as="section" bg="gray.200" color="black" py={{ base: 16, md: 24 }}>
       <Container maxW="7xl">
-        <Box width="75%" textAlign="center" mx="auto">
+        <Box
+          width={{ base: '90%', md: '75%' }}
+          textAlign="center"
+          mx="auto"
+        >
           <Text
             fontSize="sm"
             letterSpacing="0.15em"
@@ -1700,14 +1916,18 @@ const FeaturesSection = () => {
           <Heading
             fontWeight="900"
             letterSpacing="-0.03em"
-            fontSize={{ base: '28px', md: '36px', lg: '48px' }}
+            fontSize={{ base: '24px', md: '36px', lg: '48px' }}
             mb={{ base: 12, md: 16 }}
           >
             Kreiramo mrežu gde kreatori i kliperi uspevaju zajedno.
           </Heading>
         </Box>
 
-        <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6} gridAutoRows="1fr">
+        <Grid
+          templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
+          gap={6}
+          gridAutoRows="1fr"
+        >
           {features.map((f, i) => (
             <MotionGridItem
               key={f.title}
@@ -1717,7 +1937,13 @@ const FeaturesSection = () => {
               transition={{ duration: 0.45, delay: i * 0.08, ease: 'easeOut' }}
               viewport={{ once: true, amount: 0.25 }}
             >
-              <FeatureCard icon={f.icon} title={f.title} description={f.description} index={i} key={i} />
+              <FeatureCard
+                icon={f.icon}
+                title={f.title}
+                description={f.description}
+                index={i}
+                key={i}
+              />
             </MotionGridItem>
           ))}
         </Grid>
@@ -1736,7 +1962,7 @@ const PricingSection = () => {
         'Pristup našem Dashboard-u',
         'Redovni izveštaji + 24/7 support',
         'Organski rast engagementa',
-        'Garancija'
+        'Garancija',
       ],
     },
     {
@@ -1759,7 +1985,7 @@ const PricingSection = () => {
         'Dedicated tim za tvoj brend',
         'A/B testing i optimizacija',
         'Full produkcija sadržaja',
-        'aaaa'
+        'aaaa',
       ],
       enterprise: true,
     },
@@ -1779,17 +2005,16 @@ const PricingSection = () => {
       position="relative"
       overflow="hidden"
     >
-      <Container maxW="7xl" h="full" >
+      <Container maxW="7xl" h="full">
         <VStack spacing={24} h="full" justify="center">
           {/* Header matching the image style */}
           <VStack spacing={3}>
             <Heading
-              fontSize={{ base: '36px', md: '48px', lg: '72px' }}
+              fontSize={{ base: '32px', sm: '48px', md: '72px' }}
               fontWeight="900"
               letterSpacing="-0.04em"
               lineHeight="1"
               textAlign="center"
-
             >
               Fleksibilni
               <Box
@@ -1799,7 +2024,10 @@ const PricingSection = () => {
                 color="black"
                 pl="2"
                 ml="2"
-                bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
+                bgGradient={{
+                  base: 'none',
+                  md: 'linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))',
+                }}
                 borderLeft="8px"
                 borderColor="red.500"
               >
@@ -1807,7 +2035,7 @@ const PricingSection = () => {
               </Box>
             </Heading>
             <Text
-              fontSize={{ base: '16px', md: '20px' }}
+              fontSize={{ base: '14px', md: '20px' }}
               color="gray.600"
               fontWeight="500"
             >
@@ -1837,7 +2065,7 @@ const PricingSection = () => {
                       border="2px solid"
                       borderColor="gray.200"
                       borderRadius="2xl"
-                      p={6}
+                      p={{ base: 5, md: 6 }}
                       spacing={4}
                       h="full"
                       position="relative"
@@ -1845,9 +2073,12 @@ const PricingSection = () => {
                       color="gray.700"
                       overflow="hidden"
                       _hover={{
-                        transform: 'translateY(-4px)',
+                        transform: { base: 'none', md: 'translateY(-4px)' },
                         borderColor: 'gray.300',
-                        boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+                        boxShadow: {
+                          base: 'none',
+                          md: '0 10px 30px rgba(0,0,0,0.05)',
+                        },
                       }}
                       _before={{
                         content: '""',
@@ -1876,7 +2107,7 @@ const PricingSection = () => {
                       </Badge>
 
                       <Heading
-                        fontSize="3xl"
+                        fontSize={{ base: '2xl', md: '3xl' }}
                         fontWeight="900"
                         textAlign="center"
                         lineHeight="1.1"
@@ -1906,7 +2137,11 @@ const PricingSection = () => {
                               bgGradient="linear(to-r, gray.300, gray.400)"
                               flexShrink={0}
                             />
-                            <Text fontSize="sm" fontWeight="700" noOfLines={1}>
+                            <Text
+                              fontSize={{ base: 'xs', md: 'sm' }}
+                              fontWeight="700"
+                              noOfLines={1}
+                            >
                               {feature}
                             </Text>
                           </HStack>
@@ -1914,12 +2149,17 @@ const PricingSection = () => {
                       </VStack>
 
                       <VStack spacing={3} w="full">
-                        <Heading fontSize="lg" fontWeight="900" letterSpacing="-0.02em" color="gray.700">
+                        <Heading
+                          fontSize={{ base: 'md', md: 'lg' }}
+                          fontWeight="900"
+                          letterSpacing="-0.02em"
+                          color="gray.700"
+                        >
                           Kontaktiraj nas za cenu
                         </Heading>
                         <Button
                           w="full"
-                          size="lg"
+                          size={{ base: 'md', md: 'lg' }}
                           bgGradient="linear(to-r, gray.200, gray.300)"
                           color="gray.700"
                           borderRadius="xl"
@@ -1955,7 +2195,7 @@ const PricingSection = () => {
                         border="3px solid"
                         borderColor="red.500"
                         borderRadius="2xl"
-                        p={6}
+                        p={{ base: 5, md: 6 }}
                         spacing={4}
                         h="full"
                         position="relative"
@@ -1963,8 +2203,11 @@ const PricingSection = () => {
                         color="white"
                         overflow="hidden"
                         _hover={{
-                          transform: 'translateY(-8px)',
-                          boxShadow: '0 20px 40px rgba(239, 68, 68, 0.4)',
+                          transform: { base: 'none', md: 'translateY(-8px)' },
+                          boxShadow: {
+                            base: 'none',
+                            md: '0 20px 40px rgba(239, 68, 68, 0.4)',
+                          },
                         }}
                         _before={{
                           content: '""',
@@ -1973,7 +2216,8 @@ const PricingSection = () => {
                           right: 0,
                           w: '200px',
                           h: '200px',
-                          bgGradient: 'radial(circle, rgba(239, 68, 68, 0.15), transparent 70%)',
+                          bgGradient:
+                            'radial(circle, rgba(239, 68, 68, 0.15), transparent 70%)',
                           pointerEvents: 'none',
                         }}
                       >
@@ -1991,7 +2235,7 @@ const PricingSection = () => {
                         </Badge>
 
                         <Heading
-                          fontSize="3xl"
+                          fontSize={{ base: '2xl', md: '3xl' }}
                           fontWeight="900"
                           textAlign="center"
                           lineHeight="1.1"
@@ -2017,7 +2261,11 @@ const PricingSection = () => {
                                 bg="red.500"
                                 flexShrink={0}
                               />
-                              <Text fontSize="sm" fontWeight="600" noOfLines={1}>
+                              <Text
+                                fontSize={{ base: 'xs', md: 'sm' }}
+                                fontWeight="600"
+                                noOfLines={1}
+                              >
                                 {feature}
                               </Text>
                             </HStack>
@@ -2025,12 +2273,16 @@ const PricingSection = () => {
                         </VStack>
 
                         <VStack spacing={3} w="full">
-                          <Heading fontSize="lg" fontWeight="900" letterSpacing="-0.02em">
+                          <Heading
+                            fontSize={{ base: 'md', md: 'lg' }}
+                            fontWeight="900"
+                            letterSpacing="-0.02em"
+                          >
                             Kontaktiraj nas za cenu
                           </Heading>
                           <Button
                             w="full"
-                            size="lg"
+                            size={{ base: 'md', md: 'lg' }}
                             bg="red.500"
                             color="white"
                             borderRadius="xl"
@@ -2080,7 +2332,7 @@ const PricingSection = () => {
                     border="2px solid"
                     borderColor="gray.700"
                     borderRadius="2xl"
-                    p={6}
+                    p={{ base: 5, md: 6 }}
                     spacing={4}
                     h="full"
                     position="relative"
@@ -2088,9 +2340,12 @@ const PricingSection = () => {
                     color="white"
                     overflow="hidden"
                     _hover={{
-                      transform: 'translateY(-4px)',
+                      transform: { base: 'none', md: 'translateY(-4px)' },
                       borderColor: 'gray.500',
-                      boxShadow: '0 15px 40px rgba(0,0,0,0.25)',
+                      boxShadow: {
+                        base: 'none',
+                        md: '0 15px 40px rgba(0,0,0,0.25)',
+                      },
                     }}
                     _before={{
                       content: '""',
@@ -2119,7 +2374,7 @@ const PricingSection = () => {
                     </Badge>
 
                     <Heading
-                      fontSize="3xl"
+                      fontSize={{ base: '2xl', md: '3xl' }}
                       fontWeight="900"
                       textAlign="center"
                       lineHeight="1.1"
@@ -2149,7 +2404,11 @@ const PricingSection = () => {
                             bgGradient="linear(to-r, gray.400, gray.600)"
                             flexShrink={0}
                           />
-                          <Text fontSize="sm" fontWeight="700" noOfLines={1}>
+                          <Text
+                            fontSize={{ base: 'xs', md: 'sm' }}
+                            fontWeight="700"
+                            noOfLines={1}
+                          >
                             {feature}
                           </Text>
                         </HStack>
@@ -2157,12 +2416,16 @@ const PricingSection = () => {
                     </VStack>
 
                     <VStack spacing={3} w="full">
-                      <Heading fontSize="lg" fontWeight="900" letterSpacing="-0.02em">
+                      <Heading
+                        fontSize={{ base: 'md', md: 'lg' }}
+                        fontWeight="900"
+                        letterSpacing="-0.02em"
+                      >
                         Kontaktiraj nas za cenu
                       </Heading>
                       <Button
                         w="full"
-                        size="lg"
+                        size={{ base: 'md', md: 'lg' }}
                         bgGradient="linear(to-r, gray.700, gray.900)"
                         color="white"
                         borderRadius="xl"
@@ -2186,21 +2449,27 @@ const PricingSection = () => {
 
           {/* Bottom CTA */}
           <HStack
-            spacing={4}
+            spacing={{ base: 3, md: 4 }}
             bg="gray.50"
             border="1px solid"
             borderColor="gray.200"
             borderRadius="xl"
-            p={8}
+            p={{ base: 6, md: 8 }}
             maxW="4xl"
             w="full"
             transition="all 0.3s"
+            flexDirection={{ base: 'column', md: 'row' }}
             _hover={{
-              transform: 'translateY(-8px)',
+              transform: { base: 'none', md: 'translateY(-8px)' },
             }}
           >
             <Box flex="1">
-              <Text fontSize="xl" fontWeight="800" mb={1} color="black">
+              <Text
+                fontSize={{ base: 'lg', md: 'xl' }}
+                fontWeight="800"
+                mb={1}
+                color="black"
+              >
                 Nisi siguran šta ti treba?
               </Text>
               <Text fontSize="sm" color="gray.600">
@@ -2208,7 +2477,7 @@ const PricingSection = () => {
               </Text>
             </Box>
             <Button
-              size="lg"
+              size={{ base: 'md', md: 'lg' }}
               bg="red.500"
               color="white"
               borderRadius="xl"
@@ -2219,6 +2488,7 @@ const PricingSection = () => {
                 transform: 'scale(1.05)',
                 bg: 'red.600',
               }}
+              w={{ base: 'full', md: 'auto' }}
               flexShrink={0}
             >
               Kontakt
@@ -2262,12 +2532,12 @@ const FAQSection = () => {
   ];
 
   const FaqColumn = ({
-                       title,
-                       items,
-                       ctaButtonText,
-                       ctaButtonLink,
-                       accentColor,
-                     }: {
+    title,
+    items,
+    ctaButtonText,
+    ctaButtonLink,
+    accentColor,
+  }: {
     title: string;
     items: { q: string; a: string }[];
     ctaButtonText: string;
@@ -2277,7 +2547,7 @@ const FAQSection = () => {
     <Box>
       <Heading
         as="h3"
-        fontSize={{ base: '2xl', md: '3xl' }}
+        fontSize={{ base: 'xl', md: '3xl' }}
         mb={8}
         color="white"
         fontWeight="900"
@@ -2312,7 +2582,7 @@ const FAQSection = () => {
             _hover={{
               borderColor: accentColor,
               bg: 'whiteAlpha.100',
-              transform: 'translateX(4px)',
+              transform: { base: 'none', md: 'translateX(4px)' },
             }}
           >
             {({ isExpanded }) => (
@@ -2320,13 +2590,13 @@ const FAQSection = () => {
                 <h2>
                   <AccordionButton
                     _expanded={{ bg: 'whiteAlpha.100' }}
-                    p={6}
+                    p={{ base: 4, md: 6 }}
                     justifyContent="space-between"
                     alignItems="center"
                     _hover={{ bg: 'whiteAlpha.100' }}
                   >
                     <Heading
-                      size="sm"
+                      size={{ base: 'xs', md: 'sm' }}
                       color="white"
                       fontWeight="700"
                       letterSpacing="-0.01em"
@@ -2351,7 +2621,9 @@ const FAQSection = () => {
                         lineHeight="1"
                         color="white"
                         fontWeight="bold"
-                        transform={isExpanded ? 'rotate(45deg)' : 'rotate(0deg)'}
+                        transform={
+                          isExpanded ? 'rotate(45deg)' : 'rotate(0deg)'
+                        }
                         transition="transform 0.3s ease"
                       >
                         +
@@ -2360,11 +2632,11 @@ const FAQSection = () => {
                   </AccordionButton>
                 </h2>
                 <AccordionPanel
-                  px={6}
-                  pb={6}
+                  px={{ base: 4, md: 6 }}
+                  pb={{ base: 4, md: 6 }}
                   pt={2}
                   color="gray.300"
-                  fontSize="md"
+                  fontSize={{ base: 'sm', md: 'md' }}
                   lineHeight="1.8"
                 >
                   {faq.a}
@@ -2379,15 +2651,17 @@ const FAQSection = () => {
           as="a"
           href={ctaButtonLink}
           target={ctaButtonText.includes('Discord') ? '_blank' : undefined}
-          rel={ctaButtonText.includes('Discord') ? 'noopener noreferrer' : undefined}
-          size="lg"
+          rel={
+            ctaButtonText.includes('Discord') ? 'noopener noreferrer' : undefined
+          }
+          size={{ base: 'md', md: 'lg' }}
           w={{ base: 'full', md: '85%' }}
           bg="white"
           color="black"
           borderRadius="full"
-          px={10}
-          py={8}
-          fontSize="lg"
+          px={{ base: 6, md: 10 }}
+          py={{ base: 6, md: 8 }}
+          fontSize={{ base: 'md', md: 'lg' }}
           fontWeight="700"
           boxShadow="0px 8px 24px rgba(255,255,255,0.15)"
           leftIcon={
@@ -2454,7 +2728,6 @@ const FAQSection = () => {
         h="500px"
         borderRadius="full"
         bgGradient="radial(circle, rgba(239, 68, 68, 0.08), transparent 70%)"
-
         pointerEvents="none"
       />
 
@@ -2480,20 +2753,22 @@ const FAQSection = () => {
           <Heading
             fontWeight="900"
             letterSpacing="-0.03em"
-            fontSize={{ base: '36px', md: '48px', lg: '56px' }}
+            fontSize={{ base: '32px', md: '48px', lg: '56px' }}
             color="white"
             lineHeight="1.1"
           >
             Česta{' '}
-            <Box
-              as="span"
-              position="relative"
-              zIndex={1}
-            >
+            <Box as="span" position="relative" zIndex={1}>
               Pitanja
             </Box>
           </Heading>
-          <Text color="gray.400" fontSize={{ base: 'lg', md: 'xl' }} maxW="2xl" lineHeight="1.6">
+          <Text
+            color="gray.400"
+            fontSize={{ base: 'md', md: 'xl' }}
+            maxW="2xl"
+            lineHeight="1.6"
+            px={{ base: 4, md: 0 }}
+          >
             Sve što treba da znaš — bilo da kreiraš sadržaj ili klipuješ ga.
           </Text>
         </MotionVStack>
@@ -2593,17 +2868,16 @@ const CTASection = () => {
             spacing={2}
           >
             <Icon as={MessageSquareIcon} boxSize={4} />
-            <Text fontWeight="600">
-              Stupite u kontakt
-            </Text>
+            <Text fontWeight="600">Stupite u kontakt</Text>
           </HStack>
 
           <Heading
-            fontSize={{ base: '28px', md: '36px', lg: '48px' }}
+            fontSize={{ base: '24px', sm: '32px', md: '48px' }}
             fontWeight="900"
             lineHeight="1.05"
             letterSpacing="-0.03em"
             color="white"
+            px={{ base: 4, md: 0 }}
           >
             ZAPOČNI SVOJ PUT KA
             <Box
@@ -2613,7 +2887,10 @@ const CTASection = () => {
               color="white"
               pl="2"
               ml="2"
-              bgGradient="linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))"
+              bgGradient={{
+                base: 'none',
+                md: 'linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))',
+              }}
               borderLeft="8px"
               borderColor="red.500"
             >
@@ -2623,19 +2900,24 @@ const CTASection = () => {
 
           <Text
             color="gray.400"
-            fontSize={{ base: 'lg', md: 'xl' }}
+            fontSize={{ base: 'sm', md: 'xl' }}
             lineHeight={1.7}
+            px={{ base: 4, md: 0 }}
           >
-            Spremni da pojačate engagement i prodaju na društvenim mrežama kroz strateški organski <br/> marketing i profesionalne usluge klipovanja kontenta? Zakažite besplatan poziv<br/> kako bi videli  da li možemo ostvariti prave rezultate za vaš brend.
+            Spremni da pojačate engagement i prodaju na društvenim mrežama kroz
+            strateški organski <br /> marketing i profesionalne usluge
+            klipovanja kontenta? Zakažite besplatan poziv
+            <br /> kako bi videli da li možemo ostvariti prave rezultate za vaš
+            brend.
           </Text>
 
           <HStack
-            spacing={8}
+            spacing={{ base: 4, md: 8 }}
             pt={4}
             flexWrap="wrap"
             justify="center"
             color="gray.300"
-            fontSize="md"
+            fontSize={{ base: 'xs', md: 'md' }}
             fontWeight="medium"
           >
             <HStack>
@@ -2646,7 +2928,7 @@ const CTASection = () => {
               <Icon as={ArrowRight} boxSize={5} />
               <Text>Besplatne konsultacije</Text>
             </HStack>
-            <HStack>
+            <HStack display={{ base: 'none', md: 'flex' }}>
               <Icon as={Check} boxSize={5} />
               <Text>Veruju nam 100+ brendova</Text>
             </HStack>
@@ -2668,12 +2950,15 @@ const CTASection = () => {
             borderColor="white"
             borderRadius="2xl"
             textAlign="center"
-            p={{ base: 10, md: 14 }}
+            p={{ base: 8, md: 14 }}
             boxShadow="0 20px 60px rgba(255, 255, 255, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)"
             transition="all 0.3s ease"
             _hover={{
-              transform: 'translateY(-8px)',
-              boxShadow: '0 30px 80px rgba(255, 255, 255, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.2)',
+              transform: { base: 'none', md: 'translateY(-8px)' },
+              boxShadow: {
+                base: '0 20px 60px rgba(255, 255, 255, 0.15)',
+                md: '0 30px 80px rgba(255, 255, 255, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.2)',
+              },
               borderColor: 'gray.100',
             }}
             position="relative"
@@ -2692,27 +2977,38 @@ const CTASection = () => {
 
             <VStack spacing={5} position="relative" zIndex={1}>
               <Flex
-                w="72px"
-                h="72px"
+                w={{ base: '60px', md: '72px' }}
+                h={{ base: '60px', md: '72px' }}
                 borderRadius="xl"
                 bg="white"
                 align="center"
                 justify="center"
               >
-                <Icon as={CalendarIcon} boxSize={10} color="black" />
+                <Icon
+                  as={CalendarIcon}
+                  boxSize={{ base: 8, md: 10 }}
+                  color="black"
+                />
               </Flex>
-              <Heading size="lg" fontWeight="900" color="white">
+              <Heading size={{ base: 'md', md: 'lg' }} fontWeight="900" color="white">
                 Zakažite Besplatan Poziv
               </Heading>
-              <Text color="gray.400" maxW="2xl" mx="auto" fontSize="md" lineHeight="1.7">
-                Rezervišite 30-minutni besplatan poziv za više informacija<br/> kako bismo videli da li možemo da vam pomognemo
+              <Text
+                color="gray.400"
+                maxW="2xl"
+                mx="auto"
+                fontSize={{ base: 'sm', md: 'md' }}
+                lineHeight="1.7"
+              >
+                Rezervišite 30-minutni besplatan poziv za više informacija
+                <br /> kako bismo videli da li možemo da vam pomognemo
               </Text>
               <Button
-                size="lg"
+                size={{ base: 'md', md: 'lg' }}
                 mt={4}
-                px={10}
-                py={7}
-                fontSize="lg"
+                px={{ base: 6, md: 10 }}
+                py={{ base: 6, md: 7 }}
+                fontSize={{ base: 'md', md: 'lg' }}
                 fontWeight="700"
                 borderRadius="full"
                 bg="white"
@@ -2750,24 +3046,25 @@ const CTASection = () => {
               border="2px solid"
               borderColor="whiteAlpha.200"
               borderRadius="2xl"
-              p={{ base: 8, md: 10 }}
+              p={{ base: 6, md: 10 }}
               boxShadow="0 20px 60px rgba(0,0,0,0.3)"
               transition="all 0.3s ease"
               _hover={{
-                transform: 'translateY(-8px)',
+                transform: { base: 'none', md: 'translateY(-8px)' },
                 borderColor: 'whiteAlpha.300',
-                boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
+                boxShadow: {
+                  base: '0 20px 60px rgba(0,0,0,0.3)',
+                  md: '0 30px 80px rgba(0,0,0,0.4)',
+                },
               }}
               h="100%"
             >
               <HStack spacing={2} mb="8">
                 <Icon as={MailIcon} boxSize={6} my="auto" color="white" />
-                <Heading size="lg" my="auto" fontWeight="900">
-
+                <Heading size={{ base: 'md', md: 'lg' }} my="auto" fontWeight="900">
                   Direktan kontakt
                 </Heading>
               </HStack>
-
 
               <VStack align="start" spacing={8}>
                 {[
@@ -2804,14 +3101,20 @@ const CTASection = () => {
                       <Icon as={item.icon} boxSize={5} color="black" />
                     </Flex>
                     <Box>
-                      <Text color="gray.500" fontSize="sm" fontWeight="600" textTransform="uppercase" letterSpacing="wide">
+                      <Text
+                        color="gray.500"
+                        fontSize="sm"
+                        fontWeight="600"
+                        textTransform="uppercase"
+                        letterSpacing="wide"
+                      >
                         {item.label}
                       </Text>
                       {item.href ? (
                         <Link
                           href={item.href}
                           fontWeight="700"
-                          fontSize="lg"
+                          fontSize={{ base: 'md', md: 'lg' }}
                           color="white"
                           _hover={{
                             color: 'gray.300',
@@ -2822,7 +3125,11 @@ const CTASection = () => {
                           {item.value}
                         </Link>
                       ) : (
-                        <Text fontWeight="700" fontSize="lg" color="white">
+                        <Text
+                          fontWeight="700"
+                          fontSize={{ base: 'md', md: 'lg' }}
+                          color="white"
+                        >
                           {item.value}
                         </Text>
                       )}
@@ -2846,17 +3153,20 @@ const CTASection = () => {
               border="2px solid"
               borderColor="whiteAlpha.200"
               borderRadius="2xl"
-              p={{ base: 8, md: 10 }}
+              p={{ base: 6, md: 10 }}
               boxShadow="0 20px 60px rgba(0,0,0,0.3)"
               transition="all 0.3s ease"
               _hover={{
-                transform: 'translateY(-8px)',
+                transform: { base: 'none', md: 'translateY(-8px)' },
                 borderColor: 'whiteAlpha.300',
-                boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
+                boxShadow: {
+                  base: '0 20px 60px rgba(0,0,0,0.3)',
+                  md: '0 30px 80px rgba(0,0,0,0.4)',
+                },
               }}
               h="100%"
             >
-              <Heading size="lg" mb={8} fontWeight="900">
+              <Heading size={{ base: 'md', md: 'lg' }} mb={8} fontWeight="900">
                 Šta{' '}
                 <Box as="span" fontWeight="900" color="white">
                   Dalje?
@@ -2902,10 +3212,19 @@ const CTASection = () => {
                       {step.num}
                     </Flex>
                     <Box>
-                      <Text fontWeight="700" color="white" fontSize="lg" mb={1}>
+                      <Text
+                        fontWeight="700"
+                        color="white"
+                        fontSize={{ base: 'md', md: 'lg' }}
+                        mb={1}
+                      >
                         {step.title}
                       </Text>
-                      <Text color="gray.400" fontSize="md" lineHeight="1.6">
+                      <Text
+                        color="gray.400"
+                        fontSize={{ base: 'sm', md: 'md' }}
+                        lineHeight="1.6"
+                      >
                         {step.desc}
                       </Text>
                     </Box>
@@ -2932,50 +3251,62 @@ const CTASection = () => {
             borderColor="whiteAlpha.200"
             borderRadius="2xl"
             textAlign="center"
-            p={{ base: 10, md: 12 }}
+            p={{ base: 8, md: 12 }}
             boxShadow="0 20px 60px rgba(0,0,0,0.3)"
             transition="all 0.3s ease"
             _hover={{
-              transform: 'translateY(-8px)',
+              transform: { base: 'none', md: 'translateY(-8px)' },
               borderColor: '#7289da',
-              boxShadow: '0 30px 80px rgba(114, 137, 218, 0.2)',
+              boxShadow: {
+                base: '0 20px 60px rgba(0,0,0,0.3)',
+                md: '0 30px 80px rgba(114, 137, 218, 0.2)',
+              },
             }}
             position="relative"
             overflow="hidden"
           >
             <VStack spacing={6} position="relative" zIndex={1}>
               <Flex
-                w="72px"
-                h="72px"
+                w={{ base: '60px', md: '72px' }}
+                h={{ base: '60px', md: '72px' }}
                 borderRadius="xl"
                 bg="#7289da"
                 align="center"
                 justify="center"
               >
-                <Icon as={FaDiscord} boxSize={12} color="white" />
+                <Icon
+                  as={FaDiscord}
+                  boxSize={{ base: 10, md: 12 }}
+                  color="white"
+                />
               </Flex>
 
               <Heading
-                fontSize={{ base: '2xl', md: '3xl' }}
+                fontSize={{ base: 'xl', md: '3xl' }}
                 fontWeight="900"
                 lineHeight="short"
               >
                 Želiš da postaneš kliper?
               </Heading>
 
-              <Text color="gray.400" fontSize="lg" maxW="2xl">
-                Počni da zarađuješ kreirajući viralne klipove za top brendove i kreatore.
+              <Text
+                color="gray.400"
+                fontSize={{ base: 'md', md: 'lg' }}
+                maxW="2xl"
+              >
+                Počni da zarađuješ kreirajući viralne klipove za top brendove i
+                kreatore.
               </Text>
 
               <Button
-                size="lg"
+                size={{ base: 'md', md: 'lg' }}
                 bg="#7289da"
                 color="white"
                 borderRadius="full"
-                px={10}
-                py={7}
+                px={{ base: 6, md: 10 }}
+                py={{ base: 6, md: 7 }}
                 fontWeight="700"
-                fontSize="lg"
+                fontSize={{ base: 'md', md: 'lg' }}
                 leftIcon={<FaDiscord size={22} />}
                 _hover={{
                   bg: '#5b6eae',

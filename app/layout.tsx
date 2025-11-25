@@ -2,6 +2,7 @@ import { ColorModeScript } from '@chakra-ui/react'
 
 import { Provider } from './providers/provider'
 import { Analytics } from "@vercel/analytics/next"
+import '@fontsource-variable/montserrat';
 
 export default function Layout(props: { children: React.ReactNode }) {
   const colorMode = 'dark'

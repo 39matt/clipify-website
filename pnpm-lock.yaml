@@ -35,6 +35,9 @@ importers:
       '@fontsource-variable/inter':
         specifier: ^5.1.0
         version: 5.2.6
+      '@fontsource-variable/montserrat':
+        specifier: ^5.2.8
+        version: 5.2.8
       '@formspree/react':
         specifier: ^3.0.0
         version: 3.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1228,6 +1231,9 @@ packages:
 
   '@fontsource-variable/inter@5.2.6':
     resolution: {integrity: sha512-jks/bficUPQ9nn7GvXvHtlQIPudW7Wx8CrlZoY8bhxgeobNxlQan8DclUJuYF2loYRrGpfrhCIZZspXYysiVGg==}
+
+  '@fontsource-variable/montserrat@5.2.8':
+    resolution: {integrity: sha512-d8wykq7GCKhEOlLwEuQIOK3w3qsXNxwDlH0meru4AZZzQ4/+rZyvHWKL6BBtHdmbovSHEEQDkwkD8qYUKlcFtQ==}
 
   '@formspree/core@4.0.0':
     resolution: {integrity: sha512-geNlUut5nME1Ztej5Pzx1BrlQ1fFIcJYIqmF+Vm0jaUbpZxjXvt7SDOGeQVkuxn80QJiIHlwBGGjSBFjPX/KDw==}
@@ -6196,6 +6202,8 @@ snapshots:
   '@firebase/webchannel-wrapper@1.0.3': {}
 
   '@fontsource-variable/inter@5.2.6': {}
+
+  '@fontsource-variable/montserrat@5.2.8': {}
 
   '@formspree/core@4.0.0':
     dependencies:

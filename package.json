@@ -19,6 +19,7 @@
     "@firebase/auth": "^1.10.6",
     "@firebase/firestore": "^4.7.16",
     "@fontsource-variable/inter": "^5.1.0",
+    "@fontsource-variable/montserrat": "^5.2.8",
     "@formspree/react": "^3.0.0",
     "@saas-ui/auth": "^3.4.0",
     "@saas-ui/core": "^2.8.1",
