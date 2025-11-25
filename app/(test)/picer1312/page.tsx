@@ -25,8 +25,8 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
-  AccordionPanel,
-} from '@chakra-ui/react';
+  AccordionPanel, IconButton, SimpleGrid,
+} from '@chakra-ui/react'
 import { motion } from 'framer-motion';
 import {
   ChevronRight,
@@ -46,8 +46,8 @@ import {
   PhoneIcon,
   Calendar,
   InstagramIcon,
-  Instagram,
-} from 'lucide-react';
+  Instagram, SparklesIcon,
+} from 'lucide-react'
 import type { NextPage } from 'next';
 import { Global } from '@emotion/react';
 import { GoPeople } from 'react-icons/go';
@@ -113,7 +113,7 @@ const Home: NextPage = () => {
 
 const HeroSection = () => {
   return (
-    <Box position="relative" minH={{base: "130vh", md: "100vh"}}>
+    <Box position="relative" minH={{base: "140vh", md: "100vh"}}>
       {/* Logo and Badge - Fixed at top */}
       <VStack
         spacing={{ base: 6, md: 12 }}
@@ -369,6 +369,22 @@ const HeroSection = () => {
         zIndex={1}
       >
         <Container maxW="7xl" px={{ base: 4, md: 6 }}>
+          <Flex
+            mx="auto"
+            mb="6"
+            w={16}
+            h={16}
+            borderRadius="lg"
+            bg="black"
+            border="1px solid"
+            borderColor="whiteAlpha.200"
+            align="center"
+            justify="center"
+            flexShrink={0}
+          >
+            <Icon as={SparklesIcon} boxSize="50%" color="white" />
+          </Flex>
+
           <MotionText
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -580,66 +596,6 @@ const MarqueeSection = () => {
     </Box>
   );
 };
-function useCountUp(params: {
-  end: number;
-  duration?: number;
-  format?: (n: number) => string;
-}) {
-  const {
-    end,
-    duration = 5000,
-    format = (n: number) => Math.floor(n).toString(),
-  } = params;
-
-  const [value, setValue] = useState(0);
-  const [started, setStarted] = useState(false);
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting && !started) {
-            setStarted(true);
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    io.observe(ref.current);
-    return () => io.disconnect();
-  }, [started]);
-
-  useEffect(() => {
-    if (!started) return;
-
-    const start = performance.now();
-    const tick = (now: number) => {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setValue(end * eased);
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    const r = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(r);
-  }, [started, duration, end]);
-
-  return { ref, display: format(value) };
-}
-
-const formatInt = (n: number) => Math.floor(n).toLocaleString('sr-RS');
-
-const formatCompact = (n: number) => {
-  const v = Math.floor(n);
-  if (v >= 1_000_000)
-    return (v / 1_000_000).toFixed(1).replace('.0', '') + 'M';
-  if (v >= 1_000) return (v / 1_000).toFixed(0) + 'K';
-  return v.toString();
-};
 
 const StatsSection = () => {
   const targets = {
@@ -647,6 +603,67 @@ const StatsSection = () => {
     klipera: 700,
     pregleda: 25_000_000,
     kampanja: 7,
+  };
+
+  function useCountUp(params: {
+    end: number;
+    duration?: number;
+    format?: (n: number) => string;
+  }) {
+    const {
+      end,
+      duration = 5000,
+      format = (n: number) => Math.floor(n).toString(),
+    } = params;
+
+    const [value, setValue] = useState(0);
+    const [started, setStarted] = useState(false);
+    const ref = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+      if (!ref.current) return;
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting && !started) {
+              setStarted(true);
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+
+      io.observe(ref.current);
+      return () => io.disconnect();
+    }, [started]);
+
+    useEffect(() => {
+      if (!started) return;
+
+      const start = performance.now();
+      const tick = (now: number) => {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        setValue(end * eased);
+        if (progress < 1) requestAnimationFrame(tick);
+      };
+      const r = requestAnimationFrame(tick);
+      return () => cancelAnimationFrame(r);
+    }, [started, duration, end]);
+
+    return { ref, display: format(value) };
+  }
+
+  const formatInt = (n: number) => Math.floor(n).toLocaleString('sr-RS');
+
+  const formatCompact = (n: number) => {
+    const v = Math.floor(n);
+    if (v >= 1_000_000)
+      return (v / 1_000_000).toFixed(1).replace('.0', '') + 'M';
+    if (v >= 1_000) return (v / 1_000).toFixed(0) + 'K';
+    return v.toString();
   };
 
   const dinara = useCountUp({
@@ -679,7 +696,7 @@ const StatsSection = () => {
               spacing={1}
               align="start"
               borderLeft="3px solid"
-              borderColor={{ base: 'red.500', md: 'black' }}
+              borderColor='black'
               pl={4}
             >
               <Heading
@@ -704,7 +721,7 @@ const StatsSection = () => {
               spacing={1}
               align="start"
               borderLeft="3px solid"
-              borderColor={{ base: 'red.500', md: 'black' }}
+              borderColor='black'
               pl={4}
             >
               <Heading
@@ -729,7 +746,7 @@ const StatsSection = () => {
               spacing={1}
               align="start"
               borderLeft="3px solid"
-              borderColor={{ base: 'red.500', md: 'black' }}
+              borderColor='black'
               pl={4}
             >
               <Heading
@@ -754,7 +771,7 @@ const StatsSection = () => {
               spacing={1}
               align="start"
               borderLeft="3px solid"
-              borderColor={{ base: 'red.500', md: 'black' }}
+              borderColor='black'
               pl={4}
             >
               <Heading
@@ -1104,85 +1121,114 @@ type CaseStudyModalProps = {
   data: CaseItem | null;
 };
 
-const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({
-  label,
-  value,
-}) => (
-  <Box
-    borderRadius="xl"
-    overflow="hidden"
-    position="relative"
-    sx={{
-      _before: {
-        content: '""',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        bgGradient:
-          'linear(to-r, transparent, rgba(255,255,255,0.1), transparent)',
-        animation: 'shine 2.5s infinite linear',
-        pointerEvents: 'none',
-        zIndex: 1,
-      },
-    }}
-  >
-    <VStack
-      align="start"
-      bg="whiteAlpha.100"
-      border="1px solid"
-      borderColor="whiteAlpha.300"
+const CaseStudyModal: React.FC<CaseStudyModalProps> = ({isOpen,onClose,data,}) => {
+  const GlowAnimation = () => (
+    <style jsx global>{`
+      @keyframes shine {
+        0% {
+          transform: translateX(-100%) skewX(-30deg);
+        }
+        100% {
+          transform: translateX(200%) skewX(-30deg);
+        }
+      }
+    `}</style>
+  );
+
+  const StatCard: React.FC<{ label: string; value: React.ReactNode }> = ({label,value,}) => (
+    <Box
       borderRadius="xl"
-      p={4}
-      spacing={1}
-      boxShadow="0 4px 10px rgba(0,0,0,0.3)"
+      overflow="hidden"
       position="relative"
-      zIndex={2}
+      sx={{
+        _before: {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          bgGradient:
+            'linear(to-r, transparent, rgba(255,255,255,0.1), transparent)',
+          animation: 'shine 2.5s infinite linear',
+          pointerEvents: 'none',
+          zIndex: 1,
+        },
+      }}
     >
-      <Text fontSize="sm" color="gray.400">
-        {label}
-      </Text>
-      <Heading size="lg" color="white" fontWeight="bold">
-        {value}
-      </Heading>
-    </VStack>
-  </Box>
-);
+      <VStack
+        align="start"
+        bg="whiteAlpha.100"
+        border="1px solid"
+        borderColor="whiteAlpha.300"
+        borderRadius="xl"
+        p={{ base: 3, md: 4 }}
+        spacing={1}
+        boxShadow="0 4px 10px rgba(0,0,0,0.3)"
+        position="relative"
+        zIndex={2}
+      >
+        <Text fontSize={{ base: 'xs', md: 'sm' }} color="gray.400">
+          {label}
+        </Text>
+        <Heading
+          size={{ base: 'md', md: 'lg' }}
+          color="white"
+          fontWeight="bold"
+        >
+          {value}
+        </Heading>
+      </VStack>
+    </Box>
+  );
 
-const GlowAnimation = () => (
-  <style jsx global>{`
-    @keyframes shine {
-      0% {
-        transform: translateX(-100%) skewX(-30deg);
-      }
-      100% {
-        transform: translateX(200%) skewX(-30deg);
-      }
-    }
-  `}</style>
-);
-
-const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
-  isOpen,
-  onClose,
-  data,
-}) => {
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      size="4xl"
+      size={{ base: 'full', md: '4xl' }}
       motionPreset="slideInBottom"
+      scrollBehavior="inside"
     >
       <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(8px)" />
-      <ModalContent bg="gray.900" color="white" borderRadius="2xl" overflow="hidden">
-        <ModalCloseButton top={3} right={3} size="lg" />
+      <ModalContent
+        bg="gray.900"
+        color="white"
+        borderRadius={{ base: 'none', md: '2xl' }}
+        overflow="hidden"
+        mx={{ base: 0, md: 4 }}
+        my={{ base: 0, md: 4 }}
+        maxH={{ base: '100vh', md: '90vh' }}
+      >
+        {/* Close Button */}
+        <IconButton
+          aria-label="Close modal"
+          icon={<Box fontSize="24px">×</Box>}
+          onClick={onClose}
+          position="absolute"
+          top={{ base: 2, md: 3 }}
+          right={{ base: 2, md: 3 }}
+          zIndex={10}
+          size={{ base: 'md', md: 'lg' }}
+          bg="blackAlpha.600"
+          color="white"
+          borderRadius="full"
+          _hover={{
+            bg: 'blackAlpha.800',
+            transform: 'scale(1.1)',
+          }}
+          _active={{
+            bg: 'blackAlpha.900',
+          }}
+          transition="all 0.2s"
+        />
+
         <ModalBody p={0}>
           {data && (
             <Box>
+              {/* Hero Image Section */}
               <Box
-                h={{ base: '220px', md: '320px' }}
+                h={{ base: '200px', sm: '250px', md: '320px' }}
                 bg="gray.800"
                 position="relative"
               >
@@ -1196,27 +1242,34 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
                 <Box
                   position="absolute"
                   inset={0}
-                  bg="linear-gradient(to top, rgba(0,0,0,0.5), transparent)"
+                  bg="linear-gradient(to top, rgba(0,0,0,0.7), transparent)"
                 />
                 <VStack
                   position="absolute"
-                  bottom={4}
-                  left={4}
+                  bottom={{ base: 3, md: 4 }}
+                  left={{ base: 3, md: 4 }}
                   align="start"
                   spacing={1}
                 >
-                  <Heading size="lg">{data.name}</Heading>
-                  <HStack>
-                    <Badge colorScheme="green" px={2} py={1} borderRadius="md">
-                      {data.views} pregleda
-                    </Badge>
-                  </HStack>
+                  <Heading size={{ base: 'md', md: 'lg' }}>
+                    {data.name}
+                  </Heading>
+                  <Badge
+                    colorScheme="green"
+                    px={2}
+                    py={1}
+                    borderRadius="md"
+                    fontSize={{ base: 'xs', md: 'sm' }}
+                  >
+                    {data.views} pregleda
+                  </Badge>
                 </VStack>
               </Box>
 
+              {/* Stats Grid */}
               <Grid
-                templateColumns={{ base: '1fr 1fr', md: 'repeat(4, 1fr)' }}
-                gap={4}
+                templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }}
+                gap={{ base: 3, md: 4 }}
                 p={{ base: 4, md: 6 }}
                 bg="gray.800"
                 borderBottom="1px solid"
@@ -1224,7 +1277,10 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
                 boxShadow="inset 0 -2px 8px rgba(0,0,0,0.2)"
               >
                 <GlowAnimation />
-                <StatCard label="Ukupno Klipera" value={data.totalClippers ?? 0} />
+                <StatCard
+                  label="Ukupno Klipera"
+                  value={data.totalClippers ?? 0}
+                />
                 <StatCard
                   label="Ukupno Video klipova"
                   value={data.totalVideos ?? 0}
@@ -1236,15 +1292,28 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
                 <StatCard label="Ukupno Pregleda" value={data.views} />
               </Grid>
 
-              <Box maxW="95%" mx="auto" my="8">
-                <Heading my={2}>Detaljna analiza</Heading>
-                <Text color="gray.400" textAlign="left">
+              {/* Detailed Analysis */}
+              <Box px={{ base: 4, md: 6 }} py={{ base: 6, md: 8 }}>
+                <Heading size={{ base: 'md', md: 'lg' }} mb={4}>
+                  Detaljna analiza
+                </Heading>
+                <Text
+                  color="gray.400"
+                  textAlign="left"
+                  fontSize={{ base: 'sm', md: 'md' }}
+                  lineHeight="1.7"
+                >
                   {data.text}
                 </Text>
               </Box>
 
+              {/* Top Video Link */}
               {data.topVideo?.link && (
-                <Box px={{ base: 4, md: 6 }} pb={{ base: 6, md: 8 }}>
+                <Box
+                  px={{ base: 4, md: 6 }}
+                  pb={{ base: 6, md: 8 }}
+                  pt={{ base: 0, md: 0 }}
+                >
                   <Button
                     as={Link}
                     href={data.topVideo.link}
@@ -1253,10 +1322,17 @@ const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
                     colorScheme="green"
                     variant="solid"
                     borderRadius="full"
+                    size={{ base: 'md', md: 'lg' }}
+                    w={{ base: 'full', sm: 'auto' }}
+                    px={{ base: 6, md: 8 }}
                   >
                     Pogledaj najpopularniji klip
                   </Button>
-                  <Text mt={2} color="gray.400" fontSize="sm">
+                  <Text
+                    mt={2}
+                    color="gray.400"
+                    fontSize={{ base: 'xs', md: 'sm' }}
+                  >
                     by {data.topVideo.clipper}
                   </Text>
                 </Box>
@@ -1319,11 +1395,14 @@ const StepsSection = () => {
           <Heading
             fontWeight="900"
             letterSpacing="-0.03em"
-            fontSize={{ base: '32px', md: '48px', lg: '56px' }}
-            lineHeight="1"
+            fontSize={{ base: '38px', md: '48px', lg: '56px' }}
+            lineHeight="1.1"
             px={{ base: 4, md: 0 }}
           >
-            Postani viralan u<br/>
+            Postani viralan {' '}
+            <Box as="span" display={{base: "block", md: "none"}}></Box>
+            u
+
             <Box
               as="span"
               position="relative"
@@ -1404,12 +1483,13 @@ const StepsSection = () => {
                 role="group"
                 _hover={{
                   borderColor: 'red.500',
-                  transform: { base: 'none', md: 'translateY(-8px)' },
+                  transform: 'translateY(-8px)',
                   boxShadow: {
                     base: 'none',
                     md: '0 20px 40px rgba(239, 68, 68, 0.15)',
                   },
                 }}
+
               >
                 {/* Background Gradient Effect */}
                 <Box
@@ -1443,7 +1523,7 @@ const StepsSection = () => {
                   transition="all 0.3s ease"
                   _groupHover={{
                     bg: 'red.500',
-                    transform: { base: 'none', md: 'scale(1.1) rotate(5deg)' },
+                    transform: 'scale(1.1) rotate(5deg)',
                     boxShadow: {
                       base: '0 8px 24px rgba(0,0,0,0.12)',
                       md: '0 12px 32px rgba(239, 68, 68, 0.3)',
@@ -1493,7 +1573,7 @@ const StepsSection = () => {
                 {/* Content */}
                 <VStack spacing={3} flex="1">
                   <Heading
-                    fontSize={{ base: 'lg', md: '2xl' }}
+                    fontSize={{ base: 'xl', md: '2xl' }}
                     fontWeight="800"
                     textAlign="center"
                     letterSpacing="-0.02em"
@@ -1685,17 +1765,7 @@ const StepsSection = () => {
   );
 };
 
-const FeatureCard = ({
-  icon,
-  title,
-  description,
-  index,
-}: {
-  icon: any;
-  title: string;
-  description: string;
-  index: number;
-}) => {
+const FeatureCard = ({icon,title,description,index,}: {icon: any;title: string;description: string;index: number;}) => {
   return (
     <MotionBox
       initial={{ opacity: 0, y: 30 }}
@@ -1916,7 +1986,7 @@ const FeaturesSection = () => {
           <Heading
             fontWeight="900"
             letterSpacing="-0.03em"
-            fontSize={{ base: '24px', md: '36px', lg: '48px' }}
+            fontSize={{ base: '28px', md: '36px', lg: '48px' }}
             mb={{ base: 12, md: 16 }}
           >
             Kreiramo mrežu gde kreatori i kliperi uspevaju zajedno.
@@ -2006,7 +2076,7 @@ const PricingSection = () => {
       overflow="hidden"
     >
       <Container maxW="7xl" h="full">
-        <VStack spacing={24} h="full" justify="center">
+        <VStack spacing={{ base: 12, md: 24 }} h="full" justify="center">
           {/* Header matching the image style */}
           <VStack spacing={3}>
             <Heading
@@ -2024,10 +2094,7 @@ const PricingSection = () => {
                 color="black"
                 pl="2"
                 ml="2"
-                bgGradient={{
-                  base: 'none',
-                  md: 'linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))',
-                }}
+                bgGradient='linear(to-r, rgba(252, 165, 165, 0.9), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.2), rgba(252, 165, 165, 0.0))'
                 borderLeft="8px"
                 borderColor="red.500"
               >
@@ -2846,7 +2913,7 @@ const CTASection = () => {
         pointerEvents="none"
       />
 
-      <Container maxW="7xl" position="relative" zIndex={1}>
+      <Container position="relative" zIndex={1}>
         <MotionVStack
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -2870,16 +2937,14 @@ const CTASection = () => {
             <Icon as={MessageSquareIcon} boxSize={4} />
             <Text fontWeight="600">Stupite u kontakt</Text>
           </HStack>
-
           <Heading
-            fontSize={{ base: '24px', sm: '32px', md: '48px' }}
+            fontSize='36px'
             fontWeight="900"
             lineHeight="1.05"
             letterSpacing="-0.03em"
             color="white"
-            px={{ base: 4, md: 0 }}
           >
-            ZAPOČNI SVOJ PUT KA
+            ZAPOČNI SVOJ PUT <br/> KA
             <Box
               as="span"
               position="relative"
@@ -2887,10 +2952,7 @@ const CTASection = () => {
               color="white"
               pl="2"
               ml="2"
-              bgGradient={{
-                base: 'none',
-                md: 'linear(to-r, rgba(252, 165, 165, 0.7), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.0))',
-              }}
+              bgGradient='linear(to-r, rgba(252, 165, 165, 0.9), rgba(252, 165, 165, 0.5), rgba(252, 165, 165, 0.2), rgba(252, 165, 165, 0.0))'
               borderLeft="8px"
               borderColor="red.500"
             >
@@ -2900,39 +2962,44 @@ const CTASection = () => {
 
           <Text
             color="gray.400"
-            fontSize={{ base: 'sm', md: 'xl' }}
-            lineHeight={1.7}
-            px={{ base: 4, md: 0 }}
+            fontSize={{ base: 'lg', md: 'xl' }}
+            lineHeight={1.5}
           >
             Spremni da pojačate engagement i prodaju na društvenim mrežama kroz
-            strateški organski <br /> marketing i profesionalne usluge
+            strateški organski  marketing i profesionalne usluge
             klipovanja kontenta? Zakažite besplatan poziv
-            <br /> kako bi videli da li možemo ostvariti prave rezultate za vaš
+             kako bi videli da li možemo ostvariti prave rezultate za vaš
             brend.
           </Text>
 
-          <HStack
-            spacing={{ base: 4, md: 8 }}
+          <SimpleGrid
+            columns={{ base: 1, sm: 2, md: 2 }}
+            spacingY={12}
+            spacingX={{ base: 0, sm: 8 }}
             pt={4}
-            flexWrap="wrap"
-            justify="center"
+            justifyItems="center"
             color="gray.300"
-            fontSize={{ base: 'xs', md: 'md' }}
+            fontSize="md"
             fontWeight="medium"
           >
             <HStack>
               <Icon as={ClockIcon} boxSize={5} />
               <Text>Odgovor u roku od 24h</Text>
             </HStack>
+
             <HStack>
               <Icon as={ArrowRight} boxSize={5} />
               <Text>Besplatne konsultacije</Text>
             </HStack>
-            <HStack display={{ base: 'none', md: 'flex' }}>
+
+            <HStack
+              gridColumn={{ base: 'auto', md: '1 / span 2' }}
+              justify="center"
+            >
               <Icon as={Check} boxSize={5} />
               <Text>Veruju nam 100+ brendova</Text>
             </HStack>
-          </HStack>
+          </SimpleGrid>
         </MotionVStack>
 
         {/* --- Schedule a Meeting Card --- */}
@@ -3001,7 +3068,7 @@ const CTASection = () => {
                 lineHeight="1.7"
               >
                 Rezervišite 30-minutni besplatan poziv za više informacija
-                <br /> kako bismo videli da li možemo da vam pomognemo
+                 kako bismo videli da li možemo da vam pomognemo
               </Text>
               <Button
                 size={{ base: 'md', md: 'lg' }}
