@@ -1663,7 +1663,7 @@ const StepsSection = () => {
               letterSpacing="-0.02em"
               maxW="3xl"
             >
-              Započni svoj rast na drustvenim mrezama vec danas
+              Započni svoj rast na društvenim mrežama već danas
             </Heading>
 
             <Text
@@ -2913,7 +2913,7 @@ const CTASection = () => {
         pointerEvents="none"
       />
 
-      <Container position="relative" zIndex={1}>
+      <Container maxW="7xl" position="relative" zIndex={1}>
         <MotionVStack
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
