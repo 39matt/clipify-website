@@ -115,12 +115,8 @@ const HeroSection = () => {
   return (
     <Box position="relative" minH={{base: "140vh", md: "100vh"}}>
       {/* Logo and Badge - Fixed at top */}
-      <VStack
-        spacing={{ base: 6, md: 12 }}
-        mt={{ base: 6, md: 12 }}
-        position="relative"
-        zIndex={2}
-      >
+
+      <VStack spacing={{ base: 2, md: 3 }} mt={{ base: 6, md: 12 }} position="relative" zIndex={2}>
         <MotionBox
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -132,40 +128,55 @@ const HeroSection = () => {
             alt="Clipify Logo"
           />
         </MotionBox>
+        <MotionBox
+          display={{ base: "block", md: "none" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <HStack
+            mt="4"
+            spacing={2}
+            bg="white"
+            px={4}
+            py={2}
+            borderRadius="full"
+            border="2px solid"
+            borderColor="gray.100"
+            boxShadow="0 4px 16px rgba(0,0,0,0.08)"
+          >
+            <Box position="relative">
+              <Box
+                w="8px"
+                h="8px"
+                borderRadius="full"
+                bg="red.500"
+              />
+              <Box
+                as={motion.div}
+                position="absolute"
+                top="0"
+                left="0"
+                w="8px"
+                h="8px"
+                borderRadius="full"
+                bg="red.500"
+                animate={{
+                  scale: [1, 2, 2],
+                  opacity: [0.8, 0, 0],
+                }}
+              />
+            </Box>
+            <Text fontSize="xs" fontWeight="700" color="gray.900">
+              5 aktivnih kampanja
+            </Text>
+          </HStack>
+        </MotionBox>
       </VStack>
 
-      
       {/* Background gradient */}
       <Box position="absolute" inset={0} pointerEvents="none" />
 
-      <HStack
-      mx="auto"
-      w="fit-content"
-      mt={12}
-        display={{base: "flex", md: "none"}}
-        color="black"
-        px={4}
-        py={1.5}
-        borderRadius="full"
-        spacing={2}
-      >
-        <Box
-          w={1.5}
-          h={1.5}
-          borderRadius="full"
-          bg="red.500"
-          animation="pulse 2s ease-in-out infinite"
-        />
-
-        <Text
-          fontSize="2xs"
-          fontWeight="700"
-          letterSpacing="wide"
-          textTransform="uppercase"
-        >
-          Performance-Based Marketing
-        </Text>
-      </HStack>
       {/* Main Content - Absolutely centered on screen */}
       <Box
         position="absolute"
@@ -2836,7 +2847,7 @@ const FAQSection = () => {
             lineHeight="1.6"
             px={{ base: 4, md: 0 }}
           >
-            Sve što treba da znaš — bilo da kreiraš sadržaj ili klipuješ ga.
+            Sve što treba da znaš - bilo da kreiraš sadržaj ili klipuješ ga.
           </Text>
         </MotionVStack>
 
@@ -2938,14 +2949,19 @@ const CTASection = () => {
             <Text fontWeight="600">Stupite u kontakt</Text>
           </HStack>
           <Heading
-            fontSize='36px'
+            fontSize={{base: '36px', md: '52px'}}
             fontWeight="900"
             lineHeight="1.05"
             letterSpacing="-0.03em"
             color="white"
           >
-            ZAPOČNI SVOJ PUT <br/> KA
+            ZAPOČNI SVOJ PUT
             <Box
+              as="br"
+              display={{ base: "block", md: "none" }}
+            />
+            <Box
+              fontSize={{base: "42px", md: '52px'}}
               as="span"
               position="relative"
               zIndex={1}
@@ -2964,16 +2980,29 @@ const CTASection = () => {
             color="gray.400"
             fontSize={{ base: 'lg', md: 'xl' }}
             lineHeight={1.5}
+            display={{ base: "none", md: "block" }}
           >
             Spremni da pojačate engagement i prodaju na društvenim mrežama kroz
-            strateški organski  marketing i profesionalne usluge
+            strateški organski <br/> marketing i profesionalne usluge
             klipovanja kontenta? Zakažite besplatan poziv
-             kako bi videli da li možemo ostvariti prave rezultate za vaš
+            <br/> kako bi videli da li možemo ostvariti prave rezultate za vaš
+            brend.
+          </Text>
+
+          <Text
+            color="gray.400"
+            fontSize={{ base: 'lg', md: 'xl' }}
+            lineHeight={1.5}
+            display={{ base: "block", md: "none" }}
+
+          >
+            Spremni da pojačate engagement? Zakažite besplatan poziv
+            kako bi videli da li možemo ostvariti prave rezultate za vaš
             brend.
           </Text>
 
           <SimpleGrid
-            columns={{ base: 1, sm: 2, md: 2 }}
+            columns={{ base: 1, md: 3 }}
             spacingY={12}
             spacingX={{ base: 0, sm: 8 }}
             pt={4}
@@ -2993,7 +3022,6 @@ const CTASection = () => {
             </HStack>
 
             <HStack
-              gridColumn={{ base: 'auto', md: '1 / span 2' }}
               justify="center"
             >
               <Icon as={Check} boxSize={5} />
