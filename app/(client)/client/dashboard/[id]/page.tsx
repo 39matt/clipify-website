@@ -229,7 +229,7 @@ const Page = () => {
   const [totalComments, setTotalComments] = useState<number>(0);
   const [totalVideos, setTotalVideos] = useState<number>(0);
   const [sortBy, setSortBy] = useState<'date' | 'views'>('views');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
