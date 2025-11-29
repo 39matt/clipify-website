@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import {adminDb} from '../../../lib/firebase/firebaseAdmin'
 import { IVideo } from '../../../lib/models/video'
 import { ICampaign } from '../../../lib/models/campaign'
+import { ISnapshot } from '../../../lib/models/snapshot'
 
 export async function GET(req: NextRequest) {
   try {
@@ -38,7 +39,14 @@ export async function GET(req: NextRequest) {
       ...video.data()
     })) as IVideo[];
 
-    return NextResponse.json({ campaign, videos }, { status: 200 });
+    const snapshotsSnapshot = await adminDb.collection('campaigns')
+      .doc(campaignId).collection('snapshots').get();
+    const snapshots = snapshotsSnapshot.docs.map((snapshot) => ({
+      id: snapshot.id,
+      ...snapshot.data()
+    })) as ISnapshot[];
+
+    return NextResponse.json({ campaign, videos, snapshots }, { status: 200 });
   } catch (error) {
     console.error('Error getting campaign:', error);
     return NextResponse.json(

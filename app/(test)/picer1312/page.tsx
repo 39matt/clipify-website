@@ -17,7 +17,6 @@ import {
   Badge,
   Modal,
   ModalOverlay,
-  ModalCloseButton,
   ModalBody,
   ModalContent,
   Link,
@@ -45,15 +44,12 @@ import {
   MailIcon,
   PhoneIcon,
   Calendar,
-  InstagramIcon,
   Instagram, SparklesIcon,
 } from 'lucide-react'
 import type { NextPage } from 'next';
 import { Global } from '@emotion/react';
 import { GoPeople } from 'react-icons/go';
 import { FaDiscord } from 'react-icons/fa';
-import { FiAward, FiCheckCircle, FiStar, FiUsers, FiZap } from 'react-icons/fi';
-import { FcCheckmark } from 'react-icons/fc';
 import { GrCheckmark } from 'react-icons/gr';
 
 const MotionBox = motion(Box);

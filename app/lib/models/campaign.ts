@@ -12,7 +12,10 @@ export interface ICampaign {
   maxSubmissions: number;
   minViewsPerPayout: number;
   moneySpent: number;
-  totalViews: number;
   isActive: boolean;
   discordInvite: string;
+  totalViews: number;
+  totalLikes: number;
+  totalComments: number;
+  totalShares: number;
 }

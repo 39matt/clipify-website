@@ -12,7 +12,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Campaign ID is mandatory!' }, { status: 400 });
     }
 
-    const campaignDocRef = adminDb.collection('campaigns').doc(campaignId) // Fixed collection name
+    const campaignDocRef = adminDb.collection('campaigns').doc(campaignId)
     const campaignSnap = await campaignDocRef.get()
 
     if (!campaignSnap.exists) {
@@ -39,18 +39,46 @@ export async function PUT(req: NextRequest) {
       const videoData = doc.data() as IVideo;
       return accumulator + (videoData.views || 0);
     }, 0);
+    const totalLikes = videosSnap.docs.filter((video) => video.data()["approved"] !== false).reduce((accumulator, doc) => {
+      const videoData = doc.data() as IVideo;
+      return accumulator + (videoData.likes || 0);
+    }, 0);
+    const totalComments = videosSnap.docs.filter((video) => video.data()["approved"] !== false).reduce((accumulator, doc) => {
+      const videoData = doc.data() as IVideo;
+      return accumulator + (videoData.comments || 0);
+    }, 0);
+    const totalShares = videosSnap.docs.filter((video) => video.data()["approved"] !== false).reduce((accumulator, doc) => {
+      const videoData = doc.data() as IVideo;
+      return accumulator + (videoData.shares || 0);
+    }, 0);
+
 
     await campaignDocRef.update({
       progress: finalProgress,
       totalViews: totalViews,
-      moneySpent: moneySpent
+      moneySpent: moneySpent,
+      totalLikes: totalLikes,
+      totalComments: totalComments,
+      totalShares: totalShares,
     });
+
+    await campaignDocRef.collection('snapshots').add({
+      date: new Date().toISOString(),
+      totalViews: totalViews,
+      totalLikes: totalLikes,
+      totalComments: totalComments,
+      totalShares: totalShares,
+      progress: finalProgress,
+    })
 
     return NextResponse.json({
       message: 'Campaign progress updated successfully!',
       progress: finalProgress,
       totalViews: totalViews,
-      moneySpent: moneySpent
+      moneySpent: moneySpent,
+      totalLikes: totalLikes,
+      totalComments: totalComments,
+      totalShares: totalShares,
     }, { status: 200 });
 
   } catch (error) {
