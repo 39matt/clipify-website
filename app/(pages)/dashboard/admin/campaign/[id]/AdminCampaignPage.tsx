@@ -108,6 +108,12 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
         h="96px"
         onClick={()=> router.push(`/dashboard/admin/campaign/${campaignId}/revenue-approval`)}
       >Unovcavanje odobrenih videa</Button>
+      <Button
+        w="50%"
+        h="96px"
+        onClick={()=> router.push(`/client/dashboard/${campaignId}`)}
+      >Klijent dashboard</Button>
+
     </VStack>
   );
 };

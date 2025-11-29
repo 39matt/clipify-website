@@ -249,7 +249,7 @@ const Page = () => {
         // setVideos(vids.sort((a, b) => b.views- a.views));
         setVideos(vids);
         setSnapshots(aggregateSnapshotsByDay(snapshots));
-        setCampaign(camp.isActive ? camp : null);
+        setCampaign(camp);
         setLoading(false);
       } catch (err) {
         console.error('Error loading data:', err);
