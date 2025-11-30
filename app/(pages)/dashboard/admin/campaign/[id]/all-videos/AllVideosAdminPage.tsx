@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -21,24 +21,27 @@ import {
 import AdminVideoCard from './components/AdminVideoCard';
 import { ICampaign } from '../../../../../../lib/models/campaign';
 import { IVideo } from '../../../../../../lib/models/video';
-import { Share, Share2 } from 'lucide-react'
+import { Share, Share2 } from 'lucide-react';
 
 interface AdminCampaignPageProps {
   idToken: string;
 }
 
-const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
+const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
+                                                                idToken,
+                                                              }) => {
   const pathname = usePathname();
   const campaignId = pathname.split('/')[pathname.split('/').length - 2];
   const [campaign, setCampaign] = useState<ICampaign | null>(null);
   const [videos, setVideos] = useState<IVideo[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [sortOption, setSortOption] = useState<'createdAt' | 'lastUpdatedAt'>(
-    'createdAt'
-  );
+  const [sortOption, setSortOption] = useState<
+    'createdAt' | 'lastUpdatedAt' | 'views'
+  >('views');
+  const [updatedCount, setUpdatedCount] = useState(0);
+  const [isUpdating, setIsUpdating] = useState(false);
   const toast = useToast();
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,9 +52,12 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           setError('Campaign ID is missing');
           return;
         }
-        const responseJson = await fetch(`/api/campaign/get?id=${campaignId}`, {
-          method: 'GET',
-        }).then((res) => res.json());
+        const responseJson = await fetch(
+          `/api/campaign/get?id=${campaignId}`,
+          {
+            method: 'GET',
+          }
+        ).then((res) => res.json());
 
         setCampaign(responseJson['campaign']);
         setVideos(
@@ -71,6 +77,51 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
 
     fetchData();
   }, [campaignId]);
+
+  // Move useMemo BEFORE conditional returns
+  const {
+    totalViews,
+    totalLikes,
+    totalShares,
+    totalComments,
+    videoCount,
+    sortedVideos,
+  } = useMemo(() => {
+    if (!videos || videos.length === 0) {
+      return {
+        totalViews: 0,
+        totalLikes: 0,
+        totalShares: 0,
+        totalComments: 0,
+        videoCount: 0,
+        sortedVideos: [],
+      };
+    }
+
+    const totals = videos.reduce(
+      (acc, v) => {
+        acc.totalViews += v.views || 0;
+        acc.totalLikes += v.likes || 0;
+        acc.totalShares += v.shares || 0;
+        acc.totalComments += v.comments || 0;
+        return acc;
+      },
+      { totalViews: 0, totalLikes: 0, totalShares: 0, totalComments: 0 }
+    );
+
+    const sorted = [...videos].sort((a, b) => {
+      const field = sortOption;
+      const aDate = new Date(a[field] || 0).getTime();
+      const bDate = new Date(b[field] || 0).getTime();
+      return bDate - aDate;
+    });
+
+    return {
+      ...totals,
+      videoCount: videos.length,
+      sortedVideos: sorted,
+    };
+  }, [videos, sortOption]);
 
   const handleDeleteVideo = async (videoId: string) => {
     try {
@@ -113,7 +164,9 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       const getVideoResponse = await fetch('/api/campaign/video/get-info', {
         method: 'PUT',
         body: JSON.stringify({
-          platform: video.link.includes('instagram') ? 'Instagram' : 'TikTok',
+          platform: video.link.includes('instagram')
+            ? 'Instagram'
+            : 'TikTok',
           videoId: video.link.split('/')[5],
           videoUrl: video.link,
           api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
@@ -153,16 +206,22 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({ video: newVideo, campaignId, videoId: video.id }),
+        body: JSON.stringify({
+          video: newVideo,
+          campaignId,
+          videoId: video.id,
+        }),
       });
 
       setVideos((prev) =>
-        prev
-          ? prev.map((v) =>
-            v.id === video.id ? { ...v, ...newVideo } : v
-          )
-          : null
+        prev ? prev.map((v) => (v.id === video.id ? { ...v, ...newVideo } : v)) : null
       );
+
+      await fetch('/api/campaign/calculate-progress', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ campaignId }),
+      });
 
       toast({
         title: 'Updated!',
@@ -186,13 +245,19 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
   };
 
   const handleUpdateViews = async () => {
+    if (!videos || videos.length === 0) return;
+
     try {
-      const updatedVideos: IVideo[] = [];
-      for (const video of videos || []) {
+      setIsUpdating(true);
+      setUpdatedCount(0);
+
+      for (const video of videos) {
         const getVideoResponse = await fetch('/api/campaign/video/get-info', {
           method: 'PUT',
           body: JSON.stringify({
-            platform: video.link.includes('instagram') ? 'Instagram' : 'TikTok',
+            platform: video.link.includes('instagram')
+              ? 'Instagram'
+              : 'TikTok',
             videoId: video.link.split('/')[5],
             videoUrl: video.link,
             api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
@@ -202,18 +267,17 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
         if (getVideoResponse.status !== 200) {
           toast({
             title: 'Error!',
-            description: `Error getting video info for \n${video.name}`,
+            description: `Error updating info for ${video.name}`,
             status: 'error',
-            duration: 3000,
+            duration: 2000,
             isClosable: true,
             position: 'top-right',
           });
           continue;
         }
 
-        const getVideoResponseJson = await getVideoResponse.json();
-        const newVideo = getVideoResponseJson['videoInfo'] as IVideo;
-
+        const data = await getVideoResponse.json();
+        const newVideo = data['videoInfo'] as IVideo;
         if (!newVideo || !newVideo.accountName) continue;
 
         await fetch('/api/campaign/video/update-info', {
@@ -225,33 +289,50 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           body: JSON.stringify({ video: newVideo, campaignId }),
         });
 
-        updatedVideos.push(newVideo);
+        setVideos((prev) =>
+          prev
+            ? prev.map((v) => (v.id === video.id ? { ...v, ...newVideo } : v))
+            : [newVideo]
+        );
+
+        setUpdatedCount((c) => c + 1);
+
         toast({
-          title: 'Success!',
-          description: `Successfully updated video views for \n${video.name}`,
+          title: 'Updated!',
+          description: `${newVideo.name} ažuriran.`,
           status: 'success',
-          duration: 3000,
+          duration: 1500,
           isClosable: true,
           position: 'top-right',
         });
       }
 
-      setVideos(updatedVideos);
       await fetch('/api/campaign/calculate-progress', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ campaignId }),
       });
+
+      toast({
+        title: 'All done!',
+        description: 'Svi video zapisi su uspešno ažurirani.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
     } catch (error) {
       console.error(error);
       toast({
         title: 'Error!',
-        description: 'Error while updating video views.',
+        description: 'Došlo je do greške pri ažuriranju videa.',
         status: 'error',
         duration: 3000,
         isClosable: true,
         position: 'top-right',
       });
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -286,22 +367,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
     );
   }
 
-  const sortedVideos = (videos || []).sort((a, b) => {
-    const field = sortOption;
-    const aDate = new Date(a[field] || 0).getTime();
-    const bDate = new Date(b[field] || 0).getTime();
-    return bDate - aDate;
-  });
-
-  const totalViews = campaign.totalViews ?? 0;
-  const totalLikes =
-    videos?.reduce((acc, v) => acc + (v.likes || 0), 0) ?? 0;
-  const totalShares =
-    videos?.reduce((acc, v) => acc + (v.shares || 0), 0) ?? 0;
-  const totalComments =
-    videos?.reduce((acc, v) => acc + (v.comments || 0), 0) ?? 0;
-  const videoCount = videos?.length ?? 0;
-
   return (
     <VStack spacing={6} width="90%" mx="auto" py={6}>
       <Heading textAlign="center" color="green.400">
@@ -309,7 +374,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       </Heading>
 
       <HStack spacing={6} w="full" mx="auto" py={6} flexWrap="wrap">
-        {/* Total Views */}
         <Box
           bg="gray.700"
           p={6}
@@ -343,7 +407,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
             <StatLabel fontSize="lg" color="gray.400">
               Ukupno lajkova
             </StatLabel>
-              ❤️
+            ❤️
             <StatNumber fontSize="3xl" color="white" fontWeight="bold">
               {totalLikes.toLocaleString()}
             </StatNumber>
@@ -411,20 +475,41 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
         </Box>
 
         <Box w="fit-content">
-          <Button
-            colorScheme={'green'}
-            ml={'auto'}
-            size={'lg'}
-            onClick={handleUpdateViews}
-          >
-            Update all views
-          </Button>
+          <VStack spacing={2}>
+            <Button
+              colorScheme="green"
+              size="lg"
+              onClick={handleUpdateViews}
+              isDisabled={isUpdating}
+            >
+              {isUpdating ? 'Updating...' : 'Update all views'}
+            </Button>
+            {isUpdating && (
+              <>
+                <Text color="gray.400" fontSize="sm" textAlign="center">
+                  {updatedCount} / {videos?.length || 0} videos updated
+                </Text>
+                <Box
+                  w="200px"
+                  bg="gray.600"
+                  borderRadius="full"
+                  overflow="hidden"
+                >
+                  <Box
+                    h="6px"
+                    bg="green.400"
+                    width={`${(updatedCount / (videos?.length || 1)) * 100}%`}
+                    transition="width 0.3s ease"
+                  />
+                </Box>
+              </>
+            )}
+          </VStack>
         </Box>
       </HStack>
 
       <Divider />
 
-      {/* Sort Buttons */}
       <HStack spacing={4} justify="flex-end" w="full" mb={4}>
         <Text color="gray.400" fontSize="sm">
           Sort by:
@@ -444,6 +529,14 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           onClick={() => setSortOption('lastUpdatedAt')}
         >
           Last Updated
+        </Button>
+        <Button
+          size="sm"
+          colorScheme={sortOption === 'views' ? 'blue' : 'gray'}
+          variant={sortOption === 'views' ? 'solid' : 'outline'}
+          onClick={() => setSortOption('views')}
+        >
+          Views
         </Button>
       </HStack>
 
