@@ -17,19 +17,19 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: 'Access denied: Admins only' }, { status: 403 });
     }
 
-    const {video, campaignId} = await req.json()
+    const {video, campaignId, videoId} = await req.json()
     if (!video) {
       return NextResponse.json({message: 'Empty video!'}, {status: 200});
     }
 
     const snap = await adminDb.collection('campaigns')
-      .doc(campaignId).collection('videos')
-      .where("link", "==", video.link).limit(1).get();
-    if(snap.empty) {
+      .doc(campaignId).collection('videos').doc(videoId).get();
+      // .where("link", "==", video.link).limit(1).get();
+    if(!snap.exists) {
       return NextResponse.json({message: 'Video not found!'}, {status: 400});
     }
 
-    const videoRef = snap.docs[0].ref;
+    const videoRef = snap.ref;
     const wr = await videoRef.update(video);
     if (!wr) {
       return  NextResponse.json({message: 'Error writing video!'});

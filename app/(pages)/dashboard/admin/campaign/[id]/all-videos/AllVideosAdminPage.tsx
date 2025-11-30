@@ -153,7 +153,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({ video: newVideo, campaignId }),
+        body: JSON.stringify({ video: newVideo, campaignId, videoId: video.id }),
       });
 
       setVideos((prev) =>
