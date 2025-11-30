@@ -47,34 +47,55 @@ function aggregateSnapshotsByDay(snapshots: ISnapshot[]) {
     .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 }
 
-function Chart({ data }) {
+function Chart({
+                 data,
+                 selectedStats,
+               }: {
+  data: ISnapshot[];
+  selectedStats: string[];
+}) {
+  const statConfig: Record<
+    string,
+    { color: string; label: string }
+  > = {
+    totalViews: { color: '#3182CE', label: 'Pregledi' },
+    totalLikes: { color: '#82ca9d', label: 'Lajkovi' },
+    totalShares: { color: '#dd6b20', label: 'Deljenja' },
+    totalComments: { color: '#d53f8c', label: 'Komentari' },
+    progress: { color: '#E53E3E', label: 'Progres (%)' },
+  };
+
+  const activeStats = selectedStats.length > 0 ? selectedStats : ['totalViews'];
+
   return (
-    <Box w="100%" h={{ base: "300px", md: "400px" }}>
+    <Box w="100%" h={{ base: '300px', md: '400px' }}>
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={data}
-        >
+        <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
           <YAxis width={80} />
           <Tooltip contentStyle={{ fontSize: '12px' }} />
           <Legend wrapperStyle={{ fontSize: '12px' }} />
-          <Line type="monotone" dataKey="totalViews" stroke="#3182CE" name="Pregledi" />
-          <Line type="monotone" dataKey="totalLikes" stroke="#82ca9d" name="Lajkovi" />
-          <Line type="monotone" dataKey="totalShares" stroke="#dd6b20" name="Deljenja" />
-          <Line
-            type="monotone"
-            dataKey="progress"
-            stroke="#E53E3E"
-            name="Progres (%)"
-            yAxisId="right"
-          />
+          {activeStats.map((statKey) => {
+            const { color, label } = statConfig[statKey];
+            return (
+              <Line
+                key={statKey}
+                type="monotone"
+                dataKey={statKey}
+                stroke={color}
+                name={label}
+                strokeWidth={3}
+                dot={{ r: 3 }}
+                activeDot={{ r: 5 }}
+              />
+            );
+          })}
         </LineChart>
       </ResponsiveContainer>
     </Box>
   );
 }
-
 function VideoCard({ video }: { video: IVideo }) {
   return (
     <Box
@@ -231,6 +252,7 @@ const Page = () => {
   const [sortBy, setSortBy] = useState<'date' | 'views'>('views');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStats, setSelectedStats] = useState<string[]>(['totalViews']);
 
   useEffect(() => {
     if (!campaignId || Array.isArray(campaignId)) return;
@@ -431,6 +453,16 @@ const Page = () => {
             </Center>
           </Box>
 
+          <Text
+            textAlign="center"
+            fontSize="sm"
+            color="gray.600"
+            mt={4}
+            mb={-6}
+          >
+            Klikni na kartice ispod da izabereš podatke za prikaz na grafikonu 👇
+          </Text>
+
           <SimpleGrid
             mt={12}
             spacing={8}
@@ -438,57 +470,87 @@ const Page = () => {
             w="100%"
           >
             {[
-              { label: 'Ukupno Pregleda', value: totalViews.toLocaleString() },
-              { label: 'Ukupno Lajkova', value: totalLikes.toLocaleString() },
-              { label: 'Ukupno Komentara', value: totalComments.toLocaleString() },
-              { label: 'Ukupno Deljenja', value: totalShares.toLocaleString() },
-              { label: 'Ukupno Videa', value: videos.length },
-            ].map((item, i) => (
-              <Box
-                key={i}
-                bg="white"
-                border="1px solid"
-                borderColor="gray.300"
-                borderRadius="xl"
-                p={{ base: 5, md: 6 }}
-                textAlign="center"
-                boxShadow="sm"
-                transition="all 0.25s ease"
-                _hover={{
-                  transform: 'translateY(-4px)',
-                  boxShadow: 'xl',
-                  borderColor: 'black',
-                }}
-              >
-                <Text
-                  fontSize="sm"
-                  fontWeight="500"
-                  color="gray.600"
-                  textTransform="uppercase"
-                  letterSpacing="wide"
+              { label: 'Ukupno Pregleda', value: totalViews.toLocaleString(), key: 'totalViews' },
+              { label: 'Ukupno Lajkova', value: totalLikes.toLocaleString(), key: 'totalLikes' },
+              { label: 'Ukupno Komentara', value: totalComments.toLocaleString(), key: 'totalComments' },
+              { label: 'Ukupno Deljenja', value: totalShares.toLocaleString(), key: 'totalShares' },
+              { label: 'Progres (%)', value: campaign.progress.toFixed(1), key: 'progress' },
+            ].map((item) => {
+              const isActive = selectedStats.includes(item.key);
+              return (
+                <Box
+                  key={item.key}
+                  as="button"
+                  cursor="pointer"
+                  onClick={() =>
+                    setSelectedStats((prev) =>
+                      prev.includes(item.key)
+                        ? prev.filter((s) => s !== item.key)
+                        : [...prev, item.key]
+                    )
+                  }
+                  bg='white'
+                  color='black'
+                  border="2px solid"
+                  borderColor={isActive ? 'black' : 'gray.300'}
+                  borderRadius="xl"
+                  p={{ base: 5, md: 6 }}
+                  textAlign="center"
+                  boxShadow={isActive ? 'xl' : 'sm'}
+                  transition="all 0.25s ease"
+                  transform={isActive ? 'scale(1.05)' : 'scale(1)'}
+                  _hover={{
+                    transform: 'translateY(-4px) scale(1.03)',
+                    boxShadow: 'xl',
+                    borderColor: 'black',
+                    bg: 'gray.100',
+                  }}
+                  _active={{
+                    transform: 'translateY(0) scale(0.98)',
+                  }}
                 >
-                  {item.label}
-                </Text>
+                  <Text
+                    fontSize="sm"
+                    fontWeight="500"
+                    color='gray.600'
+                    textTransform="uppercase"
+                    letterSpacing="wide"
+                  >
+                    {item.label}
+                  </Text>
 
-                <Text
-                  fontSize={{ base: '2xl', md: '3xl' }}
-                  fontWeight="700"
-                  color="black"
-                  mt={2}
-                >
-                  {item.value}
-                </Text>
-              </Box>
-            ))}
+                  <Text
+                    fontSize={{ base: '2xl', md: '3xl' }}
+                    fontWeight="700"
+                    color='black'
+                    mt={2}
+                  >
+                    {item.value}
+                  </Text>
+
+                  {isActive && (
+                    <Text fontSize="xs" color="green.300" mt={1}>
+                      ✓ Prikazano
+                    </Text>
+                  )}
+                </Box>
+              );
+            })}
           </SimpleGrid>
 
           {snapshots.length > 0 ? (
-            <Center mt={12}>
-              <Chart data={snapshots} />
+            <Center mt={12} flexDirection="column" gap={4}>
+              <Heading fontSize="xl" color="gray.700">
+                📊 Izabrane metrike
+                {selectedStats.length > 0
+                  ? ` (${selectedStats.length})`
+                  : ' (ništa izabrano)'}
+              </Heading>
+              <Chart data={snapshots} selectedStats={selectedStats} />
             </Center>
           ) : (
             <Center mt={12}>
-              <Text color="gray.500">Nema dostupnih snimaka napretka kampanje.</Text>
+              <Text color="gray.500">Nema dostupnih podataka.</Text>
             </Center>
           )}
 
