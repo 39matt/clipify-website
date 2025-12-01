@@ -1,6 +1,6 @@
 'use client'
 import { usePathname } from 'next/navigation'
-import { Box, Center, Container, Heading, SimpleGrid, Spinner, Text, Input } from '@chakra-ui/react'
+import { Box, Center, Container, Heading, SimpleGrid, Spinner, Text, Input, VStack } from '@chakra-ui/react'
 import { Global } from '@emotion/react'
 import React, { useEffect, useMemo, useState } from 'react'
 import { ICampaign } from '../../../../lib/models/campaign'
@@ -65,35 +65,66 @@ function Chart({
     progress: { color: '#E53E3E', label: 'Progres (%)' },
   };
 
-  const activeStats = selectedStats.length > 0 ? selectedStats : ['totalViews'];
+  const activeStats =
+    selectedStats.length > 0 ? selectedStats : ['totalViews'];
 
   return (
-    <Box w="100%" h={{ base: '300px', md: '400px' }}>
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis width={80} />
-          <Tooltip contentStyle={{ fontSize: '12px' }} />
-          <Legend wrapperStyle={{ fontSize: '12px' }} />
-          {activeStats.map((statKey) => {
-            const { color, label } = statConfig[statKey];
-            return (
-              <Line
-                key={statKey}
-                type="monotone"
-                dataKey={statKey}
-                stroke={color}
-                name={label}
-                strokeWidth={3}
-                dot={{ r: 3 }}
-                activeDot={{ r: 5 }}
-              />
-            );
-          })}
-        </LineChart>
-      </ResponsiveContainer>
-    </Box>
+    <VStack spacing={8} w="100%">
+      {activeStats.map((statKey) => {
+        const { color, label } = statConfig[statKey];
+        const isProgress = statKey === 'progress';
+
+        return (
+          <Box key={statKey} w="100%">
+            <Heading
+              fontSize="lg"
+              color="gray.700"
+              mb={3}
+              textAlign="center"
+            >
+              {label}
+            </Heading>
+            <Box w="100%" h={{ base: '250px', md: '300px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis
+                    width={80}
+                    domain={isProgress ? [0, 100] : undefined}
+                  />
+                  <Tooltip
+                    contentStyle={{ fontSize: '12px' }}
+                    formatter={(value: number) => {
+                      if (isProgress) {
+                        return `${value.toFixed(2)}%`;
+                      }
+                      return value.toLocaleString();
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey={statKey}
+                    stroke={color}
+                    strokeWidth={3}
+                    dot={{ r: 4 }}
+                    activeDot={{ r: 6 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </Box>
+          </Box>
+        );
+      })}
+
+      {activeStats.length === 0 && (
+        <Center py={12}>
+          <Text color="gray.500" fontSize="lg">
+            Izaberi metrike iznad za prikaz grafikona
+          </Text>
+        </Center>
+      )}
+    </VStack>
   );
 }
 function VideoCard({ video }: { video: IVideo }) {
