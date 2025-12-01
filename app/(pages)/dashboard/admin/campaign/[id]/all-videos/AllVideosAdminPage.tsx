@@ -41,6 +41,9 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
   >('views');
   const [updatedCount, setUpdatedCount] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [failedVideoIds, setFailedVideoIds] = useState<Set<string>>(
+    new Set()
+  );
   const toast = useToast();
 
   useEffect(() => {
@@ -78,7 +81,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
     fetchData();
   }, [campaignId]);
 
-  // Move useMemo BEFORE conditional returns
   const {
     totalViews,
     totalLikes,
@@ -110,6 +112,14 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
     );
 
     const sorted = [...videos].sort((a, b) => {
+      // Failed videos always come first
+      const aFailed = failedVideoIds.has(a.id!);
+      const bFailed = failedVideoIds.has(b.id!);
+
+      if (aFailed && !bFailed) return -1;
+      if (!aFailed && bFailed) return 1;
+
+      // Then sort by selected option
       const field = sortOption;
       const aDate = new Date(a[field] || 0).getTime();
       const bDate = new Date(b[field] || 0).getTime();
@@ -121,7 +131,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       videoCount: videos.length,
       sortedVideos: sorted,
     };
-  }, [videos, sortOption]);
+  }, [videos, sortOption, failedVideoIds]);
 
   const handleDeleteVideo = async (videoId: string) => {
     try {
@@ -153,6 +163,11 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       });
 
       setVideos((prev) => prev?.filter((v) => v.id !== videoId) || null);
+      setFailedVideoIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(videoId);
+        return newSet;
+      });
     } catch (err) {
       console.error(err);
       setError('Error deleting video: ' + err);
@@ -174,6 +189,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       });
 
       if (getVideoResponse.status !== 200) {
+        setFailedVideoIds((prev) => new Set(prev).add(video.id!));
         toast({
           title: 'Error!',
           description: `Error getting video info for \n${video.name}`,
@@ -189,6 +205,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       const newVideo = getVideoResponseJson['videoInfo'] as IVideo;
 
       if (!newVideo || !newVideo.accountName) {
+        setFailedVideoIds((prev) => new Set(prev).add(video.id!));
         toast({
           title: 'Skipped.',
           description: `No valid data for ${video.name}.`,
@@ -214,8 +231,17 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       });
 
       setVideos((prev) =>
-        prev ? prev.map((v) => (v.id === video.id ? { ...v, ...newVideo } : v)) : null
+        prev
+          ? prev.map((v) => (v.id === video.id ? { ...v, ...newVideo } : v))
+          : null
       );
+
+      // Remove from failed list on success
+      setFailedVideoIds((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(video.id!);
+        return newSet;
+      });
 
       await fetch('/api/campaign/calculate-progress', {
         method: 'PUT',
@@ -233,6 +259,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       });
     } catch (error) {
       console.error(error);
+      setFailedVideoIds((prev) => new Set(prev).add(video.id!));
       toast({
         title: 'Error updating views!',
         description: `${video.name}`,
@@ -250,62 +277,82 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
     try {
       setIsUpdating(true);
       setUpdatedCount(0);
+      setFailedVideoIds(new Set());
+
+      const newFailedIds = new Set<string>();
 
       for (const video of videos) {
-        const getVideoResponse = await fetch('/api/campaign/video/get-info', {
-          method: 'PUT',
-          body: JSON.stringify({
-            platform: video.link.includes('instagram')
-              ? 'Instagram'
-              : 'TikTok',
-            videoId: video.link.split('/')[5],
-            videoUrl: video.link,
-            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
-          }),
-        });
+        try {
+          const getVideoResponse = await fetch(
+            '/api/campaign/video/get-info',
+            {
+              method: 'PUT',
+              body: JSON.stringify({
+                platform: video.link.includes('instagram')
+                  ? 'Instagram'
+                  : 'TikTok',
+                videoId: video.link.split('/')[5],
+                videoUrl: video.link,
+                api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+              }),
+            }
+          );
 
-        if (getVideoResponse.status !== 200) {
+          if (getVideoResponse.status !== 200) {
+            newFailedIds.add(video.id!);
+            toast({
+              title: 'Error!',
+              description: `Error updating info for ${video.name}`,
+              status: 'error',
+              duration: 2000,
+              isClosable: true,
+              position: 'top-right',
+            });
+            continue;
+          }
+
+          const data = await getVideoResponse.json();
+          const newVideo = data['videoInfo'] as IVideo;
+
+          if (!newVideo || !newVideo.accountName) {
+            newFailedIds.add(video.id!);
+            continue;
+          }
+
+          await fetch('/api/campaign/video/update-info', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${idToken}`,
+            },
+            body: JSON.stringify({ video: newVideo, campaignId, videoId: video.id! }),
+          });
+
+          setVideos((prev) =>
+            prev
+              ? prev.map((v) =>
+                v.id === video.id ? { ...v, ...newVideo } : v
+              )
+              : [newVideo]
+          );
+
+          setUpdatedCount((c) => c + 1);
+
           toast({
-            title: 'Error!',
-            description: `Error updating info for ${video.name}`,
-            status: 'error',
-            duration: 2000,
+            title: 'Updated!',
+            description: `${newVideo.name} ažuriran.`,
+            status: 'success',
+            duration: 1500,
             isClosable: true,
             position: 'top-right',
           });
-          continue;
+        } catch (error) {
+          console.error(`Error updating video ${video.id}:`, error);
+          newFailedIds.add(video.id!);
         }
-
-        const data = await getVideoResponse.json();
-        const newVideo = data['videoInfo'] as IVideo;
-        if (!newVideo || !newVideo.accountName) continue;
-
-        await fetch('/api/campaign/video/update-info', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${idToken}`,
-          },
-          body: JSON.stringify({ video: newVideo, campaignId }),
-        });
-
-        setVideos((prev) =>
-          prev
-            ? prev.map((v) => (v.id === video.id ? { ...v, ...newVideo } : v))
-            : [newVideo]
-        );
-
-        setUpdatedCount((c) => c + 1);
-
-        toast({
-          title: 'Updated!',
-          description: `${newVideo.name} ažuriran.`,
-          status: 'success',
-          duration: 1500,
-          isClosable: true,
-          position: 'top-right',
-        });
       }
+
+      setFailedVideoIds(newFailedIds);
 
       await fetch('/api/campaign/calculate-progress', {
         method: 'PUT',
@@ -313,10 +360,14 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
         body: JSON.stringify({ campaignId }),
       });
 
+      const successCount = videos.length - newFailedIds.size;
       toast({
-        title: 'All done!',
-        description: 'Svi video zapisi su uspešno ažurirani.',
-        status: 'success',
+        title: newFailedIds.size > 0 ? 'Partially done!' : 'All done!',
+        description:
+          newFailedIds.size > 0
+            ? `${successCount} uspešno, ${newFailedIds.size} neuspešno.`
+            : 'Svi video zapisi su uspešno ažurirani.',
+        status: newFailedIds.size > 0 ? 'warning' : 'success',
         duration: 3000,
         isClosable: true,
         position: 'top-right',
@@ -508,6 +559,21 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
         </Box>
       </HStack>
 
+      {failedVideoIds.size > 0 && (
+        <Box
+          w="full"
+          bg="red.900"
+          p={4}
+          borderRadius="md"
+          borderWidth="1px"
+          borderColor="red.600"
+        >
+          <Text color="red.200" fontWeight="bold" textAlign="center">
+            ⚠️ {failedVideoIds.size} video(s) failed to update
+          </Text>
+        </Box>
+      )}
+
       <Divider />
 
       <HStack spacing={4} justify="flex-end" w="full" mb={4}>
@@ -552,6 +618,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
               video={video}
               onDelete={handleDeleteVideo}
               onUpdate={handleUpdateSingleVideo}
+              hasFailed={failedVideoIds.has(video.id!)}
             />
           ))}
         </SimpleGrid>

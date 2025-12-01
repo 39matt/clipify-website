@@ -23,13 +23,15 @@ import { IVideo } from '../../../../../../../lib/models/video';
 interface AdminVideoCardProps {
   video: IVideo;
   onDelete?: (id: string) => void;
-  onUpdate?: (video: IVideo) => void; // ✅ new prop
+  onUpdate?: (video: IVideo) => void;
+  hasFailed?: boolean;
 }
 
 const AdminVideoCard: React.FC<AdminVideoCardProps> = ({
                                                          video,
                                                          onDelete,
                                                          onUpdate,
+                                                         hasFailed = false,
                                                        }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef<HTMLButtonElement>(null);
@@ -55,6 +57,7 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({
 
   return (
     <Box
+      position="relative"
       borderWidth="1px"
       borderRadius="md"
       overflow="hidden"
@@ -67,6 +70,42 @@ const AdminVideoCard: React.FC<AdminVideoCardProps> = ({
       flexDirection="column"
       h="100%"
     >
+      {/* Red overlay for failed updates */}
+      {hasFailed && (
+        <Box
+          position="absolute"
+          top={0}
+          left={0}
+          right={0}
+          bottom={0}
+          bg="red.600"
+          opacity={0.3}
+          borderRadius="md"
+          pointerEvents="none"
+          zIndex={1}
+        />
+      )}
+
+      {/* Failed update badge */}
+      {hasFailed && (
+        <Box
+          position="absolute"
+          top={2}
+          right={2}
+          bg="red.600"
+          color="white"
+          px={3}
+          py={1}
+          borderRadius="md"
+          fontSize="xs"
+          fontWeight="bold"
+          zIndex={2}
+          boxShadow="lg"
+        >
+          ⚠️ FAILED UPDATE
+        </Box>
+      )}
+
       {/* Thumbnail */}
       <Link href={video.link} target="_blank" rel="noopener noreferrer">
         <Image
