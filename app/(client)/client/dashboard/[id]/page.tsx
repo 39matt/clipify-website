@@ -47,13 +47,7 @@ function aggregateSnapshotsByDay(snapshots: ISnapshot[]) {
     .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 }
 
-function Chart({
-                 data,
-                 selectedStats,
-               }: {
-  data: ISnapshot[];
-  selectedStats: string[];
-}) {
+function Chart({data,selectedStats,}: {data: ISnapshot[];selectedStats: string[];}) {
   const statConfig: Record<
     string,
     { color: string; label: string }
@@ -127,6 +121,7 @@ function Chart({
     </VStack>
   );
 }
+
 function VideoCard({ video }: { video: IVideo }) {
   return (
     <Box
@@ -284,6 +279,37 @@ const Page = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStats, setSelectedStats] = useState<string[]>(['totalViews']);
+  const recentGrowth = useMemo(() => {
+    if (snapshots.length < 2) return null;
+
+    const latest = snapshots[snapshots.length - 1];
+    const previous = snapshots[snapshots.length - 2];
+
+    return {
+      views: ((latest.totalViews - previous.totalViews) / previous.totalViews * 100).toFixed(1),
+      likes: ((latest.totalLikes - previous.totalLikes) / previous.totalLikes * 100).toFixed(1),
+      engagement: (((latest.totalLikes + latest.totalComments + latest.totalShares) -
+          (previous.totalLikes + previous.totalComments + previous.totalShares)) /
+        (previous.totalLikes + previous.totalComments + previous.totalShares) * 100).toFixed(1)
+    };
+  }, [snapshots]);
+  const projectedCompletion = useMemo(() => {
+    if (!campaign || snapshots.length < 2 || campaign.progress >= 100) return null;
+
+    const daysOfData = snapshots.length;
+    const totalProgressMade = campaign.progress;
+    const avgProgressPerDay = totalProgressMade / daysOfData;
+
+    if (avgProgressPerDay === 0) return null;
+
+    const remainingProgress = 100 - campaign.progress;
+    const daysToComplete = Math.ceil(remainingProgress / avgProgressPerDay);
+
+    const completionDate = new Date();
+    completionDate.setDate(completionDate.getDate() + daysToComplete);
+
+    return completionDate;
+  }, [snapshots, campaign]);
 
   useEffect(() => {
     if (!campaignId || Array.isArray(campaignId)) return;
@@ -483,6 +509,163 @@ const Page = () => {
               </Text>
             </Center>
           </Box>
+
+          {recentGrowth && campaign.progress < 100 &&(
+            <Box
+              bg="white"
+              border="2px solid"
+              borderColor="gray.300"
+              borderRadius="xl"
+              p={6}
+              mt={8}
+              textAlign="center"
+            >
+              <Text
+                fontSize="sm"
+                fontWeight="500"
+                color="gray.600"
+                textTransform="uppercase"
+                letterSpacing="wide"
+                mb={2}
+              >
+                Rast (1 dan)
+              </Text>
+
+              <VStack spacing={2}>
+                <Box>
+                  <Text fontSize="xs" color="gray.500">Pregledi</Text>
+                  <Text
+                    fontSize="2xl"
+                    fontWeight="700"
+                    color={parseFloat(recentGrowth.views) > 0 ? "green.500" : "red.500"}
+                  >
+                    {parseFloat(recentGrowth.views) > 0 ? '↗' : '↘'} {recentGrowth.views}%
+                  </Text>
+                </Box>
+
+                <Box>
+                  <Text fontSize="xs" color="gray.500">Lajkovi</Text>
+                  <Text
+                    fontSize="2xl"
+                    fontWeight="700"
+                    color={parseFloat(recentGrowth.likes) > 0 ? "green.500" : "red.500"}
+                  >
+                    {parseFloat(recentGrowth.likes) > 0 ? '↗' : '↘'} {recentGrowth.likes}%
+                  </Text>
+                </Box>
+              </VStack>
+            </Box>
+          )}
+          {/*<SimpleGrid*/}
+          {/*  mt={8}*/}
+          {/*  spacing={6}*/}
+          {/*  columns={{ base: 1, md: 2 }}*/}
+          {/*>*/}
+          {/*  {recentGrowth && campaign.progress < 100 &&(*/}
+          {/*    <Box*/}
+          {/*      bg="white"*/}
+          {/*      border="2px solid"*/}
+          {/*      borderColor="gray.300"*/}
+          {/*      borderRadius="xl"*/}
+          {/*      p={6}*/}
+          {/*      textAlign="center"*/}
+          {/*    >*/}
+          {/*      <Text*/}
+          {/*        fontSize="sm"*/}
+          {/*        fontWeight="500"*/}
+          {/*        color="gray.600"*/}
+          {/*        textTransform="uppercase"*/}
+          {/*        letterSpacing="wide"*/}
+          {/*        mb={2}*/}
+          {/*      >*/}
+          {/*        Rast (1 dan)*/}
+          {/*      </Text>*/}
+
+          {/*      <VStack spacing={2}>*/}
+          {/*        <Box>*/}
+          {/*          <Text fontSize="xs" color="gray.500">Pregledi</Text>*/}
+          {/*          <Text*/}
+          {/*            fontSize="2xl"*/}
+          {/*            fontWeight="700"*/}
+          {/*            color={parseFloat(recentGrowth.views) > 0 ? "green.500" : "red.500"}*/}
+          {/*          >*/}
+          {/*            {parseFloat(recentGrowth.views) > 0 ? '↗' : '↘'} {recentGrowth.views}%*/}
+          {/*          </Text>*/}
+          {/*        </Box>*/}
+
+          {/*        <Box>*/}
+          {/*          <Text fontSize="xs" color="gray.500">Lajkovi</Text>*/}
+          {/*          <Text*/}
+          {/*            fontSize="2xl"*/}
+          {/*            fontWeight="700"*/}
+          {/*            color={parseFloat(recentGrowth.likes) > 0 ? "green.500" : "red.500"}*/}
+          {/*          >*/}
+          {/*            {parseFloat(recentGrowth.likes) > 0 ? '↗' : '↘'} {recentGrowth.likes}%*/}
+          {/*          </Text>*/}
+          {/*        </Box>*/}
+          {/*      </VStack>*/}
+          {/*    </Box>*/}
+          {/*  )}*/}
+
+          {/*  {projectedCompletion && campaign && campaign.progress < 100 && (*/}
+          {/*    <Box*/}
+          {/*      bg="white"*/}
+          {/*      border="2px solid"*/}
+          {/*      borderColor="blue.300"*/}
+          {/*      borderRadius="xl"*/}
+          {/*      p={6}*/}
+          {/*      textAlign="center"*/}
+          {/*    >*/}
+          {/*      <Text*/}
+          {/*        fontSize="sm"*/}
+          {/*        fontWeight="500"*/}
+          {/*        color="gray.600"*/}
+          {/*        textTransform="uppercase"*/}
+          {/*        letterSpacing="wide"*/}
+          {/*        mb={2}*/}
+          {/*      >*/}
+          {/*        Procenjeni završetak*/}
+          {/*      </Text>*/}
+
+          {/*      <Text*/}
+          {/*        fontSize={{ base: '2xl', md: '3xl' }}*/}
+          {/*        fontWeight="700"*/}
+          {/*        color="blue.600"*/}
+          {/*      >*/}
+          {/*        {projectedCompletion.toLocaleDateString('sr-RS', {*/}
+          {/*          day: 'numeric',*/}
+          {/*          month: 'long',*/}
+          {/*          year: 'numeric'*/}
+          {/*        })}*/}
+          {/*      </Text>*/}
+
+          {/*      <Text fontSize="xs" color="gray.500" mt={2}>*/}
+          {/*        (~{Math.ceil((projectedCompletion.getTime() - Date.now()) / (1000 * 60 * 60 * 24))} dana)*/}
+          {/*      </Text>*/}
+          {/*    </Box>*/}
+          {/*  )}*/}
+
+          {/*  {campaign && campaign.progress >= 100 && (*/}
+          {/*    <Box*/}
+          {/*      bg="green.50"*/}
+          {/*      border="2px solid"*/}
+          {/*      borderColor="green.300"*/}
+          {/*      borderRadius="xl"*/}
+          {/*      p={6}*/}
+          {/*      textAlign="center"*/}
+          {/*      gridColumn={{ md: "span 2" }}*/}
+          {/*    >*/}
+          {/*      <Text fontSize="3xl" mb={2}>🎉</Text>*/}
+          {/*      <Text*/}
+          {/*        fontSize="2xl"*/}
+          {/*        fontWeight="700"*/}
+          {/*        color="green.600"*/}
+          {/*      >*/}
+          {/*        Kampanja završena!*/}
+          {/*      </Text>*/}
+          {/*    </Box>*/}
+          {/*  )}*/}
+          {/*</SimpleGrid>*/}
 
           <Text
             textAlign="center"
