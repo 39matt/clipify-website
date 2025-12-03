@@ -114,7 +114,7 @@ const SignUp: NextPage = () => {
         alignItems="center"
         px={{ base: 8, md: 12, lg: 8, xl: 12 }}
         py={{ base: 6, lg: 0 }}
-        pt={{ base: 20, md: 'auto' }}
+        pt={{ base: 5, md: 'auto' }}
         position="relative"
         bg="black"
         overflow="hidden"
