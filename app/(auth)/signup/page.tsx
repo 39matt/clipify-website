@@ -18,12 +18,14 @@ import {
   InputGroup,
   InputRightElement,
   IconButton,
+  Badge,
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 
 import { PageTransition } from '#components/home-page/motion/page-transition';
 import siteConfig from '#data/config';
@@ -31,6 +33,8 @@ import siteConfig from '#data/config';
 import { signUp } from '../../lib/firebase/auth';
 import { firebaseSignupErrorMap } from '../../lib/firebase/errors';
 import { useAuth } from '../../providers/authProvider';
+
+const MotionBox = motion(Box);
 
 const SignUp: NextPage = () => {
   const router = useRouter();
@@ -52,8 +56,8 @@ const SignUp: NextPage = () => {
 
   if (authLoading) {
     return (
-      <Center minH="100vh">
-        <Spinner size="xl" color="green.500" thickness="4px" />
+      <Center minH="100vh" bg="white">
+        <Spinner size="xl" color="red.500" thickness="4px" />
       </Center>
     );
   }
@@ -100,6 +104,7 @@ const SignUp: NextPage = () => {
       direction={{ base: 'column', lg: 'row' }}
       position="relative"
       overflow="hidden"
+
     >
       {/* Left side - Branding */}
       <Flex
@@ -112,17 +117,17 @@ const SignUp: NextPage = () => {
         py={{ base: 6, lg: 0 }}
         pt={{ base: 20, md: 'auto' }}
         position="relative"
-        bg="gray.900"
-        _light={{ bg: 'gray.50' }}
+        bg="black"
         overflow="hidden"
       >
-        {/* Large decorative gradient */}
+        {/* Decorative gradient */}
         <Box
           position="absolute"
           top="-20%"
           left="-20%"
           w="140%"
           h="140%"
+          bgGradient="radial(circle at 30% 30%, rgba(239, 68, 68, 0.15), transparent 70%)"
           animation="pulse 8s ease-in-out infinite"
           sx={{
             '@keyframes pulse': {
@@ -141,55 +146,40 @@ const SignUp: NextPage = () => {
           zIndex={1}
           textAlign="center"
         >
-          {/* Logo - hidden on mobile */}
-          <Box
-            display={{ base: 'none', lg: 'block' }}
-            opacity={0}
-            animation="fadeInUp 0.8s ease forwards"
-            sx={{
-              '@keyframes fadeInUp': {
-                '0%': { opacity: 0, transform: 'translateY(30px)' },
-                '100%': { opacity: 1, transform: 'translateY(0)' },
-              },
-            }}
-          >
-            <NextLink href="/">
-              <Box
-                as={siteConfig.logo}
-                width="220px"
-                cursor="pointer"
-                transition="all 0.3s ease"
-                _hover={{ transform: 'scale(1.05)' }}
-                mx="auto"
-              />
-            </NextLink>
-          </Box>
 
           {/* Main heading */}
-          <VStack
-            spacing={{ base: 4, lg: 4 }}
-            opacity={0}
-            animation="fadeInUp 0.8s ease 0.1s forwards"
-          >
+          <VStack spacing={{ base: 4, lg: 4 }}>
+            <Badge
+              bg="red.500"
+              color="white"
+              px={4}
+              py={1}
+              borderRadius="full"
+              fontSize="xs"
+              fontWeight="900"
+              textTransform="uppercase"
+              letterSpacing="wider"
+            >
+              PRIDRUŽI SE
+            </Badge>
+
             <Heading
               fontSize={{ base: '4xl', md: '7xl' }}
-              fontWeight="black"
-              bgGradient="linear(to-r, green.200, green.300, green.400, green.500)"
-              bgClip="text"
+              fontWeight="900"
+              color="white"
               lineHeight="1.05"
               letterSpacing="-0.03em"
-
             >
-              Zarađuj od svojih klipova
+              Zarađuj od
+                Svojih klipova
             </Heading>
-            {/* Text visible only on desktop */}
+
             <Text
               display={{ base: 'none', lg: 'block' }}
               fontSize="2xl"
               color="gray.300"
-              _light={{ color: 'gray.700' }}
               lineHeight="1.4"
-              fontWeight="medium"
+              fontWeight="600"
               maxW="500px"
             >
               Klipuj. Okači. Zaradi.
@@ -201,38 +191,34 @@ const SignUp: NextPage = () => {
             columns={3}
             spacing={{ base: 3, lg: 6 }}
             w="full"
-            opacity={0}
-            animation="fadeInUp 0.8s ease 0.2s forwards"
             maxW="550px"
           >
             {[
-              { value: '100k+', label: 'Isplaćeno', icon: '💰' },
-              { value: '600+', label: 'Aktivnih klipera', icon: '👥' },
-              { value: '20M+', label: 'Ukupno pregleda', icon: '📈' },
+              { value: '250k+', label: 'Isplaćeno', icon: '💰' },
+              { value: '700+', label: 'Aktivnih klipera', icon: '👥' },
+              { value: '25M+', label: 'Ukupno pregleda', icon: '📈' },
             ].map((stat, idx) => (
               <VStack
                 key={idx}
                 spacing={{ base: 1.5, lg: 2 }}
                 p={{ base: 3, lg: 4 }}
-                bg="whiteAlpha.50"
-                _light={{ bg: 'white' }}
+                bg="whiteAlpha.100"
                 borderRadius={{ base: 'xl', lg: 'xl' }}
                 borderWidth="2px"
-                borderColor="transparent"
+                borderColor="whiteAlpha.200"
                 transition="all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)"
                 _hover={{
-                  borderColor: 'green.400',
+                  borderColor: 'red.500',
                   transform: 'translateY(-8px)',
-                  shadow: '0 20px 40px rgba(72, 187, 120, 0.2)',
+                  boxShadow: '0 20px 40px rgba(239, 68, 68, 0.3)',
                 }}
               >
                 <Text fontSize={{ base: 'xl', lg: '2xl' }}>{stat.icon}</Text>
                 <VStack spacing={0.5}>
                   <Text
                     fontSize={{ base: 'lg', lg: '2xl' }}
-                    fontWeight="black"
-                    bgGradient="linear(to-r, green.300, green.500)"
-                    bgClip="text"
+                    fontWeight="900"
+                    color="white"
                     letterSpacing="-0.03em"
                   >
                     {stat.value}
@@ -240,8 +226,7 @@ const SignUp: NextPage = () => {
                   <Text
                     fontSize={{ base: '2xs', lg: 'xs' }}
                     color="gray.400"
-                    _light={{ color: 'gray.600' }}
-                    fontWeight="semibold"
+                    fontWeight="700"
                     textTransform="uppercase"
                     letterSpacing="wider"
                   >
@@ -252,11 +237,9 @@ const SignUp: NextPage = () => {
             ))}
           </SimpleGrid>
 
-          {/* Features - desktop only */}
+          {/* Features */}
           <VStack
             spacing={3}
-            opacity={0}
-            animation="fadeInUp 0.8s ease 0.3s forwards"
             w="full"
             align="stretch"
             display={{ base: 'none', lg: 'flex' }}
@@ -269,33 +252,32 @@ const SignUp: NextPage = () => {
                 gap={3}
                 p={4}
                 w="full"
-                bg="whiteAlpha.50"
-                _light={{ bg: 'white' }}
+                bg="whiteAlpha.100"
                 borderRadius="lg"
                 borderWidth="2px"
-                borderColor="transparent"
+                borderColor="whiteAlpha.200"
                 transition="all 0.3s ease"
                 _hover={{
-                  borderColor: 'green.400',
+                  borderColor: 'red.500',
                   transform: 'translateX(8px)',
+                  bg: 'whiteAlpha.150',
                 }}
               >
                 <Center
                   w="44px"
                   h="44px"
                   borderRadius="lg"
-                  bgGradient="linear(to-br, green.400, green.600)"
+                  bg="red.500"
                   color="white"
                   flexShrink={0}
-                  boxShadow="0 4px 14px rgba(72, 187, 120, 0.4)"
+                  boxShadow="0 4px 14px rgba(239, 68, 68, 0.4)"
                 >
                   <Icon as={feature.icon} boxSize={5} />
                 </Center>
                 <VStack align="start" spacing={0.5} flex={1}>
                   <Text
-                    fontWeight="bold"
+                    fontWeight="800"
                     color="white"
-                    _light={{ color: 'gray.900' }}
                     fontSize="md"
                     textAlign="left"
                   >
@@ -304,9 +286,9 @@ const SignUp: NextPage = () => {
                   <Text
                     fontSize="sm"
                     color="gray.400"
-                    _light={{ color: 'gray.600' }}
                     lineHeight="1.5"
                     textAlign="left"
+                    fontWeight="500"
                   >
                     {feature.description}
                   </Text>
@@ -326,17 +308,27 @@ const SignUp: NextPage = () => {
         px={{ base: 6, md: 12, lg: 16 }}
         py={{ base: 6, lg: 0 }}
         bg="white"
-        _dark={{ bg: 'gray.900', borderColor: 'gray.700' }}
+        sx={{
+          backgroundImage: `radial-gradient(rgba(0,0,0,0.06) 2px, transparent 2px)`,
+          backgroundSize: '22px 22px',
+          backgroundAttachment: 'fixed',
+        }}
         position="relative"
         zIndex={1}
-        borderLeftWidth={{ base: 0, lg: '1px' }}
-        borderColor="gray.200"
-        boxShadow={{ base: 'none', lg: '-20px 0 60px rgba(0, 0, 0, 0.05)' }}
-        _light={{
-          boxShadow: { lg: '-20px 0 60px rgba(0, 0, 0, 0.08)' },
-        }}
         overflow="hidden"
       >
+        {/* Decorative element */}
+        <Box
+          position="absolute"
+          top="-20%"
+          right="-20%"
+          w="500px"
+          h="500px"
+          borderRadius="full"
+          bgGradient="radial(circle, rgba(239, 68, 68, 0.04), transparent 70%)"
+          pointerEvents="none"
+        />
+
         <PageTransition>
           <VStack
             spacing={{ base: 4, lg: 8 }}
@@ -344,24 +336,35 @@ const SignUp: NextPage = () => {
             maxW="440px"
             mx="auto"
             w="full"
+            position="relative"
           >
             <VStack spacing={{ base: 1, lg: 3 }} align="start">
               <Box>
+                <Badge
+                  bg="red.500"
+                  color="white"
+                  px={4}
+                  py={1}
+                  borderRadius="full"
+                  fontSize="xs"
+                  fontWeight="900"
+                  textTransform="uppercase"
+                  letterSpacing="wider"
+                  mb={3}
+                >
+                  KREIRAJ NALOG
+                </Badge>
+
                 <Heading
                   fontSize={{ base: '2xl', lg: '4xl' }}
-                  fontWeight="black"
+                  fontWeight="900"
                   color="gray.900"
-                  _dark={{ color: 'white' }}
                   letterSpacing="-0.02em"
                   mb={{ base: 1, lg: 2 }}
                 >
                   Napravi nalog
                 </Heading>
-                <Text
-                  color="gray.600"
-                  _dark={{ color: 'gray.400' }}
-                  fontSize={{ base: 'sm', lg: 'lg' }}
-                >
+                <Text color="gray.600" fontSize={{ base: 'sm', lg: 'lg' }} fontWeight="500">
                   Popuni podatke i započni svoju zaradu!
                 </Text>
               </Box>
@@ -372,9 +375,10 @@ const SignUp: NextPage = () => {
                 <VStack spacing={{ base: 1, lg: 2 }} align="stretch">
                   <Text
                     fontSize="sm"
-                    fontWeight="600"
-                    color="gray.700"
-                    _dark={{ color: 'gray.300' }}
+                    fontWeight="700"
+                    color="gray.900"
+                    textTransform="uppercase"
+                    letterSpacing="wider"
                   >
                     Email adresa
                   </Text>
@@ -385,16 +389,14 @@ const SignUp: NextPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    bg="gray.50"
-                    _dark={{ bg: 'gray.800', borderColor: 'gray.700' }}
+                    bg="gray.200"
                     border="2px"
                     borderColor="gray.200"
-                    _hover={{ borderColor: 'green.300' }}
+                    _hover={{ borderColor: 'red.300' }}
                     _focus={{
-                      borderColor: 'green.500',
-                      boxShadow: '0 0 0 3px rgba(72, 187, 120, 0.1)',
+                      borderColor: 'red.500',
+                      boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.1)',
                       bg: 'white',
-                      _dark: { bg: 'gray.700' },
                     }}
                     borderRadius="xl"
                     height={{ base: '48px', lg: '56px' }}
@@ -406,9 +408,10 @@ const SignUp: NextPage = () => {
                 <VStack spacing={{ base: 1, lg: 2 }} align="stretch">
                   <Text
                     fontSize="sm"
-                    fontWeight="600"
-                    color="gray.700"
-                    _dark={{ color: 'gray.300' }}
+                    fontWeight="700"
+                    color="gray.900"
+                    textTransform="uppercase"
+                    letterSpacing="wider"
                   >
                     Lozinka
                   </Text>
@@ -420,16 +423,14 @@ const SignUp: NextPage = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      bg="gray.50"
-                      _dark={{ bg: 'gray.800', borderColor: 'gray.700' }}
+                      bg="gray.200"
                       border="2px"
                       borderColor="gray.200"
-                      _hover={{ borderColor: 'green.300' }}
+                      _hover={{ borderColor: 'red.300' }}
                       _focus={{
-                        borderColor: 'green.500',
-                        boxShadow: '0 0 0 3px rgba(72, 187, 120, 0.1)',
+                        borderColor: 'red.500',
+                        boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.1)',
                         bg: 'white',
-                        _dark: { bg: 'gray.700' },
                       }}
                       borderRadius="xl"
                       height={{ base: '48px', lg: '56px' }}
@@ -447,7 +448,7 @@ const SignUp: NextPage = () => {
                         variant="ghost"
                         size="sm"
                         color="gray.500"
-                        _hover={{ color: 'green.500', bg: 'transparent' }}
+                        _hover={{ color: 'red.500', bg: 'transparent' }}
                       />
                     </InputRightElement>
                   </InputGroup>
@@ -456,9 +457,10 @@ const SignUp: NextPage = () => {
                 <VStack spacing={{ base: 1, lg: 2 }} align="stretch">
                   <Text
                     fontSize="sm"
-                    fontWeight="600"
-                    color="gray.700"
-                    _dark={{ color: 'gray.300' }}
+                    fontWeight="700"
+                    color="gray.900"
+                    textTransform="uppercase"
+                    letterSpacing="wider"
                   >
                     Potvrdi lozinku
                   </Text>
@@ -470,16 +472,14 @@ const SignUp: NextPage = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
-                      bg="gray.50"
-                      _dark={{ bg: 'gray.800', borderColor: 'gray.700' }}
+                      bg="gray.200"
                       border="2px"
                       borderColor="gray.200"
-                      _hover={{ borderColor: 'green.300' }}
+                      _hover={{ borderColor: 'red.300' }}
                       _focus={{
-                        borderColor: 'green.500',
-                        boxShadow: '0 0 0 3px rgba(72, 187, 120, 0.1)',
+                        borderColor: 'red.500',
+                        boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.1)',
                         bg: 'white',
-                        _dark: { bg: 'gray.700' },
                       }}
                       borderRadius="xl"
                       height={{ base: '48px', lg: '56px' }}
@@ -495,9 +495,7 @@ const SignUp: NextPage = () => {
                             : 'Prikaži lozinku'
                         }
                         icon={
-                          <Icon
-                            as={showConfirmPassword ? FiEyeOff : FiEye}
-                          />
+                          <Icon as={showConfirmPassword ? FiEyeOff : FiEye} />
                         }
                         onClick={() =>
                           setShowConfirmPassword(!showConfirmPassword)
@@ -505,7 +503,7 @@ const SignUp: NextPage = () => {
                         variant="ghost"
                         size="sm"
                         color="gray.500"
-                        _hover={{ color: 'green.500', bg: 'transparent' }}
+                        _hover={{ color: 'red.500', bg: 'transparent' }}
                       />
                     </InputRightElement>
                   </InputGroup>
@@ -516,16 +514,12 @@ const SignUp: NextPage = () => {
                     status="error"
                     borderRadius="xl"
                     bg="red.50"
-                    _dark={{
-                      bg: 'rgba(127, 29, 29, 0.3)',
-                      borderColor: 'red.900',
-                    }}
                     borderWidth="2px"
                     borderColor="red.200"
                     py={{ base: 2, lg: 3 }}
                   >
                     <AlertIcon boxSize={{ base: 4, lg: 5 }} />
-                    <Text fontSize="sm" fontWeight="medium">
+                    <Text fontSize="sm" fontWeight="600">
                       {error}
                     </Text>
                   </Alert>
@@ -536,16 +530,12 @@ const SignUp: NextPage = () => {
                     status="success"
                     borderRadius="xl"
                     bg="green.50"
-                    _dark={{
-                      bg: 'rgba(22, 101, 52, 0.3)',
-                      borderColor: 'green.900',
-                    }}
                     borderWidth="2px"
                     borderColor="green.200"
                     py={{ base: 2, lg: 3 }}
                   >
                     <AlertIcon boxSize={{ base: 4, lg: 5 }} />
-                    <Text fontSize="sm" fontWeight="medium">
+                    <Text fontSize="sm" fontWeight="600">
                       {success}
                     </Text>
                   </Alert>
@@ -555,24 +545,24 @@ const SignUp: NextPage = () => {
                   type="submit"
                   size="lg"
                   w="full"
-                  bgGradient="linear(to-r, green.500, green.600)"
+                  bg="black"
                   color="white"
                   _hover={{
-                    bgGradient: 'linear(to-r, green.600, green.700)',
+                    bg: 'red.500',
                     transform: 'translateY(-2px)',
-                    shadow: '0 12px 24px rgba(72, 187, 120, 0.4)',
+                    boxShadow: '0 12px 24px rgba(239, 68, 68, 0.4)',
                   }}
                   _active={{
                     transform: 'translateY(0)',
                   }}
                   height={{ base: '48px', lg: '56px' }}
                   fontSize="md"
-                  fontWeight="bold"
+                  fontWeight="800"
                   borderRadius="xl"
                   transition="all 0.2s"
                   isLoading={loading}
                   loadingText="Kreiranje naloga..."
-                  boxShadow="0 8px 16px rgba(72, 187, 120, 0.3)"
+                  boxShadow="0 8px 16px rgba(0, 0, 0, 0.2)"
                   mt={{ base: 1, lg: 2 }}
                 >
                   Kreiraj nalog
@@ -584,18 +574,18 @@ const SignUp: NextPage = () => {
               <Text
                 fontSize={{ base: 'sm', lg: 'lg' }}
                 color="gray.600"
-                _dark={{ color: 'gray.400' }}
+                fontWeight="500"
               >
                 Već imaš nalog?
               </Text>
               <NextLink href="/login" passHref>
                 <Text
                   fontSize={{ base: 'sm', lg: 'lg' }}
-                  fontWeight="bold"
-                  color="green.500"
+                  fontWeight="800"
+                  color="red.500"
                   cursor="pointer"
                   _hover={{
-                    color: 'green.600',
+                    color: 'red.600',
                     textDecoration: 'underline',
                   }}
                   transition="all 0.2s"

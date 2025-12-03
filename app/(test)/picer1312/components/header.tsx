@@ -15,6 +15,7 @@ import { useScroll } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
+import { ButtonLink } from '#components/home-page/button-link'
 
 export interface HeaderProps extends Omit<BoxProps, 'children'> {}
 
@@ -174,22 +175,16 @@ export const Header = (props: HeaderProps) => {
                 </Button>
               ))}
 
-              <Button
+              <ButtonLink
+                href="https://cal.com/petarnovakovic/"
                 size="sm"
                 bg="white"
                 color="black"
                 fontWeight="700"
                 _hover={{ bg: 'gray.100' }}
-                onClick={(e) => {
-                  e.preventDefault()
-                  document.querySelector('#kontakt')?.scrollIntoView({
-                    behavior: 'smooth',
-                  })
-                  onClose()
-                }}
               >
                 Zakaži Poziv
-              </Button>
+              </ButtonLink>
             </VStack>
           </Collapse>
 

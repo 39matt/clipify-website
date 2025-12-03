@@ -51,6 +51,7 @@ import { Global } from '@emotion/react';
 import { GoPeople } from 'react-icons/go';
 import { FaDiscord } from 'react-icons/fa';
 import { GrCheckmark } from 'react-icons/gr';
+import { ButtonLink } from '#components/home-page/button-link'
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -271,7 +272,8 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.7 }}
             >
               <HStack spacing={4} flexWrap="wrap" justify="center">
-                <Button
+                <ButtonLink
+                  href="https://cal.com/petarnovakovic/"
                   width={{base: "full", md: "auto"}}
                   bg="black"
                   color="white"
@@ -285,17 +287,12 @@ const HeroSection = () => {
                     boxShadow: 'xl',
                   }}
                   transition="all 0.2s"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    document.querySelector('#kontakt')?.scrollIntoView({
-                      behavior: 'smooth',
-                    });
-                  }}
                   leftIcon={<PhoneIcon size={16} />}
                 >
                   Zakaži Poziv
-                </Button>
-                <Button
+                </ButtonLink>
+                <ButtonLink
+                  href="/signup"
                   width={{base: "full", md: "auto"}}
                   borderColor="black"
                   color="black"
@@ -311,13 +308,10 @@ const HeroSection = () => {
                     transform: 'translateY(-2px)',
                   }}
                   transition="all 0.2s"
-                  onClick={(e) => {
-                    e.preventDefault();
-                  }}
                   leftIcon={<GoPeople size={16} />}
                 >
                   Zaradi kao kliper
-                </Button>
+                </ButtonLink>
               </HStack>
             </MotionBox>
 
@@ -842,7 +836,7 @@ const CaseStudiesSection = () => {
     {
       id: 'cjuree',
       name: 'Cjuree',
-      views: '5M',
+      views: '6M',
       image:
         'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/cjuree.jpeg?alt=media&token=0cc34f5b-8216-4e79-aca0-22fd6beadf20',
       totalClippers: 15,
@@ -872,7 +866,7 @@ const CaseStudiesSection = () => {
         clipper: 'kliper1311',
         link: 'https://www.tiktok.com/@kliper1311/video/7538504023171665208',
       },
-      text: '',
+      text: 'Tokom kampanje za Aleksića fokusirali smo se na organski rast kroz našu mrežu klipera. Umesto otvaranja novih profila, Aleksićev sadržaj je strateški ubacen na već postojeće kliperske i streamerske profile koji imaju izgrađenu publiku. Kliperi su svakodnevno izbacivali najbolje momente i zabavne isečke iz njegovih videa koje najbolje prolaze u njegovoj niši. ',
     },
   ];
 
@@ -1690,7 +1684,8 @@ const StepsSection = () => {
               pt={2}
               w="full"
             >
-              <Button
+              <ButtonLink
+                href="https://cal.com/petarnovakovic/"
                 size={{ base: 'md', md: 'lg' }}
                 bg="white"
                 color="black"
@@ -1705,15 +1700,9 @@ const StepsSection = () => {
                   boxShadow: '0 12px 32px rgba(255,255,255,0.3)',
                 }}
                 transition="all 0.2s"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.querySelector('#kontakt')?.scrollIntoView({
-                    behavior: 'smooth',
-                  });
-                }}
               >
                 Rezerviši Poziv
-              </Button>
+              </ButtonLink>
 
               <Button
                 size={{ base: 'md', md: 'lg' }}
@@ -2035,11 +2024,11 @@ const PricingSection = () => {
       name: 'Povećaj Prodaju',
       tag: 'PRODAJA',
       features: [
-        'Kampanja fokusirana na rast prodaje',
+        'Kampanja optimizovana za rast prodaje',
         'Pristup našem Dashboard-u',
-        'Redovni izveštaji + 24/7 support',
+        'Nedeljni izvestaji + 24/7 support',
         'Organski rast engagementa',
-        'Garancija',
+        'Garancija Rezultata',
       ],
     },
     {
@@ -2048,9 +2037,9 @@ const PricingSection = () => {
       features: [
         'Kampanja fokusirana na rast pregleda',
         'Pristup našem Dashboard-u',
-        'Redovni izveštaji + 24/7 support',
+        'Nedeljni izvestaji + 24/7 support',
         'Organski rast engagementa',
-        'Garancija',
+        'Garancija Rezultata',
       ],
       highlight: true,
     },
@@ -2058,11 +2047,7 @@ const PricingSection = () => {
       name: 'Paket po želji',
       tag: 'CUSTOM',
       features: [
-        'Custom strategija i ciljevi',
-        'Dedicated tim za tvoj brend',
-        'A/B testing i optimizacija',
-        'Full produkcija sadržaja',
-        'aaaa',
+        'Sve po Dogovoru',
       ],
       enterprise: true,
     },
@@ -2231,7 +2216,8 @@ const PricingSection = () => {
                         >
                           Kontaktiraj nas za cenu
                         </Heading>
-                        <Button
+                        <ButtonLink
+                          href="https://cal.com/petarnovakovic/"
                           w="full"
                           size={{ base: 'md', md: 'lg' }}
                           bgGradient="linear(to-r, gray.200, gray.300)"
@@ -2247,7 +2233,7 @@ const PricingSection = () => {
                           transition="all 0.2s"
                         >
                           Zakaži Poziv
-                        </Button>
+                        </ButtonLink>
                       </VStack>
                     </VStack>
                   </MotionBox>
@@ -2354,7 +2340,8 @@ const PricingSection = () => {
                           >
                             Kontaktiraj nas za cenu
                           </Heading>
-                          <Button
+                          <ButtonLink
+                            href="https://cal.com/petarnovakovic/"
                             w="full"
                             size={{ base: 'md', md: 'lg' }}
                             bg="red.500"
@@ -2368,7 +2355,7 @@ const PricingSection = () => {
                             transition="all 0.2s"
                           >
                             Zakaži Poziv
-                          </Button>
+                          </ButtonLink>
                         </VStack>
                       </VStack>
 
@@ -2497,7 +2484,8 @@ const PricingSection = () => {
                       >
                         Kontaktiraj nas za cenu
                       </Heading>
-                      <Button
+                      <ButtonLink
+                        href="https://cal.com/petarnovakovic/"
                         w="full"
                         size={{ base: 'md', md: 'lg' }}
                         bgGradient="linear(to-r, gray.700, gray.900)"
@@ -2513,7 +2501,7 @@ const PricingSection = () => {
                         transition="all 0.2s"
                       >
                         Zakaži poziv
-                      </Button>
+                      </ButtonLink>
                     </VStack>
                   </VStack>
                 </MotionBox>
@@ -2564,6 +2552,12 @@ const PricingSection = () => {
               }}
               w={{ base: 'full', md: 'auto' }}
               flexShrink={0}
+              onClick={(e) => {
+                e.preventDefault()
+                document.querySelector('#kontakt')?.scrollIntoView({
+                  behavior: 'smooth',
+                })
+              }}
             >
               Kontakt
             </Button>
@@ -3091,10 +3085,11 @@ const CTASection = () => {
                 fontSize={{ base: 'sm', md: 'md' }}
                 lineHeight="1.7"
               >
-                Rezervišite 30-minutni besplatan poziv za više informacija
+                Rezervišite 30-minutni besplatan poziv za više informacija <hr/>
                  kako bismo videli da li možemo da vam pomognemo
               </Text>
-              <Button
+              <ButtonLink
+                href="https://cal.com/petarnovakovic/"
                 size={{ base: 'md', md: 'lg' }}
                 mt={4}
                 px={{ base: 6, md: 10 }}
@@ -3113,7 +3108,7 @@ const CTASection = () => {
                 transition="all 0.25s ease"
               >
                 Zakaži konsultacije
-              </Button>
+              </ButtonLink>
             </VStack>
           </Box>
         </MotionBox>

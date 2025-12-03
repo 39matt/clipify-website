@@ -17,6 +17,7 @@ import {
   InputGroup,
   InputRightElement,
   IconButton,
+  Badge,
 } from '@chakra-ui/react';
 import { PageTransition } from '#components/home-page/motion/page-transition';
 import siteConfig from '#data/config';
@@ -28,6 +29,9 @@ import { firebaseLoginErrorMap } from '../../lib/firebase/errors';
 import { useRouter } from 'next/navigation';
 import { signIn } from '../../lib/firebase/auth';
 import { useAuth } from '../../providers/authProvider';
+import { motion } from 'framer-motion';
+
+const MotionBox = motion(Box);
 
 const Login: NextPage = () => {
   const router = useRouter();
@@ -47,8 +51,8 @@ const Login: NextPage = () => {
 
   if (authLoading) {
     return (
-      <Center minH="100vh">
-        <Spinner size="xl" color="green.500" thickness="4px" />
+      <Center minH="100vh" bg="white">
+        <Spinner size="xl" color="red.500" thickness="4px" />
       </Center>
     );
   }
@@ -75,7 +79,8 @@ const Login: NextPage = () => {
       }
 
       setError(
-        firebaseLoginErrorMap[code] || 'Došlo je do greške. Pokušajte ponovo.'
+        firebaseLoginErrorMap[code] ||
+        'Došlo je do greške. Pokušajte ponovo.'
       );
     } finally {
       setLoading(false);
@@ -87,47 +92,80 @@ const Login: NextPage = () => {
       minH="100vh"
       direction="column"
       bg="white"
-      _dark={{ bg: 'gray.900' }}
+      sx={{
+        backgroundImage: `radial-gradient(rgba(0,0,0,0.06) 2px, transparent 2px)`,
+        backgroundSize: '22px 22px',
+        backgroundAttachment: 'fixed',
+      }}
       px={{ base: 4, md: 8 }}
       py={{ base: 6, md: 12 }}
       position="relative"
     >
-      {/* ✅ Centered logo in upper part of screen */}
-      <Flex
+      {/* Decorative background elements */}
+      <Box
         position="absolute"
-        top="10%"
-        left="50%"
-        transform="translateX(-50%)"
-        justifyContent="center"
-      >
-        <NextLink href="/">
-          <Box
-            as={siteConfig.logo}
-            width={{ base: '150px', md: '200px' }}
-            mx="auto"
-            cursor="pointer"
-          />
-        </NextLink>
-      </Flex>
+        top="-10%"
+        right="-10%"
+        w="500px"
+        h="500px"
+        borderRadius="full"
+        bgGradient="radial(circle, rgba(239, 68, 68, 0.06), transparent 70%)"
+        pointerEvents="none"
+      />
 
-      {/* ✅ Form perfectly centered in viewport */}
+      {/* Logo - Centered in upper part */}
+      {/*<Flex*/}
+      {/*  position="absolute"*/}
+      {/*  top="10%"*/}
+      {/*  left="50%"*/}
+      {/*  transform="translateX(-50%)"*/}
+      {/*  justifyContent="center"*/}
+      {/*>*/}
+      {/*  <NextLink href="/">*/}
+      {/*    <MotionBox*/}
+      {/*      as={siteConfig.logo}*/}
+      {/*      width={{ base: '150px', md: '200px' }}*/}
+      {/*      mx="auto"*/}
+      {/*      cursor="pointer"*/}
+      {/*      initial={{ opacity: 0, scale: 0.9 }}*/}
+      {/*      animate={{ opacity: 1, scale: 1 }}*/}
+      {/*      transition={{ duration: 0.5 }}*/}
+      {/*      _hover={{ transform: 'scale(1.05)' }}*/}
+      {/*    />*/}
+      {/*  </NextLink>*/}
+      {/*</Flex>*/}
+
       <Flex flex="1" align="center" justify="center">
         <PageTransition>
           <VStack
             spacing={{ base: 6, md: 8, lg: 9 }}
             align="stretch"
             maxW="900px"
-            minW={{base: "auto", md:"400px"}}
+            minW={{ base: 'auto', md: '400px' }}
             w="full"
           >
             {/* Heading */}
             <VStack spacing={{ base: 2, md: 3, lg: 3 }} align="start">
               <Box>
+                <Badge
+                  bg="red.500"
+                  color="white"
+                  px={4}
+                  py={1}
+                  borderRadius="full"
+                  fontSize="xs"
+                  fontWeight="900"
+                  textTransform="uppercase"
+                  letterSpacing="wider"
+                  mb={4}
+                >
+                  PRISTUP NALOGU
+                </Badge>
+
                 <Heading
                   fontSize={{ base: '3xl', md: '4xl', lg: '4xl' }}
-                  fontWeight="black"
+                  fontWeight="900"
                   color="gray.900"
-                  _dark={{ color: 'white' }}
                   letterSpacing="-0.02em"
                   mb={{ base: 2, md: 2, lg: 3 }}
                 >
@@ -135,8 +173,8 @@ const Login: NextPage = () => {
                 </Heading>
                 <Text
                   color="gray.600"
-                  _dark={{ color: 'gray.400' }}
                   fontSize={{ base: 'md', md: 'lg', lg: 'lg' }}
+                  fontWeight="500"
                 >
                   Uloguj se da nastaviš zaradu
                 </Text>
@@ -150,9 +188,10 @@ const Login: NextPage = () => {
                 <VStack spacing={{ base: 2, md: 3, lg: 3 }} align="stretch">
                   <Text
                     fontSize={{ base: 'sm', md: 'sm', lg: 'md' }}
-                    fontWeight="600"
-                    color="gray.700"
-                    _dark={{ color: 'gray.300' }}
+                    fontWeight="700"
+                    color="gray.900"
+                    textTransform="uppercase"
+                    letterSpacing="wider"
                   >
                     Email adresa
                   </Text>
@@ -163,16 +202,14 @@ const Login: NextPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    bg="gray.50"
-                    _dark={{ bg: 'gray.800', borderColor: 'gray.700' }}
+                    bg="gray.200"
                     border="2px"
                     borderColor="gray.200"
-                    _hover={{ borderColor: 'green.300' }}
+                    _hover={{ borderColor: 'red.300' }}
                     _focus={{
-                      borderColor: 'green.500',
-                      boxShadow: '0 0 0 3px rgba(72, 187, 120, 0.1)',
+                      borderColor: 'red.500',
+                      boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.1)',
                       bg: 'white',
-                      _dark: { bg: 'gray.700' },
                     }}
                     borderRadius="xl"
                     height={{ base: '52px', md: '56px', lg: '58px' }}
@@ -185,9 +222,10 @@ const Login: NextPage = () => {
                 <VStack spacing={{ base: 2, md: 3, lg: 3 }} align="stretch">
                   <Text
                     fontSize={{ base: 'sm', md: 'sm', lg: 'md' }}
-                    fontWeight="600"
-                    color="gray.700"
-                    _dark={{ color: 'gray.300' }}
+                    fontWeight="700"
+                    color="gray.900"
+                    textTransform="uppercase"
+                    letterSpacing="wider"
                   >
                     Lozinka
                   </Text>
@@ -199,16 +237,14 @@ const Login: NextPage = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      bg="gray.50"
-                      _dark={{ bg: 'gray.800', borderColor: 'gray.700' }}
+                      bg="gray.200"
                       border="2px"
                       borderColor="gray.200"
-                      _hover={{ borderColor: 'green.300' }}
+                      _hover={{ borderColor: 'red.300' }}
                       _focus={{
-                        borderColor: 'green.500',
-                        boxShadow: '0 0 0 3px rgba(72, 187, 120, 0.1)',
+                        borderColor: 'red.500',
+                        boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.1)',
                         bg: 'white',
-                        _dark: { bg: 'gray.700' },
                       }}
                       borderRadius="xl"
                       height={{ base: '52px', md: '56px', lg: '58px' }}
@@ -228,7 +264,7 @@ const Login: NextPage = () => {
                         variant="ghost"
                         size={{ base: 'sm', md: 'md', lg: 'md' }}
                         color="gray.500"
-                        _hover={{ color: 'green.500', bg: 'transparent' }}
+                        _hover={{ color: 'red.500', bg: 'transparent' }}
                       />
                     </InputRightElement>
                   </InputGroup>
@@ -240,10 +276,6 @@ const Login: NextPage = () => {
                     status="error"
                     borderRadius="xl"
                     bg="red.50"
-                    _dark={{
-                      bg: 'rgba(127, 29, 29, 0.3)',
-                      borderColor: 'red.900',
-                    }}
                     borderWidth="2px"
                     borderColor="red.200"
                     py={{ base: 3, md: 4, lg: 5 }}
@@ -251,7 +283,7 @@ const Login: NextPage = () => {
                     <AlertIcon boxSize={{ base: 4, md: 5, lg: 6 }} />
                     <Text
                       fontSize={{ base: 'sm', md: 'md', lg: 'md' }}
-                      fontWeight="medium"
+                      fontWeight="600"
                     >
                       {error}
                     </Text>
@@ -264,10 +296,6 @@ const Login: NextPage = () => {
                     status="success"
                     borderRadius="xl"
                     bg="green.50"
-                    _dark={{
-                      bg: 'rgba(22, 101, 52, 0.3)',
-                      borderColor: 'green.900',
-                    }}
                     borderWidth="2px"
                     borderColor="green.200"
                     py={{ base: 3, md: 4, lg: 5 }}
@@ -275,7 +303,7 @@ const Login: NextPage = () => {
                     <AlertIcon boxSize={{ base: 4, md: 5, lg: 6 }} />
                     <Text
                       fontSize={{ base: 'sm', md: 'md', lg: 'md' }}
-                      fontWeight="medium"
+                      fontWeight="600"
                     >
                       {success}
                     </Text>
@@ -287,22 +315,22 @@ const Login: NextPage = () => {
                   type="submit"
                   size="lg"
                   w="full"
-                  bgGradient="linear(to-r, green.500, green.600)"
+                  bg="black"
                   color="white"
                   _hover={{
-                    bgGradient: 'linear(to-r, green.600, green.700)',
+                    bg: 'red.500',
                     transform: 'translateY(-2px)',
-                    shadow: '0 12px 24px rgba(72, 187, 120, 0.4)',
+                    boxShadow: '0 12px 24px rgba(239, 68, 68, 0.4)',
                   }}
                   _active={{ transform: 'translateY(0)' }}
                   height={{ base: '52px', md: '56px', lg: '58px' }}
                   fontSize={{ base: 'md', md: 'md', lg: 'lg' }}
-                  fontWeight="bold"
+                  fontWeight="800"
                   borderRadius="xl"
                   transition="all 0.2s"
                   isLoading={loading}
                   loadingText="Prijavljivanje..."
-                  boxShadow="0 8px 16px rgba(72, 187, 120, 0.3)"
+                  boxShadow="0 8px 16px rgba(0, 0, 0, 0.2)"
                   mt={2}
                 >
                   Uloguj se
@@ -311,22 +339,26 @@ const Login: NextPage = () => {
             </Box>
 
             {/* Register */}
-            <HStack spacing={{ base: 2, md: 2 }} justify="center" pt={{ base: 2, md: 4 }}>
+            <HStack
+              spacing={{ base: 2, md: 2 }}
+              justify="center"
+              pt={{ base: 2, md: 4 }}
+            >
               <Text
                 fontSize={{ base: 'md', md: 'sm', lg: 'md' }}
                 color="gray.600"
-                _dark={{ color: 'gray.400' }}
+                fontWeight="500"
               >
                 Nemaš nalog?
               </Text>
               <NextLink href="/signup" passHref>
                 <Text
                   fontSize={{ base: 'md', md: 'sm', lg: 'md' }}
-                  fontWeight="bold"
-                  color="green.500"
+                  fontWeight="800"
+                  color="red.500"
                   cursor="pointer"
                   _hover={{
-                    color: 'green.600',
+                    color: 'red.600',
                     textDecoration: 'underline',
                   }}
                 >
