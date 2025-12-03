@@ -386,6 +386,7 @@ const SignUp: NextPage = () => {
                     type="email"
                     placeholder="tvoj@email.com"
                     size="lg"
+                    color="gray.800"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -419,6 +420,7 @@ const SignUp: NextPage = () => {
                     <Input
                       type={showPassword ? 'text' : 'password'}
                       placeholder="••••••••"
+                      color="gray.800"
                       size="lg"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -468,6 +470,7 @@ const SignUp: NextPage = () => {
                     <Input
                       type={showConfirmPassword ? 'text' : 'password'}
                       placeholder="••••••••"
+                      color="gray.800"
                       size="lg"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
@@ -502,7 +505,7 @@ const SignUp: NextPage = () => {
                         }
                         variant="ghost"
                         size="sm"
-                        color="gray.500"
+                        color="gray.800"
                         _hover={{ color: 'red.500', bg: 'transparent' }}
                       />
                     </InputRightElement>
@@ -513,13 +516,23 @@ const SignUp: NextPage = () => {
                   <Alert
                     status="error"
                     borderRadius="xl"
-                    bg="red.50"
+                    bg="red.100"
                     borderWidth="2px"
-                    borderColor="red.200"
-                    py={{ base: 2, lg: 3 }}
+                    borderColor="red.400"
+                    py={{ base: 3, lg: 4 }}
+                    color="red.800"
+                    boxShadow="lg"
                   >
-                    <AlertIcon boxSize={{ base: 4, lg: 5 }} />
-                    <Text fontSize="sm" fontWeight="600">
+                    <AlertIcon
+                      boxSize={{ base: 5, lg: 6 }}
+                      color="red.600"
+                      flexShrink={0}
+                    />
+                    <Text
+                      fontSize={{ base: 'sm', lg: 'md' }}
+                      fontWeight="700"
+                      color="red.800"
+                    >
                       {error}
                     </Text>
                   </Alert>
@@ -529,13 +542,23 @@ const SignUp: NextPage = () => {
                   <Alert
                     status="success"
                     borderRadius="xl"
-                    bg="green.50"
+                    bg="green.100"
                     borderWidth="2px"
-                    borderColor="green.200"
-                    py={{ base: 2, lg: 3 }}
+                    borderColor="green.400"
+                    py={{ base: 3, lg: 4 }}
+                    color="green.800"
+                    boxShadow="lg"
                   >
-                    <AlertIcon boxSize={{ base: 4, lg: 5 }} />
-                    <Text fontSize="sm" fontWeight="600">
+                    <AlertIcon
+                      boxSize={{ base: 5, lg: 6 }}
+                      color="green.600"
+                      flexShrink={0}
+                    />
+                    <Text
+                      fontSize={{ base: 'sm', lg: 'md' }}
+                      fontWeight="700"
+                      color="green.800"
+                    >
                       {success}
                     </Text>
                   </Alert>

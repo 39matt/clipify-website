@@ -175,8 +175,10 @@ export const Header = (props: HeaderProps) => {
                 </Button>
               ))}
 
-              <ButtonLink
+              <Button
+                as="a"
                 href="https://cal.com/petarnovakovic/"
+                target="_blank"
                 size="sm"
                 bg="white"
                 color="black"
@@ -184,7 +186,7 @@ export const Header = (props: HeaderProps) => {
                 _hover={{ bg: 'gray.100' }}
               >
                 Zakaži Poziv
-              </ButtonLink>
+              </Button>
             </VStack>
           </Collapse>
 

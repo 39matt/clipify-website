@@ -196,6 +196,7 @@ const Login: NextPage = () => {
                     Email adresa
                   </Text>
                   <Input
+                    color="gray.800"
                     type="email"
                     placeholder="tvoj@email.com"
                     size="lg"
@@ -231,6 +232,7 @@ const Login: NextPage = () => {
                   </Text>
                   <InputGroup size="lg">
                     <Input
+                      color="gray.800"
                       type={showPassword ? 'text' : 'password'}
                       placeholder="••••••••"
                       size="lg"
@@ -275,35 +277,48 @@ const Login: NextPage = () => {
                   <Alert
                     status="error"
                     borderRadius="xl"
-                    bg="red.50"
+                    bg="red.100"
                     borderWidth="2px"
-                    borderColor="red.200"
-                    py={{ base: 3, md: 4, lg: 5 }}
+                    borderColor="red.400"
+                    py={{ base: 3, lg: 4 }}
+                    color="red.800"
+                    boxShadow="lg"
                   >
-                    <AlertIcon boxSize={{ base: 4, md: 5, lg: 6 }} />
+                    <AlertIcon
+                      boxSize={{ base: 5, lg: 6 }}
+                      color="red.600"
+                      flexShrink={0}
+                    />
                     <Text
-                      fontSize={{ base: 'sm', md: 'md', lg: 'md' }}
-                      fontWeight="600"
+                      fontSize={{ base: 'sm', lg: 'md' }}
+                      fontWeight="700"
+                      color="red.800"
                     >
                       {error}
                     </Text>
                   </Alert>
                 )}
 
-                {/* Success */}
                 {success && (
                   <Alert
                     status="success"
                     borderRadius="xl"
-                    bg="green.50"
+                    bg="green.100"
                     borderWidth="2px"
-                    borderColor="green.200"
-                    py={{ base: 3, md: 4, lg: 5 }}
+                    borderColor="green.400"
+                    py={{ base: 3, lg: 4 }}
+                    color="green.800"
+                    boxShadow="lg"
                   >
-                    <AlertIcon boxSize={{ base: 4, md: 5, lg: 6 }} />
+                    <AlertIcon
+                      boxSize={{ base: 5, lg: 6 }}
+                      color="green.600"
+                      flexShrink={0}
+                    />
                     <Text
-                      fontSize={{ base: 'sm', md: 'md', lg: 'md' }}
-                      fontWeight="600"
+                      fontSize={{ base: 'sm', lg: 'md' }}
+                      fontWeight="700"
+                      color="green.800"
                     >
                       {success}
                     </Text>
