@@ -272,8 +272,13 @@ const HeroSection = () => {
               transition={{ duration: 0.6, delay: 0.7 }}
             >
               <HStack spacing={4} flexWrap="wrap" justify="center">
-                <ButtonLink
-                  href="https://cal.com/petarnovakovic/"
+                <Button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.querySelector('#kontakt')?.scrollIntoView({
+                      behavior: 'smooth',
+                    });
+                  }}
                   width={{base: "full", md: "auto"}}
                   bg="black"
                   color="white"
@@ -290,8 +295,9 @@ const HeroSection = () => {
                   leftIcon={<PhoneIcon size={16} />}
                 >
                   Zakaži Poziv
-                </ButtonLink>
-                <ButtonLink
+                </Button>
+                <Button
+                  as="a"
                   href="/signup"
                   width={{base: "full", md: "auto"}}
                   borderColor="black"
@@ -311,7 +317,7 @@ const HeroSection = () => {
                   leftIcon={<GoPeople size={16} />}
                 >
                   Zaradi kao kliper
-                </ButtonLink>
+                </Button>
               </HStack>
             </MotionBox>
 
@@ -1684,8 +1690,10 @@ const StepsSection = () => {
               pt={2}
               w="full"
             >
-              <ButtonLink
+              <Button
+                as="a"
                 href="https://cal.com/petarnovakovic/"
+                target="_blank"
                 size={{ base: 'md', md: 'lg' }}
                 bg="white"
                 color="black"
@@ -1702,7 +1710,7 @@ const StepsSection = () => {
                 transition="all 0.2s"
               >
                 Rezerviši Poziv
-              </ButtonLink>
+              </Button>
 
               <Button
                 size={{ base: 'md', md: 'lg' }}
@@ -2216,8 +2224,11 @@ const PricingSection = () => {
                         >
                           Kontaktiraj nas za cenu
                         </Heading>
-                        <ButtonLink
+                        <Button
+                          as="a"
                           href="https://cal.com/petarnovakovic/"
+                          target="_blank"
+                          rel="noopener noreferrer"
                           w="full"
                           size={{ base: 'md', md: 'lg' }}
                           bgGradient="linear(to-r, gray.200, gray.300)"
@@ -2233,7 +2244,7 @@ const PricingSection = () => {
                           transition="all 0.2s"
                         >
                           Zakaži Poziv
-                        </ButtonLink>
+                        </Button>
                       </VStack>
                     </VStack>
                   </MotionBox>
@@ -2340,22 +2351,26 @@ const PricingSection = () => {
                           >
                             Kontaktiraj nas za cenu
                           </Heading>
-                          <ButtonLink
+                          <Button
+                            as="a"
                             href="https://cal.com/petarnovakovic/"
+                            target="_blank"
+                            rel="noopener noreferrer"
                             w="full"
                             size={{ base: 'md', md: 'lg' }}
                             bg="red.500"
                             color="white"
                             borderRadius="xl"
                             fontWeight="800"
+                            border="1px solid"
+                            borderColor="red.200"
                             _hover={{
                               transform: 'scale(1.05)',
-                              bg: 'red.600',
                             }}
                             transition="all 0.2s"
                           >
                             Zakaži Poziv
-                          </ButtonLink>
+                          </Button>
                         </VStack>
                       </VStack>
 
@@ -2380,7 +2395,6 @@ const PricingSection = () => {
                 );
               }
 
-              // Enterprise Plan Style
               return (
                 <MotionBox
                   key={idx}
@@ -2484,24 +2498,27 @@ const PricingSection = () => {
                       >
                         Kontaktiraj nas za cenu
                       </Heading>
-                      <ButtonLink
+                      <Button
+                        as="a"
                         href="https://cal.com/petarnovakovic/"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         w="full"
                         size={{ base: 'md', md: 'lg' }}
-                        bgGradient="linear(to-r, gray.700, gray.900)"
-                        color="white"
+                        bgGradient="linear(to-r, gray.200, gray.300)"
+                        color="gray.700"
                         borderRadius="xl"
                         fontWeight="800"
                         border="1px solid"
-                        borderColor="whiteAlpha.300"
+                        borderColor="gray.200"
                         _hover={{
                           transform: 'scale(1.05)',
-                          bgGradient: 'linear(to-r, gray.600, gray.800)',
+                          bgGradient: 'linear(to-r, gray.300, gray.400)',
                         }}
                         transition="all 0.2s"
                       >
-                        Zakaži poziv
-                      </ButtonLink>
+                        Zakaži Poziv
+                      </Button>
                     </VStack>
                   </VStack>
                 </MotionBox>
@@ -2973,9 +2990,9 @@ const CTASection = () => {
             display={{ base: "none", md: "block" }}
           >
             Spremni da pojačate engagement i prodaju na društvenim mrežama kroz
-            strateški organski <br/> marketing i profesionalne usluge
+            strateški organski   <Box as="br" display={{ base: 'none', md: 'block' }} /> marketing i profesionalne usluge
             klipovanja kontenta? Zakažite besplatan poziv
-            <br/> kako bi videli da li možemo ostvariti prave rezultate za vaš
+            <Box as="br" display={{ base: 'none', md: 'block' }} /> kako bi videli da li možemo ostvariti prave rezultate za vaš
             brend.
           </Text>
 
@@ -3085,11 +3102,16 @@ const CTASection = () => {
                 fontSize={{ base: 'sm', md: 'md' }}
                 lineHeight="1.7"
               >
-                Rezervišite 30-minutni besplatan poziv za više informacija <hr/>
-                 kako bismo videli da li možemo da vam pomognemo
+                Rezervišite 30-minutni besplatan poziv za više informacija {' '}
+                <Box as="br" display={{ base: 'none', md: 'block' }} />
+                 kako bismo videli da li {' '}
+                <Box as="br" display={{ base: 'block', md: 'none' }} />
+                možemo da vam pomognemo
               </Text>
-              <ButtonLink
+              <Button
+                as="a"
                 href="https://cal.com/petarnovakovic/"
+                target="_blank"
                 size={{ base: 'md', md: 'lg' }}
                 mt={4}
                 px={{ base: 6, md: 10 }}
@@ -3108,7 +3130,7 @@ const CTASection = () => {
                 transition="all 0.25s ease"
               >
                 Zakaži konsultacije
-              </ButtonLink>
+              </Button>
             </VStack>
           </Box>
         </MotionBox>
