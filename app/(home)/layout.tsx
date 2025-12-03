@@ -1,5 +1,12 @@
-import { MarketingLayout } from 'components/home-page/layout'
+import { Header } from './components/header'
+import { Footer } from './components/footer'
 
-export default function Layout(props: { children: React.ReactNode }) {
-  return <MarketingLayout>{props.children}</MarketingLayout>
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <Header/>
+      {children}
+      <Footer/>
+    </>
+  );
 }
