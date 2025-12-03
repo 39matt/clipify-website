@@ -100,16 +100,15 @@ const SignUp: NextPage = () => {
 
   return (
     <Flex
-      h="100vh"
+      minH="100vh" // Changed from h="100vh"
       direction={{ base: 'column', lg: 'row' }}
       position="relative"
       overflow="hidden"
-
     >
       {/* Left side - Branding */}
       <Flex
         w={{ base: 'full', lg: '50%' }}
-        h={{ base: '35%', lg: 'auto' }}
+        minH={{ base: '35vh', lg: 'auto' }} // Changed from h to minH
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
@@ -302,7 +301,7 @@ const SignUp: NextPage = () => {
       {/* Right side - Form */}
       <Flex
         w={{ base: 'full', lg: '50%' }}
-        h={{ base: '65%', lg: 'auto' }}
+        minH={{ base: '65vh', lg: 'auto' }} // Changed from h to minH
         flexDirection="column"
         justifyContent="center"
         px={{ base: 6, md: 12, lg: 16 }}
@@ -315,7 +314,7 @@ const SignUp: NextPage = () => {
         }}
         position="relative"
         zIndex={1}
-        overflow="hidden"
+        overflow="auto" // Changed from "hidden" to "auto" to allow scrolling
       >
         {/* Decorative element */}
         <Box
