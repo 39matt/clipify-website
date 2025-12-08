@@ -1709,7 +1709,7 @@ const StepsSection = () => {
                 }}
                 transition="all 0.2s"
               >
-                Rezerviši Konsultacije
+                Zakaži Konsultacije
               </Button>
 
               <Button
