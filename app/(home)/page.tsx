@@ -1709,7 +1709,7 @@ const StepsSection = () => {
                 }}
                 transition="all 0.2s"
               >
-                Rezerviši Poziv
+                Rezerviši Konsultacije
               </Button>
 
               <Button
@@ -2243,7 +2243,7 @@ const PricingSection = () => {
                           }}
                           transition="all 0.2s"
                         >
-                          Zakaži Poziv
+                          Zakaži Konsultacije
                         </Button>
                       </VStack>
                     </VStack>
@@ -2369,7 +2369,7 @@ const PricingSection = () => {
                             }}
                             transition="all 0.2s"
                           >
-                            Zakaži Poziv
+                            Zakaži Konsultacije
                           </Button>
                         </VStack>
                       </VStack>
@@ -2517,7 +2517,7 @@ const PricingSection = () => {
                         }}
                         transition="all 0.2s"
                       >
-                        Zakaži Poziv
+                        Zakaži Konsultacije
                       </Button>
                     </VStack>
                   </VStack>
