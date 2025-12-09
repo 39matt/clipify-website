@@ -278,6 +278,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       setIsUpdating(true);
       setUpdatedCount(0);
       setFailedVideoIds(new Set());
+      setSortOption('lastUpdatedAt');
 
       const newFailedIds = new Set<string>();
 
@@ -386,6 +387,39 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       setIsUpdating(false);
     }
   };
+
+  const handleCalculateViews = async () => {
+    try {
+      const res = await fetch('/api/campaign/calculate-progress', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ campaignId }),
+      });
+      if (!res.ok) {
+        toast({
+          title: 'Failed!',
+          description: 'Failed to calculate views for the campaign.',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+          position: 'top-right',
+        });
+        return;
+      }
+      toast({
+        title: 'Success!',
+        description: 'Campaign views successfully updated.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+        position: 'top-right',
+      });
+  }
+  catch (err) {
+    console.error(err);
+    setError('Error updating campaign views: ' + err);
+  }
+}
 
   if (loading) {
     return (
@@ -526,7 +560,14 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
         </Box>
 
         <Box w="fit-content">
-          <VStack spacing={2}>
+          <HStack spacing={2}>
+            <Button
+              colorScheme="orange"
+              size="lg"
+              onClick={handleCalculateViews}
+            >
+              Calculate views
+            </Button>
             <Button
               colorScheme="green"
               size="lg"
@@ -555,7 +596,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
                 </Box>
               </>
             )}
-          </VStack>
+          </HStack>
         </Box>
       </HStack>
 
