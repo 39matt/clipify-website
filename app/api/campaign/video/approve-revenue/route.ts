@@ -55,7 +55,7 @@ export async function PUT(req: NextRequest) {
     const revenuePerView = campaign.perMillion / 1000000;
     let videoRevenue = video.views * revenuePerView;
 
-    if(videoRevenue > campaign.maxEarningsPerPost) {
+    if(videoRevenue > campaign.maxEarningsPerPost && !campaign.isPot) {
       videoRevenue = campaign.maxEarningsPerPost;
     }
     await userRef.update({ balance: parseFloat((user.balance + videoRevenue).toFixed(2)) });
