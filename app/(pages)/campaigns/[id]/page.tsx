@@ -396,17 +396,41 @@ const Page = () => {
       <VStack spacing={6}>
         <Card w="full" maxW="1200px" mx="auto" bg="gray.800" borderRadius="lg" boxShadow="lg" p={6}>
           <CardHeader textAlign="center">
-            <Heading size="xl" color="green.400" mb={4}>
-              Cena po milion pregleda
-            </Heading>
+            {!campaign.isPot &&
+                <Heading size="xl" color="green.400" mb={4}>
+                  Cena po milion pregleda
+                </Heading>
+            }
+            {campaign.isPot &&
+                <Heading size="xl" color="green.400" mb={4}>
+                  POT sistem
+                </Heading>
+            }
+
           </CardHeader>
           <CardBody textAlign="center">
-            <Text fontSize="6xl" fontWeight="bold">
-              ${campaign.perMillion.toFixed(2)}
-            </Text>
-            <Text fontSize="sm" color="gray.400" mb={4}>
-              Po milion pregleda na svim podržanim platformama
-            </Text>
+            {!campaign.isPot &&
+                <Text fontSize="6xl" fontWeight="bold">
+                  ${campaign.perMillion.toFixed(2)}
+                </Text>
+            }
+            {campaign.isPot &&
+                <Text fontSize="6xl" fontWeight="bold">
+                  ${campaign.perMillionText}
+                </Text>
+            }
+
+            {campaign.isPot &&
+                <Text fontSize="sm" color="gray.400" mb={4}>
+                  Budzet se deli medju kliperima tako da kliperi sa više pregleda dobijaju veći deo budzeta i obrnuto.
+                </Text>
+            }
+            {!campaign.isPot &&
+                <Text fontSize="sm" color="gray.400" mb={4}>
+                  Po milion pregleda na svim podržanim platformama
+                </Text>
+            }
+
             <Button colorScheme="green" size="lg" onClick={onOpen}>
               Pošalji sadržaj
             </Button>
@@ -436,36 +460,38 @@ const Page = () => {
             </HStack>
           </CardBody>
         </Card>
-
         <Flex w="full" maxW="1200px" mx="auto" justify="center" gap={4} width="full" flexDirection={{ base: "column", md: "row" }}>
-          <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
-            <CardHeader textAlign="center">
-              <Heading size="lg" color="green.400" mb={4}>
-                Napredak kampanje
-              </Heading>
-            </CardHeader>
-            <CardBody>
-              <StatGroup>
-                <Stat>
-                  <StatLabel>Ukupan budžet</StatLabel>
-                  <StatNumber>${campaign.budget}</StatNumber>
-                </Stat>
-                <Stat>
-                  <StatLabel>Iskorišćeno</StatLabel>
-                  <StatNumber>${campaign.moneySpent?.toFixed(2)}</StatNumber>
-                </Stat>
-              </StatGroup>
-              <Progress
-                value={campaign.progress}
-                colorScheme="green"
-                size="lg"
-                mt={4}
-              />
-              <Text fontSize="sm" color="gray.400" mt={2} textAlign="center">
-                {campaign.progress.toFixed(2)}% Završeno
-              </Text>
-            </CardBody>
-          </Card>
+          {!campaign.isPot &&
+            <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
+              <CardHeader textAlign="center">
+                <Heading size="lg" color="green.400" mb={4}>
+                  Napredak kampanje
+                </Heading>
+              </CardHeader>
+              <CardBody>
+                <StatGroup>
+                  <Stat>
+                    <StatLabel>Ukupan budžet</StatLabel>
+                    <StatNumber>${campaign.budget}</StatNumber>
+                  </Stat>
+                  <Stat>
+                    <StatLabel>Iskorišćeno</StatLabel>
+                    <StatNumber>${campaign.moneySpent?.toFixed(2)}</StatNumber>
+                  </Stat>
+                </StatGroup>
+                <Progress
+                  value={campaign.progress}
+                  colorScheme="green"
+                  size="lg"
+                  mt={4}
+                />
+                <Text fontSize="sm" color="gray.400" mt={2} textAlign="center">
+                  {campaign.progress.toFixed(2)}% Završeno
+                </Text>
+              </CardBody>
+            </Card>
+
+          }
 
           <Card bg="gray.800" borderRadius="lg" boxShadow="lg" p={6} flex="1">
             <CardHeader textAlign="center">
