@@ -203,7 +203,7 @@ const Page = () => {
         }
 
         const match = finalUrl.match(
-          /tiktok\.com\/@([^/]+)\/(?:video|photo)\/(\d+)/
+          /tiktok\.com\/@([^\/]+)\/(?:video|photo)\/(\d+)/
         );
         if (!match) {
           setMessage("Greška pri pribavljanju videa!");
