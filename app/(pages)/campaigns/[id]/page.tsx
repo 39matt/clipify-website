@@ -206,7 +206,7 @@ const Page = () => {
           /tiktok\.com\/@([^\/]+)\/(?:video|photo)\/(\d+)/
         );
         if (!match) {
-          setMessage("Greška pri pribavljanju videa!");
+          setMessage("Format linka je pogrešan!");
           return;
         }
 
@@ -273,7 +273,7 @@ const Page = () => {
 
       // Validate video age
       if (!video) {
-        setMessage("Greška pri pribavljanju videa!");
+        setMessage("Greška pri pribavljanju videa");
         return;
       }
 
