@@ -147,7 +147,7 @@ const Page = () => {
       const tiktokDesktopRegex =
         /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/(?:video|photo)\/[0-9]+\/?$/
       const tiktokMobileRegex =
-        /^https:\/\/vm\.tiktok\.com\/[A-Za-z0-9]+\/?$/;
+        /^https:\/\/[A-Za-z][A-Za-z]\.tiktok\.com\/[A-Za-z0-9]+\/?$/;
 
       let platform: string;
       if (instagramReelRegex.test(rawVideoUrl)) {
