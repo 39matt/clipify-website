@@ -57,7 +57,7 @@ const Page = () => {
   const [videosLoading, setVideosLoading] = useState(false);
   const [addingVideo, setAddingVideo] = useState(false);
   const { user, discordUsername } = useLayoutContext();
-  const videoAgeInHours = 24;
+  const videoAgeInHours = 72;
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [videoUrl, setVideoUrl] = useState('');
