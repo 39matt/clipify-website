@@ -65,7 +65,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({balance, uid, toast, payoutReq
           whiteSpace="pre-line"
           maxHeight="sm"
         >
-          Minimalni iznos koji možete da isplatite je $3.
+          Minimalni iznos koji možete da isplatite je $10.
           {"\n"}
           Nakon svake kampanje vam se sabiraju pregledi validnih videa i dodaju na vaš balance.
         </Text>
