@@ -51,7 +51,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({balance, uid, toast, payoutReq
             <Text fontSize="4xl" fontWeight="bold" textAlign="center">
               ${balance}
             </Text>
-            <Button isDisabled={balance < 3 || Date.now() - new Date(payoutRequested).getTime() / 1000 / 60 / 60 / 24 > 1} onClick={requestPayout} colorScheme="green" w="75%" mx="auto">
+            <Button isDisabled={balance < 10 || Date.now() - new Date(payoutRequested).getTime() / 1000 / 60 / 60 / 24 > 1} onClick={requestPayout} colorScheme="green" w="75%" mx="auto">
               Zatraži isplatu
             </Button>
           </VStack>

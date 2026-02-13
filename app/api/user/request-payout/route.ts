@@ -13,7 +13,7 @@ export async function PATCH(req: NextRequest) {
     const userDocRef = adminDb.collection('users').doc(uid);
     const userSnapshot = await userDocRef.get()
     const user = userSnapshot.data() as IUser
-    if (user.balance! < 3) {
+    if (user.balance! < 10) {
       return NextResponse.json({message: "User has to have at least $3 balance!"}, {status: 400})
     }
     await adminDb.collection('users').doc(uid)
