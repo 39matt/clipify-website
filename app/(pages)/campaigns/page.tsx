@@ -38,6 +38,7 @@ const Campaigns: NextPage = () => {
           },
         })
         const campaigns = (await response.json()) as ICampaign[]
+        campaigns.map(c => c.influencer == "Trajko 3" ? c.progress = 0 : c.progress)
         setCampaignList(campaigns.filter((campaign) => campaign.isActive))
       } catch (error) {
         console.error('Error fetching campaigns:', error)
