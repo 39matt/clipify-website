@@ -606,10 +606,10 @@ const MarqueeSection = () => {
 
 const StatsSection = () => {
   const targets = {
-    dinara: 250_000,
-    klipera: 700,
-    pregleda: 25_000_000,
-    kampanja: 7,
+    dinara: 400_000,
+    klipera: 1_100,
+    pregleda: 50_000_000,
+    kampanja: 20,
   };
 
   function useCountUp(params: {
@@ -821,28 +821,24 @@ type CaseItem = {
 const CaseStudiesSection = () => {
   const cases: CaseItem[] = [
     {
-      id: 'nosestrips',
-      name: 'Nosestrips',
-      views: '8M',
-      image:
-        'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/nosestrips.jpeg?alt=media&token=beb586e1-3856-40ac-bbbd-14f4682311e8',
-      totalClippers: 20,
-      totalVideos: 120,
-      durationDays: 8,
+      id: 'trajko',
+      name: 'Trajko',
+      views: '20M',
+      image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/trajko2.jpg?alt=media&token=0a3856fd-cb1f-473a-b61b-41f7c62dc181',
+      totalClippers: 50,
+      totalVideos: 750,
+      durationDays: 7,
       topVideo: {
-        views: '600K',
-        clipper: 'biohack.balkan',
-        link: 'https://www.tiktok.com/@biohack.balkan/video/7570306263716760843',
+        views: '570K',
+        clipper: 'kliper_1311',
+        link: 'https://www.instagram.com/p/DUq_kBnj_kz/',
       },
-      text:
-        'Tokom kampanje za Nosestrips fokusirali smo se na organsku distribuciju kroz našu mrežu klipera. Aktivirali smo kreatore koji klipuju najgledanije strimere, kako bi se brend prirodno pojavljivao u sadržaju sa visokim engagementom.\n' +
-        '\n' +
-        'Uz streamer sadržaj uključili smo i health & wellbeing stranice, čime smo pogodili najrelevantniju publiku za proizvod. Ovaj kombinovani pristup doneo je snažan organski reach i vrhunski engagement u kratkom roku.',
+      text: "Tokom kampanje za Trajka fokusirali smo se na organski rast kroz našu mrežu klipera. Umesto otvaranja novih profila, Trajkov sadržaj je strateški ubacen na već postojeće kliperske i streamerske profile koji imaju izgrađenu publiku. Kliperi su svakodnevno izbacivali najbolje momente i zabavne isečke iz njegovih kick strimova koje najbolje prolaze u njegovoj niši."
     },
     {
       id: 'cjuree',
       name: 'Cjuree',
-      views: '6M',
+      views: '10M',
       image:
         'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/cjuree.jpeg?alt=media&token=0cc34f5b-8216-4e79-aca0-22fd6beadf20',
       totalClippers: 15,
