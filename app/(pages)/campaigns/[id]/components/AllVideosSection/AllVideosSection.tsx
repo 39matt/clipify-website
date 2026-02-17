@@ -89,7 +89,7 @@ const AllVideosSection = ({
           </Center>
         ) : (
           <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4}>
-            {sortedVideos.map((video, index) => (
+            {sortedVideos.filter(video => video.approved).map((video, index) => (
               <AllVideosCard key={video.id || index} video={video} index={index} />
             ))}
           </SimpleGrid>
