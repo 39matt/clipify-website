@@ -1,29 +1,12 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Heading,
-  Image,
-  Progress,
-  Text,
-  Box,
-  Badge,
-  HStack,
-  VStack,
-  Icon,
-  AspectRatio,
-  useColorModeValue,
-  Flex,
-} from '@chakra-ui/react'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import {
-  FiTrendingUp,
-  FiTarget,
-  FiArrowRight,
-} from 'react-icons/fi'
-import { ICampaign } from '../../../app/lib/models/campaign'
-import { FaBurn } from 'react-icons/fa'
+import { AspectRatio, Badge, Box, Button, Card, CardBody, CardFooter, Flex, HStack, Heading, Icon, Image, Progress, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { FaBurn } from 'react-icons/fa';
+import { FiArrowRight, FiTarget, FiTrendingUp } from 'react-icons/fi';
+
+
+
+import { ICampaign } from '../../../app/lib/models/campaign';
+
 
 interface CampaignCardProps {
   campaign: ICampaign
@@ -53,7 +36,7 @@ const CampaignCard: React.FC<CampaignCardProps> = ({ campaign, router }) => {
     return 'green'
   }
 
-  const roundedProgress = Math.round(campaign.progress * 100) / 100
+  const roundedProgress = campaign.influencer.includes('Trajko') ? 0 : Math.round(campaign.progress * 100) / 100
 
   return (
     <Card
