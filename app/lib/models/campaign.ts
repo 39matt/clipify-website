@@ -20,4 +20,6 @@ export interface ICampaign {
   totalLikes: number;
   totalComments: number;
   totalShares: number;
+  dateStarted?: string;
+  dateEnded?: string;
 }
