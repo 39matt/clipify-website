@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '../../../lib/firebase/firebaseAdmin'
-import { IVideo } from '../../../lib/models/video'
-import { ICampaign } from '../../../lib/models/campaign'
+
+
+
+import { adminDb } from '../../../lib/firebase/firebaseAdmin';
+import { ICampaign } from '../../../lib/models/campaign';
+import { IVideo } from '../../../lib/models/video';
+
 
 export async function PUT(req: NextRequest) {
   try {
     const body = await req.json()
     const { campaignId } = body
+
 
     if (!campaignId) {
       return NextResponse.json({ error: 'Campaign ID is mandatory!' }, { status: 400 });
@@ -24,13 +29,23 @@ export async function PUT(req: NextRequest) {
     const videoColRef = campaignDocRef.collection('videos')
     const videosSnap = await videoColRef.get()
 
-    const totalViewsProgress = videosSnap.docs.filter((video) => video.data()["approved"] !== false).reduce((accumulator, doc) => {
-      const videoData = doc.data() as IVideo;
-      return accumulator + (Math.min(videoData.views, 1000000 * campaign.maxEarningsPerPost / campaign.perMillion) || 0);
-    }, 0);
+    const perMillion = campaign.perMillion || 0
+    const budget = campaign.budget || 1
+    const maxEarningsPerPost = campaign.maxEarningsPerPost || Infinity
 
-    const moneySpent = totalViewsProgress / 1000000 * campaign.perMillion
-    const progressPercentage = (moneySpent / campaign.budget) * 100;
+    const totalViewsProgress = videosSnap.docs
+      .filter((video) => video.data()['approved'] !== false)
+      .reduce((acc, doc) => {
+        const videoData = doc.data() as IVideo
+        const capped = Math.min(
+          videoData.views || 0,
+          (1000000 * maxEarningsPerPost) / perMillion,
+        )
+        return acc + (capped || 0)
+      }, 0)
+
+    const moneySpent = totalViewsProgress / 1000000 * perMillion
+    const progressPercentage = (moneySpent / budget) * 100;
 
     const finalProgress = Math.min(progressPercentage, 100);
 
@@ -54,9 +69,9 @@ export async function PUT(req: NextRequest) {
 
 
     await campaignDocRef.update({
-      progress: finalProgress | 100,
+      progress: finalProgress ,
       totalViews: totalViews,
-      moneySpent: moneySpent | 1000,
+      moneySpent: moneySpent || 0,
       totalLikes: totalLikes,
       totalComments: totalComments,
       totalShares: totalShares,
