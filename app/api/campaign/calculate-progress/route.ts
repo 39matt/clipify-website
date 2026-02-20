@@ -54,9 +54,9 @@ export async function PUT(req: NextRequest) {
 
 
     await campaignDocRef.update({
-      progress: finalProgress,
+      progress: finalProgress | 100,
       totalViews: totalViews,
-      moneySpent: moneySpent,
+      moneySpent: moneySpent | 1000,
       totalLikes: totalLikes,
       totalComments: totalComments,
       totalShares: totalShares,
