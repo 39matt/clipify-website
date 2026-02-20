@@ -2,6 +2,9 @@
 
 import { Box, Button, Center, Divider, HStack, Heading, SimpleGrid, Spinner, Stat, StatLabel, StatNumber, Text, VStack, useToast } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
+
+
+
 import { useEffect, useMemo, useState } from 'react';
 
 
@@ -387,15 +390,9 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
     const newFailedIds = new Set<string>()
     const successfulUpdates: IVideo[] = []
 
-    // Helper function to update progress safely
-    const incrementProgress = () => {
-      setUpdatedCount((prev) => prev + 1)
-    }
-
-    // 1. Create promises with a side-effect that updates the counter
-    const updatePromises = videos.map(async (video) => {
+    // The per-video update logic (same as before, extracted as a function)
+    const updateSingleVideo = async (video: IVideo) => {
       try {
-        // API Call 1: Get Info
         const getVideoResponse = await fetch('/api/campaign/video/get-info', {
           method: 'PUT',
           body: JSON.stringify({
@@ -419,7 +416,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
           return { success: false, videoId: video.id }
         }
 
-        // API Call 2: Save to DB
         const updateDbResponse = await fetch(
           '/api/campaign/video/update-info',
           {
@@ -446,15 +442,15 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
         console.error(`Exception updating video ${video.id}:`, error)
         return { success: false, videoId: video.id }
       } finally {
-        // This runs for EVERY video as soon as it finishes (success or fail)
-        incrementProgress()
+        // Still updates counter in real-time, chunk by chunk
+        setUpdatedCount((prev) => prev + 1)
       }
-    })
+    }
 
-    // 2. Wait for all
-    const results = await Promise.all(updatePromises)
+    // 🔑 Process 3 videos at a time, with 1000ms between each batch
+    const results = await processInChunks(videos, 3, 1000, updateSingleVideo)
 
-    // 3. Process results
+    // Process results (same as before)
     results.forEach((result) => {
       if (result.success && result.newVideo) {
         successfulUpdates.push(result.newVideo)
@@ -463,7 +459,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       }
     })
 
-    // 4. Update State (One big render for video data)
     if (successfulUpdates.length > 0) {
       setVideos((prev) => {
         if (!prev) return successfulUpdates
@@ -476,7 +471,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
 
     setFailedVideoIds(newFailedIds)
 
-    // 5. Calculate final stats
     try {
       await fetch('/api/campaign/calculate-progress', {
         method: 'PUT',
@@ -487,7 +481,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       console.error('Calc progress failed', e)
     }
 
-    // 6. Final Toast
     toast({
       title: newFailedIds.size > 0 ? 'Partially done!' : 'All done!',
       description:
