@@ -471,8 +471,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       }
     }
 
-    // 🔑 Process 3 videos at a time, with 1000ms between each batch
-    const results = await processInChunks(videos, 3, 1000, updateSingleVideo)
+    const results = await processInChunks(videos, 3, 100, updateSingleVideo)
 
     // Process results (same as before)
     results.forEach((result) => {
