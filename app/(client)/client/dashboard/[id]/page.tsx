@@ -128,6 +128,39 @@ const formatDate = (date: Date | string) => {
   })
 }
 
+const DurationCounter = ({ startDate, endDate }) => {
+  const [duration, setDuration] = useState('')
+
+  useEffect(() => {
+    const calculateTime = () => {
+      const start = new Date(startDate)
+      const end = new Date()
+
+      const diff = end.getTime() - start.getTime()
+
+      if (diff < 0) {
+        setDuration('Not started')
+        return
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24)
+      const minutes = Math.floor((diff / (1000 * 60)) % 60)
+
+      setDuration(`${days} dana, ${hours} sati, ${minutes} minuta`)
+    }
+
+    calculateTime()
+
+    if (!endDate) {
+      const timer = setInterval(calculateTime, 60000)
+      return () => clearInterval(timer)
+    }
+  }, [startDate, endDate])
+
+  return <>{duration}</>
+}
+
 function VideoCard({ video }: { video: IVideo }) {
   return (
     <Box
@@ -517,11 +550,28 @@ const Page = () => {
                 borderColor="gray.300"
               >
                 <Text fontSize="sm" fontWeight="600" color="gray.600">
-                  📅 Trajanje: {formatDate(campaign.dateStarted!)} - {formatDate(campaign.dateEnded!)}
+                  📅 Trajanje: <DurationCounter startDate={campaign.dateStarted!} endDate={campaign.dateEnded} />
                 </Text>
               </Box>
             </Center>
           )}
+          {(campaign.lastUpdatedAt) && (
+            <Center mt={4}>
+              <Box
+                bg="gray.100"
+                px={4}
+                py={2}
+                borderRadius="full"
+                border="1px solid"
+                borderColor="gray.300"
+              >
+                <Text fontSize="sm" fontWeight="600" color="gray.600">
+                  🔄 Poslednji update: {formatDate(campaign.lastUpdatedAt)}
+                </Text>
+              </Box>
+            </Center>
+          )
+          }
 
           {/* ... Stats Grid & Chart ... */}
           <SimpleGrid

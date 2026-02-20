@@ -22,4 +22,5 @@ export interface ICampaign {
   totalShares: number;
   dateStarted?: string;
   dateEnded?: string;
+  lastUpdatedAt?: string;
 }

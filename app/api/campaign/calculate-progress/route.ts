@@ -60,6 +60,7 @@ export async function PUT(req: NextRequest) {
       totalLikes: totalLikes,
       totalComments: totalComments,
       totalShares: totalShares,
+      lastUpdatedAt: new Date().toISOString(),
     });
 
     await campaignDocRef.collection('snapshots').add({

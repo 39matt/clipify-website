@@ -1,27 +1,15 @@
 'use client';
 
+import { Box, Button, Center, Divider, HStack, Heading, SimpleGrid, Spinner, Stat, StatLabel, StatNumber, Text, VStack, useToast } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-import {
-  Box,
-  Button,
-  Center,
-  Divider,
-  Heading,
-  HStack,
-  SimpleGrid,
-  Spinner,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Text,
-  useToast,
-  VStack,
-} from '@chakra-ui/react';
-import AdminVideoCard from './components/AdminVideoCard';
+
+
+
 import { ICampaign } from '../../../../../../lib/models/campaign';
 import { IVideo } from '../../../../../../lib/models/video';
-import { Share, Share2 } from 'lucide-react';
+import AdminVideoCard from './components/AdminVideoCard';
+
 
 interface AdminCampaignPageProps {
   idToken: string;
@@ -388,13 +376,140 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
     }
   };
 
+  const handleUpdateViewsParallel = async () => {
+    if (!videos || videos.length === 0) return
+
+    setIsUpdating(true)
+    setUpdatedCount(0)
+    setFailedVideoIds(new Set())
+    setSortOption('lastUpdatedAt')
+
+    const newFailedIds = new Set<string>()
+    const successfulUpdates: IVideo[] = []
+
+    // Helper function to update progress safely
+    const incrementProgress = () => {
+      setUpdatedCount((prev) => prev + 1)
+    }
+
+    // 1. Create promises with a side-effect that updates the counter
+    const updatePromises = videos.map(async (video) => {
+      try {
+        // API Call 1: Get Info
+        const getVideoResponse = await fetch('/api/campaign/video/get-info', {
+          method: 'PUT',
+          body: JSON.stringify({
+            platform: video.link.includes('instagram') ? 'Instagram' : 'TikTok',
+            videoId: video.link.split('/')[5],
+            videoUrl: video.link,
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+          }),
+        })
+
+        if (!getVideoResponse.ok) {
+          console.error(`Failed to fetch info for video ${video.id}`)
+          return { success: false, videoId: video.id }
+        }
+
+        const data = await getVideoResponse.json()
+        const newVideo = data['videoInfo'] as IVideo
+
+        if (!newVideo || !newVideo.accountName) {
+          console.error(`Invalid video data for video ${video.id}`)
+          return { success: false, videoId: video.id }
+        }
+
+        // API Call 2: Save to DB
+        const updateDbResponse = await fetch(
+          '/api/campaign/video/update-info',
+          {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${idToken}`,
+            },
+            body: JSON.stringify({
+              video: newVideo,
+              campaignId,
+              videoId: video.id!,
+            }),
+          },
+        )
+
+        if (!updateDbResponse.ok) {
+          console.error(`Failed to update DB for video ${video.id}`)
+          return { success: false, videoId: video.id }
+        }
+
+        return { success: true, videoId: video.id, newVideo }
+      } catch (error) {
+        console.error(`Exception updating video ${video.id}:`, error)
+        return { success: false, videoId: video.id }
+      } finally {
+        // This runs for EVERY video as soon as it finishes (success or fail)
+        incrementProgress()
+      }
+    })
+
+    // 2. Wait for all
+    const results = await Promise.all(updatePromises)
+
+    // 3. Process results
+    results.forEach((result) => {
+      if (result.success && result.newVideo) {
+        successfulUpdates.push(result.newVideo)
+      } else {
+        if (result.videoId) newFailedIds.add(result.videoId)
+      }
+    })
+
+    // 4. Update State (One big render for video data)
+    if (successfulUpdates.length > 0) {
+      setVideos((prev) => {
+        if (!prev) return successfulUpdates
+        return prev.map((v) => {
+          const updated = successfulUpdates.find((u) => u.id === v.id)
+          return updated ? { ...v, ...updated } : v
+        })
+      })
+    }
+
+    setFailedVideoIds(newFailedIds)
+
+    // 5. Calculate final stats
+    try {
+      await fetch('/api/campaign/calculate-progress', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ campaignId }),
+      })
+    } catch (e) {
+      console.error('Calc progress failed', e)
+    }
+
+    // 6. Final Toast
+    toast({
+      title: newFailedIds.size > 0 ? 'Partially done!' : 'All done!',
+      description:
+        newFailedIds.size > 0
+          ? `${successfulUpdates.length} uspešno, ${newFailedIds.size} neuspešno.`
+          : 'Svi video zapisi su uspešno ažurirani.',
+      status: newFailedIds.size > 0 ? 'warning' : 'success',
+      duration: 3000,
+      isClosable: true,
+      position: 'top-right',
+    })
+
+    setIsUpdating(false)
+  }
+
   const handleCalculateViews = async () => {
     try {
       const res = await fetch('/api/campaign/calculate-progress', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ campaignId }),
-      });
+      })
       if (!res.ok) {
         toast({
           title: 'Failed!',
@@ -403,8 +518,8 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
           duration: 3000,
           isClosable: true,
           position: 'top-right',
-        });
-        return;
+        })
+        return
       }
       toast({
         title: 'Success!',
@@ -413,13 +528,12 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
         duration: 3000,
         isClosable: true,
         position: 'top-right',
-      });
+      })
+    } catch (err) {
+      console.error(err)
+      setError('Error updating campaign views: ' + err)
+    }
   }
-  catch (err) {
-    console.error(err);
-    setError('Error updating campaign views: ' + err);
-  }
-}
 
   if (loading) {
     return (
@@ -575,6 +689,14 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
               isDisabled={isUpdating}
             >
               {isUpdating ? 'Updating...' : 'Update all views'}
+            </Button>
+            <Button
+              colorScheme="purple"
+              size="lg"
+              onClick={handleUpdateViewsParallel}
+              isDisabled={isUpdating}
+            >
+              {isUpdating ? 'Updating...' : 'Update all views parallel'}
             </Button>
             {isUpdating && (
               <>
