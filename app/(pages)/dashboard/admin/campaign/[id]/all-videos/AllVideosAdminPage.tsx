@@ -426,7 +426,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
             api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
           }),
         })
-
         if (!getVideoResponse.ok) {
           console.error(`Failed to fetch info for video ${video.id}`)
           return { success: false, videoId: video.id }
@@ -471,7 +470,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
       }
     }
 
-    const results = await processInChunks(videos, 3, 100, updateSingleVideo)
+    const results = await processInChunks(videos, 8, 200, updateSingleVideo)
 
     // Process results (same as before)
     results.forEach((result) => {
