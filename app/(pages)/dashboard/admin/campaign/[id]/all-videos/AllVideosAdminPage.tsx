@@ -379,6 +379,30 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({
     }
   };
 
+  async function processInChunks<T, R>(
+    items: T[],
+    chunkSize: number,
+    delayMs: number,
+    fn: (item: T) => Promise<R>,
+  ): Promise<R[]> {
+    const results: R[] = []
+
+    for (let i = 0; i < items.length; i += chunkSize) {
+      const chunk = items.slice(i, i + chunkSize)
+
+      // Run current chunk in parallel
+      const chunkResults = await Promise.all(chunk.map(fn))
+      results.push(...chunkResults)
+
+      // Wait between chunks (skip delay after the last chunk)
+      if (i + chunkSize < items.length) {
+        await new Promise((resolve) => setTimeout(resolve, delayMs))
+      }
+    }
+
+    return results
+  }
+
   const handleUpdateViewsParallel = async () => {
     if (!videos || videos.length === 0) return
 
