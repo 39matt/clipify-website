@@ -34,7 +34,7 @@ export async function PUT(req: NextRequest) {
     const maxEarningsPerPost = campaign.maxEarningsPerPost || Infinity
 
     const totalViewsProgress = videosSnap.docs
-      .filter((video) => video.data()['approved'] !== false)
+      .filter((video) => video.data()['approved'] == true)
       .reduce((acc, doc) => {
         const videoData = doc.data() as IVideo
         const capped = Math.min(

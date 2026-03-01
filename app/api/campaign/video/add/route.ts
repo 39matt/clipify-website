@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       accountName: accId,
       uid: uid,
       createdAt: new Date().toISOString(),
-      approved: false
+      approved: null
     };
 
     const newVideoDocRef = await videoColRef.add(videoData);
