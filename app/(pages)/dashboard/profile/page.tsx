@@ -1,87 +1,88 @@
 'use client';
-import { NextPage } from 'next';
-import {
-  AbsoluteCenter,
-  Box,
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Center, Grid,
-  Heading,
-  HStack,
-  Spacer,
-  Spinner, Text, useToast,
-  VStack,
-} from '@chakra-ui/react'
+
+import { AbsoluteCenter, Box, Button, Card, CardBody, CardHeader, Center, Grid, HStack, Heading, Spacer, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
 import { Property, PropertyList } from '@saas-ui/core';
+import { NextPage } from 'next';
+
+
+
 import { useEffect, useState } from 'react';
-import { useLayoutContext } from '../context';
-import EditPaymentInfoCard from './components/EditPaymentInfoCard';
-import ChangePasswordCard from './components/ChangePasswordCard';
-import { BoxFeature, BoxFeatures } from '#components/home-page/features/box-features';
+
+
+
 import { FeatureProps } from '#components/home-page/features';
-import { isUserLinked } from '../../../lib/firebase/firestore/user'
-import { IUser } from '../../../lib/models/user'
-import BalanceCard from './components/BalanceCard'
+import { BoxFeature, BoxFeatures } from '#components/home-page/features/box-features';
+
+
+
+import { isUserLinked } from '../../../lib/firebase/firestore/user';
+import { IUser } from '../../../lib/models/user';
+import { useLayoutContext } from '../context';
+import BalanceCard from './components/BalanceCard';
+import ChangePasswordCard from './components/ChangePasswordCard';
+import EditPaymentInfoCard from './components/EditPaymentInfoCard';
+
 
 const Profile: NextPage = () => {
-  const [linked, setLinked] = useState<boolean | null>(null);
-  const [checkingLinked, setCheckingLinked] = useState(false);
-  const [userInfo, setUserInfo] = useState<IUser | null>(null)
+  const [linked, setLinked] = useState<boolean>(false);
+  const [linkChecked, setLinkChecked] = useState(false);
+  const [userInfo, setUserInfo] = useState<IUser | null>(null);
   const { user, loading, discordUsername } = useLayoutContext();
   const toast = useToast();
-
-  useEffect(() => {
-    const checkLinkedStatus = async () => {
-      setCheckingLinked(true);
-
-      if (discordUsername) {
-        const isLinked = await isUserLinked(discordUsername);
-        setLinked(isLinked);
-
-        const response = await fetch(`/api/user/get?uid=${discordUsername}`, {
-          method:"GET"
-        })
-        if(response.ok) {
-          const responseJson = await response.json();
-          setUserInfo(responseJson["user"]);
-        }
-      } else {
-        setLinked(false); // explicitly mark as not linked
-      }
-
-      setCheckingLinked(false);
-    };
-
-    checkLinkedStatus();
-  }, [discordUsername]);
-
   const handleLinkDiscord = async () => {
     if (!user?.email) {
-      return;
+      return
     }
 
     if (linked) {
-      alert(`Korisnik sa emailom "${user.email}" je već povezao nalog`);
-      return;
+      alert(`Korisnik sa emailom "${user.email}" je već povezao nalog`)
+      return
     }
 
-    localStorage.setItem('userEmail', user.email);
+    localStorage.setItem('userEmail', user.email)
     const params = new URLSearchParams({
       client_id: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID!,
       redirect_uri: process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI!,
       response_type: 'code',
       scope: 'identify email',
       prompt: 'consent',
-    });
-    window.location.href = `https://discord.com/api/oauth2/authorize?${params.toString()}`;
-  };
+    })
+    window.location.href = `https://discord.com/api/oauth2/authorize?${params.toString()}`
+  }
 
-  if (loading) {
+  useEffect(() => {
+    if(loading) return;
+    if (!discordUsername) return;
+
+    const checkLinkedStatus = async () => {
+      try {
+        const isLinked = await isUserLinked(discordUsername)
+        setLinked(isLinked)
+
+        const response = await fetch(`/api/user/get?uid=${discordUsername}`, {
+          method: 'GET',
+        })
+        if (response.ok) {
+          const responseJson = await response.json()
+          setUserInfo(responseJson['user'])
+        }
+      } catch (error) {
+        console.error('Error loading user data:', error)
+      } finally {
+        setLinkChecked(true)
+      }
+    };
+
+    checkLinkedStatus();
+  }, [discordUsername]);
+
+  if (loading || !linkChecked) {
     return (
-      <Center minH="100vh">
-        <Spinner />
+      <Center minH="100vh" flex={1} flexDirection="column">
+        <Spinner size="xl" color="green.400" thickness="4px" />
+        <Text mt={4} fontSize="lg" color="gray.500" fontWeight="medium">
+          Učitavanje korisnika...
+        </Text>
       </Center>
     );
   }
@@ -104,8 +105,7 @@ const Profile: NextPage = () => {
         <Card w="full" minH="200px" position="relative" bg="gray.800">
           <CardHeader display="flex" flexDirection={{ base: 'column', md: 'row' }} gap={4}>
             <Heading size="lg">Osnovne informacije</Heading>
-            {/* Only show button after checking is done AND user is not linked */}
-            {linked === false && !checkingLinked && (
+            {!linked && linkChecked && (
               <Button
                 colorScheme="green"
                 variant="solid"
@@ -120,14 +120,14 @@ const Profile: NextPage = () => {
               <Property
                 label="Discord"
                 value={
-                  checkingLinked
-                    ? "Proverava..."
+                  !linkChecked
+                    ? "Provera..."
                     : linked
                       ? discordUsername
                       : 'Nije povezan'
                 }
                 textColor={
-                  checkingLinked
+                  !linkChecked
                     ? 'gray.500'
                     : linked
                       ? '#5865F2'
@@ -143,8 +143,7 @@ const Profile: NextPage = () => {
             </PropertyList>
           </CardBody>
 
-          {/* Optional: Show a subtle loading indicator */}
-          {checkingLinked && (
+          {!linkChecked && (
             <Box position="absolute" top={2} right={2}>
               <Spinner size="sm" color="gray.400" />
             </Box>
