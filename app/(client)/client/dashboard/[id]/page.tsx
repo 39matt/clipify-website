@@ -816,12 +816,11 @@ const Page = () => {
             {sortedVideos.length > 0 ? (
               <>
                 <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={6}>
-                  {currentVideos.map((video) => (
+                  {currentVideos.filter(video => video.approved).map((video) => (
                     <VideoCard key={video.id} video={video} />
                   ))}
                 </SimpleGrid>
 
-                {/* PAGINATION CONTROLS */}
                 {totalPages > 1 && (
                   <HStack spacing={4} justify="center" mt={12} mb={12}>
                     <Button
