@@ -53,6 +53,7 @@ const Profile: NextPage = () => {
   useEffect(() => {
     if(loading) return;
     if (!discordUsername) return;
+    if (linkChecked) return;
 
     const checkLinkedStatus = async () => {
       try {
@@ -74,7 +75,7 @@ const Profile: NextPage = () => {
     };
 
     checkLinkedStatus();
-  }, [discordUsername]);
+  }, [discordUsername, loading]);
 
   if (loading || !linkChecked) {
     return (
