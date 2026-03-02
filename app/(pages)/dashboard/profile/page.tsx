@@ -27,7 +27,7 @@ const Profile: NextPage = () => {
   const [linked, setLinked] = useState<boolean>(false);
   const [linkChecked, setLinkChecked] = useState(false);
   const [userInfo, setUserInfo] = useState<IUser | null>(null);
-  const { user, loading, discordUsername } = useLayoutContext();
+  const { user, loading, discordUsername, adminLoading } = useLayoutContext();
   const toast = useToast();
   const handleLinkDiscord = async () => {
     if (!user?.email) {
@@ -51,18 +51,20 @@ const Profile: NextPage = () => {
   }
 
   useEffect(() => {
-    if(loading) return;
-    if (!discordUsername) return;
-    if (linkChecked) return;
+    if (loading || adminLoading) return
+
+    if (!discordUsername) {
+      setLinked(false)
+      setLinkChecked(true)
+      return
+    }
 
     const checkLinkedStatus = async () => {
       try {
         const isLinked = await isUserLinked(discordUsername)
         setLinked(isLinked)
 
-        const response = await fetch(`/api/user/get?uid=${discordUsername}`, {
-          method: 'GET',
-        })
+        const response = await fetch(`/api/user/get?uid=${discordUsername}`)
         if (response.ok) {
           const responseJson = await response.json()
           setUserInfo(responseJson['user'])
@@ -72,12 +74,15 @@ const Profile: NextPage = () => {
       } finally {
         setLinkChecked(true)
       }
-    };
+    }
 
-    checkLinkedStatus();
-  }, [discordUsername, loading]);
+    checkLinkedStatus()
+  }, [discordUsername, loading, adminLoading])
 
-  if (loading || !linkChecked) {
+
+  const isDataReady = !discordUsername || (discordUsername && userInfo)
+
+  if (loading || adminLoading || !linkChecked || !isDataReady) {
     return (
       <Center minH="100vh" flex={1} flexDirection="column">
         <Spinner size="xl" color="green.400" thickness="4px" />
@@ -242,14 +247,14 @@ const Profile: NextPage = () => {
         {/* Payment Info and Change Password Cards */}
         <HStack
           w="full"
-          justifyContent={{ base: 'center', md: 'space-between' }}
+          justifyContent={discordUsername ? { base: 'center', md: 'space-between' } : {base: "center"}}
           flexDirection={{ base: 'column', md: 'row' }}
           spacing={{ base: 4, md: 8 }}
         >
-          <EditPaymentInfoCard discordUsername={discordUsername} userInfo={userInfo} />
+          {discordUsername && <EditPaymentInfoCard discordUsername={discordUsername} userInfo={userInfo} />}
           <ChangePasswordCard user={user} />
         </HStack>
-        <BalanceCard balance={userInfo?.balance!} uid={discordUsername!} toast={toast} payoutRequested={userInfo?.payoutRequested!}/>
+        {discordUsername && <BalanceCard balance={userInfo?.balance!} uid={discordUsername!} toast={toast} payoutRequested={userInfo?.payoutRequested!}/>}
       </VStack>
     </VStack>
   );
