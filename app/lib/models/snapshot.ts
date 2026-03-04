@@ -5,4 +5,5 @@ export interface ISnapshot {
   totalComments: number;
   totalShares: number;
   totalLikes: number;
+  progress: number;
 }
