@@ -34,8 +34,6 @@ import { signUp } from '../../lib/firebase/auth';
 import { firebaseSignupErrorMap } from '../../lib/firebase/errors';
 import { useAuth } from '../../providers/authProvider';
 
-const MotionBox = motion(Box);
-
 const SignUp: NextPage = () => {
   const router = useRouter();
   const [error, setError] = useState('');
@@ -193,9 +191,9 @@ const SignUp: NextPage = () => {
             maxW="550px"
           >
             {[
-              { value: '250k+', label: 'Isplaćeno', icon: '💰' },
+              { value: '500k+', label: 'Isplaćeno', icon: '💰' },
               { value: '700+', label: 'Aktivnih klipera', icon: '👥' },
-              { value: '25M+', label: 'Ukupno pregleda', icon: '📈' },
+              { value: '100M+', label: 'Ukupno pregleda', icon: '📈' },
             ].map((stat, idx) => (
               <VStack
                 key={idx}

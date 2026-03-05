@@ -634,28 +634,28 @@ const HeroSection: React.FC = () => {
         iconSize={4}
         features={[
           {
-            title: '100.000+',
+            title: '500.000+',
             icon: DollarSign,
             description: 'Dinara isplaćeno kliperima',
             iconPosition: 'left',
             delay: 0,
           },
           {
-            title: '600+',
+            title: '700+',
             icon: User,
             description: 'Aktivnih klipera',
             iconPosition: 'left',
             delay: 0.2,
           },
           {
-            title: '20M+',
+            title: '100M+',
             icon: EyeIcon,
             description: 'Organskih pregleda',
             iconPosition: 'left',
             delay: 0.4,
           },
           {
-            title: '6',
+            title: '10+',
             icon: ImBullhorn,
             description: 'Pokrenutih kampanja',
             iconPosition: 'left',

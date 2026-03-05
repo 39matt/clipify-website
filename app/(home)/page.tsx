@@ -51,7 +51,6 @@ import { Global } from '@emotion/react';
 import { GoPeople } from 'react-icons/go';
 import { FaDiscord } from 'react-icons/fa';
 import { GrCheckmark } from 'react-icons/gr';
-import { ButtonLink } from '#components/home-page/button-link'
 
 const MotionBox = motion(Box);
 const MotionText = motion(Text);
@@ -606,9 +605,9 @@ const MarqueeSection = () => {
 
 const StatsSection = () => {
   const targets = {
-    dinara: 400_000,
+    dinara: 500_000,
     klipera: 1_100,
-    pregleda: 50_000_000,
+    pregleda: 100_000_000,
     kampanja: 20,
   };
 
@@ -944,7 +943,7 @@ const CaseStudiesSection = () => {
           templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }}
           gap={{ base: 6, md: 8 }}
         >
-          {cases.map((item, i) => (
+          {cases.map((item) => (
             <MotionBox
               key={item.id}
               initial={{ opacity: 0, y: 16 }}
