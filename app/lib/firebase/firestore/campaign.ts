@@ -36,7 +36,7 @@ export async function getCampaign(id: string): Promise<ICampaign | null> {
         maxEarnings: data.maxEarnings,
         maxEarningsPerPost: data.maxEarningsPerPost,
         maxSubmissions: data.maxSubmissions,
-        minViewsPerPayout: data.minViewsForPayout,
+        minViewsForPayout: data.minViewsForPayout,
       } as ICampaign
     } else {
       console.log('Could not find campaign')

@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       activity: body.activity || '',
       budget: Number(body.budget) || 0,
       perMillion: Number(body.perMillion) || 0,
-      minViewsPerPayout: Number(body.minViewsPerPayout) || 0,
+      minViewsForPayout: Number(body.minViewsForPayout) || 0,
       maxEarnings: Number(body.maxEarnings) || 0,
       maxEarningsPerPost: Number(body.maxEarningsPerPost) || 0,
       maxSubmissions: Number(body.maxSubmissions) || 0,

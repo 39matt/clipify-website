@@ -69,7 +69,7 @@ export default function AdminPanelClient() {
     maxEarnings: 0,
     maxEarningsPerPost: 0,
     maxSubmissions: 0,
-    minViewsPerPayout: 0,
+    minViewsForPayout: 0,
     isActive: true,
     isPot: false,
     perMillionText: '',
@@ -427,7 +427,7 @@ export default function AdminPanelClient() {
                   <NumberInput
                     min={0}
                     onChange={(_, val) =>
-                      setNewCampaign({ ...newCampaign, minViewsPerPayout: val })
+                      setNewCampaign({ ...newCampaign, minViewsForPayout: val })
                     }
                   >
                     <NumberInputField />

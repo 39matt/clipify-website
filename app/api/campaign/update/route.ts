@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       maxEarnings: Number(campaign.maxEarnings),
       maxEarningsPerPost: Number(campaign.maxEarningsPerPost),
       maxSubmissions: Number(campaign.maxSubmissions),
-      minViewsPerPayout: Number(campaign.minViewsPerPayout),
+      minViewsForPayout: Number(campaign.minViewsForPayout),
       discordInvite: campaign.discordInvite || '',
       lastUpdatedAt: new Date().toISOString(),
     }

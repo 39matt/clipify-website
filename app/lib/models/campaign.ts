@@ -10,7 +10,7 @@ export interface ICampaign {
   maxEarnings: number;
   maxEarningsPerPost: number;
   maxSubmissions: number;
-  minViewsPerPayout: number;
+  minViewsForPayout: number;
   moneySpent: number;
   isActive: boolean;
   isPot:boolean;
