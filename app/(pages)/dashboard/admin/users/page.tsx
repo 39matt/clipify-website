@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import PayoutPage from './PayoutPage'
+import PayoutPage from './UsersPage'
 
 export default async function AdminPage() {
   const cookieStore = cookies();
