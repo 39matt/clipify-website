@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Badge,
   Box,
   Button,
   Center,
@@ -10,6 +11,7 @@ import {
   HStack,
   Heading,
   Icon,
+  Image,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -33,15 +35,9 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
-import { usePathname, useRouter } from 'next/navigation'
-import {
-  FiAlertCircle,
-  FiDollarSign,
-  FiLink,
-  FiSave,
-  FiSettings,
-  FiTrash2,
-} from 'react-icons/fi'
+import { getDownloadURL, uploadBytes } from 'firebase/storage'
+import { usePathname, useRouter } from 'next/navigation';
+import { FiAlertCircle, FiDollarSign, FiLink, FiSave, FiSettings, FiTrash2 } from 'react-icons/fi';
 
 
 
@@ -49,6 +45,7 @@ import { useEffect, useState } from 'react';
 
 
 
+import { deleteImageFromStorage, uploadCampaignImage } from '../../../../../lib/firebase/storage';
 import { ICampaign } from '../../../../../lib/models/campaign';
 
 
@@ -62,6 +59,7 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
   const [campaign, setCampaign] = useState<ICampaign | null>(null)
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [imageToDelete, setImageToDelete] = useState<string | null>(null)
   const router = useRouter()
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -101,6 +99,30 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
     }
   }
 
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !campaign) return
+
+    try {
+      setSaving(true)
+
+      if (campaign.imageUrl) {
+        setImageToDelete(campaign.imageUrl)
+      }
+
+      const newUrl = await uploadCampaignImage(file);
+
+      handleChange('imageUrl', newUrl)
+
+      toast({ title: 'Nova slika spremna za čuvanje!', status: 'info' })
+    } catch (err) {
+      toast({ title: 'Greška pri uploadu', status: 'error' })
+    } finally {
+      setSaving(false)
+    }
+  }
+
   const handleSave = async () => {
     setSaving(true)
     try {
@@ -109,8 +131,13 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ campaign }),
       })
+
       if (response.ok) {
-        toast({ title: 'Sačuvano', status: 'success', duration: 2000 })
+        if (imageToDelete) {
+          await deleteImageFromStorage(imageToDelete)
+          setImageToDelete(null)
+        }
+        toast({ title: 'Promene sačuvane!', status: 'success' })
       }
     } catch (err) {
       toast({ title: 'Greška pri čuvanju', status: 'error' })
@@ -120,21 +147,23 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
   }
 
   const handleDelete = async () => {
-    if (confirmName !== campaign?.influencer) return;
+    if (confirmName !== campaign?.influencer) return
 
-    setDeleting(true);
+    setDeleting(true)
     try {
-      const res = await fetch(`/api/campaign/delete?id=${campaignId}`, { method: 'DELETE' });
+      const res = await fetch(`/api/campaign/delete?id=${campaignId}`, {
+        method: 'DELETE',
+      })
       if (res.ok) {
-        toast({ title: 'Kampanja obrisana', status: 'success' });
-        router.push('/dashboard/admin');
+        toast({ title: 'Kampanja obrisana', status: 'success' })
+        router.push('/dashboard/admin')
       }
     } catch (err) {
-      toast({ title: 'Greška pri brisanju', status: 'error' });
+      toast({ title: 'Greška pri brisanju', status: 'error' })
     } finally {
-      setDeleting(false);
+      setDeleting(false)
     }
-  };
+  }
 
   if (loading || !campaign) {
     return (
@@ -242,6 +271,50 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                   />
                 </FormControl>
 
+                <FormControl gridColumn={{ md: "span 2" }}>
+                  <FormLabel fontSize="xs" fontWeight="bold">
+                    Cover Slika Kampanje
+                  </FormLabel>
+                  <HStack spacing={6} align="center" bg={inputBg} p={4} borderRadius="xl" borderWidth="1px" borderStyle={imageToDelete ? "dashed" : "solid"} borderColor={imageToDelete ? "orange.300" : "inherit"}>
+                    <Box position="relative">
+                      <Image
+                        src={campaign.imageUrl || 'https://via.placeholder.com/150'}
+                        boxSize="100px"
+                        objectFit="cover"
+                        borderRadius="lg"
+                        fallbackSrc="https://via.placeholder.com/150"
+                        shadow="md"
+                      />
+                      {imageToDelete && (
+                        <Badge position="absolute" top="-2" right="-2" colorScheme="orange" variant="solid" borderRadius="full">
+                          New
+                        </Badge>
+                      )}
+                    </Box>
+
+                    <VStack align="start" flex={1} spacing={2}>
+                      <Text fontSize="xs" color="gray.500">
+                        Kliknite ispod da biste izabrali novu sliku. Stara slika će biti obrisana tek kada kliknete na <strong>"Sačuvaj izmene"</strong>.
+                      </Text>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        p={1}
+                        height="auto"
+                        variant="unstyled"
+                        onChange={handleImageUpload}
+                        disabled={saving}
+                      />
+                      {imageToDelete && (
+                        <HStack color="orange.500" spacing={1}>
+                          <Icon as={FiAlertCircle} boxSize={3} />
+                          <Text fontSize="10px" fontWeight="bold">Promena nije sačuvana u bazi!</Text>
+                        </HStack>
+                      )}
+                    </VStack>
+                  </HStack>
+                </FormControl>
+
                 <FormControl>
                   <FormLabel fontSize="xs" fontWeight="bold">
                     Activity Name
@@ -342,8 +415,8 @@ const AdminCampaignPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                 />
                 <InputField
                   label="Min Views/Payout"
-                  value={campaign.minViewsPerPayout}
-                  onChange={(v) => handleChange('minViewsPerPayout', v)}
+                  value={campaign.minViewsForPayout}
+                  onChange={(v) => handleChange('minViewsForPayout', v)}
                 />
 
                 <InputField

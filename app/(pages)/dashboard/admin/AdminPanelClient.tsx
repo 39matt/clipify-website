@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   Badge,
@@ -13,6 +13,7 @@ import {
   HStack,
   Heading,
   Icon,
+  Image,
   Input,
   Modal,
   ModalBody,
@@ -41,26 +42,26 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
-import {
-  FiCalendar,
-  FiDollarSign,
-  FiPlus,
-  FiTrendingUp,
-  FiUsers,
-} from 'react-icons/fi'
+import { FiCalendar, FiDollarSign, FiPlus, FiTrendingUp, FiUsers } from 'react-icons/fi';
 
-import React, { useEffect, useState } from 'react'
 
-import { ICampaign } from '../../../lib/models/campaign'
+
+import React, { useEffect, useState } from 'react';
+
+
+
+import { uploadCampaignImage } from '../../../lib/firebase/storage';
+import { ICampaign } from '../../../lib/models/campaign';
+
 
 export default function AdminPanelClient() {
   const [campaigns, setCampaigns] = useState<ICampaign[]>([])
   const [loading, setLoading] = useState(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isUploading, setIsUploading] = useState(false);
   const router = useRouter()
   const toast = useToast()
 
-  // Expanded Form State with all fields
   const [newCampaign, setNewCampaign] = useState<Partial<ICampaign>>({
     influencer: '',
     activity: '',
@@ -124,6 +125,23 @@ export default function AdminPanelClient() {
       }
     } catch (error) {
       toast({ title: 'Greška pri kreiranju', status: 'error' })
+    }
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    try {
+      setIsUploading(true)
+      const url = await uploadCampaignImage(file)
+      setNewCampaign((prev) => ({ ...prev, imageUrl: url }))
+
+      toast({ title: 'Slika spremna!', status: 'success' })
+    } catch (err) {
+      toast({ title: 'Greška pri uploadu', status: 'error' })
+    } finally {
+      setIsUploading(false)
     }
   }
 
@@ -396,7 +414,41 @@ export default function AdminPanelClient() {
                   </FormControl>
                 </GridItem>
               </Grid>
-
+              <FormControl>
+                <FormLabel fontSize="xs">Slika Kampanje (Cover Image)</FormLabel>
+                <HStack spacing={4}>
+                  {newCampaign.imageUrl && (
+                    <Image
+                      src={newCampaign.imageUrl}
+                      boxSize="50px"
+                      objectFit="cover"
+                      borderRadius="md"
+                      alt="Preview"
+                    />
+                  )}
+                  <Box position="relative" w="full">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      p={1}
+                      fontSize="sm"
+                    />
+                    {isUploading && (
+                      <Spinner
+                        size="xs"
+                        position="absolute"
+                        right="10px"
+                        top="10px"
+                        color="green.500"
+                      />
+                    )}
+                  </Box>
+                </HStack>
+                <Text fontSize="10px" color="gray.500" mt={1}>
+                  Ova slika će biti prikazana korisnicima na dashboardu.
+                </Text>
+              </FormControl>
               <Divider />
 
               <Grid templateColumns="repeat(3, 1fr)" gap={4}>
@@ -545,7 +597,13 @@ export default function AdminPanelClient() {
             <Button variant="ghost" mr={3} onClick={onClose}>
               Odustani
             </Button>
-            <Button colorScheme="green" px={8} onClick={handleCreateCampaign}>
+            <Button
+              colorScheme="green"
+              px={8}
+              onClick={handleCreateCampaign}
+              isLoading={isUploading}
+              isDisabled={isUploading}
+            >
               Kreiraj Kampanju
             </Button>
           </ModalFooter>

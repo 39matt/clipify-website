@@ -6,6 +6,7 @@ import {
 } from '@firebase/firestore'
 import { getAuth } from '@firebase/auth';
 import { initializeAppCheck, ReCaptchaV3Provider } from '@firebase/app-check';
+import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -34,5 +35,7 @@ export const db = initializeFirestore(app, {
   }),
 });
 
-// Initialize Auth
+
 export const auth = getAuth(app);
+
+export const storage = getStorage(app);

@@ -24,14 +24,12 @@ export async function POST(req: NextRequest) {
       isActive: body.isActive ?? true,
       isPot: body.isPot ?? false,
       perMillionText: body.perMillionText || '',
-
       progress: 0,
       moneySpent: 0,
       totalViews: 0,
       totalLikes: 0,
       totalComments: 0,
       totalShares: 0,
-
       imageUrl: body.imageUrl || '',
       createdAt: new Date().toISOString(),
       lastUpdatedAt: new Date().toISOString(),

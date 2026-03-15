@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
       minViewsForPayout: Number(campaign.minViewsForPayout),
       discordInvite: campaign.discordInvite || '',
       lastUpdatedAt: new Date().toISOString(),
+      imageUrl: campaign.imageUrl,
     }
 
     await campaignDocRef.update(updateData)
