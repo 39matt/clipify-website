@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   Badge,
@@ -27,6 +27,7 @@ import {
   Progress,
   SimpleGrid,
   Spinner,
+  Stack,
   Switch,
   Table,
   TableContainer,
@@ -37,30 +38,34 @@ import {
   Thead,
   Tr,
   VStack,
+  useBreakpointValue,
   useColorModeValue,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation'
-import { FiCalendar, FiDollarSign, FiPlus, FiTrendingUp, FiUsers } from 'react-icons/fi';
+import {
+  FiCalendar,
+  FiDollarSign,
+  FiPlus,
+  FiTrendingUp,
+  FiUsers,
+} from 'react-icons/fi'
 
+import React, { useEffect, useState } from 'react'
 
-
-import React, { useEffect, useState } from 'react';
-
-
-
-import { uploadCampaignImage } from '../../../lib/firebase/storage';
-import { ICampaign } from '../../../lib/models/campaign';
-
+import { uploadCampaignImage } from '../../../lib/firebase/storage'
+import { ICampaign } from '../../../lib/models/campaign'
 
 export default function AdminPanelClient() {
   const [campaigns, setCampaigns] = useState<ICampaign[]>([])
   const [loading, setLoading] = useState(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [isUploading, setIsUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false)
   const router = useRouter()
   const toast = useToast()
+
+  const isMobile = useBreakpointValue({ base: true, md: false })
 
   const [newCampaign, setNewCampaign] = useState<Partial<ICampaign>>({
     influencer: '',
@@ -75,7 +80,7 @@ export default function AdminPanelClient() {
     isPot: false,
     perMillionText: '',
     discordInvite: '',
-    imageUrl: '', // Optional/Default
+    imageUrl: '',
     progress: 0,
     moneySpent: 0,
     totalViews: 0,
@@ -136,7 +141,6 @@ export default function AdminPanelClient() {
       setIsUploading(true)
       const url = await uploadCampaignImage(file)
       setNewCampaign((prev) => ({ ...prev, imageUrl: url }))
-
       toast({ title: 'Slika spremna!', status: 'success' })
     } catch (err) {
       toast({ title: 'Greška pri uploadu', status: 'error' })
@@ -149,7 +153,7 @@ export default function AdminPanelClient() {
     <Box
       as="button"
       onClick={onClick}
-      p={5}
+      p={{ base: 4, md: 5 }}
       bg={useColorModeValue('white', 'gray.800')}
       shadow="sm"
       borderWidth="1px"
@@ -166,16 +170,16 @@ export default function AdminPanelClient() {
       gap={4}
     >
       <Center
-        w={12}
-        h={12}
+        w={{ base: 10, md: 12 }}
+        h={{ base: 10, md: 12 }}
         bg={`${color}.50`}
         color={`${color}.500`}
         borderRadius="lg"
       >
-        <Icon as={icon} boxSize={6} />
+        <Icon as={icon} boxSize={{ base: 5, md: 6 }} />
       </Center>
       <VStack align="start" spacing={0}>
-        <Text fontWeight="bold" fontSize="lg">
+        <Text fontWeight="bold" fontSize={{ base: 'md', md: 'lg' }}>
           {label}
         </Text>
         <Text fontSize="xs" color="gray.500">
@@ -199,28 +203,47 @@ export default function AdminPanelClient() {
   }
 
   return (
-    <Box minH="100vh" bgGradient={bgGradient} py={10} px={{ base: 4, md: 8 }}>
-      <VStack spacing={10} maxW="1400px" mx="auto" align="stretch">
-        <HStack justify="space-between" align="flex-end">
+    <Box
+      minH="100vh"
+      bgGradient={bgGradient}
+      py={{ base: 6, md: 10 }}
+      px={{ base: 4, md: 8 }}
+    >
+      <VStack
+        spacing={{ base: 6, md: 10 }}
+        maxW="1400px"
+        mx="auto"
+        align="stretch"
+      >
+        <Stack
+          direction={{ base: 'column', sm: 'row' }}
+          justify="space-between"
+          align={{ base: 'start', sm: 'flex-end' }}
+          spacing={4}
+        >
           <Box textAlign="left">
             <Heading size="lg" fontWeight="extrabold" letterSpacing="tight">
               Admin Dashboard
             </Heading>
-            <Text color="gray.500">
+            <Text color="gray.500" fontSize="sm">
               Overview of active campaigns and user management
             </Text>
           </Box>
           <Button
             leftIcon={<FiPlus />}
             colorScheme="green"
-            size="lg"
+            size="md"
+            w={{ base: 'full', sm: 'auto' }}
             onClick={onOpen}
           >
             Nova kampanja
           </Button>
-        </HStack>
+        </Stack>
 
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6}>
+        <SimpleGrid
+          columns={{ base: 1, sm: 2, md: 3 }}
+          spacing={{ base: 4, md: 6 }}
+        >
           <QuickStat
             label="Korisnici"
             icon={FiUsers}
@@ -246,15 +269,15 @@ export default function AdminPanelClient() {
             <Heading size="md">Aktivne Kampanje</Heading>
           </Box>
 
-          <TableContainer>
-            <Table variant="simple" size="md">
+          <TableContainer overflowX="auto">
+            <Table variant="simple" size="sm">
               <Thead bg={useColorModeValue('gray.50', 'whiteAlpha.50')}>
                 <Tr>
-                  <Th>Influencer - Activity</Th>
-                  <Th>Status</Th>
-                  <Th>Budget</Th>
+                  <Th>Campaign</Th>
+                  {!isMobile && <Th>Status</Th>}
+                  {!isMobile && <Th>Budget</Th>}
                   <Th>Progress</Th>
-                  <Th>Last Updated</Th>
+                  {!isMobile && <Th>Last Updated</Th>}
                 </Tr>
               </Thead>
               <Tbody>
@@ -269,7 +292,7 @@ export default function AdminPanelClient() {
                         <Tr bg={useColorModeValue('gray.100', 'gray.700')}>
                           <Td colSpan={5} py={2}>
                             <Text
-                              fontSize="xs"
+                              fontSize="10px"
                               fontWeight="bold"
                               color="gray.500"
                               textTransform="uppercase"
@@ -286,7 +309,6 @@ export default function AdminPanelClient() {
                           )
                         }
                         cursor="pointer"
-                        transition="background 0.2s"
                         _hover={{
                           bg: useColorModeValue(
                             `${statusColor}.50`,
@@ -301,42 +323,55 @@ export default function AdminPanelClient() {
                       >
                         <Td>
                           <VStack align="start" spacing={0}>
-                            <Text fontWeight="bold" fontSize="sm">
-                              {campaign.influencer}
-                            </Text>
+                            <HStack>
+                              <Text
+                                fontWeight="bold"
+                                fontSize="sm"
+                                noOfLines={1}
+                              >
+                                {campaign.influencer}
+                              </Text>
+                              {isMobile && (
+                                <Badge
+                                  colorScheme={statusColor}
+                                  fontSize="9px"
+                                  borderRadius="full"
+                                >
+                                  {campaign.isActive ? 'A' : 'I'}
+                                </Badge>
+                              )}
+                            </HStack>
                             <Text fontSize="xs" color="gray.500">
                               {campaign.activity}
                             </Text>
                           </VStack>
                         </Td>
+                        {!isMobile && (
+                          <Td>
+                            <Badge
+                              colorScheme={statusColor}
+                              variant="subtle"
+                              px={3}
+                              borderRadius="full"
+                            >
+                              {campaign.isActive ? 'Active' : 'Inactive'}
+                            </Badge>
+                          </Td>
+                        )}
+                        {!isMobile && (
                         <Td>
-                          <Badge
-                            colorScheme={statusColor}
-                            variant="subtle"
-                            px={3}
-                            borderRadius="full"
-                          >
-                            {campaign.isActive ? 'Active' : 'Inactive'}
-                          </Badge>
-                        </Td>
-                        <Td>
-                          <HStack spacing={1}>
-                            <Text fontWeight="bold">${campaign.budget}</Text>
-                            <Text fontSize="xs" color="gray.400">
-                              / ${campaign.moneySpent?.toFixed(2)} spent
+                          <VStack align="start" spacing={0}>
+                            <Text fontWeight="bold" fontSize="xs">
+                              ${campaign.budget}
                             </Text>
-                          </HStack>
+                            <Text fontSize="10px" color="gray.400">
+                              ${campaign.moneySpent?.toFixed(0)}
+                            </Text>
+                          </VStack>
                         </Td>
-                        <Td minW="200px">
+                        )}
+                        <Td minW={isMobile ? '100px' : '180px'}>
                           <VStack align="stretch" spacing={1}>
-                            <HStack justify="space-between">
-                              <Text fontSize="xs" fontWeight="bold">
-                                {campaign.progress}%
-                              </Text>
-                              <Text fontSize="xs" color="gray.500">
-                                {campaign.totalViews?.toLocaleString()} views
-                              </Text>
-                            </HStack>
                             <Progress
                               value={campaign.progress}
                               size="xs"
@@ -345,20 +380,25 @@ export default function AdminPanelClient() {
                               }
                               borderRadius="full"
                             />
+                            <Text fontSize="10px" fontWeight="bold">
+                              {campaign.progress}%
+                            </Text>
                           </VStack>
                         </Td>
-                        <Td>
-                          <HStack color="gray.500" spacing={2}>
-                            <Icon as={FiCalendar} />
-                            <Text fontSize="sm">
-                              {campaign.lastUpdatedAt
-                                ? new Date(
-                                    campaign.lastUpdatedAt,
-                                  ).toLocaleDateString()
-                                : 'N/A'}
-                            </Text>
-                          </HStack>
-                        </Td>
+                        {!isMobile && (
+                          <Td>
+                            <HStack color="gray.500" spacing={1}>
+                              <Icon as={FiCalendar} boxSize={3} />
+                              <Text fontSize="xs">
+                                {campaign.lastUpdatedAt
+                                  ? new Date(
+                                      campaign.lastUpdatedAt,
+                                    ).toLocaleDateString()
+                                  : 'N/A'}
+                              </Text>
+                            </HStack>
+                          </Td>
+                        )}
                       </Tr>
                     </React.Fragment>
                   )
@@ -369,54 +409,53 @@ export default function AdminPanelClient() {
         </Box>
       </VStack>
 
-      {/* CREATE MODAL WITH ALL FIELDS */}
+      {/* CREATE MODAL */}
       <Modal
         isOpen={isOpen}
         onClose={onClose}
-        size="xl"
+        size={{ base: 'full', md: 'xl' }}
         scrollBehavior="inside"
       >
         <ModalOverlay backdropFilter="blur(5px)" />
-        <ModalContent borderRadius="2xl">
+        <ModalContent borderRadius={{ base: 'none', md: '2xl' }}>
           <ModalHeader borderBottomWidth="1px">
             Kreiraj novu kampanju
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody py={6}>
             <VStack spacing={6} align="stretch">
-              <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-                <GridItem colSpan={1}>
-                  <FormControl isRequired>
-                    <FormLabel fontSize="xs">Influencer</FormLabel>
-                    <Input
-                      placeholder="Ime"
-                      onChange={(e) =>
-                        setNewCampaign({
-                          ...newCampaign,
-                          influencer: e.target.value,
-                        })
-                      }
-                    />
-                  </FormControl>
-                </GridItem>
-                <GridItem colSpan={1}>
-                  <FormControl isRequired>
-                    <FormLabel fontSize="xs">Aktivnost</FormLabel>
-                    <Input
-                      placeholder="TikTok/Reels"
-                      onChange={(e) =>
-                        setNewCampaign({
-                          ...newCampaign,
-                          activity: e.target.value,
-                        })
-                      }
-                    />
-                  </FormControl>
-                </GridItem>
-              </Grid>
+              <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={4}>
+                <FormControl isRequired>
+                  <FormLabel fontSize="xs">Influencer</FormLabel>
+                  <Input
+                    placeholder="Ime"
+                    onChange={(e) =>
+                      setNewCampaign({
+                        ...newCampaign,
+                        influencer: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>
+                <FormControl isRequired>
+                  <FormLabel fontSize="xs">Aktivnost</FormLabel>
+                  <Input
+                    placeholder="TikTok/Reels"
+                    onChange={(e) =>
+                      setNewCampaign({
+                        ...newCampaign,
+                        activity: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>
+              </SimpleGrid>
+
               <FormControl>
-                <FormLabel fontSize="xs">Slika Kampanje (Cover Image)</FormLabel>
-                <HStack spacing={4}>
+                <FormLabel fontSize="xs">
+                  Slika Kampanje (Cover Image)
+                </FormLabel>
+                <Stack direction={{ base: 'column', sm: 'row' }} spacing={4}>
                   {newCampaign.imageUrl && (
                     <Image
                       src={newCampaign.imageUrl}
@@ -444,14 +483,12 @@ export default function AdminPanelClient() {
                       />
                     )}
                   </Box>
-                </HStack>
-                <Text fontSize="10px" color="gray.500" mt={1}>
-                  Ova slika će biti prikazana korisnicima na dashboardu.
-                </Text>
+                </Stack>
               </FormControl>
+
               <Divider />
 
-              <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+              <SimpleGrid columns={{ base: 2, md: 3 }} spacing={4}>
                 <FormControl>
                   <FormLabel fontSize="xs">Budžet ($)</FormLabel>
                   <NumberInput
@@ -475,7 +512,7 @@ export default function AdminPanelClient() {
                   </NumberInput>
                 </FormControl>
                 <FormControl>
-                  <FormLabel fontSize="xs">Min Views/Payout</FormLabel>
+                  <FormLabel fontSize="xs">Min Views</FormLabel>
                   <NumberInput
                     min={0}
                     onChange={(_, val) =>
@@ -485,11 +522,8 @@ export default function AdminPanelClient() {
                     <NumberInputField />
                   </NumberInput>
                 </FormControl>
-              </Grid>
-
-              <Grid templateColumns="repeat(3, 1fr)" gap={4}>
                 <FormControl>
-                  <FormLabel fontSize="xs">Max Earnings ($)</FormLabel>
+                  <FormLabel fontSize="xs">Max Earn ($)</FormLabel>
                   <NumberInput
                     min={0}
                     onChange={(_, val) =>
@@ -500,7 +534,7 @@ export default function AdminPanelClient() {
                   </NumberInput>
                 </FormControl>
                 <FormControl>
-                  <FormLabel fontSize="xs">Max / Post ($)</FormLabel>
+                  <FormLabel fontSize="xs">Max/Post ($)</FormLabel>
                   <NumberInput
                     min={0}
                     onChange={(_, val) =>
@@ -514,7 +548,7 @@ export default function AdminPanelClient() {
                   </NumberInput>
                 </FormControl>
                 <FormControl>
-                  <FormLabel fontSize="xs">Max Submissions</FormLabel>
+                  <FormLabel fontSize="xs">Max Subs</FormLabel>
                   <NumberInput
                     min={0}
                     onChange={(_, val) =>
@@ -524,7 +558,7 @@ export default function AdminPanelClient() {
                     <NumberInputField />
                   </NumberInput>
                 </FormControl>
-              </Grid>
+              </SimpleGrid>
 
               <Divider />
 
@@ -541,7 +575,10 @@ export default function AdminPanelClient() {
                 />
               </FormControl>
 
-              <HStack spacing={10}>
+              <Stack
+                direction={{ base: 'column', sm: 'row' }}
+                spacing={{ base: 4, sm: 10 }}
+              >
                 <FormControl display="flex" alignItems="center">
                   <FormLabel mb="0" fontSize="sm">
                     Pot System?
@@ -572,12 +609,12 @@ export default function AdminPanelClient() {
                     }
                   />
                 </FormControl>
-              </HStack>
+              </Stack>
 
               {newCampaign.isPot && (
                 <FormControl>
                   <FormLabel fontSize="xs" color="purple.500">
-                    Pot System Text (Per Million Text)
+                    Pot System Text
                   </FormLabel>
                   <Input
                     placeholder="npr. $500 shared pot"
@@ -594,7 +631,12 @@ export default function AdminPanelClient() {
           </ModalBody>
 
           <ModalFooter borderTopWidth="1px">
-            <Button variant="ghost" mr={3} onClick={onClose}>
+            <Button
+              variant="ghost"
+              mr={3}
+              onClick={onClose}
+              w={{ base: 'full', md: 'auto' }}
+            >
               Odustani
             </Button>
             <Button
@@ -603,8 +645,9 @@ export default function AdminPanelClient() {
               onClick={handleCreateCampaign}
               isLoading={isUploading}
               isDisabled={isUploading}
+              w={{ base: 'full', md: 'auto' }}
             >
-              Kreiraj Kampanju
+              Kreiraj
             </Button>
           </ModalFooter>
         </ModalContent>

@@ -14,7 +14,9 @@ import { ICampaign } from '../../../../../../lib/models/campaign';
 import { IVideo } from '../../../../../../lib/models/video';
 
 
-interface AdminCampaignPageProps { idToken: string }
+interface AdminCampaignPageProps {
+  idToken: string
+}
 
 const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
   const pathname = usePathname()
@@ -27,7 +29,10 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
   const [sortOption, setSortOption] = useState<'createdAt' | 'views'>(
     'createdAt',
   )
+
   const [isUpdating, setIsUpdating] = useState(false)
+  const [updatedCount, setUpdatedCount] = useState(0)
+  const [failedVideoIds, setFailedVideoIds] = useState<Set<string>>(new Set())
 
   const toast = useToast()
   const bgGradient = useColorModeValue(
@@ -46,7 +51,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
         setCampaign(data.campaign)
         setVideos(data.videos as IVideo[])
       } catch (err) {
-        toast({ title: 'Greška', status: 'error' })
+        toast({ title: 'Greška pri učitavanju', status: 'error' })
       } finally {
         setLoading(false)
       }
@@ -57,10 +62,15 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
   const sortedVideos = useMemo(() => {
     if (!videos) return []
     return [...videos].sort((a, b) => {
+      const aFailed = failedVideoIds.has(a.id!)
+      const bFailed = failedVideoIds.has(b.id!)
+      if (aFailed && !bFailed) return -1
+      if (!aFailed && bFailed) return 1
+
       if (sortOption === 'views') return (b.views || 0) - (a.views || 0)
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     })
-  }, [videos, sortOption])
+  }, [videos, sortOption, failedVideoIds])
 
   const stats = useMemo(() => {
     if (!videos) return { totalViews: 0, totalLikes: 0, videoCount: 0 }
@@ -74,11 +84,177 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
     )
   }, [videos])
 
-  const handleUpdateSingleVideo = async (video: IVideo) => {
-    /* logika */
+  const handleDeleteVideo = async (videoId: string) => {
+    if (!window.confirm('Da li ste sigurni da želite da obrišete ovaj video?'))
+      return
+    try {
+      const res = await fetch(`/api/campaign/video/delete`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ videoId, campaignId }),
+      })
+
+      if (!res.ok) toast({ title: 'Greška pri brisanju', status: 'error' })
+
+      toast({ title: 'Video obrisan', status: 'success' })
+      setVideos((prev) => prev?.filter((v) => v.id !== videoId) || null)
+    } catch (err) {
+      toast({ title: 'Greška pri brisanju', status: 'error' })
+    }
   }
-  const handleDeleteVideo = async (id: string) => {
-    /* logika */
+
+  const handleUpdateSingleVideo = async (video: IVideo) => {
+    try {
+      const getVideoResponse = await fetch('/api/campaign/video/get-info', {
+        method: 'PUT',
+        body: JSON.stringify({
+          platform: video.link.includes('instagram') ? 'Instagram' : 'TikTok',
+          videoId: video.link.split('/')[5],
+          videoUrl: video.link,
+          api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+        }),
+      })
+
+      if (!getVideoResponse.ok) {
+        setFailedVideoIds((prev) => new Set(prev).add(video.id!))
+        return toast({ title: 'Greška API-ja', status: 'error' })
+      }
+
+      const data = await getVideoResponse.json()
+      const newVideo = data['videoInfo'] as IVideo
+
+      await fetch('/api/campaign/video/update-info', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          video: newVideo,
+          campaignId,
+          videoId: video.id,
+        }),
+      })
+
+      setVideos((prev) =>
+        prev
+          ? prev.map((v) => (v.id === video.id ? { ...v, ...newVideo } : v))
+          : null,
+      )
+      setFailedVideoIds((prev) => {
+        const newSet = new Set(prev)
+        newSet.delete(video.id!)
+        return newSet
+      })
+
+      toast({ title: `Ažuriran video ${video.name}`, status: 'success', duration: 2000 })
+    } catch (error) {
+      toast({ title: `Greska pri ažuriranju videa ${video.name}`, status: 'error' })
+    }
+  }
+
+  const processInChunks = async <T, R>(
+    items: T[],
+    chunkSize: number,
+    delayMs: number,
+    fn: (item: T) => Promise<R>,
+  ) => {
+    const results: R[] = []
+    for (let i = 0; i < items.length; i += chunkSize) {
+      const chunk = items.slice(i, i + chunkSize)
+      const chunkResults = await Promise.all(chunk.map(fn))
+      results.push(...chunkResults)
+      if (i + chunkSize < items.length)
+        await new Promise((res) => setTimeout(res, delayMs))
+    }
+    return results
+  }
+
+  const handleUpdateViewsParallel = async () => {
+    if (!videos || videos.length === 0) return
+    setIsUpdating(true)
+    setUpdatedCount(0)
+    setFailedVideoIds(new Set())
+
+    const updateLogic = async (video: IVideo) => {
+      try {
+        const res = await fetch('/api/campaign/video/get-info', {
+          method: 'PUT',
+          body: JSON.stringify({
+            platform: video.link.includes('instagram') ? 'Instagram' : 'TikTok',
+            videoId: video.link.split('/')[5],
+            videoUrl: video.link,
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+          }),
+        })
+        if (!res.ok) return { success: false, videoId: video.id }
+
+        const data = await res.json()
+        const newVideo = data['videoInfo']
+
+        await fetch('/api/campaign/video/update-info', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({
+            video: newVideo,
+            campaignId,
+            videoId: video.id!,
+          }),
+        })
+
+        return { success: true, videoId: video.id, newVideo }
+      } catch (e) {
+        return { success: false, videoId: video.id }
+      } finally {
+        setUpdatedCount((prev) => prev + 1)
+      }
+    }
+
+    const results = await processInChunks(videos, 8, 200, updateLogic)
+
+    const successfulUpdates = results
+      .filter((r) => r.success)
+      .map((r) => r.newVideo)
+    const failedIds = new Set(
+      results.filter((r) => !r.success).map((r) => r.videoId!),
+    )
+
+    if (successfulUpdates.length > 0) {
+      setVideos(
+        (prev) =>
+          prev?.map((v) => successfulUpdates.find((u) => u.id === v.id) || v) ||
+          null,
+      )
+    }
+    setFailedVideoIds(failedIds)
+
+    await fetch('/api/campaign/calculate-progress', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ campaignId }),
+    })
+
+    setIsUpdating(false)
+    toast({
+      title: 'Grupno ažuriranje završeno',
+      status: failedIds.size > 0 ? 'warning' : 'success',
+    })
+  }
+
+  const handleCalculateTotal = async () => {
+    try {
+      await fetch('/api/campaign/calculate-progress', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ campaignId }),
+      })
+      toast({ title: 'Progres preračunat', status: 'success' })
+    } catch (e) {
+      toast({ title: 'Greška', status: 'error' })
+    }
   }
 
   if (loading)
@@ -95,28 +271,38 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       py={{ base: 4, md: 10 }}
       px={{ base: 2, md: 8 }}
     >
-      <VStack spacing={6} maxW="98%" mx="auto" align="stretch">
+      <VStack spacing={6} maxW="1200px" mx="auto" align="stretch">
         {/* Header */}
-        <Flex justify="space-between" align="center">
-          <HStack>
-            <IconButton
-              icon={<FiChevronLeft />}
-              variant="ghost"
-              onClick={() => router.back()}
-              size="sm"
-              aria-label="nazad"
-            />
-            <Heading size={{ base: 'md', md: 'lg' }}>
-              {campaign?.influencer}
-            </Heading>
-          </HStack>
+        <Flex justify="space-between" align="center" wrap="wrap" gap={4}>
+          <Box textAlign="left">
+            <HStack>
+              <IconButton
+                icon={<FiChevronLeft />}
+                variant="ghost"
+                onClick={() => router.back()}
+                size="sm"
+                aria-label="nazad"
+              />
+              <VStack align="start" spacing={0}>
+                <Heading size={{ base: 'md', md: 'lg' }}>
+                  {campaign?.influencer}
+                </Heading>
+                <Text fontSize="xs" color="gray.500">
+                  Poslednji update: {campaign?.lastUpdatedAt
+                  ? new Date(campaign.lastUpdatedAt).toLocaleString('sr-RS')
+                  : 'Nema podataka'}
+                </Text>
+              </VStack>
+            </HStack>
+          </Box>
           <HStack spacing={2}>
             <Button
               size="sm"
               leftIcon={<FiZap />}
               colorScheme="purple"
-              variant="subtle"
-              onClick={() => {}}
+              onClick={handleUpdateViewsParallel}
+              isLoading={isUpdating}
+              loadingText={`${updatedCount}/${videos?.length}`}
             >
               Update views
             </Button>
@@ -124,12 +310,20 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
               size="sm"
               leftIcon={<FiRefreshCw />}
               colorScheme="green"
-              onClick={() => {}}
+              onClick={handleCalculateTotal}
             >
               Calculate
             </Button>
           </HStack>
         </Flex>
+
+        {/* Failed Banner */}
+        {failedVideoIds.size > 0 && (
+          <Badge colorScheme="red" p={2} borderRadius="md" textAlign="center">
+            ⚠️ {failedVideoIds.size} videa nije uspešno ažurirano.
+          </Badge>
+        )}
+
         {/* Stats Row */}
         <SimpleGrid columns={3} spacing={3}>
           <StatBox
@@ -151,6 +345,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
             color="purple"
           />
         </SimpleGrid>
+
         {/* Sorting Toggle */}
         <HStack
           justify="space-between"
@@ -184,8 +379,8 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
             </Button>
           </ButtonGroup>
         </HStack>
+
         {/* --- MOBILE VIEW: CARDS --- */}
-        /* --- MOBILE VIEW: CARDS --- */
         <VStack display={{ base: 'flex', md: 'none' }} spacing={4}>
           {sortedVideos.map((video) => (
             <Box
@@ -195,64 +390,75 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
               p={4}
               borderRadius="2xl"
               shadow="md"
-              borderWidth="1px"
+              borderWidth={failedVideoIds.has(video.id!) ? '2px' : '1px'}
+              borderColor={
+                failedVideoIds.has(video.id!) ? 'red.400' : 'transparent'
+              }
             >
               <HStack spacing={4} align="start">
-                {/* Preview slika je malo veća za bolji visual */}
                 <Box
+                  as="a"
+                  href={video.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   w="85px"
                   h="115px"
                   borderRadius="xl"
                   overflow="hidden"
                   flexShrink={0}
                   bg="gray.100"
+                  cursor="pointer"
+                  transition="transform 0.2s, filter 0.2s"
+                  _hover={{
+                    transform: 'scale(1.05)',
+                    filter: 'brightness(0.8)',
+                  }}
+                  _active={{ transform: 'scale(0.95)' }}
                 >
                   <Image
                     src={video.coverUrl}
                     objectFit="cover"
                     w="full"
                     h="full"
-                    fallback={
-                      <Center h="full">
-                        <Icon as={FiImage} color="gray.300" />
-                      </Center>
-                    }
+                    alt={video.accountName}
                   />
                 </Box>
-
                 <VStack align="start" spacing={2} flex={1}>
                   <HStack w="full" justify="space-between">
                     <VStack align="start" spacing={0}>
-                      <HStack spacing={2}>
-                        <Avatar size="xs" name={video.accountName} />
-                        <Text fontWeight="bold" fontSize="xs" noOfLines={1}>
-                          {video.accountName}
+                      <Text fontWeight="bold" fontSize="xs" noOfLines={1}>{video.accountName}</Text>
+                      <HStack spacing={2} mt={1}>
+                        <Text fontSize="9px" color="gray.400">
+                          Postavljeno: {new Date(video.createdAt).toLocaleDateString('sr-RS')}
                         </Text>
+                        {video.lastUpdatedAt && (
+                          <>
+                            <Text fontSize="9px" color="gray.500">•</Text>
+                            <Text fontSize="9px" color="blue.400" fontWeight="medium">
+                              Ažurirano: {new Date(video.lastUpdatedAt).toLocaleDateString('sr-RS')}
+                            </Text>
+                          </>
+                        )}
                       </HStack>
-                      <Text fontSize="9px" color="gray.400" mt={1}>
-                        {new Date(video.createdAt).toLocaleDateString('sr-RS')}
-                      </Text>
                     </VStack>
                     <Badge
                       fontSize="9px"
                       borderRadius="full"
-                      px={2}
                       colorScheme={
-                        video.approved == true
+                        video.approved
                           ? 'green'
-                          : video.approved == false
+                          : video.approved === false
                             ? 'red'
                             : 'orange'
                       }
                     >
-                      {video.approved == true
+                      {video.approved
                         ? 'Approved'
-                        : video.approved == false
+                        : video.approved === false
                           ? 'Denied'
                           : 'Pending'}
                     </Badge>
                   </HStack>
-
                   <HStack spacing={4}>
                     <HStack spacing={1}>
                       <Icon as={FiEye} color="blue.400" />
@@ -267,41 +473,23 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                       </Text>
                     </HStack>
                   </HStack>
-
-                  <Link
-                    href={video.link}
-                    isExternal
-                    color="blue.500"
-                    fontSize="xs"
-                    fontWeight="bold"
-                  >
-                    Pogledaj video{' '}
-                    <Icon as={FiExternalLink} boxSize={3} ml={1} />
-                  </Link>
-
-                  <Divider my={1} />
-
-                  {/* UVEĆANI DUGMIĆI ZA MOBILNI */}
-                  <HStack w="full" justify="space-between">
+                  <HStack w="full" mt={2}>
                     <Button
-                      size="sm"
+                      size="xs"
                       leftIcon={<FiRefreshCw />}
                       onClick={() => handleUpdateSingleVideo(video)}
                       variant="outline"
                       flex={1}
-                      h="40px" // Fiksna visina za lakši dodir
                     >
                       Refresh
                     </Button>
                     <IconButton
-                      size="sm"
+                      size="xs"
                       colorScheme="red"
                       variant="ghost"
                       icon={<FiTrash2 />}
                       onClick={() => handleDeleteVideo(video.id!)}
                       aria-label="delete"
-                      w="45px"
-                      h="40px"
                     />
                   </HStack>
                 </VStack>
@@ -309,8 +497,8 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
             </Box>
           ))}
         </VStack>
+
         {/* --- DESKTOP VIEW: TABLE --- */}
-        /* --- DESKTOP VIEW: TABLE --- */
         <Box
           display={{ base: 'none', md: 'block' }}
           bg={cardBg}
@@ -320,70 +508,60 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           borderWidth="1px"
         >
           <TableContainer>
-            <Table variant="simple" size="sm" layout="fixed">
-              {' '}
-              {/* Dodat layout fixed */}
+            <Table variant="simple" size="sm">
               <Thead bg={useColorModeValue('gray.50', 'whiteAlpha.50')}>
                 <Tr>
-                  <Th w="250px">Account</Th>
-                  <Th w="100px">Preview</Th>
-                  <Th isNumeric w="120px">
-                    Views
-                  </Th>
-                  <Th isNumeric w="100px">
-                    Likes
-                  </Th>
-                  <Th w="120px">Status</Th>
-                  <Th w="100px" textAlign="right">
-                    Actions
-                  </Th>
+                  <Th>Account</Th>
+                  <Th>Preview</Th>
+                  <Th isNumeric>Views</Th>
+                  <Th isNumeric>Likes</Th>
+                  <Th>Status</Th>
+                  <Th>Last Updated</Th>
+                  <Th textAlign="right">Actions</Th>
                 </Tr>
               </Thead>
               <Tbody>
                 {sortedVideos.map((video) => (
                   <Tr
                     key={video.id}
-                    _hover={{
-                      bg: useColorModeValue('gray.50', 'whiteAlpha.100'),
-                    }}
+                    bg={
+                      failedVideoIds.has(video.id!) ? 'red.50' : 'transparent'
+                    }
                   >
                     <Td>
-                      <HStack spacing={3}>
-                        <Avatar size="sm" name={video.accountName} />
-                        <VStack align="start" spacing={0}>
-                          <Text
-                            fontWeight="bold"
-                            fontSize="sm"
-                            noOfLines={1}
-                            maxW="180px"
-                          >
-                            {video.accountName}
-                          </Text>
-                          <Link
-                            href={video.link}
-                            isExternal
-                            color="blue.400"
-                            fontSize="xs"
-                          >
-                            View Link <Icon as={FiExternalLink} ml={1} />
-                          </Link>
-                        </VStack>
+                      <HStack>
+                        <Avatar size="xs" name={video.accountName} />
+                        <Text fontWeight="bold" fontSize="sm">
+                          {video.accountName}
+                        </Text>
                       </HStack>
                     </Td>
                     <Td>
                       <Box
-                        w="50px"
-                        h="70px"
+                        as="a"
+                        href={video.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        display="block"
+                        w="40px"
+                        h="55px"
                         borderRadius="md"
                         overflow="hidden"
                         bg="gray.100"
-                        borderWidth="1px"
+                        cursor="pointer"
+                        transition="all 0.2s"
+                        _hover={{
+                          transform: 'scale(1.1)',
+                          shadow: 'lg',
+                          filter: 'brightness(0.9)',
+                        }}
+                        _active={{ transform: 'scale(0.95)' }}
                       >
                         <Image
                           src={video.coverUrl}
-                          objectFit="cover"
                           w="full"
                           h="full"
+                          objectFit="cover"
                           fallback={
                             <Center h="full">
                               <Icon as={FiImage} color="gray.400" />
@@ -397,28 +575,34 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                     </Td>
                     <Td isNumeric>{video.likes?.toLocaleString()}</Td>
                     <Td>
-                      {/* ISPRAVLJENA LOGIKA ZA BADGE - radi za true, false i null */}
                       <Badge
-                        fontSize="10px"
-                        borderRadius="full"
-                        px={2}
                         colorScheme={
-                          video.approved === true
+                          video.approved
                             ? 'green'
                             : video.approved === false
                               ? 'red'
                               : 'orange'
                         }
                       >
-                        {video.approved === true
+                        {video.approved
                           ? 'Approved'
                           : video.approved === false
                             ? 'Denied'
                             : 'Pending'}
                       </Badge>
                     </Td>
+                    <Td>
+                      <HStack spacing={1} color="gray.500">
+                        <Icon as={FiClock} boxSize={3} />
+                        <Text fontSize="xs">
+                          {video.lastUpdatedAt
+                            ? new Date(video.lastUpdatedAt).toLocaleDateString('sr-RS')
+                            : 'N/A'}
+                        </Text>
+                      </HStack>
+                    </Td>
                     <Td textAlign="right">
-                      <HStack spacing={1} justify="flex-end">
+                      <HStack justify="flex-end">
                         <IconButton
                           size="xs"
                           icon={<FiRefreshCw />}
@@ -473,4 +657,4 @@ const StatBox = ({ label, value, icon, color }: any) => (
   </Box>
 )
 
-export default AllVideosAdminPage;
+export default AllVideosAdminPage
