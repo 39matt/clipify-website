@@ -246,6 +246,7 @@ const Page = () => {
             const aggregatedCampaign: ICampaign = {
               ...first,
               id: campaignId as string,
+              influencer: campaignId.charAt(0).toUpperCase() + campaignId.slice(1),
               totalViews: validMembers.reduce(
                 (sum: number, m: any) => sum + (m.totalViews || 0),
                 0,
