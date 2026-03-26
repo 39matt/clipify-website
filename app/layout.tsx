@@ -1,9 +1,14 @@
-import { ColorModeScript } from '@chakra-ui/react'
-
-import { Provider } from './providers/provider'
-import { Analytics } from "@vercel/analytics/next"
+import { ColorModeScript } from '@chakra-ui/react';
 import '@fontsource-variable/montserrat';
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import dynamic from 'next/dynamic'
+
+
+
+import { Provider } from './providers/provider';
+
+
 const PixelTracker = dynamic(() => import("./providers/PixelTracker"), { ssr: false });
 
 export default function Layout(props: { children: React.ReactNode }) {
@@ -45,6 +50,7 @@ export default function Layout(props: { children: React.ReactNode }) {
       <body className={`chakra-ui-${colorMode}`}>
         <ColorModeScript initialColorMode={colorMode} />
         <PixelTracker/>
+        <SpeedInsights />
         <Provider>{props.children}</Provider>
         <Analytics />
       </body>
