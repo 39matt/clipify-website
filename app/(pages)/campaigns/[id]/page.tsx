@@ -559,7 +559,7 @@ const Page = () => {
         )}
 
         <YourVideosSection userVideos={userVideos} videosLoading={videosLoading} />
-        <AllVideosSection videos={videos} videosLoading={loading} />
+        {/*<AllVideosSection videos={videos} videosLoading={loading} />*/}
 
 
       </VStack>
