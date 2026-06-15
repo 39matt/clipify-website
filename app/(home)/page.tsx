@@ -605,10 +605,10 @@ const MarqueeSection = () => {
 
 const StatsSection = () => {
   const targets = {
-    dinara: 500_000,
+    dinara: 1_000_000,
     klipera: 1_100,
-    pregleda: 100_000_000,
-    kampanja: 20,
+    pregleda: 250_000_000,
+    kampanja: 35,
   };
 
   function useCountUp(params: {
@@ -822,11 +822,11 @@ const CaseStudiesSection = () => {
     {
       id: 'trajko',
       name: 'Trajko',
-      views: '30M',
+      views: '100M',
       image: 'https://firebasestorage.googleapis.com/v0/b/botina-44e95.firebasestorage.app/o/trajko2.jpg?alt=media&token=0a3856fd-cb1f-473a-b61b-41f7c62dc181',
       totalClippers: 50,
       totalVideos: 1000,
-      durationDays: 10,
+      durationDays: 30,
       topVideo: {
         views: '570K',
         clipper: 'kliper_1311',
