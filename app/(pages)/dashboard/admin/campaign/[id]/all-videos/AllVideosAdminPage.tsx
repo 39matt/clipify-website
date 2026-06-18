@@ -1,18 +1,64 @@
-'use client';
+'use client'
 
-import { Avatar, Badge, Box, Button, ButtonGroup, Center, Divider, Flex, HStack, Heading, Icon, IconButton, Image, Link, Progress, SimpleGrid, Spinner, Stat, StatLabel, StatNumber, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
-import { usePathname, useRouter } from 'next/navigation';
-import { FiChevronLeft, FiClock, FiExternalLink, FiEye, FiHeart, FiImage, FiRefreshCw, FiTrash2, FiTrendingUp, FiVideo, FiZap } from 'react-icons/fi';
+import {
+  Avatar,
+  Badge,
+  Box,
+  Button,
+  ButtonGroup,
+  Center,
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Heading,
+  Icon,
+  IconButton,
+  Image,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Select,
+  SimpleGrid,
+  Spinner,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  VStack,
+  useColorModeValue,
+  useDisclosure,
+  useToast,
+} from '@chakra-ui/react'
+import { usePathname, useRouter } from 'next/navigation'
+import {
+  FiChevronLeft,
+  FiChevronRight,
+  FiClock,
+  FiEye,
+  FiHeart,
+  FiImage,
+  FiPlus,
+  FiRefreshCw,
+  FiTrash2,
+  FiTrendingUp,
+  FiVideo,
+  FiZap,
+} from 'react-icons/fi'
 
+import React, { useEffect, useMemo, useState } from 'react'
 
-
-import React, { useEffect, useMemo, useState } from 'react';
-
-
-
-import { ICampaign } from '../../../../../../lib/models/campaign';
-import { IVideo } from '../../../../../../lib/models/video';
-
+import { ICampaign } from '../../../../../../lib/models/campaign'
+import { IVideo } from '../../../../../../lib/models/video'
 
 interface AdminCampaignPageProps {
   idToken: string
@@ -34,12 +80,25 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
   const [updatedCount, setUpdatedCount] = useState(0)
   const [failedVideoIds, setFailedVideoIds] = useState<Set<string>>(new Set())
 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const [newVideoLink, setNewVideoLink] = useState('')
+  const [newVideoUid, setNewVideoUid] = useState('')
+  const [isAddingVideo, setIsAddingVideo] = useState(false)
+
+  const [users, setUsers] = useState<any[]>([])
+  const [userSearchTerm, setUserSearchTerm] = useState('')
+  const [showUserDropdown, setShowUserDropdown] = useState(false)
+
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 20
+
   const toast = useToast()
   const bgGradient = useColorModeValue(
     'linear(to-br, gray.50, white)',
     'linear(to-br, gray.900, gray.800)',
   )
   const cardBg = useColorModeValue('white', 'gray.800')
+  const dropdownBg = useColorModeValue('white', 'gray.700')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,6 +118,38 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
     fetchData()
   }, [campaignId, toast])
 
+  const fetchUsers = async () => {
+    if (users.length > 0) return
+    try {
+      const res = await fetch('/api/users/get-all')
+      if (res.ok) {
+        const data = await res.json()
+        setUsers(data)
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  const handleOpenModal = () => {
+    fetchUsers()
+    onOpen()
+  }
+
+  const filteredUsers = useMemo(() => {
+    if (!userSearchTerm) return users.slice(0, 50)
+    const term = userSearchTerm.toLowerCase()
+    return users
+      .filter(
+        (u) =>
+          u.id.toLowerCase().includes(term) ||
+          (u.email && u.email.toLowerCase().includes(term)) ||
+          (u.name && u.name.toLowerCase().includes(term)) ||
+          (u.displayName && u.displayName.toLowerCase().includes(term)),
+      )
+      .slice(0, 50)
+  }, [users, userSearchTerm])
+
   const sortedVideos = useMemo(() => {
     if (!videos) return []
     return [...videos].sort((a, b) => {
@@ -71,6 +162,16 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     })
   }, [videos, sortOption, failedVideoIds])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [sortOption])
+
+  const totalPages = Math.ceil(sortedVideos.length / itemsPerPage)
+  const paginatedVideos = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage
+    return sortedVideos.slice(startIndex, startIndex + itemsPerPage)
+  }, [sortedVideos, currentPage, itemsPerPage])
 
   const stats = useMemo(() => {
     if (!videos) return { totalViews: 0, totalLikes: 0, videoCount: 0 }
@@ -97,7 +198,16 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       if (!res.ok) toast({ title: 'Greška pri brisanju', status: 'error' })
 
       toast({ title: 'Video obrisan', status: 'success' })
-      setVideos((prev) => prev?.filter((v) => v.id !== videoId) || null)
+      setVideos((prev) => {
+        const newVideos = prev?.filter((v) => v.id !== videoId) || null
+        if (
+          newVideos &&
+          Math.ceil(newVideos.length / itemsPerPage) < currentPage
+        ) {
+          setCurrentPage(Math.max(1, currentPage - 1))
+        }
+        return newVideos
+      })
     } catch (err) {
       toast({ title: 'Greška pri brisanju', status: 'error' })
     }
@@ -147,9 +257,16 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
         return newSet
       })
 
-      toast({ title: `Ažuriran video ${video.name}`, status: 'success', duration: 2000 })
+      toast({
+        title: `Ažuriran video ${video.name}`,
+        status: 'success',
+        duration: 2000,
+      })
     } catch (error) {
-      toast({ title: `Greska pri ažuriranju videa ${video.name}`, status: 'error' })
+      toast({
+        title: `Greska pri ažuriranju videa ${video.name}`,
+        status: 'error',
+      })
     }
   }
 
@@ -257,6 +374,174 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
     }
   }
 
+  const handleAddVideo = async () => {
+    if (!newVideoLink.trim() || !newVideoUid) {
+      toast({ title: 'Sva polja su obavezna', status: 'warning' })
+      return
+    }
+
+    try {
+      setIsAddingVideo(true)
+
+      let rawVideoUrl = newVideoLink.split('?')[0]
+
+      const instagramReelRegex =
+        /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[a-zA-Z0-9_-]+\/?$/
+      const tiktokDesktopRegex =
+        /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/(?:video|photo)\/[0-9]+\/?$/
+      const tiktokMobileRegex =
+        /^https:\/\/[A-Za-z][A-Za-z]\.tiktok\.com\/[A-Za-z0-9]+\/?$/
+      const youtubeShortsRegex =
+        /^https:\/\/(www\.)?youtube\.com\/shorts\/[a-zA-Z0-9_-]+\/?(\?.*)?$/
+
+      let platform: string
+      if (instagramReelRegex.test(rawVideoUrl)) {
+        platform = 'Instagram'
+      } else if (
+        tiktokDesktopRegex.test(rawVideoUrl) ||
+        tiktokMobileRegex.test(rawVideoUrl)
+      ) {
+        platform = 'TikTok'
+      } else if (youtubeShortsRegex.test(rawVideoUrl)) {
+        platform = 'YouTube'
+      } else {
+        toast({
+          title:
+            'Molimo vas unesite validan Instagram/TikTok/YouTube video URL.',
+          status: 'error',
+        })
+        return
+      }
+
+      let videoId = ''
+      let video: any = null
+
+      if (platform === 'TikTok') {
+        let finalUrl = rawVideoUrl
+
+        if (tiktokMobileRegex.test(rawVideoUrl)) {
+          const res = await fetch(
+            `/api/resolve-tiktok?url=${encodeURIComponent(rawVideoUrl)}`,
+          )
+          if (!res.ok) {
+            toast({
+              title: 'Greška pri pribavljanju videa! (TikTok Resolve)',
+              status: 'error',
+            })
+            return
+          }
+          const data = await res.json()
+          finalUrl = data.finalUrl
+        }
+
+        const match = finalUrl.match(
+          /tiktok\.com\/@([^\/]+)\/(?:video|photo)\/(\d+)/,
+        )
+        if (!match) {
+          toast({ title: 'Format linka je pogrešan!', status: 'error' })
+          return
+        }
+
+        videoId = match[2]
+
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            platform: 'TikTok',
+            videoId,
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+          }),
+        })
+
+        const responseJson = await response.json()
+        video = responseJson.videoInfo
+      }
+
+      if (platform === 'Instagram') {
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            platform: 'Instagram',
+            videoUrl: rawVideoUrl,
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+          }),
+        })
+
+        const responseJson = await response.json()
+        video = responseJson.videoInfo
+      }
+
+      if (platform === 'YouTube') {
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            platform: 'YouTube',
+            videoUrl: rawVideoUrl,
+            videoId: rawVideoUrl.split('/')[4],
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+          }),
+        })
+
+        const responseJson = await response.json()
+        video = responseJson.videoInfo
+      }
+
+      if (!video) {
+        toast({
+          title: 'Greška pri pribavljanju videa sa mreže',
+          status: 'error',
+        })
+        return
+      }
+
+      const addRes = await fetch('/api/campaign/video/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          video,
+          campaignId,
+          accId: video.accountName,
+          uid: newVideoUid,
+        }),
+      })
+
+      const addResJson = await addRes.json()
+
+      if (!addRes.ok) {
+        toast({
+          title:
+            addResJson.error === 'Video already exists'
+              ? 'Video je već dodat!'
+              : addResJson.error || 'Došlo je do greške',
+          status: 'error',
+        })
+        return
+      }
+
+      toast({ title: 'Video uspešno dodat', status: 'success' })
+
+      const resList = await fetch(`/api/campaign/get?id=${campaignId}`)
+      const dataList = await resList.json()
+      setVideos(dataList.videos as IVideo[])
+
+      setNewVideoLink('')
+      setNewVideoUid('')
+      setUserSearchTerm('')
+      onClose()
+    } catch (error) {
+      console.error('Error adding video:', error)
+      toast({
+        title: 'Došlo je do greške prilikom dodavanja videa.',
+        status: 'error',
+      })
+    } finally {
+      setIsAddingVideo(false)
+    }
+  }
+
   if (loading)
     return (
       <Center minH="100vh">
@@ -272,7 +557,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       px={{ base: 2, md: 8 }}
     >
       <VStack spacing={6} maxW="1200px" mx="auto" align="stretch">
-        {/* Header */}
         <Flex justify="space-between" align="center" wrap="wrap" gap={4}>
           <Box textAlign="left">
             <HStack>
@@ -288,14 +572,23 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                   {campaign?.influencer}
                 </Heading>
                 <Text fontSize="xs" color="gray.500">
-                  Poslednji update: {campaign?.lastUpdatedAt
-                  ? new Date(campaign.lastUpdatedAt).toLocaleString('sr-RS')
-                  : 'Nema podataka'}
+                  Poslednji update:{' '}
+                  {campaign?.lastUpdatedAt
+                    ? new Date(campaign.lastUpdatedAt).toLocaleString('sr-RS')
+                    : 'Nema podataka'}
                 </Text>
               </VStack>
             </HStack>
           </Box>
           <HStack spacing={2}>
+            <Button
+              size="sm"
+              leftIcon={<FiPlus />}
+              colorScheme="blue"
+              onClick={handleOpenModal}
+            >
+              Add Video
+            </Button>
             <Button
               size="sm"
               leftIcon={<FiZap />}
@@ -317,14 +610,12 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           </HStack>
         </Flex>
 
-        {/* Failed Banner */}
         {failedVideoIds.size > 0 && (
           <Badge colorScheme="red" p={2} borderRadius="md" textAlign="center">
             ⚠️ {failedVideoIds.size} videa nije uspešno ažurirano.
           </Badge>
         )}
 
-        {/* Stats Row */}
         <SimpleGrid columns={3} spacing={3}>
           <StatBox
             icon={FiEye}
@@ -346,7 +637,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           />
         </SimpleGrid>
 
-        {/* Sorting Toggle */}
         <HStack
           justify="space-between"
           bg={cardBg}
@@ -380,9 +670,8 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           </ButtonGroup>
         </HStack>
 
-        {/* --- MOBILE VIEW: CARDS --- */}
         <VStack display={{ base: 'flex', md: 'none' }} spacing={4}>
-          {sortedVideos.map((video) => (
+          {paginatedVideos.map((video) => (
             <Box
               key={video.id}
               bg={cardBg}
@@ -426,16 +715,30 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                 <VStack align="start" spacing={2} flex={1}>
                   <HStack w="full" justify="space-between">
                     <VStack align="start" spacing={0}>
-                      <Text fontWeight="bold" fontSize="xs" noOfLines={1}>{video.accountName}</Text>
+                      <Text fontWeight="bold" fontSize="xs" noOfLines={1}>
+                        {video.accountName}
+                      </Text>
                       <HStack spacing={2} mt={1}>
                         <Text fontSize="9px" color="gray.400">
-                          Postavljeno: {new Date(video.createdAt).toLocaleDateString('sr-RS')}
+                          Postavljeno:{' '}
+                          {new Date(video.createdAt).toLocaleDateString(
+                            'sr-RS',
+                          )}
                         </Text>
                         {video.lastUpdatedAt && (
                           <>
-                            <Text fontSize="9px" color="gray.500">•</Text>
-                            <Text fontSize="9px" color="blue.400" fontWeight="medium">
-                              Ažurirano: {new Date(video.lastUpdatedAt).toLocaleDateString('sr-RS')}
+                            <Text fontSize="9px" color="gray.500">
+                              •
+                            </Text>
+                            <Text
+                              fontSize="9px"
+                              color="blue.400"
+                              fontWeight="medium"
+                            >
+                              Ažurirano:{' '}
+                              {new Date(video.lastUpdatedAt).toLocaleDateString(
+                                'sr-RS',
+                              )}
                             </Text>
                           </>
                         )}
@@ -498,7 +801,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
           ))}
         </VStack>
 
-        {/* --- DESKTOP VIEW: TABLE --- */}
         <Box
           display={{ base: 'none', md: 'block' }}
           bg={cardBg}
@@ -521,7 +823,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                 </Tr>
               </Thead>
               <Tbody>
-                {sortedVideos.map((video) => (
+                {paginatedVideos.map((video) => (
                   <Tr
                     key={video.id}
                     bg={
@@ -596,7 +898,9 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                         <Icon as={FiClock} boxSize={3} />
                         <Text fontSize="xs">
                           {video.lastUpdatedAt
-                            ? new Date(video.lastUpdatedAt).toLocaleDateString('sr-RS')
+                            ? new Date(video.lastUpdatedAt).toLocaleDateString(
+                                'sr-RS',
+                              )
                             : 'N/A'}
                         </Text>
                       </HStack>
@@ -626,7 +930,161 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
             </Table>
           </TableContainer>
         </Box>
+
+        {totalPages > 1 && (
+          <Flex justify="center" mt={4} align="center" gap={4}>
+            <Button
+              size="sm"
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              isDisabled={currentPage === 1}
+              leftIcon={<FiChevronLeft />}
+              variant="outline"
+            >
+              Nazad
+            </Button>
+
+            <HStack>
+              <Text fontSize="sm" fontWeight="medium" color="gray.600">
+                Strana
+              </Text>
+              <Select
+                size="sm"
+                w="auto"
+                value={currentPage}
+                onChange={(e) => setCurrentPage(Number(e.target.value))}
+                borderRadius="md"
+              >
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <option key={page} value={page}>
+                      {page}
+                    </option>
+                  ),
+                )}
+              </Select>
+              <Text fontSize="sm" fontWeight="medium" color="gray.600">
+                od {totalPages}
+              </Text>
+            </HStack>
+
+            <Button
+              size="sm"
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              isDisabled={currentPage === totalPages}
+              rightIcon={<FiChevronRight />}
+              variant="outline"
+            >
+              Napred
+            </Button>
+          </Flex>
+        )}
       </VStack>
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent overflow="visible">
+          <ModalHeader>Dodaj novi video</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <VStack spacing={4}>
+              <FormControl isRequired position="relative">
+                <FormLabel>Korisnik (Pretraga)</FormLabel>
+                <Input
+                  placeholder="Kucaj ime, email ili ID..."
+                  value={userSearchTerm}
+                  onChange={(e) => {
+                    setUserSearchTerm(e.target.value)
+                    setShowUserDropdown(true)
+                    if (newVideoUid) {
+                      setNewVideoUid('')
+                    }
+                  }}
+                  onFocus={() => setShowUserDropdown(true)}
+                  onBlur={() =>
+                    setTimeout(() => setShowUserDropdown(false), 200)
+                  }
+                />
+
+                {showUserDropdown && userSearchTerm && (
+                  <Box
+                    position="absolute"
+                    zIndex={10}
+                    w="full"
+                    bg={dropdownBg}
+                    shadow="xl"
+                    borderWidth="1px"
+                    maxH="200px"
+                    overflowY="auto"
+                    borderRadius="md"
+                    mt={1}
+                  >
+                    {filteredUsers.length === 0 ? (
+                      <Box p={3} textAlign="center">
+                        <Text fontSize="sm" color="gray.500">
+                          Nema rezultata
+                        </Text>
+                      </Box>
+                    ) : (
+                      filteredUsers.map((user) => (
+                        <Box
+                          key={user.id}
+                          p={3}
+                          _hover={{
+                            bg: 'blue.500',
+                            color: 'white',
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => {
+                            setNewVideoUid(user.id)
+                            setUserSearchTerm(
+                              user.email || user.name || user.id,
+                            )
+                            setShowUserDropdown(false)
+                          }}
+                        >
+                          <Text fontWeight="bold" fontSize="sm">
+                            {user.name ||
+                              user.displayName ||
+                              user.email ||
+                              'Nepoznato'}
+                          </Text>
+                          <Text fontSize="xs" opacity={0.8}>
+                            {user.id}
+                          </Text>
+                        </Box>
+                      ))
+                    )}
+                  </Box>
+                )}
+              </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel>Video Link</FormLabel>
+                <Input
+                  placeholder="TikTok, YouTube ili Instagram link"
+                  value={newVideoLink}
+                  onChange={(e) => setNewVideoLink(e.target.value)}
+                />
+              </FormControl>
+            </VStack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={handleAddVideo}
+              isLoading={isAddingVideo}
+              isDisabled={!newVideoUid || !newVideoLink}
+            >
+              Dodaj
+            </Button>
+            <Button onClick={onClose} variant="ghost">
+              Otkaži
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   )
 }
