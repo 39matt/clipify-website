@@ -32,7 +32,6 @@ export async function POST(req: NextRequest) {
           ? `https://tiktok-api23.p.rapidapi.com/api/user/info?uniqueId=${verification.username}`
           : `https://youtube-media-downloader.p.rapidapi.com/v2/channel/details?channelId=@${verification.username}`
 
-    console.log(url)
     const response = await fetch(url, {
       method: 'GET',
       headers: {

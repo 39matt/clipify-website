@@ -196,8 +196,10 @@ const ConnectedAccounts: NextPage = () => {
       setAccountLink(
         responseJson.verification.platform === 'Instagram'
           ? `https://instagram.com/${responseJson.verification.username}`
-          : `https://tiktok.com/@${responseJson.verification.username}`
-      );
+          : responseJson.verification.platform === 'TikTok'
+            ? `https://tiktok.com/@${responseJson.verification.username}`
+            : `https://youtube.com/@${responseJson.verification.username}`,
+      )
       setIsVerifyEnabled(true);
 
       setMessage(
