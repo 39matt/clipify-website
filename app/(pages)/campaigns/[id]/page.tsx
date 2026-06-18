@@ -262,6 +262,16 @@ const Page = () => {
 
         const responseJson = await response.json()
         video = responseJson.videoInfo;
+        const accExists = await userAccountExists(
+          discordUsername!,
+          video.accountName,
+          "YouTube"
+        );
+
+        if (!accExists) {
+          setMessage("Nalog mora biti vaš!");
+          return;
+        }
       }
       // Validate video age
       if (!video) {
@@ -269,25 +279,15 @@ const Page = () => {
         return;
       }
 
-      const accExists = await userAccountExists(
-        discordUsername!,
-        video.accountName,
-        "YouTube"
-      );
-
-      if (!accExists) {
-        setMessage("Nalog mora biti vaš!");
-        return;
-      }
       const createdAt = new Date(video.createdAt);
       const currentTime = new Date();
-      // if (
-      //   currentTime.getTime() - createdAt.getTime() >
-      //   videoAgeInHours * 60 * 60 * 1000
-      // ) {
-      //   setMessage(`Video je stariji od ${videoAgeInHours}h`);
-      //   return;
-      // }
+      if (
+        currentTime.getTime() - createdAt.getTime() >
+        videoAgeInHours * 60 * 60 * 1000
+      ) {
+        setMessage(`Video je stariji od ${videoAgeInHours}h`);
+        return;
+      }
 
       const addRes = await fetch("/api/campaign/video/add", {
         method: "POST",
