@@ -121,7 +121,7 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
   const fetchUsers = async () => {
     if (users.length > 0) return
     try {
-      const res = await fetch('/api/users/get-all')
+      const res = await fetch('/api/user/get-all')
       if (res.ok) {
         const data = await res.json()
         setUsers(data)
@@ -813,10 +813,10 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
             <Table variant="simple" size="sm">
               <Thead bg={useColorModeValue('gray.50', 'whiteAlpha.50')}>
                 <Tr>
+                  <Th>User</Th>
                   <Th>Account</Th>
                   <Th>Preview</Th>
                   <Th isNumeric>Views</Th>
-                  <Th isNumeric>Likes</Th>
                   <Th>Status</Th>
                   <Th>Last Updated</Th>
                   <Th textAlign="right">Actions</Th>
@@ -832,7 +832,14 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                   >
                     <Td>
                       <HStack>
-                        <Avatar size="xs" name={video.accountName} />
+                        <Avatar size="xs" name={video.uid} />
+                        <Text fontWeight="bold" fontSize="sm">
+                          {video.uid}
+                        </Text>
+                      </HStack>
+                    </Td>
+                    <Td>
+                      <HStack>
                         <Text fontWeight="bold" fontSize="sm">
                           {video.accountName}
                         </Text>
@@ -875,7 +882,6 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
                     <Td isNumeric fontWeight="bold">
                       {video.views?.toLocaleString()}
                     </Td>
-                    <Td isNumeric>{video.likes?.toLocaleString()}</Td>
                     <Td>
                       <Badge
                         colorScheme={
