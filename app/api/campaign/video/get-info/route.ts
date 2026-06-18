@@ -92,16 +92,13 @@ export async function PUT(req: NextRequest) {
       }
     } else if (platform === 'YouTube') {
       const youtubeData = parsedBody
-      console.log('--- YOUTUBE DATA START ---')
-      console.log(JSON.stringify(youtubeData, null, 2))
-      console.log('--- YOUTUBE DATA END ---')
       videoInfo = {
         comments: Number(youtubeData.commentCountText) || 0,
         createdAt: new Date(youtubeData.publishedTime).toISOString(),
         likes: youtubeData.likeCount || 0,
         link: `https://www.youtube.com/shorts/${youtubeData.id}`,
         name: youtubeData.title || '',
-        accountName: youtubeData.channel?.name || '',
+        accountName: youtubeData.channel?.handle.replace("@", "") || '',
         shares: youtubeData.stats?.shareCount || 0,
         views: youtubeData.viewCount || 0,
         coverUrl: youtubeData.thumbnails[0]?.url || '',
