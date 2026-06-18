@@ -253,10 +253,10 @@ const Page = () => {
           accountName,
           "YouTube"
         );
-        // if (!accExists) {
-        //   setMessage("Nalog mora biti vaš!");
-        //   return;
-        // }
+        if (!accExists) {
+          setMessage("Nalog mora biti vaš!");
+          return;
+        }
         console.log('AAAA0')
         const response = await fetch('/api/campaign/video/get-info', {
           method: 'PUT',
