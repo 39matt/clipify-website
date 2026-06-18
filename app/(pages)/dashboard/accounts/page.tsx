@@ -1,36 +1,24 @@
 'use client';
 
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  Heading,
-  Icon,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  SimpleGrid,
-  Text,
-  VStack,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Button, Center, Flex, Heading, Icon, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/navigation';
 import { FiPlus } from 'react-icons/fi';
+
+
+
 import { useEffect, useState } from 'react';
+
+
+
 import AccountCard from '#components/app/AccountCard/AccountCard';
-import {
-  accountExists,
-  getAllAccounts,
-} from '../../../lib/firebase/firestore/account';
+
+
+
+import { accountExists, getAllAccounts } from '../../../lib/firebase/firestore/account';
 import { IAccount } from '../../../lib/models/account';
 import { useLayoutContext } from '../context';
+
 
 const ConnectedAccounts: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -52,6 +40,7 @@ const ConnectedAccounts: NextPage = () => {
 
   const instagramAccountLimit = 5;
   const tiktokAccountLimit = 5;
+  const youtubeAccountLimit = 5;
 
   useEffect(() => {
     const fetchAccounts = async () => {
@@ -92,7 +81,9 @@ const ConnectedAccounts: NextPage = () => {
             setAccountLink(
               responseJson.verification.platform === 'Instagram'
                 ? `https://instagram.com/${responseJson.verification.username}`
-                : `https://tiktok.com/@${responseJson.verification.username}`
+                : responseJson.verification.platform === 'TikTok'
+                  ?  `https://tiktok.com/@${responseJson.verification.username}`
+                  : `https://youtube.com/@${responseJson.verification.username}`
             );
             setIsVerifyEnabled(true);
             setMessage(
@@ -122,7 +113,7 @@ const ConnectedAccounts: NextPage = () => {
   const handleAddAccount = async () => {
     try {
       setMessage('');
-      if(accounts.length > tiktokAccountLimit + instagramAccountLimit - 1) {
+      if(accounts.length > tiktokAccountLimit + instagramAccountLimit + youtubeAccountLimit - 1) {
         setMessage('Možeš imati maksimalno 5 Instagram i 5 TikTok naloga');
         return;
       }
@@ -131,10 +122,13 @@ const ConnectedAccounts: NextPage = () => {
         /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/;
       const tiktokRegex =
         /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/?$/;
+      const youtubeRegex =
+        /^https:\/\/(www\.)?youtube\.com\/@?[a-zA-Z0-9_.]+\/?$/;
 
       if (
         !instagramRegex.test(accountLink) &&
-        !tiktokRegex.test(accountLink)
+        !tiktokRegex.test(accountLink) &&
+        !youtubeRegex.test(accountLink)
       ) {
         setMessage(
           'Uneti link nije validan. Molimo unesite ispravan link naloga.'
@@ -159,7 +153,7 @@ const ConnectedAccounts: NextPage = () => {
           setMessage('Nalog se već koristi.');
           return;
         }
-      } else {
+      } else if (accountLink.includes("instagram")) {
         if (accounts.filter((acc) => acc.platform === 'Instagram').length > instagramAccountLimit - 1) {
           setMessage('Možeš imati maksimalno 5 Instagram naloga');
           return;
@@ -170,15 +164,24 @@ const ConnectedAccounts: NextPage = () => {
           setMessage('Nalog se već koristi.');
           return;
         }
+      } else {
+        if (accounts.filter((acc) => acc.platform === 'YouTube').length > youtubeAccountLimit - 1) {
+          setMessage('Možeš imati maksimalno 5 YouTube naloga');
+          return;
+        }
+        const parts = accountLink.split('@').filter((part) => part !== '');
+        username = parts[parts.length - 1].includes("?") ? parts[parts.length - 1].split("?")[0]
+          : parts[parts.length - 1];
+        if (await accountExists(username, 'YouTube')) {
+          setMessage('Nalog se već koristi.');
+          return;
+        }
       }
 
       if (!username || username.trim() === '') {
         setMessage('Nije moguće izdvojiti korisničko ime iz linka.');
         return;
       }
-
-      username = username.trim();
-      console.log('Extracted username:', username);
 
       const response = await fetch('/api/user/verification/add', {
         method: 'POST',
@@ -240,12 +243,16 @@ const ConnectedAccounts: NextPage = () => {
       const verification = {
         platform: accountLink.toLowerCase().includes('tiktok')
           ? 'TikTok'
-          : 'Instagram',
+          : accountLink.toLowerCase().includes('instagram')
+            ? 'Instagram'
+            : 'YouTube',
         username: accountLink.includes('tiktok')
           ? accountLink.split('@')[1]
-          : accountLink.split('/')[accountLink.split('/').length - 1],
+          : accountLink.includes('instagram')
+            ? accountLink.split('/')[accountLink.split('/').length - 1]
+            : accountLink.split('/')[accountLink.split('/').length - 1].split('?')[0].replace("@", ""),
         code: verificationCode!,
-      };
+      }
 
       const response = await fetch('/api/user/verification/verify', {
         method: 'POST',
@@ -409,7 +416,9 @@ const ConnectedAccounts: NextPage = () => {
                 <Heading size="md" color="green.400">
                   {accountLink.toLowerCase().includes('tiktok')
                     ? 'TikTok'
-                    : 'Instagram'}
+                    : accountLink.toLowerCase().includes('instagram') ?
+                      'Instagram'
+                  :"YouTube"}
                 </Heading>
                 <Text mt={2}>Korisničko ime:</Text>
                 <Heading size="md" color="green.400">

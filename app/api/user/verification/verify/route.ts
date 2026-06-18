@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { IAccount } from '../../../../lib/models/account'
-import { adminDb } from '../../../../lib/firebase/firebaseAdmin'
+
+
+
+import { adminDb } from '../../../../lib/firebase/firebaseAdmin';
+import { IAccount } from '../../../../lib/models/account';
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -20,12 +24,15 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+    console.log(verification.platform);
     const url =
       verification.platform === 'Instagram'
         ? `https://instagram-looter2.p.rapidapi.com/profile?username=${verification.username}`
-        : `https://tiktok-api23.p.rapidapi.com/api/user/info?uniqueId=${verification.username}`;
+        : verification.platform === 'TikTok'
+          ? `https://tiktok-api23.p.rapidapi.com/api/user/info?uniqueId=${verification.username}`
+          : `https://youtube-media-downloader.p.rapidapi.com/v2/channel/details?channelId=@${verification.username}`
 
+    console.log(url)
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -33,17 +40,21 @@ export async function POST(req: NextRequest) {
         'x-rapidapi-host':
           verification.platform === 'Instagram'
             ? 'instagram-looter2.p.rapidapi.com'
-            : 'tiktok-api23.p.rapidapi.com',
+            : verification.platform === 'TikTok'
+              ? 'tiktok-api23.p.rapidapi.com'
+              : 'youtube-media-downloader.p.rapidapi.com',
       },
-    });
+    })
 
     const parsedBody = await response.json();
-
+    console.log(parsedBody);
     let bio: string | null = null;
     if (verification.platform === 'Instagram') {
       bio = parsedBody.biography || null;
     } else if (verification.platform === 'TikTok') {
       bio = parsedBody.userInfo?.user?.signature || null;
+    } else {
+      bio = parsedBody.description || null
     }
 
     if (bio?.includes(verification.code.toString())) {
@@ -53,7 +64,9 @@ export async function POST(req: NextRequest) {
         link:
           verification.platform === 'Instagram'
             ? `https://www.instagram.com/${verification.username}`
-            : `https://www.tiktok.com/@${verification.username}`,
+            : verification.platform === "TikTok" ?
+              `https://www.tiktok.com/@${verification.username}`
+            : `https://www.youtube.com/@${verification.username}`
       };
 
       const verificationsRef = adminDb

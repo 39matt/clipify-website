@@ -1,47 +1,20 @@
 'use client';
 
+import { Box, Button, Card, CardBody, CardHeader, Center, Divider, Flex, HStack, Heading, IconButton, Image, Input, List, ListIcon, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Progress, Spinner, Stat, StatGroup, StatLabel, StatNumber, Text, VStack, useDisclosure } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import {
-  Box,
-  Image,
-  Text,
-  VStack,
-  Progress,
-  Heading,
-  Divider,
-  Spinner,
-  Center,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatGroup,
-  Card,
-  CardBody,
-  CardHeader,
-  Button,
-  HStack,
-  IconButton,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  Input,
-  useDisclosure,
-  ModalFooter,
-  Flex,
-  List,
-  ListItem,
-  ListIcon,
-} from '@chakra-ui/react';
 import { FaMeh, FaThumbsDown, FaThumbsUp } from 'react-icons/fa';
 import { FaDiscord } from 'react-icons/fa';
-import { useLayoutContext } from '../../dashboard/context';
-import { IVideo } from '../../../lib/models/video';
+
+
+
+import { useEffect, useState } from 'react';
+
+
+
 import { userAccountExists } from '../../../lib/firebase/firestore/account';
-import { ICampaign } from '../../../lib/models/campaign'
+import { ICampaign } from '../../../lib/models/campaign';
+import { IVideo } from '../../../lib/models/video';
+import { useLayoutContext } from '../../dashboard/context';
 import AllVideosSection from "./components/AllVideosSection/AllVideosSection";
 import YourVideosSection from "./components/YourVideosSection/YourVideosSection";
 
@@ -148,6 +121,8 @@ const Page = () => {
         /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/(?:video|photo)\/[0-9]+\/?$/
       const tiktokMobileRegex =
         /^https:\/\/[A-Za-z][A-Za-z]\.tiktok\.com\/[A-Za-z0-9]+\/?$/;
+      const youtubeShortsRegex =
+        /^https:\/\/(www\.)?youtube\.com\/shorts\/[a-zA-Z0-9_-]+\/?(\?.*)?$/;
 
       let platform: string;
       if (instagramReelRegex.test(rawVideoUrl)) {
@@ -157,8 +132,10 @@ const Page = () => {
         tiktokMobileRegex.test(rawVideoUrl)
       ) {
         platform = "TikTok";
+      } else if (youtubeShortsRegex.test(rawVideoUrl)) {
+        platform = "YouTube";
       } else {
-        setMessage("Molimo vas unesite validan Instagram/TikTok video URL.");
+        setMessage("Molimo vas unesite validan Instagram/TikTok/YouTube video URL.");
         return;
       }
 
@@ -271,11 +248,38 @@ const Page = () => {
         }
       }
 
+      if (platform === "YouTube") {
+        const accExists = await userAccountExists(
+          discordUsername!,
+          accountName,
+          "YouTube"
+        );
+        // if (!accExists) {
+        //   setMessage("Nalog mora biti vaš!");
+        //   return;
+        // }
+        console.log('AAAA0')
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            platform: 'YouTube',
+            videoUrl: rawVideoUrl,
+            videoId: rawVideoUrl.split('/')[4],
+            api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
+          }),
+        })
+
+        const responseJson = await response.json()
+        video = responseJson.videoInfo;
+      }
+      console.log("AAAA1")
       // Validate video age
       if (!video) {
         setMessage("Greška pri pribavljanju videa");
         return;
       }
+      console.log('AAAA2')
 
       const createdAt = new Date(video.createdAt);
       const currentTime = new Date();
@@ -286,6 +290,7 @@ const Page = () => {
         setMessage(`Video je stariji od ${videoAgeInHours}h`);
         return;
       }
+      console.log('AAAA3')
 
       const addRes = await fetch("/api/campaign/video/add", {
         method: "POST",
@@ -293,7 +298,7 @@ const Page = () => {
         body: JSON.stringify({
           video,
           campaignId,
-          accId: accountName,
+          accId: video.accountName,
           uid: discordUsername,
         }),
       });

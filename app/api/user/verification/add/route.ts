@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { adminDb } from '../../../../lib/firebase/firebaseAdmin'
+
+
+
+import { adminDb } from '../../../../lib/firebase/firebaseAdmin';
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -31,7 +35,7 @@ export async function POST(req: NextRequest) {
     );
 
     let username = '';
-    let platform: 'Instagram' | 'TikTok' = 'Instagram';
+    let platform;
 
     if (cleanAccountLink.toLowerCase().includes('tiktok')) {
       platform = 'TikTok';
@@ -41,9 +45,16 @@ export async function POST(req: NextRequest) {
         const parts = cleanAccountLink.split('/').filter((part) => part !== '');
         username = parts[parts.length - 1];
       }
-    } else {
+    } else if (cleanAccountLink.toLowerCase().includes('instagram')) {
+      platform = 'Instagram'
       const parts = cleanAccountLink.split('/').filter((part) => part !== '');
       username = parts[parts.length - 1];
+    } else {
+      platform = 'YouTube'
+      const parts = accountLink.split('@').filter((part) => part !== '')
+      username = parts[parts.length - 1].includes('?')
+        ? parts[parts.length - 1].split('?')[0]
+        : parts[parts.length - 1]
     }
 
     if (!username || username.trim() === '') {

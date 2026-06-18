@@ -117,7 +117,9 @@ const AccountCard: React.FC<Props> = ({ account, index, router, onDelete, userId
           bgImage={
             account.platform === 'Instagram'
               ? "url('/static/images/instagram-logo.jpg')"
-              : "url('/static/images/tiktok-logo.png')"
+              : account.platform === 'TikTok'
+                ? "url('/static/images/tiktok-logo.png')"
+              : "url('/static/images/youtube-logo.png')"
           }
           bgSize="contain"
           bgPosition="center"

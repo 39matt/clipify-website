@@ -1,5 +1,9 @@
-import { IVideo } from '../../../../lib/models/video'
 import { NextRequest, NextResponse } from 'next/server';
+
+
+
+import { IVideo } from '../../../../lib/models/video';
+
 
 export async function PUT(req: NextRequest) {
   try {
@@ -8,7 +12,9 @@ export async function PUT(req: NextRequest) {
     const url =
       platform === 'Instagram'
         ? `https://instagram-looter2.p.rapidapi.com/post?url=${videoUrl}`
-        : `https://tiktok-api23.p.rapidapi.com/api/post/detail?videoId=${videoId}`;
+        : platform === 'TikTok'
+          ? `https://tiktok-api23.p.rapidapi.com/api/post/detail?videoId=${videoId}`
+          : `https://youtube-media-downloader.p.rapidapi.com/v2/video/details?videoId=${videoId}&urlAccess=blocked&videos=false&audios=false`
 
     const response = await fetch(url, {
       method: 'GET',
@@ -17,9 +23,12 @@ export async function PUT(req: NextRequest) {
         'x-rapidapi-host':
           platform === 'Instagram'
             ? 'instagram-looter2.p.rapidapi.com'
-            : 'tiktok-api23.p.rapidapi.com',
+            :
+          platform === 'TikTok'
+              ? 'tiktok-api23.p.rapidapi.com'
+              : 'youtube-media-downloader.p.rapidapi.com',
       },
-    });
+    })
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -80,13 +89,30 @@ export async function PUT(req: NextRequest) {
           coverUrl: tiktokData.video.cover || '',
           lastUpdatedAt: new Date(Date.now()).toISOString(),
         };
-      } else {
+      }
+    } else if (platform === 'YouTube') {
+      const youtubeData = parsedBody
+      console.log('--- YOUTUBE DATA START ---')
+      console.log(JSON.stringify(youtubeData, null, 2))
+      console.log('--- YOUTUBE DATA END ---')
+      videoInfo = {
+        comments: Number(youtubeData.commentCountText) || 0,
+        createdAt: new Date(youtubeData.publishedTime).toISOString(),
+        likes: youtubeData.likeCount || 0,
+        link: `https://www.youtube.com/shorts/${youtubeData.id}`,
+        name: youtubeData.title || '',
+        accountName: youtubeData.channel?.name || '',
+        shares: youtubeData.stats?.shareCount || 0,
+        views: youtubeData.viewCount || 0,
+        coverUrl: youtubeData.thumbnails[0]?.url || '',
+        lastUpdatedAt: new Date(Date.now()).toISOString(),
+      }
+    } else {
         return NextResponse.json(
           { message: 'Video is deleted or not found!', videoInfo },
           { status: 200 }
         );
       }
-    }
 
     return NextResponse.json(
       { message: 'Successfully got video info.', videoInfo },
