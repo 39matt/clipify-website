@@ -262,6 +262,7 @@ const Page = () => {
 
         const responseJson = await response.json()
         video = responseJson.videoInfo;
+
         const accExists = await userAccountExists(
           discordUsername!,
           video.accountName,

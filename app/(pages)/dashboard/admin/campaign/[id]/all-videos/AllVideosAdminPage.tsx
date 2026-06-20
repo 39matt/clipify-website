@@ -1,64 +1,18 @@
-'use client'
+'use client';
 
-import {
-  Avatar,
-  Badge,
-  Box,
-  Button,
-  ButtonGroup,
-  Center,
-  Flex,
-  FormControl,
-  FormLabel,
-  HStack,
-  Heading,
-  Icon,
-  IconButton,
-  Image,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Select,
-  SimpleGrid,
-  Spinner,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  VStack,
-  useColorModeValue,
-  useDisclosure,
-  useToast,
-} from '@chakra-ui/react'
-import { usePathname, useRouter } from 'next/navigation'
-import {
-  FiChevronLeft,
-  FiChevronRight,
-  FiClock,
-  FiEye,
-  FiHeart,
-  FiImage,
-  FiPlus,
-  FiRefreshCw,
-  FiTrash2,
-  FiTrendingUp,
-  FiVideo,
-  FiZap,
-} from 'react-icons/fi'
+import { Avatar, Badge, Box, Button, ButtonGroup, Center, Flex, FormControl, FormLabel, HStack, Heading, Icon, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, SimpleGrid, Spinner, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, VStack, useColorModeValue, useDisclosure, useToast } from '@chakra-ui/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { FiChevronLeft, FiChevronRight, FiClock, FiEye, FiHeart, FiImage, FiPlus, FiRefreshCw, FiTrash2, FiTrendingUp, FiVideo, FiZap } from 'react-icons/fi';
 
-import React, { useEffect, useMemo, useState } from 'react'
 
-import { ICampaign } from '../../../../../../lib/models/campaign'
-import { IVideo } from '../../../../../../lib/models/video'
+
+import React, { useEffect, useMemo, useState } from 'react';
+
+
+
+import { ICampaign } from '../../../../../../lib/models/campaign';
+import { IVideo } from '../../../../../../lib/models/video';
+
 
 interface AdminCampaignPageProps {
   idToken: string
@@ -218,8 +172,14 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
       const getVideoResponse = await fetch('/api/campaign/video/get-info', {
         method: 'PUT',
         body: JSON.stringify({
-          platform: video.link.includes('instagram') ? 'Instagram' : 'TikTok',
-          videoId: video.link.split('/')[5],
+          platform: video.link.includes('instagram')
+            ? 'Instagram'
+            : video.link.includes('tiktok')
+              ? 'TikTok'
+              : 'YouTube',
+          videoId: video.link.includes('youtube')
+            ? video.link.split('/')[4]
+            : video.link.split('/')[5],
           videoUrl: video.link,
           api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
         }),
@@ -298,8 +258,14 @@ const AllVideosAdminPage: React.FC<AdminCampaignPageProps> = ({ idToken }) => {
         const res = await fetch('/api/campaign/video/get-info', {
           method: 'PUT',
           body: JSON.stringify({
-            platform: video.link.includes('instagram') ? 'Instagram' : 'TikTok',
-            videoId: video.link.split('/')[5],
+            platform: video.link.includes('instagram')
+              ? 'Instagram'
+              : video.link.includes('tiktok')
+                ? 'TikTok'
+                : 'YouTube',
+            videoId: video.link.includes('youtube')
+              ? video.link.split('/')[4]
+              : video.link.split('/')[5],
             videoUrl: video.link,
             api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
           }),
