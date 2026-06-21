@@ -138,7 +138,7 @@ const ConnectedAccounts: NextPage = () => {
 
       let username = '';
 
-      if (accountLink.includes('tiktok')) {
+      if (accountLink.includes('tiktok.com')) {
         if (accounts.filter((acc) => acc.platform === 'TikTok').length > tiktokAccountLimit - 1) {
           setMessage('Možeš imati maksimalno 5 TikTok naloga');
           return;
@@ -153,7 +153,7 @@ const ConnectedAccounts: NextPage = () => {
           setMessage('Nalog se već koristi.');
           return;
         }
-      } else if (accountLink.includes("instagram")) {
+      } else if (accountLink.includes("instagram.com")) {
         if (accounts.filter((acc) => acc.platform === 'Instagram').length > instagramAccountLimit - 1) {
           setMessage('Možeš imati maksimalno 5 Instagram naloga');
           return;
@@ -424,7 +424,7 @@ const ConnectedAccounts: NextPage = () => {
                 </Heading>
                 <Text mt={2}>Korisničko ime:</Text>
                 <Heading size="md" color="green.400">
-                  {accountLink.includes('tiktok')
+                  {accountLink.includes('tiktok.com')
                     ? accountLink.split('@')[1]
                     : accountLink.split('/')[
                     accountLink.split('/').length - 1
