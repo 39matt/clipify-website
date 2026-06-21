@@ -416,9 +416,9 @@ const ConnectedAccounts: NextPage = () => {
               <Box mt={4}>
                 <Text>Platforma:</Text>
                 <Heading size="md" color="green.400">
-                  {accountLink.toLowerCase().includes('tiktok')
+                  {accountLink.toLowerCase().includes('tiktok.com')
                     ? 'TikTok'
-                    : accountLink.toLowerCase().includes('instagram') ?
+                    : accountLink.toLowerCase().includes('instagram.com') ?
                       'Instagram'
                   :"YouTube"}
                 </Heading>
