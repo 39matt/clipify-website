@@ -243,14 +243,14 @@ const ConnectedAccounts: NextPage = () => {
       setMessage('Verifikacija u toku...');
 
       const verification = {
-        platform: accountLink.toLowerCase().includes('tiktok')
+        platform: accountLink.toLowerCase().includes('tiktok.com')
           ? 'TikTok'
-          : accountLink.toLowerCase().includes('instagram')
+          : accountLink.toLowerCase().includes('instagram.com')
             ? 'Instagram'
             : 'YouTube',
-        username: accountLink.includes('tiktok')
+        username: accountLink.includes('tiktok.com')
           ? accountLink.split('@')[1]
-          : accountLink.includes('instagram')
+          : accountLink.includes('instagram.com')
             ? accountLink.split('/')[accountLink.split('/').length - 1]
             : accountLink.split('/')[accountLink.split('/').length - 1].split('?')[0].replace("@", ""),
         code: verificationCode!,
