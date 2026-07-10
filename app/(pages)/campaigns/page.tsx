@@ -1,29 +1,31 @@
 'use client'
+
 import {
   Box,
-  Heading,
-  VStack,
   Container,
-  Spinner,
-  Text,
-  useColorModeValue,
   Flex,
+  HStack,
+  Heading,
+  Icon,
+  SimpleGrid,
+  Skeleton,
+  Text,
+  VStack,
 } from '@chakra-ui/react'
 import { NextPage } from 'next'
-import CampaignCard from '#components/app/CampaignCard/CampaignCard'
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { FiGrid } from 'react-icons/fi'
+
+import { useEffect, useState } from 'react'
+
+import CampaignCard from '#components/app/CampaignCard/CampaignCard'
+
 import { ICampaign } from '../../lib/models/campaign'
 
 const Campaigns: NextPage = () => {
   const router = useRouter()
-  const [campaignList, setCampaignList] = useState<ICampaign[]>()
+  const [campaignList, setCampaignList] = useState<ICampaign[]>([])
   const [loading, setLoading] = useState(true)
-
-  const bgGradient = useColorModeValue(
-    'linear(to-br, gray.50, white)',
-    'linear(to-br, gray.900, gray.800)'
-  )
 
   useEffect(() => {
     const getCampaigns = async () => {
@@ -38,10 +40,10 @@ const Campaigns: NextPage = () => {
           },
         })
         const campaigns = (await response.json()) as ICampaign[]
-        campaigns.map(c => c.influencer == "Trajko 3" ? c.progress = 0 : c.progress)
+
         setCampaignList(campaigns.filter((campaign) => campaign.isActive))
       } catch (error) {
-        console.error('Error fetching campaigns:', error)
+        console.error(error)
       } finally {
         setLoading(false)
       }
@@ -50,79 +52,109 @@ const Campaigns: NextPage = () => {
     getCampaigns()
   }, [])
 
-  if (loading) {
-    return (
-      <Container maxW="container.xl" py={8}>
-        <VStack spacing={8} align="center" justify="center" minH="50vh">
-          <Spinner size="xl" color="green.400" thickness="4px" />
-          <Text fontSize="lg" color="gray.600">
-            Učitavanje kampanja...
-          </Text>
-        </VStack>
-      </Container>
-    )
-  }
-
   return (
-    <Box minH="100vh" minW="full" bgGradient={bgGradient}>
-      <Container maxW="container.xl" py={{ base: 6, md: 12 }}>
-        <VStack spacing={{ base: 8, md: 12 }}>
-          {/* Header Section */}
-          <Box textAlign="center" maxW="2xl">
-            <Heading
-              fontSize={{ base: 28, lg: 36 }}
-              fontWeight="bold"
-              bgGradient="linear(to-r, green.400, teal.500)"
-              // bg="white"
-              bgClip="text"
-              mb={4}
-            >
-              Aktivne kampanje
-            </Heading>
-            <Text
-              fontSize={{ base: 'md', md: 'lg' }}
-              color="gray.600"
-              maxW="lg"
-              mx="auto"
-            >
-              Pridružite se našim kampanjama i pomozite u ostvarivanju važnih
-              ciljeva
-            </Text>
-          </Box>
-
-          {/* Campaigns Grid */}
-          {campaignList && campaignList.length > 0 ? (
-            <Flex
-              flexWrap="wrap"
-              gap={12}
-              w="full"
-            >
-              {campaignList.map((campaign, index) => (
-                <Box
-                  key={campaign.id || index}
-                  maxW="320px"
-                  w="full"
-                  mx={{base:"auto", md: 0}}
-                  transform="scale(1)"
-                  transition="all 0.2s ease-in-out"
-                  _hover={{
-                    transform: 'translateY(-4px)',
-                    shadow: 'xl',
-                  }}
+    <Box minH="100vh" w="full" bg="#090A0F">
+      <Container
+        maxW="8xl"
+        px={{ base: 4, md: 8, lg: 12 }}
+        py={{ base: 8, md: 16 }}
+      >
+        <VStack spacing={10} w="full" align="stretch">
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            justify="space-between"
+            align={{ base: 'start', md: 'flex-end' }}
+            gap={4}
+            borderBottom="1px solid"
+            borderColor="whiteAlpha.100"
+            pb={6}
+          >
+            <VStack align="start" spacing={3} maxW="2xl">
+              <HStack spacing={3}>
+                <Flex
+                  p={2}
+                  bg="green.500"
+                  borderRadius="lg"
+                  boxShadow="0 0 20px rgba(72, 187, 120, 0.3)"
                 >
-                  <CampaignCard campaign={campaign} router={router} />
-                </Box>
-              ))}
-            </Flex>
-          ) : (
-            <VStack spacing={4} py={12}>
-              <Text fontSize="xl" color="gray.500" textAlign="center">
-                Trenutno nema aktivnih kampanja
-              </Text>
-              <Text fontSize="md" color="gray.400" textAlign="center">
-                Proverite ponovo uskoro za nove kampanje
+                  <Icon as={FiGrid} color="white" boxSize={6} />
+                </Flex>
+                <Heading
+                  fontSize={{ base: '3xl', lg: '4xl' }}
+                  fontWeight="black"
+                  color="white"
+                  letterSpacing="tight"
+                >
+                  Aktivne kampanje
+                </Heading>
+              </HStack>
+              <Text
+                fontSize={{ base: 'md', md: 'lg' }}
+                color="whiteAlpha.600"
+                lineHeight="tall"
+              >
+                Pridružite se našim kampanjama, ispunite uslove za preglede i
+                ostvarite zaradu na osnovu vaših rezultata.
               </Text>
             </VStack>
+          </Flex>
+
+          {loading ? (
+            <SimpleGrid
+              columns={{ base: 1, sm: 2, lg: 3, xl: 4 }}
+              spacing={6}
+              w="full"
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <Skeleton
+                  key={i}
+                  h="420px"
+                  w="full"
+                  borderRadius="2xl"
+                  startColor="#121418"
+                  endColor="#1A1D24"
+                />
+              ))}
+            </SimpleGrid>
+          ) : campaignList.length > 0 ? (
+            <SimpleGrid
+              columns={{ base: 1, sm: 2, lg: 3, xl: 4 }}
+              spacing={6}
+              w="full"
+            >
+              {campaignList.map((campaign) => (
+                <CampaignCard
+                  key={campaign.id}
+                  campaign={campaign}
+                  router={router}
+                />
+              ))}
+            </SimpleGrid>
+          ) : (
+            <Flex
+              w="full"
+              py={20}
+              direction="column"
+              align="center"
+              justify="center"
+              bg="#121418"
+              borderRadius="2xl"
+              border="1px dashed"
+              borderColor="whiteAlpha.200"
+            >
+              <Icon as={FiGrid} boxSize={12} color="whiteAlpha.200" mb={4} />
+              <Text
+                fontSize="xl"
+                fontWeight="semibold"
+                color="whiteAlpha.800"
+                mb={2}
+              >
+                Trenutno nema aktivnih kampanja
+              </Text>
+              <Text fontSize="md" color="whiteAlpha.500">
+                Proverite ponovo uskoro za nove prilike za zaradu.
+              </Text>
+            </Flex>
           )}
         </VStack>
       </Container>
