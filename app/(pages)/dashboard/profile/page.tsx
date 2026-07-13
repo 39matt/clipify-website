@@ -3,18 +3,7 @@
 import { AbsoluteCenter, Box, Button, Card, CardBody, CardHeader, Center, Grid, HStack, Heading, Spacer, Spinner, Text, VStack, useToast } from '@chakra-ui/react';
 import { Property, PropertyList } from '@saas-ui/core';
 import { NextPage } from 'next';
-
-
-
 import { useEffect, useState } from 'react';
-
-
-
-import { FeatureProps } from '#components/home-page/features';
-import { BoxFeature, BoxFeatures } from '#components/home-page/features/box-features';
-
-
-
 import { isUserLinked } from '../../../lib/firebase/firestore/user';
 import { IUser } from '../../../lib/models/user';
 import { useLayoutContext } from '../context';
