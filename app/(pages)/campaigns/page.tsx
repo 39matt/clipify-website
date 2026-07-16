@@ -2,6 +2,7 @@
 
 import {
   Box,
+  Button,
   Container,
   Flex,
   HStack,
@@ -22,10 +23,32 @@ import CampaignCard from '#components/app/CampaignCard/CampaignCard'
 
 import { ICampaign } from '../../lib/models/campaign'
 
+const normalizeActivity = (activity: string) =>
+  activity.trim().replace(/\s+/g, ' ').toLocaleLowerCase()
+
 const Campaigns: NextPage = () => {
   const router = useRouter()
   const [campaignList, setCampaignList] = useState<ICampaign[]>([])
+  const [selectedActivity, setSelectedActivity] = useState('all')
   const [loading, setLoading] = useState(true)
+
+  const availableActivities = Array.from(
+    campaignList.reduce((activities, campaign) => {
+      const label = campaign.activity.trim().replace(/\s+/g, ' ')
+
+      if (label) activities.set(normalizeActivity(label), label)
+
+      return activities
+    }, new Map<string, string>()),
+  ).sort(([, first], [, second]) => first.localeCompare(second))
+
+  const filteredCampaigns =
+    selectedActivity === 'all'
+      ? campaignList
+      : campaignList.filter(
+          (campaign) =>
+            normalizeActivity(campaign.activity) === selectedActivity,
+        )
 
   useEffect(() => {
     const getCampaigns = async () => {
@@ -57,17 +80,18 @@ const Campaigns: NextPage = () => {
       <Container
         maxW="8xl"
         px={{ base: 4, md: 8, lg: 12 }}
-        py={{ base: 8, md: 16 }}
+        pt={{ base: 20, md: 16 }}
+        pb={{ base: 10, md: 16 }}
       >
-        <VStack spacing={10} w="full" align="stretch">
+        <VStack spacing={{ base: 7, md: 10 }} w="full" align="stretch">
           <Flex
             direction={{ base: 'column', md: 'row' }}
             justify="space-between"
             align={{ base: 'start', md: 'flex-end' }}
-            gap={4}
+            gap={{ base: 6, md: 4 }}
             borderBottom="1px solid"
             borderColor="whiteAlpha.100"
-            pb={6}
+            pb={{ base: 5, md: 6 }}
           >
             <VStack align="start" spacing={3} maxW="2xl">
               <HStack spacing={3}>
@@ -97,18 +121,85 @@ const Campaigns: NextPage = () => {
                 ostvarite zaradu na osnovu vaših rezultata.
               </Text>
             </VStack>
+
+            {!loading && availableActivities.length > 1 && (
+              <VStack
+                align="start"
+                spacing={2}
+                w={{ base: 'full', md: 'auto' }}
+              >
+                <Text
+                  fontSize="xs"
+                  fontWeight="bold"
+                  color="whiteAlpha.500"
+                  textTransform="uppercase"
+                  letterSpacing="wider"
+                >
+                  Aktivnost
+                </Text>
+                <Flex
+                  w="full"
+                  maxW={{ base: 'full', md: 'lg' }}
+                  gap={2}
+                  wrap={{ base: 'nowrap', md: 'wrap' }}
+                  overflowX={{ base: 'auto', md: 'visible' }}
+                  pb={{ base: 2, md: 0 }}
+                  sx={{
+                    '&::-webkit-scrollbar': {
+                      display: 'none',
+                    },
+                  }}
+                >
+                  {[['all', 'Sve aktivnosti'], ...availableActivities].map(
+                    ([activity, label]) => {
+                      const isSelected = selectedActivity === activity
+
+                      return (
+                        <Button
+                          key={activity}
+                          type="button"
+                          size="sm"
+                          minH="36px"
+                          px={4}
+                          borderRadius="full"
+                          flexShrink={0}
+                          whiteSpace="nowrap"
+                          bg={isSelected ? 'green.500' : 'whiteAlpha.50'}
+                          color="white"
+                          border="1px solid"
+                          borderColor={
+                            isSelected ? 'green.400' : 'whiteAlpha.200'
+                          }
+                          fontWeight="semibold"
+                          onClick={() => setSelectedActivity(activity)}
+                          _hover={{
+                            bg: isSelected ? 'green.400' : 'whiteAlpha.100',
+                            borderColor: isSelected
+                              ? 'green.300'
+                              : 'whiteAlpha.400',
+                          }}
+                          _active={{ transform: 'scale(0.97)' }}
+                        >
+                          {label}
+                        </Button>
+                      )
+                    },
+                  )}
+                </Flex>
+              </VStack>
+            )}
           </Flex>
 
           {loading ? (
             <SimpleGrid
               columns={{ base: 1, sm: 2, lg: 3, xl: 4 }}
-              spacing={6}
+              spacing={{ base: 4, md: 6 }}
               w="full"
             >
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <Skeleton
                   key={i}
-                  h="420px"
+                  h={{ base: '390px', md: '420px' }}
                   w="full"
                   borderRadius="2xl"
                   startColor="#121418"
@@ -116,24 +207,31 @@ const Campaigns: NextPage = () => {
                 />
               ))}
             </SimpleGrid>
-          ) : campaignList.length > 0 ? (
+          ) : filteredCampaigns.length > 0 ? (
             <SimpleGrid
               columns={{ base: 1, sm: 2, lg: 3, xl: 4 }}
-              spacing={6}
+              spacing={{ base: 4, md: 6 }}
               w="full"
             >
               {campaignList.map((campaign) => (
-                <CampaignCard
+                <Box
                   key={campaign.id}
-                  campaign={campaign}
-                  router={router}
-                />
+                  display={
+                    selectedActivity === 'all' ||
+                    normalizeActivity(campaign.activity) === selectedActivity
+                      ? 'block'
+                      : 'none'
+                  }
+                >
+                  <CampaignCard campaign={campaign} router={router} />
+                </Box>
               ))}
             </SimpleGrid>
           ) : (
             <Flex
               w="full"
-              py={20}
+              py={{ base: 16, md: 20 }}
+              px={4}
               direction="column"
               align="center"
               justify="center"
@@ -148,11 +246,16 @@ const Campaigns: NextPage = () => {
                 fontWeight="semibold"
                 color="whiteAlpha.800"
                 mb={2}
+                textAlign="center"
               >
-                Trenutno nema aktivnih kampanja
+                {selectedActivity === 'all'
+                  ? 'Trenutno nema aktivnih kampanja'
+                  : 'Nema kampanja za izabranu aktivnost'}
               </Text>
-              <Text fontSize="md" color="whiteAlpha.500">
-                Proverite ponovo uskoro za nove prilike za zaradu.
+              <Text fontSize="md" color="whiteAlpha.500" textAlign="center">
+                {selectedActivity === 'all'
+                  ? 'Proverite ponovo uskoro za nove prilike za zaradu.'
+                  : 'Izaberite drugu aktivnost da vidite dostupne kampanje.'}
               </Text>
             </Flex>
           )}
