@@ -2,12 +2,12 @@
 
 import {
   Box,
-  Button,
   Container,
   Flex,
   HStack,
   Heading,
   Icon,
+  Select,
   SimpleGrid,
   Skeleton,
   Text,
@@ -137,55 +137,36 @@ const Campaigns: NextPage = () => {
                 >
                   Aktivnost
                 </Text>
-                <Flex
-                  w="full"
-                  maxW={{ base: 'full', md: 'lg' }}
-                  gap={2}
-                  wrap={{ base: 'nowrap', md: 'wrap' }}
-                  overflowX={{ base: 'auto', md: 'visible' }}
-                  pb={{ base: 2, md: 0 }}
+                <Select
+                  aria-label="Filtriraj kampanje po aktivnosti"
+                  value={selectedActivity}
+                  onChange={(event) => setSelectedActivity(event.target.value)}
+                  w={{ base: 'full', md: '260px' }}
+                  h="44px"
+                  bg="#111318"
+                  color="white"
+                  borderColor="whiteAlpha.200"
+                  borderRadius="xl"
+                  fontWeight="medium"
+                  _hover={{ borderColor: 'whiteAlpha.400' }}
+                  _focus={{
+                    borderColor: 'green.400',
+                    boxShadow: '0 0 0 1px var(--chakra-colors-green-400)',
+                  }}
                   sx={{
-                    '&::-webkit-scrollbar': {
-                      display: 'none',
+                    '& option': {
+                      bg: '#111318',
+                      color: 'white',
                     },
                   }}
                 >
-                  {[['all', 'Sve aktivnosti'], ...availableActivities].map(
-                    ([activity, label]) => {
-                      const isSelected = selectedActivity === activity
-
-                      return (
-                        <Button
-                          key={activity}
-                          type="button"
-                          size="sm"
-                          minH="36px"
-                          px={4}
-                          borderRadius="full"
-                          flexShrink={0}
-                          whiteSpace="nowrap"
-                          bg={isSelected ? 'green.500' : 'whiteAlpha.50'}
-                          color="white"
-                          border="1px solid"
-                          borderColor={
-                            isSelected ? 'green.400' : 'whiteAlpha.200'
-                          }
-                          fontWeight="semibold"
-                          onClick={() => setSelectedActivity(activity)}
-                          _hover={{
-                            bg: isSelected ? 'green.400' : 'whiteAlpha.100',
-                            borderColor: isSelected
-                              ? 'green.300'
-                              : 'whiteAlpha.400',
-                          }}
-                          _active={{ transform: 'scale(0.97)' }}
-                        >
-                          {label}
-                        </Button>
-                      )
-                    },
-                  )}
-                </Flex>
+                  <option value="all">Sve aktivnosti</option>
+                  {availableActivities.map(([activity, label]) => (
+                    <option key={activity} value={activity}>
+                      {label}
+                    </option>
+                  ))}
+                </Select>
               </VStack>
             )}
           </Flex>
