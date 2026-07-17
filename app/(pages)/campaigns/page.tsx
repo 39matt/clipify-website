@@ -64,7 +64,7 @@ const Campaigns: NextPage = () => {
         })
         const campaigns = (await response.json()) as ICampaign[]
 
-        setCampaignList(campaigns.filter((campaign) => campaign.isActive))
+        setCampaignList(campaigns.filter((campaign) => campaign.isActive).sort((a, b) => b.budget - a.budget))
       } catch (error) {
         console.error(error)
       } finally {
