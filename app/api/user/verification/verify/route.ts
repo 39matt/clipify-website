@@ -24,10 +24,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    console.log(verification.platform);
     const url =
       verification.platform === 'Instagram'
-        ? `https://instagram-looter2.p.rapidapi.com/profile?username=${verification.username}`
+        ? `https://instagram-looter2.p.rapidapi.com/profile2?username=${verification.username}`
         : verification.platform === 'TikTok'
           ? `https://tiktok-api23.p.rapidapi.com/api/user/info?uniqueId=${verification.username}`
           : `https://youtube-media-downloader.p.rapidapi.com/v2/channel/details?channelId=@${verification.username}`
@@ -46,7 +45,6 @@ export async function POST(req: NextRequest) {
     })
 
     const parsedBody = await response.json();
-    console.log(parsedBody);
     let bio: string | null = null;
     if (verification.platform === 'Instagram') {
       bio = parsedBody.biography || null;

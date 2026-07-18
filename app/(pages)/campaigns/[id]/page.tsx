@@ -139,27 +139,6 @@ const Page = () => {
         return;
       }
 
-      const params = new URLSearchParams({
-        campaignId: campaignId!,
-        videoLink: rawVideoUrl,
-      });
-
-      // const existsRes = await fetch(
-      //   `/api/campaign/video/exists?${params.toString()}`,
-      //   {
-      //     method: "GET",
-      //     headers: { "Content-Type": "application/json" },
-      //   }
-      // );
-
-      // if (!existsRes.ok) throw new Error("Failed to validate video");
-      //
-      // const existsData = await existsRes.json();
-      // if (existsData.exists) {
-      //   setMessage("Video je već dodat!");
-      //   return;
-      // }
-
       let accountName = "";
       let videoId = "";
       let video;
