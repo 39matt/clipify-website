@@ -119,11 +119,11 @@ const ConnectedAccounts: NextPage = () => {
       }
 
       const instagramRegex =
-        /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.]+\/?$/;
+        /^https:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9_.-]+\/?$/;
       const tiktokRegex =
-        /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/?$/;
+        /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.-]+\/?$/;
       const youtubeRegex =
-        /^https:\/\/(www\.)?youtube\.com\/@?[a-zA-Z0-9_.]+\/?$/;
+        /^https:\/\/(www\.)?youtube\.com\/@?[a-zA-Z0-9_.-]+\/?$/;
 
       if (
         !instagramRegex.test(accountLink) &&
