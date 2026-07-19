@@ -31,6 +31,7 @@ import {
   FiCheck,
   FiChevronDown,
   FiChevronLeft,
+  FiChevronRight,
   FiClock,
   FiExternalLink,
   FiImage,
@@ -49,10 +50,57 @@ interface UnapprovedVideosProps {
   idToken: string
 }
 
+interface PaginationProps {
+  currentPage: number
+  totalItems: number
+  itemsPerPage: number
+  onPageChange: (page: number) => void
+}
+
+const ITEMS_PER_PAGE = 50
+
+const PaginationControls: React.FC<PaginationProps> = ({
+  currentPage,
+  totalItems,
+  itemsPerPage,
+  onPageChange,
+}) => {
+  const totalPages = Math.ceil(totalItems / itemsPerPage)
+
+  if (totalPages <= 1) return null
+
+  return (
+    <HStack w="full" justify="center" pt={4} pb={2} spacing={2}>
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => onPageChange(currentPage - 1)}
+        isDisabled={currentPage === 1}
+        leftIcon={<FiChevronLeft />}
+      >
+        Prethodna
+      </Button>
+      <Text fontSize="sm" fontWeight="medium" color="gray.600" px={2}>
+        Strana {currentPage} od {totalPages}
+      </Text>
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => onPageChange(currentPage + 1)}
+        isDisabled={currentPage === totalPages}
+        rightIcon={<FiChevronRight />}
+      >
+        Sledeća
+      </Button>
+    </HStack>
+  )
+}
+
 const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
   const pathname = usePathname()
   const router = useRouter()
-  const campaignId = pathname.split('/')[pathname.split('/').length - 2]
+  const segments = pathname.split('/')
+  const campaignId = segments[segments.length - 2]
 
   const [campaign, setCampaign] = useState<ICampaign | null>(null)
   const [videos, setVideos] = useState<IVideo[] | null>(null)
@@ -60,25 +108,28 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
   const [openSection, setOpenSection] = useState<
     'pending' | 'declined' | 'approved' | null
   >('pending')
+
+  const [pendingPage, setPendingPage] = useState(1)
+  const [declinedPage, setDeclinedPage] = useState(1)
+  const [approvedPage, setApprovedPage] = useState(1)
+
   const toast = useToast()
 
-  const bgGradient = useColorModeValue(
-    'linear(to-br, gray.50, white)',
-    'linear(to-br, gray.900, gray.800)',
-  )
   const cardBg = useColorModeValue('white', 'gray.800')
   const userSectionBg = useColorModeValue('blue.50', 'whiteAlpha.50')
+  const tableHeadBg = useColorModeValue('gray.50', 'whiteAlpha.50')
+  const tableRowHoverBg = useColorModeValue('gray.50', 'whiteAlpha.50')
+  const userRowBg = useColorModeValue('gray.100', 'whiteAlpha.100')
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true)
         if (!campaignId) return
-        const response = await fetch(`/api/campaign/get?id=${campaignId}`).then(
-          (res) => res.json(),
-        )
-        setCampaign(response.campaign)
-        setVideos(response.videos as IVideo[])
+        const response = await fetch(`/api/campaign/get?id=${campaignId}`)
+        const data = await response.json()
+        setCampaign(data.campaign)
+        setVideos(data.videos as IVideo[])
       } catch (err) {
         toast({ title: 'Greška pri učitavanju', status: 'error' })
       } finally {
@@ -86,12 +137,55 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
       }
     }
     fetchData()
-  }, [campaignId])
+  }, [campaignId, toast])
 
-  // Grupisanje videa po UID-u (User ID)
-  const groupedVideos = useMemo(() => {
-    const pending = videos?.filter((v) => v.approved == null) || []
-    return pending.reduce(
+  const pendingVideosAll = useMemo(
+    () => videos?.filter((v) => v.approved == null) || [],
+    [videos],
+  )
+  const declinedVideosAll = useMemo(
+    () => videos?.filter((v) => v.approved === false) || [],
+    [videos],
+  )
+  const approvedVideosAll = useMemo(
+    () => videos?.filter((v) => v.approved === true) || [],
+    [videos],
+  )
+
+  useEffect(() => {
+    const maxPending = Math.ceil(pendingVideosAll.length / ITEMS_PER_PAGE) || 1
+    if (pendingPage > maxPending) setPendingPage(maxPending)
+  }, [pendingVideosAll.length, pendingPage])
+
+  useEffect(() => {
+    const maxDeclined =
+      Math.ceil(declinedVideosAll.length / ITEMS_PER_PAGE) || 1
+    if (declinedPage > maxDeclined) setDeclinedPage(maxDeclined)
+  }, [declinedVideosAll.length, declinedPage])
+
+  useEffect(() => {
+    const maxApproved =
+      Math.ceil(approvedVideosAll.length / ITEMS_PER_PAGE) || 1
+    if (approvedPage > maxApproved) setApprovedPage(maxApproved)
+  }, [approvedVideosAll.length, approvedPage])
+
+  const paginatedPending = useMemo(() => {
+    const start = (pendingPage - 1) * ITEMS_PER_PAGE
+    return pendingVideosAll.slice(start, start + ITEMS_PER_PAGE)
+  }, [pendingVideosAll, pendingPage])
+
+  const paginatedDeclined = useMemo(() => {
+    const start = (declinedPage - 1) * ITEMS_PER_PAGE
+    return declinedVideosAll.slice(start, start + ITEMS_PER_PAGE)
+  }, [declinedVideosAll, declinedPage])
+
+  const paginatedApproved = useMemo(() => {
+    const start = (approvedPage - 1) * ITEMS_PER_PAGE
+    return approvedVideosAll.slice(start, start + ITEMS_PER_PAGE)
+  }, [approvedVideosAll, approvedPage])
+
+  const groupedPendingVideos = useMemo(() => {
+    return paginatedPending.reduce(
       (acc, video) => {
         if (!video.uid) return acc
         if (!acc[video.uid]) acc[video.uid] = []
@@ -100,17 +194,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
       },
       {} as Record<string, IVideo[]>,
     )
-  }, [videos])
-
-  const declinedVideos = useMemo(
-    () => videos?.filter((v) => v.approved === false) || [],
-    [videos],
-  )
-
-  const approvedVideos = useMemo(
-    () => videos?.filter((v) => v.approved === true) || [],
-    [videos],
-  )
+  }, [paginatedPending])
 
   const handleAction = async (
     videoId: string,
@@ -142,13 +226,15 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
               : v,
           ) || null,
       )
+
+      const titleMap = {
+        approve: 'Odobreno',
+        deny: 'Odbijeno',
+        reset: 'Vraćeno na pregled',
+      }
+
       toast({
-        title:
-          type === 'approve'
-            ? 'Odobreno'
-            : type === 'deny'
-              ? 'Odbijeno'
-              : 'Vraćeno na pregled',
+        title: titleMap[type],
         status: type === 'approve' ? 'success' : 'info',
         duration: 2000,
         position: 'top-right',
@@ -158,14 +244,15 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
     }
   }
 
-  if (loading)
+  if (loading) {
     return (
       <Center minH="100vh">
         <Spinner size="xl" thickness="4px" color="green.400" />
       </Center>
     )
+  }
 
-  const userEntries = Object.entries(groupedVideos)
+  const userEntries = Object.entries(groupedPendingVideos)
 
   return (
     <Box
@@ -181,7 +268,6 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
         mx="auto"
         align="stretch"
       >
-        {/* Header */}
         <Flex justify="space-between" align="center" wrap="wrap" gap={3}>
           <VStack align="start" spacing={1}>
             <Button
@@ -211,22 +297,21 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
             gap={2}
           >
             <Icon as={FiClock} />
-            <Text fontWeight="bold">
-              {userEntries.reduce((sum, [_, v]) => sum + v.length, 0)} NA
-              ČEKANJU
-            </Text>
+            <Text fontWeight="bold">{pendingVideosAll.length} NA ČEKANJU</Text>
           </Badge>
         </Flex>
 
         <VStack spacing={4} w="full" align="stretch">
           <Box
             border="1px solid"
-            borderColor="gray.500"
+            borderColor="gray.200"
             borderRadius="xl"
             overflow="hidden"
             mb={4}
             py={4}
             w="full"
+            bg={cardBg}
+            shadow="sm"
           >
             <Button
               variant="unstyled"
@@ -234,7 +319,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
               display="flex"
               alignItems="center"
               px={5}
-              py={4}
+              py={2}
               onClick={() =>
                 setOpenSection((section) =>
                   section === 'pending' ? null : 'pending',
@@ -247,11 +332,15 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                   Pregledajte i odobrite ili odbijte nove video snimke.
                 </Text>
               </Box>
-              <Badge colorScheme="orange" mr={3}>
-                {userEntries.reduce(
-                  (sum, [_, videos]) => sum + videos.length,
-                  0,
-                )}
+              <Badge
+                colorScheme="orange"
+                mr={3}
+                fontSize="sm"
+                px={2}
+                py={1}
+                borderRadius="md"
+              >
+                {pendingVideosAll.length}
               </Badge>
               <Icon
                 as={FiChevronDown}
@@ -261,9 +350,10 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                 transition="transform 0.2s"
               />
             </Button>
+
             {openSection === 'pending' && (
               <Box w="full" px={4} pt={4} pb={4}>
-                {userEntries.length === 0 ? (
+                {pendingVideosAll.length === 0 ? (
                   <Center
                     py={20}
                     bg={cardBg}
@@ -280,11 +370,9 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                   </Center>
                 ) : (
                   <>
-                    {/* --- MOBILE VIEW: GROUPED BY USER --- */}
                     <VStack display={{ base: 'flex', md: 'none' }} spacing={6}>
                       {userEntries.map(([uid, userVideos]) => (
                         <Box key={uid} w="full">
-                          {/* User Section Header */}
                           <HStack
                             bg={userSectionBg}
                             p={3}
@@ -314,7 +402,6 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                             </Badge>
                           </HStack>
 
-                          {/* Videos for this user */}
                           <VStack spacing={4}>
                             {userVideos.map((video) => (
                               <Box
@@ -323,7 +410,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                                 w="full"
                                 p={4}
                                 borderRadius="2xl"
-                                shadow="md"
+                                shadow="sm"
                                 borderWidth="1px"
                               >
                                 <HStack spacing={4} align="start" mb={4}>
@@ -408,11 +495,10 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                       ))}
                     </VStack>
 
-                    {/* --- DESKTOP VIEW: TABLE (GROUPED) --- */}
                     <Box
                       display={{ base: 'none', md: 'block' }}
                       bg={cardBg}
-                      shadow="xl"
+                      shadow="sm"
                       borderRadius="2xl"
                       overflow="hidden"
                       borderWidth="1px"
@@ -422,9 +508,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                           variant="simple"
                           style={{ tableLayout: 'fixed' }}
                         >
-                          <Thead
-                            bg={useColorModeValue('gray.50', 'whiteAlpha.50')}
-                          >
+                          <Thead bg={tableHeadBg}>
                             <Tr>
                               <Th w="100px">Preview</Th>
                               <Th>Korisnik / Video</Th>
@@ -437,13 +521,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                           <Tbody>
                             {userEntries.map(([uid, userVideos]) => (
                               <React.Fragment key={uid}>
-                                {/* User Header Row */}
-                                <Tr
-                                  bg={useColorModeValue(
-                                    'gray.100',
-                                    'whiteAlpha.100',
-                                  )}
-                                >
+                                <Tr bg={userRowBg}>
                                   <Td colSpan={4} py={2}>
                                     <HStack spacing={3}>
                                       <Icon as={FiUser} color="blue.400" />
@@ -459,16 +537,10 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                                     </HStack>
                                   </Td>
                                 </Tr>
-                                {/* Individual Video Rows */}
                                 {userVideos.map((video) => (
                                   <Tr
                                     key={video.id}
-                                    _hover={{
-                                      bg: useColorModeValue(
-                                        'gray.50',
-                                        'whiteAlpha.50',
-                                      ),
-                                    }}
+                                    _hover={{ bg: tableRowHoverBg }}
                                   >
                                     <Td>
                                       <Box
@@ -556,6 +628,12 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                         </Table>
                       </TableContainer>
                     </Box>
+                    <PaginationControls
+                      currentPage={pendingPage}
+                      totalItems={pendingVideosAll.length}
+                      itemsPerPage={ITEMS_PER_PAGE}
+                      onPageChange={setPendingPage}
+                    />
                   </>
                 )}
               </Box>
@@ -564,12 +642,14 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
 
           <Box
             border="1px solid"
-            borderColor="gray.500"
+            borderColor="gray.200"
             borderRadius="xl"
             overflow="hidden"
             mb={4}
             py={4}
             w="full"
+            bg={cardBg}
+            shadow="sm"
           >
             <Button
               variant="unstyled"
@@ -577,7 +657,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
               display="flex"
               alignItems="center"
               px={5}
-              py={4}
+              py={2}
               onClick={() =>
                 setOpenSection((section) =>
                   section === 'declined' ? null : 'declined',
@@ -590,8 +670,15 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                   Ponovo odobrite video ako je slučajno odbijen.
                 </Text>
               </Box>
-              <Badge colorScheme="red" mr={3}>
-                {declinedVideos.length}
+              <Badge
+                colorScheme="red"
+                mr={3}
+                fontSize="sm"
+                px={2}
+                py={1}
+                borderRadius="md"
+              >
+                {declinedVideosAll.length}
               </Badge>
               <Icon
                 as={FiChevronDown}
@@ -601,219 +688,203 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                 transition="transform 0.2s"
               />
             </Button>
+
             {openSection === 'declined' && (
               <Box w="full" px={4} pt={4} pb={4}>
-                <Box>
-                  <Flex
-                    justify="space-between"
-                    align="center"
-                    wrap="wrap"
-                    gap={3}
-                    mb={4}
+                {declinedVideosAll.length === 0 ? (
+                  <Center
+                    py={12}
+                    bg={cardBg}
+                    borderRadius="2xl"
+                    borderWidth="1px"
                   >
-                    <Text fontSize="sm" color="gray.500">
-                      Video snimci koje ste prethodno odbili.
-                    </Text>
-                  </Flex>
+                    <Text color="gray.500">Nema odbijenih video snimaka.</Text>
+                  </Center>
+                ) : (
+                  <>
+                    <VStack display={{ base: 'flex', md: 'none' }} spacing={4}>
+                      {paginatedDeclined.map((video) => (
+                        <Box
+                          key={video.id}
+                          bg={cardBg}
+                          w="full"
+                          p={4}
+                          borderRadius="2xl"
+                          shadow="sm"
+                          borderWidth="1px"
+                        >
+                          <HStack spacing={4} align="start" mb={4}>
+                            <Box
+                              w="80px"
+                              h="110px"
+                              borderRadius="xl"
+                              overflow="hidden"
+                              bg="gray.100"
+                              flexShrink={0}
+                            >
+                              <Image
+                                src={video.coverUrl}
+                                objectFit="cover"
+                                w="full"
+                                h="full"
+                                fallback={
+                                  <Center h="full">
+                                    <Icon as={FiImage} color="gray.300" />
+                                  </Center>
+                                }
+                              />
+                            </Box>
+                            <VStack align="start" spacing={1} flex={1}>
+                              <Text
+                                fontSize="xs"
+                                fontWeight="bold"
+                                noOfLines={2}
+                              >
+                                {video.name || 'Bez naslova'}
+                              </Text>
+                              <Text fontSize="xs" color="gray.500">
+                                {video.accountName || 'Korisnik'}
+                              </Text>
+                              <Link
+                                href={video.link}
+                                isExternal
+                                color="blue.500"
+                                fontSize="xs"
+                                fontWeight="bold"
+                              >
+                                Otvori video <Icon as={FiExternalLink} ml={1} />
+                              </Link>
+                            </VStack>
+                          </HStack>
+                          <Button
+                            leftIcon={<FiCheck />}
+                            colorScheme="green"
+                            w="full"
+                            onClick={() => handleAction(video.id!, 'approve')}
+                          >
+                            Ponovo odobri
+                          </Button>
+                        </Box>
+                      ))}
+                    </VStack>
 
-                  {declinedVideos.length === 0 ? (
-                    <Center
-                      py={12}
+                    <Box
+                      display={{ base: 'none', md: 'block' }}
                       bg={cardBg}
+                      shadow="sm"
                       borderRadius="2xl"
+                      overflow="hidden"
                       borderWidth="1px"
                     >
-                      <Text color="gray.500">
-                        Nema odbijenih video snimaka.
-                      </Text>
-                    </Center>
-                  ) : (
-                    <>
-                      <VStack
-                        display={{ base: 'flex', md: 'none' }}
-                        spacing={4}
-                      >
-                        {declinedVideos.map((video) => (
-                          <Box
-                            key={video.id}
-                            bg={cardBg}
-                            w="full"
-                            p={4}
-                            borderRadius="2xl"
-                            shadow="md"
-                            borderWidth="1px"
-                          >
-                            <HStack spacing={4} align="start" mb={4}>
-                              <Box
-                                w="80px"
-                                h="110px"
-                                borderRadius="xl"
-                                overflow="hidden"
-                                bg="gray.100"
-                                flexShrink={0}
-                              >
-                                <Image
-                                  src={video.coverUrl}
-                                  objectFit="cover"
-                                  w="full"
-                                  h="full"
-                                  fallback={
-                                    <Center h="full">
-                                      <Icon as={FiImage} color="gray.300" />
-                                    </Center>
-                                  }
-                                />
-                              </Box>
-                              <VStack align="start" spacing={1} flex={1}>
-                                <Text
-                                  fontSize="xs"
-                                  fontWeight="bold"
-                                  noOfLines={2}
-                                >
-                                  {video.name || 'Bez naslova'}
-                                </Text>
-                                <Text fontSize="xs" color="gray.500">
-                                  {video.accountName || 'Korisnik'}
-                                </Text>
-                                <Link
-                                  href={video.link}
-                                  isExternal
-                                  color="blue.500"
-                                  fontSize="xs"
-                                  fontWeight="bold"
-                                >
-                                  Otvori video{' '}
-                                  <Icon as={FiExternalLink} ml={1} />
-                                </Link>
-                              </VStack>
-                            </HStack>
-                            <Button
-                              leftIcon={<FiCheck />}
-                              colorScheme="green"
-                              w="full"
-                              onClick={() => handleAction(video.id!, 'approve')}
-                            >
-                              Ponovo odobri
-                            </Button>
-                          </Box>
-                        ))}
-                      </VStack>
-
-                      <Box
-                        display={{ base: 'none', md: 'block' }}
-                        bg={cardBg}
-                        shadow="xl"
-                        borderRadius="2xl"
-                        overflow="hidden"
-                        borderWidth="1px"
-                      >
-                        <TableContainer>
-                          <Table
-                            variant="simple"
-                            style={{ tableLayout: 'fixed' }}
-                          >
-                            <Thead
-                              bg={useColorModeValue('gray.50', 'whiteAlpha.50')}
-                            >
-                              <Tr>
-                                <Th w="100px">Preview</Th>
-                                <Th>Korisnik / Video</Th>
-                                <Th w="130px">Datum</Th>
-                                <Th w="180px" textAlign="center">
-                                  Akcija
-                                </Th>
-                              </Tr>
-                            </Thead>
-                            <Tbody>
-                              {declinedVideos.map((video) => (
-                                <Tr key={video.id}>
-                                  <Td>
-                                    <Box
-                                      w="64px"
-                                      h="84px"
-                                      borderRadius="lg"
-                                      overflow="hidden"
-                                      bg="gray.200"
-                                      borderWidth="1px"
-                                    >
-                                      <Image
-                                        src={video.coverUrl}
-                                        objectFit="cover"
-                                        w="full"
-                                        h="full"
-                                        fallback={
-                                          <Center h="full">
-                                            <Icon
-                                              as={FiImage}
-                                              color="gray.400"
-                                            />
-                                          </Center>
-                                        }
-                                      />
-                                    </Box>
-                                  </Td>
-                                  <Td>
-                                    <VStack align="start" spacing={0}>
-                                      <Text
-                                        fontWeight="bold"
-                                        fontSize="sm"
-                                        noOfLines={2}
-                                        wordBreak="break-word"
-                                      >
-                                        {video.name || 'Bez naslova'}
-                                      </Text>
-                                      <Text fontSize="xs" color="gray.500">
-                                        {video.accountName || 'Korisnik'}
-                                      </Text>
-                                      <Link
-                                        href={video.link}
-                                        isExternal
-                                        color="blue.400"
-                                        fontSize="xs"
-                                        fontWeight="bold"
-                                      >
-                                        Link <Icon as={FiExternalLink} />
-                                      </Link>
-                                    </VStack>
-                                  </Td>
-                                  <Td fontSize="sm" color="gray.500">
-                                    {new Date(
-                                      video.createdAt,
-                                    ).toLocaleDateString('sr-RS')}
-                                  </Td>
-                                  <Td>
-                                    <Button
-                                      size="sm"
-                                      colorScheme="green"
-                                      leftIcon={<FiCheck />}
-                                      w="150px"
-                                      onClick={() =>
-                                        handleAction(video.id!, 'approve')
+                      <TableContainer>
+                        <Table
+                          variant="simple"
+                          style={{ tableLayout: 'fixed' }}
+                        >
+                          <Thead bg={tableHeadBg}>
+                            <Tr>
+                              <Th w="100px">Preview</Th>
+                              <Th>Korisnik / Video</Th>
+                              <Th w="130px">Datum</Th>
+                              <Th w="180px" textAlign="center">
+                                Akcija
+                              </Th>
+                            </Tr>
+                          </Thead>
+                          <Tbody>
+                            {paginatedDeclined.map((video) => (
+                              <Tr key={video.id}>
+                                <Td>
+                                  <Box
+                                    w="64px"
+                                    h="84px"
+                                    borderRadius="lg"
+                                    overflow="hidden"
+                                    bg="gray.200"
+                                    borderWidth="1px"
+                                  >
+                                    <Image
+                                      src={video.coverUrl}
+                                      objectFit="cover"
+                                      w="full"
+                                      h="full"
+                                      fallback={
+                                        <Center h="full">
+                                          <Icon as={FiImage} color="gray.400" />
+                                        </Center>
                                       }
+                                    />
+                                  </Box>
+                                </Td>
+                                <Td>
+                                  <VStack align="start" spacing={0}>
+                                    <Text
+                                      fontWeight="bold"
+                                      fontSize="sm"
+                                      noOfLines={2}
+                                      wordBreak="break-word"
                                     >
-                                      Ponovo odobri
-                                    </Button>
-                                  </Td>
-                                </Tr>
-                              ))}
-                            </Tbody>
-                          </Table>
-                        </TableContainer>
-                      </Box>
-                    </>
-                  )}
-                </Box>
+                                      {video.name || 'Bez naslova'}
+                                    </Text>
+                                    <Text fontSize="xs" color="gray.500">
+                                      {video.accountName || 'Korisnik'}
+                                    </Text>
+                                    <Link
+                                      href={video.link}
+                                      isExternal
+                                      color="blue.400"
+                                      fontSize="xs"
+                                      fontWeight="bold"
+                                    >
+                                      Link <Icon as={FiExternalLink} />
+                                    </Link>
+                                  </VStack>
+                                </Td>
+                                <Td fontSize="sm" color="gray.500">
+                                  {new Date(video.createdAt).toLocaleDateString(
+                                    'sr-RS',
+                                  )}
+                                </Td>
+                                <Td>
+                                  <Button
+                                    size="sm"
+                                    colorScheme="green"
+                                    leftIcon={<FiCheck />}
+                                    w="150px"
+                                    onClick={() =>
+                                      handleAction(video.id!, 'approve')
+                                    }
+                                  >
+                                    Ponovo odobri
+                                  </Button>
+                                </Td>
+                              </Tr>
+                            ))}
+                          </Tbody>
+                        </Table>
+                      </TableContainer>
+                    </Box>
+                    <PaginationControls
+                      currentPage={declinedPage}
+                      totalItems={declinedVideosAll.length}
+                      itemsPerPage={ITEMS_PER_PAGE}
+                      onPageChange={setDeclinedPage}
+                    />
+                  </>
+                )}
               </Box>
             )}
           </Box>
 
           <Box
             border="1px solid"
-            borderColor="gray.500"
+            borderColor="gray.200"
             borderRadius="xl"
             overflow="hidden"
             w="full"
             py={4}
+            bg={cardBg}
+            shadow="sm"
           >
             <Button
               variant="unstyled"
@@ -821,7 +892,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
               display="flex"
               alignItems="center"
               px={5}
-              py={4}
+              py={2}
               onClick={() =>
                 setOpenSection((section) =>
                   section === 'approved' ? null : 'approved',
@@ -834,8 +905,15 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                   Vratite slučajno odobren video na pregled.
                 </Text>
               </Box>
-              <Badge colorScheme="green" mr={3}>
-                {approvedVideos.length}
+              <Badge
+                colorScheme="green"
+                mr={3}
+                fontSize="sm"
+                px={2}
+                py={1}
+                borderRadius="md"
+              >
+                {approvedVideosAll.length}
               </Badge>
               <Icon
                 as={FiChevronDown}
@@ -845,9 +923,10 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                 transition="transform 0.2s"
               />
             </Button>
+
             {openSection === 'approved' && (
               <Box w="full" px={4} pt={4} pb={4}>
-                {approvedVideos.length === 0 ? (
+                {approvedVideosAll.length === 0 ? (
                   <Center
                     py={12}
                     bg={cardBg}
@@ -859,7 +938,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                 ) : (
                   <>
                     <VStack display={{ base: 'flex', md: 'none' }} spacing={4}>
-                      {approvedVideos.map((video) => (
+                      {paginatedApproved.map((video) => (
                         <Box
                           key={video.id}
                           bg={cardBg}
@@ -867,6 +946,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                           p={4}
                           borderRadius="2xl"
                           borderWidth="1px"
+                          shadow="sm"
                         >
                           <Text
                             fontWeight="bold"
@@ -902,10 +982,11 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                         </Box>
                       ))}
                     </VStack>
+
                     <Box
                       display={{ base: 'none', md: 'block' }}
                       bg={cardBg}
-                      shadow="xl"
+                      shadow="sm"
                       borderRadius="2xl"
                       overflow="hidden"
                       borderWidth="1px"
@@ -915,9 +996,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                           variant="simple"
                           style={{ tableLayout: 'fixed' }}
                         >
-                          <Thead
-                            bg={useColorModeValue('gray.50', 'whiteAlpha.50')}
-                          >
+                          <Thead bg={tableHeadBg}>
                             <Tr>
                               <Th>Korisnik / Video</Th>
                               <Th w="130px">Datum</Th>
@@ -927,7 +1006,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                             </Tr>
                           </Thead>
                           <Tbody>
-                            {approvedVideos.map((video) => (
+                            {paginatedApproved.map((video) => (
                               <Tr key={video.id}>
                                 <Td>
                                   <VStack align="start" spacing={0}>
@@ -978,6 +1057,12 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                         </Table>
                       </TableContainer>
                     </Box>
+                    <PaginationControls
+                      currentPage={approvedPage}
+                      totalItems={approvedVideosAll.length}
+                      itemsPerPage={ITEMS_PER_PAGE}
+                      onPageChange={setApprovedPage}
+                    />
                   </>
                 )}
               </Box>
