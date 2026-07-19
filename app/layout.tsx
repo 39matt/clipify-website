@@ -15,7 +15,11 @@ export default function Layout(props: { children: React.ReactNode }) {
   const colorMode = 'dark'
 
   return (
-    <html lang="en" data-theme={colorMode} style={{ colorScheme: colorMode }}>
+    <html
+      lang="en"
+      data-theme={colorMode}
+      style={{ colorScheme: colorMode, scrollbarGutter: 'stable' }}
+    >
       <head>
         <title>Clipify</title>
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
@@ -47,7 +51,7 @@ export default function Layout(props: { children: React.ReactNode }) {
         </noscript>
         {/* End Meta Pixel Code */}
       </head>
-      <body className={`chakra-ui-${colorMode}`}>
+      <body className={`chakra-ui-${colorMode}`} style={{ overflowY: 'scroll' }}>
         <ColorModeScript initialColorMode={colorMode} />
         <PixelTracker/>
         <SpeedInsights />
