@@ -619,12 +619,6 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                         </Table>
                       </TableContainer>
                     </Box>
-                    <PaginationControls
-                      currentPage={pendingPage}
-                      totalItems={pendingVideosAll.length}
-                      itemsPerPage={ITEMS_PER_PAGE}
-                      onPageChange={setPendingPage}
-                    />
                   </>
                 )}
               </Box>
