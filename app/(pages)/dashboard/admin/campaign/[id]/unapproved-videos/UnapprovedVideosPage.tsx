@@ -153,7 +153,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
   )
 
   useEffect(() => {
-    const maxPending = Math.ceil(pendingVideosAll.length / ITEMS_PER_PAGE) || 1
+    const maxPending = Math.ceil(pendingVideosAll.length) || 1
     if (pendingPage > maxPending) setPendingPage(maxPending)
   }, [pendingVideosAll.length, pendingPage])
 
@@ -163,16 +163,8 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
     if (declinedPage > maxDeclined) setDeclinedPage(maxDeclined)
   }, [declinedVideosAll.length, declinedPage])
 
-  useEffect(() => {
-    const maxApproved =
-      Math.ceil(approvedVideosAll.length / ITEMS_PER_PAGE) || 1
-    if (approvedPage > maxApproved) setApprovedPage(maxApproved)
-  }, [approvedVideosAll.length, approvedPage])
 
-  const paginatedPending = useMemo(() => {
-    const start = (pendingPage - 1) * ITEMS_PER_PAGE
-    return pendingVideosAll.slice(start, start + ITEMS_PER_PAGE)
-  }, [pendingVideosAll, pendingPage])
+
 
   const paginatedDeclined = useMemo(() => {
     const start = (declinedPage - 1) * ITEMS_PER_PAGE
@@ -185,7 +177,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
   }, [approvedVideosAll, approvedPage])
 
   const groupedPendingVideos = useMemo(() => {
-    return paginatedPending.reduce(
+    return pendingVideosAll.reduce(
       (acc, video) => {
         if (!video.uid) return acc
         if (!acc[video.uid]) acc[video.uid] = []
@@ -194,7 +186,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
       },
       {} as Record<string, IVideo[]>,
     )
-  }, [paginatedPending])
+  }, [pendingVideosAll])
 
   const handleAction = async (
     videoId: string,
@@ -530,8 +522,7 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                                         fontSize="xs"
                                         color="gray.600"
                                       >
-                                        KORISNIK:{' '}
-                                        {userVideos[0]?.accountName || uid} (
+                                        {uid} (
                                         {userVideos.length} videa)
                                       </Text>
                                     </HStack>
@@ -869,199 +860,6 @@ const UnapprovedVideos: React.FC<UnapprovedVideosProps> = ({ idToken }) => {
                       totalItems={declinedVideosAll.length}
                       itemsPerPage={ITEMS_PER_PAGE}
                       onPageChange={setDeclinedPage}
-                    />
-                  </>
-                )}
-              </Box>
-            )}
-          </Box>
-
-          <Box
-            border="1px solid"
-            borderColor="gray.200"
-            borderRadius="xl"
-            overflow="hidden"
-            w="full"
-            py={4}
-            bg={cardBg}
-            shadow="sm"
-          >
-            <Button
-              variant="unstyled"
-              w="full"
-              display="flex"
-              alignItems="center"
-              px={5}
-              py={2}
-              onClick={() =>
-                setOpenSection((section) =>
-                  section === 'approved' ? null : 'approved',
-                )
-              }
-            >
-              <Box flex="1" textAlign="left">
-                <Heading size="md">Odobreni video snimci</Heading>
-                <Text fontSize="sm" color="gray.500">
-                  Vratite slučajno odobren video na pregled.
-                </Text>
-              </Box>
-              <Badge
-                colorScheme="green"
-                mr={3}
-                fontSize="sm"
-                px={2}
-                py={1}
-                borderRadius="md"
-              >
-                {approvedVideosAll.length}
-              </Badge>
-              <Icon
-                as={FiChevronDown}
-                transform={
-                  openSection === 'approved' ? 'rotate(180deg)' : undefined
-                }
-                transition="transform 0.2s"
-              />
-            </Button>
-
-            {openSection === 'approved' && (
-              <Box w="full" px={4} pt={4} pb={4}>
-                {approvedVideosAll.length === 0 ? (
-                  <Center
-                    py={12}
-                    bg={cardBg}
-                    borderRadius="2xl"
-                    borderWidth="1px"
-                  >
-                    <Text color="gray.500">Nema odobrenih video snimaka.</Text>
-                  </Center>
-                ) : (
-                  <>
-                    <VStack display={{ base: 'flex', md: 'none' }} spacing={4}>
-                      {paginatedApproved.map((video) => (
-                        <Box
-                          key={video.id}
-                          bg={cardBg}
-                          w="full"
-                          p={4}
-                          borderRadius="2xl"
-                          borderWidth="1px"
-                          shadow="sm"
-                        >
-                          <Text
-                            fontWeight="bold"
-                            noOfLines={2}
-                            wordBreak="break-word"
-                          >
-                            {video.name || 'Bez naslova'}
-                          </Text>
-                          <Text fontSize="xs" color="gray.500" mt={1}>
-                            {video.accountName || 'Korisnik'}
-                          </Text>
-                          <Link
-                            href={video.link}
-                            isExternal
-                            color="blue.500"
-                            fontSize="xs"
-                            fontWeight="bold"
-                            display="block"
-                            mt={2}
-                          >
-                            Otvori video <Icon as={FiExternalLink} ml={1} />
-                          </Link>
-                          <Button
-                            mt={4}
-                            leftIcon={<FiClock />}
-                            colorScheme="orange"
-                            variant="outline"
-                            w="full"
-                            onClick={() => handleAction(video.id!, 'reset')}
-                          >
-                            Vrati na pregled
-                          </Button>
-                        </Box>
-                      ))}
-                    </VStack>
-
-                    <Box
-                      display={{ base: 'none', md: 'block' }}
-                      bg={cardBg}
-                      shadow="sm"
-                      borderRadius="2xl"
-                      overflow="hidden"
-                      borderWidth="1px"
-                    >
-                      <TableContainer>
-                        <Table
-                          variant="simple"
-                          style={{ tableLayout: 'fixed' }}
-                        >
-                          <Thead bg={tableHeadBg}>
-                            <Tr>
-                              <Th>Korisnik / Video</Th>
-                              <Th w="130px">Datum</Th>
-                              <Th w="190px" textAlign="center">
-                                Akcija
-                              </Th>
-                            </Tr>
-                          </Thead>
-                          <Tbody>
-                            {paginatedApproved.map((video) => (
-                              <Tr key={video.id}>
-                                <Td>
-                                  <VStack align="start" spacing={0}>
-                                    <Text
-                                      fontWeight="bold"
-                                      fontSize="sm"
-                                      noOfLines={2}
-                                      wordBreak="break-word"
-                                    >
-                                      {video.name || 'Bez naslova'}
-                                    </Text>
-                                    <Text fontSize="xs" color="gray.500">
-                                      {video.accountName || 'Korisnik'}
-                                    </Text>
-                                    <Link
-                                      href={video.link}
-                                      isExternal
-                                      color="blue.400"
-                                      fontSize="xs"
-                                      fontWeight="bold"
-                                    >
-                                      Link <Icon as={FiExternalLink} />
-                                    </Link>
-                                  </VStack>
-                                </Td>
-                                <Td fontSize="sm" color="gray.500">
-                                  {new Date(video.createdAt).toLocaleDateString(
-                                    'sr-RS',
-                                  )}
-                                </Td>
-                                <Td>
-                                  <Button
-                                    size="sm"
-                                    colorScheme="orange"
-                                    variant="outline"
-                                    leftIcon={<FiClock />}
-                                    w="170px"
-                                    onClick={() =>
-                                      handleAction(video.id!, 'reset')
-                                    }
-                                  >
-                                    Vrati na pregled
-                                  </Button>
-                                </Td>
-                              </Tr>
-                            ))}
-                          </Tbody>
-                        </Table>
-                      </TableContainer>
-                    </Box>
-                    <PaginationControls
-                      currentPage={approvedPage}
-                      totalItems={approvedVideosAll.length}
-                      itemsPerPage={ITEMS_PER_PAGE}
-                      onPageChange={setApprovedPage}
                     />
                   </>
                 )}
