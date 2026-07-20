@@ -105,129 +105,145 @@ const Page = () => {
 
   const handleAddVideo = async () => {
     if (!videoUrl.trim()) {
-      setMessage("Molimo unesite URL videa.");
-      return;
+      setMessage('Molimo unesite URL videa.')
+      return
     }
 
     try {
-      setAddingVideo(true);
-      setMessage("");
+      setAddingVideo(true)
+      setMessage('')
 
-      let rawVideoUrl = videoUrl.split("?")[0];
+      let rawVideoUrl = videoUrl.split('?')[0]
 
       const instagramReelRegex =
-        /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[a-zA-Z0-9_-]+\/?$/;
+        /^https:\/\/(www\.)?instagram\.com\/(reel|reels|p)\/[a-zA-Z0-9_-]+\/?$/
       const tiktokDesktopRegex =
         /^https:\/\/(www\.)?tiktok\.com\/@?[a-zA-Z0-9_.]+\/(?:video|photo)\/[0-9]+\/?$/
       const tiktokMobileRegex =
-        /^https:\/\/[A-Za-z][A-Za-z]\.tiktok\.com\/[A-Za-z0-9]+\/?$/;
+        /^https:\/\/[A-Za-z][A-Za-z]\.tiktok\.com\/[A-Za-z0-9]+\/?$/
       const youtubeShortsRegex =
-        /^https:\/\/(www\.)?youtube\.com\/shorts\/[a-zA-Z0-9_-]+\/?(\?.*)?$/;
+        /^https:\/\/(www\.)?youtube\.com\/shorts\/[a-zA-Z0-9_-]+\/?(\?.*)?$/
 
-      let platform: string;
+      let platform: string
       if (instagramReelRegex.test(rawVideoUrl)) {
-        platform = "Instagram";
+        platform = 'Instagram'
       } else if (
         tiktokDesktopRegex.test(rawVideoUrl) ||
         tiktokMobileRegex.test(rawVideoUrl)
       ) {
-        platform = "TikTok";
+        platform = 'TikTok'
       } else if (youtubeShortsRegex.test(rawVideoUrl)) {
-        platform = "YouTube";
+        platform = 'YouTube'
       } else {
-        setMessage("Molimo vas unesite validan Instagram/TikTok/YouTube video URL.");
-        return;
+        setMessage(
+          'Molimo vas unesite validan Instagram/TikTok/YouTube video URL.',
+        )
+        return
       }
 
-      let accountName = "";
-      let videoId = "";
-      let video;
+      let accountName = ''
+      let videoId = ''
+      let video
 
-      if (platform === "TikTok") {
-        let finalUrl = rawVideoUrl;
+      if (platform === 'TikTok') {
+        let finalUrl = rawVideoUrl
 
         if (tiktokMobileRegex.test(rawVideoUrl)) {
           const res = await fetch(
-            `/api/resolve-tiktok?url=${encodeURIComponent(rawVideoUrl)}`
-          );
+            `/api/resolve-tiktok?url=${encodeURIComponent(rawVideoUrl)}`,
+          )
           if (!res.ok) {
-            setMessage("Greška pri pribavljanju videa!");
-            return;
+            setMessage('Greška pri pribavljanju videa!')
+            return
           }
-          const data = await res.json();
-          finalUrl = data.finalUrl;
+          const data = await res.json()
+          finalUrl = data.finalUrl
         }
 
         const match = finalUrl.match(
-          /tiktok\.com\/@([^\/]+)\/(?:video|photo)\/(\d+)/
-        );
+          /tiktok\.com\/@([^\/]+)\/(?:video|photo)\/(\d+)/,
+        )
         if (!match) {
-          setMessage("Format linka je pogrešan!");
-          return;
+          setMessage('Format linka je pogrešan!')
+          return
         }
 
-        accountName = match[1];
-        videoId = match[2];
+        accountName = match[1]
+        videoId = match[2]
 
         const accExists = await userAccountExists(
           discordUsername!,
           accountName,
-          "TikTok"
-        );
+          'TikTok',
+        )
         if (!accExists) {
-          setMessage("Nalog mora biti vaš!");
-          return;
+          setMessage('Nalog mora biti vaš!')
+          return
         }
 
-        const response = await fetch("/api/campaign/video/get-info", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            platform: "TikTok",
+            platform: 'TikTok',
             videoId,
             api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
           }),
-        });
+        })
 
-        const responseJson = await response.json();
-        video = responseJson.videoInfo;
+        const responseJson = await response.json()
+
+        if (!response.ok) {
+          setMessage(
+              'Greška API-ja pri pribavljanju videa, pokušajte ponovo malo kasnije. Kontaktirajte support na Discord-u ukoliko se greška nastavi.',
+          )
+          return
+        }
+
+        video = responseJson.videoInfo
       }
 
-      if (platform === "Instagram") {
-        const response = await fetch("/api/campaign/video/get-info", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
+      if (platform === 'Instagram') {
+        const response = await fetch('/api/campaign/video/get-info', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            platform: "Instagram",
+            platform: 'Instagram',
             videoUrl: rawVideoUrl,
             api_key: process.env.NEXT_PUBLIC_RAPIDAPI_KEY!,
           }),
-        });
+        })
 
-        const responseJson = await response.json();
-        video = responseJson.videoInfo;
+        const responseJson = await response.json()
 
-        if (!video) {
-          setMessage("Greška pri pribavljanju videa!");
-          return;
+        if (!response.ok) {
+          setMessage(
+              'Greška API-ja pri pribavljanju videa, pokušajte ponovo malo kasnije. Kontaktirajte support na Discord-u ukoliko se greška nastavi.',
+          )
+          return
         }
 
-        accountName = video.accountName;
+        video = responseJson.videoInfo
 
-        // Check account ownership
+        if (!video) {
+          setMessage('Video nije pronađen!')
+          return
+        }
+
+        accountName = video.accountName
+
         const accExists = await userAccountExists(
           discordUsername!,
           accountName,
-          "Instagram"
-        );
+          'Instagram',
+        )
         if (!accExists) {
-          setMessage("Nalog mora biti vaš!");
-          return;
+          setMessage('Nalog mora biti vaš!')
+          return
         }
       }
 
-      if (platform === "YouTube") {
-
+      if (platform === 'YouTube') {
         const response = await fetch('/api/campaign/video/get-info', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
@@ -240,77 +256,94 @@ const Page = () => {
         })
 
         const responseJson = await response.json()
-        video = responseJson.videoInfo;
+
+        if (!response.ok) {
+          setMessage(
+            'Greška API-ja pri pribavljanju videa, pokušajte ponovo malo kasnije. Kontaktirajte support na Discord-u ukoliko se greška nastavi.',
+          )
+          return
+        }
+
+        video = responseJson.videoInfo
 
         const accExists = await userAccountExists(
           discordUsername!,
           video.accountName,
-          "YouTube"
-        );
+          'YouTube',
+        )
 
         if (!accExists) {
-          setMessage("Nalog mora biti vaš!");
-          return;
+          setMessage('Nalog mora biti vaš!')
+          return
         }
       }
-      // Validate video age
+
       if (!video) {
-        setMessage("Greška pri pribavljanju videa");
-        return;
+        setMessage('Greška pri pribavljanju videa - video ne postoji.')
+        return
       }
 
-      const createdAt = new Date(video.createdAt);
-      const currentTime = new Date();
+      const createdAt = new Date(video.createdAt)
+      const currentTime = new Date()
       if (
         currentTime.getTime() - createdAt.getTime() >
         videoAgeInHours * 60 * 60 * 1000
       ) {
-        setMessage(`Video je stariji od ${videoAgeInHours}h`);
-        return;
+        setMessage(`Video je stariji od ${videoAgeInHours}h`)
+        return
       }
 
-      const addRes = await fetch("/api/campaign/video/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const addRes = await fetch('/api/campaign/video/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           video,
           campaignId,
           accId: video.accountName,
           uid: discordUsername,
         }),
-      });
-      const addResJson = await addRes.json();
-      if(!addRes.ok && addResJson["error"] == 'Video already exists') {
-        setMessage("Video je već dodat!");
-        return;
-      }
+      })
 
-      if (addRes.ok) {
-        setMessage("Video je uspešno dodat!");
-        setVideoUrl("");
+      const addResJson = await addRes.json()
 
-        const videosResponse = await fetch(
-          `/api/campaign/get-user-videos?campaignId=${campaignId}&userId=${discordUsername}`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-
-        if (videosResponse.ok) {
-          const data = await videosResponse.json();
-          const videos = Array.isArray(data) ? data : data.videos || [];
-          setUserVideos(videos);
+      if (!addRes.ok) {
+        if (addResJson.error === 'Video already exists') {
+          setMessage('Video je već dodat u kampanju!')
+        } else {
+          setMessage(
+            addResJson.error ||
+              'Došlo je do greške na serveru prilikom čuvanja videa.',
+          )
         }
+        return
       }
-    } catch (error) {
-      console.error("Error adding video:", error);
-      setMessage("Došlo je do greške prilikom dodavanja videa.");
-    } finally {
-      setAddingVideo(false);
-    }
-  };
 
+      setMessage('Video je uspešno dodat!')
+      setVideoUrl('')
+
+      const videosResponse = await fetch(
+        `/api/campaign/get-user-videos?campaignId=${campaignId}&userId=${discordUsername}`,
+        {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        },
+      )
+
+      if (videosResponse.ok) {
+        const data = await videosResponse.json()
+        const videos = Array.isArray(data) ? data : data.videos || []
+        setUserVideos(videos)
+      }
+    } catch (error: any) {
+      console.error('Error adding video:', error)
+      setMessage(
+        error?.message ||
+          'Došlo je do neočekivane greške prilikom dodavanja videa.',
+      )
+    } finally {
+      setAddingVideo(false)
+    }
+  }
   if (loading) {
     return (
       <Center minH="100vh" flex={1} flexDirection="column">
