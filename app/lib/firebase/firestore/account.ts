@@ -101,7 +101,7 @@ export async function userAccountExists(uid: string, accountName: string, platfo
     })
     const accounts = await response.json() as IAccount[];
     for (const account of accounts) {
-      if (account.username === accountName && account.platform === platform) {
+      if (account.username.toLowerCase() === accountName.toLowerCase() && account.platform === platform) {
         return true;
       }
     }
