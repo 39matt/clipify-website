@@ -605,10 +605,10 @@ const MarqueeSection = () => {
 
 const StatsSection = () => {
   const targets = {
-    dinara: 1_000_000,
-    klipera: 1_100,
-    pregleda: 250_000_000,
-    kampanja: 35,
+    dinara: 2_000_000,
+    klipera: 1_250,
+    pregleda: 500_000_000,
+    kampanja: 40,
   };
 
   function useCountUp(params: {
